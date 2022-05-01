@@ -1,5 +1,5 @@
 {
-    "publisher": "The Boa Team",
+    "publisher": "Boa",
     "name": "boalang",
     "displayName": "Boa Language and Infrastructure",
     "description": "This extension provides syntax highlighting for Boa source queries and initial support for submitting them to Boa.",
@@ -18,9 +18,13 @@
         "mining software repositories"
     ],
     "preview": true,
+    "homepage": "https://boa.cs.iastate.edu/",
+    "bugs": {
+      "url": "https://github.com/boalang/vscode/issues"
+    },
     "repository": {
         "type": "git",
-        "url": "https://github.com/boalang/vscode"
+        "url": "https://github.com/boalang/vscode.git"
     },
     "contributes": {
         "languages": [{

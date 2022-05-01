@@ -1,2 +1,5 @@
 node_modules
 *.vsix
+.DS_Store
+.vscode-test
+vsc-extension-quickstart.md

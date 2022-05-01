@@ -3,7 +3,6 @@
 typings/**
 test/**
 src/**
-images/**
 **/*.map
 .gitignore
 .github/**

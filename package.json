@@ -1,14 +1,27 @@
 {
+    "publisher": "The Boa Team",
     "name": "boalang",
-    "displayName": "boalang",
-    "description": "The Boa Language and Infrastructure",
+    "displayName": "Boa Language and Infrastructure",
+    "description": "This extension provides syntax highlighting for Boa source queries and initial support for submitting them to Boa.",
+    "icon": "images/boa-white.png",
+    "license": "SEE LICENSE IN LICENSE",
     "version": "0.0.1",
     "engines": {
         "vscode": "^1.66.0"
     },
     "categories": [
-        "Programming Languages"
+        "Programming Languages",
+        "Snippets"
     ],
+    "keywords": [
+        "Boa",
+        "mining software repositories"
+    ],
+    "preview": true,
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/boalang/vscode"
+    },
     "contributes": {
         "languages": [{
             "id": "boalang",

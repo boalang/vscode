@@ -1,0 +1,132 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "Boa",
+	"patterns": [
+		{
+			"include": "#comments"
+		},
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#types"
+		},
+		{
+			"include": "#functions"
+		},
+		{
+			"include": "#strings"
+		}
+	],
+	"repository": {
+		"comments": {
+			"patterns": [{
+				"name": "comment.line.number-sign.boalang",
+				"begin": "#",
+				"end": "$"
+			}]
+		},
+		"keywords": {
+			"patterns": [
+				{
+					"name": "constant.language.boalang",
+					"match": "\\b(true|false|PI|Inf|inf|NaN|nan|SECOND|SEC|MINUTE|MIN|HOUR|HR)\\b"
+				},
+				{
+					"name": "constant.numeric.boalang",
+					"match": "\\b[1-9]\\d*\\b"
+				},
+				{
+					"name": "constant.numeric.boalang",
+					"match": "\\b[+-]?\\d+(?:(?:\\.\\d*)?(?:[eE][+-]?\\d+)?)?\\b"
+				},
+				{
+					"name": "constant.numeric.boalang",
+					"match": "\\b0x[0-9a-fA-F]+\\b"
+				},
+				{
+					"name": "keyword.operator.boalang",
+					"match": "\\b\\+\\+|\\-\\-|\\|\\||\\->|\\?|\\+|\\-|\\*|\\/|:=|:|\\$|%|\\||\\^|~|<<|>>|==|=|!=|<=|>=|<|>|&&|&|!\\b"
+				},
+				{
+					"name": "keyword.boalang",
+					"match": "\\b(visit|traverse|current|function|weight|input|of|before|after|case|default|_)\\b"
+				},
+				{
+					"name": "keyword.control.boalang",
+					"match": "\\b(if|else|while|for|foreach|exists|ifall|switch|return|break|stop|continue)\\b"
+				}
+			]
+		},
+		"types": {
+			"patterns": [
+				{
+					"name": "support.class.boalang",
+					"match": "\\b(Project|CodeRepository|Revision|ChangedFile|ASTRoot|Namespace|Declaration|Type|Method|Statement|Expression|Variable|Modifier|Person|CFG|CDG|DDG|PDG|CFGNode|CDGNode|DDGNode|PDGNode|CFGEdge|CDGEdge|DDGEdge|PDGEdge)\\b"
+				},
+				{
+					"name": "support.class.boalang",
+					"match": "\\b(RepositoryKind|FileKind|ChangeKind|TypeKind|StatementKind|ExpressionKind|Visibility|ModifierKind|Visibility|TraversalKind|TraversalDirection|NodeType|EdgeType|EdgeLabel)(\\.[A-Z_0-9]+)?\\b"
+				},
+				{
+					"name": "support.type.boalang",
+					"match": "\\b(visitor|traversal|fixp|output|string|bool|byte|fingerprint|int|float|time|enum|stack|map|set|array|queue)\\b"
+				}
+			]
+		},
+		"functions": {
+			"patterns": [
+				{
+					"name": "support.function.boalang",
+					"match": "\\b(hash|clear|remove|clone|add|poll|offer|peek|push|pop|abs|def|fingerprintof|new|regex|split|splitn|splitall|haskey|contains|containsall|values|keys|len|lookup|max|min|sort|sortx|convert|addday|addmonth|addweek|addyear|dayofmonth|dayofweek|dayofyear|hourof|minuteof|monthof|secondof|yearof|trunctoday|trunctohour|trunctominute|trunctomonth|trunctosecond|trunctoyear|now|formattime|lowercase|uppercase|strfind|strrfind|substring|strreplace|match|matchposns|matchstrs|format|highbit|rand|nrand|log|log10|exp|sqrt|pow|sin|cos|tan|asin|acos|atan|atan2|cosh|sinh|tanh|acosh|asinh|atanh|ceil|floor|round|trunc|isnan|isinf|isfinite|isnormal|difference|union|intersect|symdiff|getvalue|getinedge|getoutedge|normalize|gettotalnodes|gettotalcontrolnodes|gettotaledges|getcfg|getcdg|getddg|getpdg|getpdtree|getcfgslice|getpdgslice|dot|parse|parseexpression|prettyprint)\\b\\s*(?=\\()"
+				},
+				{
+					"name": "support.function.dsl.boalang",
+					"match": "\\b(getast|getsnapshot|iskind|isliteral|hasfiletype|isfixingrevision|ast_len)\\b\\s*(?=\\()"
+				},
+				{
+					"name": "support.function.aggregators.boalang",
+					"match": "\\b(collection|sum|top|bottom|mean|maximum|minimum|unique|set|quantile|histogram|text)\\b"
+				}
+			]
+		},
+		"strings": {
+			"patterns": [
+				{
+					"name": "string.quoted.double.boalang",
+					"begin": "\"",
+					"end": "\"",
+					"patterns": [
+						{
+							"name": "constant.character.escape.boalang",
+							"match": "\\\\."
+						}
+					]
+				},
+				{
+					"name": "string.regexp.boalang",
+					"begin": "`",
+					"end": "`",
+					"patterns": [
+						{
+							"name": "constant.character.escape.boalang",
+							"match": "\\\\."
+						}
+					]
+				},
+				{
+					"name": "string.quoted.triple.boalang",
+					"begin": "\"\"\"",
+					"end": "\"\"\"",
+					"patterns": [
+						{
+							"name": "constant.character.escape.boalang",
+							"match": "\\\\."
+						}
+					]
+				}
+			]
+		}
+	},
+	"scopeName": "source.boalang"
+}

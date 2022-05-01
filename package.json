@@ -1,0 +1,29 @@
+{
+    "name": "boalang",
+    "displayName": "boalang",
+    "description": "The Boa Language and Infrastructure",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.66.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "boalang",
+            "aliases": ["Boa", "boalang"],
+            "extensions": [".boa"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "boalang",
+            "scopeName": "source.boalang",
+            "path": "./syntaxes/boalang.tmLanguage.json"
+        }],
+        "snippets": [{
+            "language": "boalang",
+            "path": "./snippets/boalang.snippets.json"
+        }]
+    }
+}

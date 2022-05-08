@@ -1,0 +1,17 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "display": "Node 16",
+
+	"compilerOptions": {
+		"target": "es6",
+		"lib": [
+			"es2020.string",
+            "es6"
+        ],
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"outDir": "out",
+		"sourceMap": true,
+		"plugins": [{ "name": "typescript-tslint-plugin" }]
+	}
+}

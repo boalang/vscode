@@ -26,7 +26,47 @@
         "type": "git",
         "url": "https://github.com/boalang/vscode.git"
     },
+    "main": "./out/extension.js",
+    "activationEvents": [
+        "onLanguage:boalang",
+        "onCommand:boalang.runquery"
+    ],
     "contributes": {
+        "commands": [{
+            "command": "boalang.runquery",
+            "title": "Run Boa Query"
+        }],
+        "menus": {
+            "explorer/context": [{
+                "when": "resourceLangId == boalang",
+                "command": "boalang.runquery",
+                "group": "Boa"
+            }]
+        },
+        "configuration": {
+            "title": "Boa API Settings",
+            "order": 0,
+            "properties": {
+                "boalang.login.username": {
+                    "type": "string",
+                    "description": "Boa API username",
+                    "order": 0,
+                    "default": null
+                },
+                "boalang.dataset.favorite": {
+                    "type": "string",
+                    "description": "Favorite Boa dataset",
+                    "order": 1,
+                    "default": "2019 October/GitHub (small)"
+                },
+                "boalang.dataset.last": {
+                    "type": "string",
+                    "description": "Last Used Boa dataset",
+                    "order": 2,
+                    "default": null
+                }
+            }
+        },
         "languages": [{
             "id": "boalang",
             "aliases": ["Boa", "boalang"],
@@ -42,5 +82,20 @@
             "language": "boalang",
             "path": "./snippets/boalang.snippets.json"
         }]
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "vscode:uninstall": "node ./out/uninstall.js",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./"
+    },
+    "dependencies": {
+        "@boa/boa-api": "file:../api-js/"
+    },
+    "devDependencies": {
+        "@types/node": "^8.10.25",
+        "@types/vscode": "^1.51.0",
+        "tslint": "^5.16.0",
+        "typescript": "^3.4.5"
     }
 }

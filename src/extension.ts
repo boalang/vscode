@@ -17,8 +17,7 @@
 import * as vscode from 'vscode';
 import { BoaClient, BOA_API_ENDPOINT } from '@boa/boa-api/lib/boaclient';
 import AuthSettings from './password'
-
-const terminalName = 'Boa API';
+import { BoaJobsProvider } from './treeprovider';
 
 const datasets = [ '2021 Aug/Python', '2021 Aug/Kotlin', '2019 October/GitHub', '2019 October/GitHub (small)' ];
 const boaConfig = vscode.workspace.getConfiguration('boalang');
@@ -86,16 +85,22 @@ async function getBoaPassword(forceReset = false) {
     return pw;
 }
 
-var linkProvider = null;
-
 // this method is called when the extension is activated
 export function activate(context: vscode.ExtensionContext) {
     // handle password storage
     AuthSettings.init(context);
 
-    const boaApiDir = vscode.extensions.getExtension ('Boa.boalang').extensionPath + '/boaapi';
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.jobInfo', async (uri:vscode.Uri) => {
+        console.log('show job');
+        console.log(uri);
+        showBoaJob(uri);
+    }));
 
-    let runquery = vscode.commands.registerCommand('boalang.runquery', async (uri:vscode.Uri) => {
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.refreshJobs', async (uri:vscode.Uri) => {
+        console.log('jobs refresh');
+    }));
+
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.runQuery', async (uri:vscode.Uri) => {
         const username = await getBoaUsername();
         if (username) {
             const password = await getBoaPassword();
@@ -110,37 +115,12 @@ export function activate(context: vscode.ExtensionContext) {
                 }
             }
         }
-    });
+    }));
 
-    context.subscriptions.push(runquery);
-
-    linkProvider = vscode.window.registerTerminalLinkProvider({
-        // Linkify any Boa job IDs found in the terminal
-        provideTerminalLinks: (context: any, token: vscode.CancellationToken) => {
-            const matches = Array.from((context.line as string).matchAll(/Job#(\d+)/g));
-            if (!matches)
-                return [];
-            var results = [];
-
-            matches.forEach((link) => {
-                results.push({
-                    startIndex: (link as any).index,
-                    length: link[0].length,
-                    tooltip: 'Click to view details of Boa job #' + link[1],
-                    data: (link[1] as unknown as number)
-                });
-            });
-
-            return results;
-        },
-        handleTerminalLink: (link: any) => {
-            showBoaJob(link.data);
-        }
-    });
+    vscode.window.registerTreeDataProvider('boalang.jobList', new BoaJobsProvider());
+    // vscode.window.createTreeView('boalang.jobList', { treeDataProvider: new BoaJobsProvider() });
 }
 
 // this method is called when the extension is deactivated
 export function deactivate() {
-    if (linkProvider)
-        linkProvider.dispose();
 }

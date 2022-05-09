@@ -29,18 +29,50 @@
     "main": "./out/extension.js",
     "activationEvents": [
         "onLanguage:boalang",
-        "onCommand:boalang.runquery"
+        "onView:boalang.jobList",
+        "onCommand:boalang.runQuery",
+        "onCommand:boalang.jobInfo",
+        "onCommand:boalang.refreshJobs"
     ],
     "contributes": {
-        "commands": [{
-            "command": "boalang.runquery",
-            "title": "Run Boa Query"
-        }],
+        "commands": [
+            {
+                "command": "boalang.runQuery",
+                "title": "Run Boa Query"
+            },
+            {
+                "command": "boalang.jobInfo",
+                "title": "Display Boa Job"
+            },
+            {
+                "command": "boalang.refreshJobs",
+                "title": "Refresh Jobs",
+                "icon": "$(refresh)"
+            }
+        ],
+        "views": {
+            "explorer": [{
+                "id": "boalang.jobList",
+                "name": "Boa Jobs"
+            }]
+        },
+        "viewsWelcome": [
+            {
+                "view": "boalang.jobList",
+                "contents": "No Boa jobs currently listed. Click [Refresh](command:boalang.refreshJobs) to list recent jobs."
+            }
+        ],
         "menus": {
+            "view/title": [
+                {
+                  "command": "boalang.refreshJobs",
+                  "when": "view == boalang.jobList",
+                  "group": "navigation"
+                }
+            ],
             "explorer/context": [{
                 "when": "resourceLangId == boalang",
-                "command": "boalang.runquery",
-                "group": "Boa"
+                "command": "boalang.runQuery"
             }]
         },
         "configuration": {

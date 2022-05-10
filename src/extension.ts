@@ -109,12 +109,22 @@ async function runBoaCommands(func: { (client: boaapi.BoaClient): Promise<void>;
     if (username) {
         const password = await getBoaPassword();
         if (password) {
-            const client = new boaapi.BoaClient(boaapi.BOA_API_ENDPOINT);
-            await client.login(username, password);
-            
-            await func(client);
-            
-            await client.close();
+            vscode.window.withProgress({
+                location: vscode.ProgressLocation.Window,
+                cancellable: false,
+                title: 'Boa API'
+            }, async (progress) => {
+                progress.report({  increment: 0 });
+
+                const client = new boaapi.BoaClient(boaapi.BOA_API_ENDPOINT);
+                await client.login(username, password);
+
+                await func(client);
+
+                await client.close();
+
+                progress.report({ increment: 100 });
+            });
         }
     }
 }

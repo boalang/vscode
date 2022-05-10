@@ -52,7 +52,7 @@ async function selectDataset(): Promise<string> {
 
     const items: DatasetQuickPickItem[] = sortedDatasets.map((t, i) => {
 		return {
-			label: (lastDataset == t ? '$(history)' : favDataset == t ? '$(star-full)' : '$(database)') + ' ' + t.replace('[admin] ', ''),
+			label: (lastDataset == t ? '$(history) ' : favDataset == t ? '$(star-full) ' : '') + t.replace('[admin] ', ''),
 			// detail: lastDataset == t ? 'last used' : favDataset == t ? 'favorite' : null,
             description: t.indexOf('[admin] ') > -1 ? 'admin' : '',
             alwaysShow: true,

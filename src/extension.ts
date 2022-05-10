@@ -18,6 +18,7 @@ import * as vscode from 'vscode';
 import * as boaapi from '@boa/boa-api/lib/boaclient';
 import AuthSettings from './password'
 import { BoaJobsProvider } from './treeprovider';
+import { BoaCodelensProvider } from './codelens';
 
 const boaConfig = vscode.workspace.getConfiguration('boalang');
 
@@ -133,6 +134,12 @@ async function runQuery(uri:vscode.Uri) {
     const dataset = await selectDataset();
     if (dataset) {
         runBoaCommands(async (client: boaapi.BoaClient) => {
+            // if not a URI, it is probably a range from the code lens
+            if (!(uri instanceof vscode.Uri)) {
+                uri = vscode.window.activeTextEditor.document.uri;
+            }
+
+            console.log('uri: ' + uri);
             await client.datasets(boaapi.adminFilter)
                 .then((datasets) => console.log(datasets));
         });
@@ -160,6 +167,8 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('boalang.showJob', showJob));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.refreshJobs', refreshJobs));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.runQuery', runQuery));
+
+    context.subscriptions.push(vscode.languages.registerCodeLensProvider("boalang", new BoaCodelensProvider()));
 
     // set up the job list TreeView
     vscode.window.registerTreeDataProvider('boalang.jobList', new BoaJobsProvider());

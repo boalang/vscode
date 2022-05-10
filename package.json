@@ -38,16 +38,19 @@
         "commands": [
             {
                 "command": "boalang.runQuery",
-                "title": "Run Boa Query"
+                "title": "Run Boa Query",
+                "category": "Boa"
             },
             {
                 "command": "boalang.showJob",
-                "title": "Display Boa Job"
+                "title": "Display Boa Job",
+                "category": "Boa"
             },
             {
                 "command": "boalang.refreshJobs",
                 "title": "Refresh Jobs",
-                "icon": "$(refresh)"
+                "icon": "$(refresh)",
+                "category": "Boa"
             }
         ],
         "views": {

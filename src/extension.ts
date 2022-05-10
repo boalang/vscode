@@ -81,7 +81,7 @@ async function getBoaPassword(forceReset = false) {
     return pw;
 }
 
-async function runQuery(uri:vscode.Uri) {
+async function runBoaCommands(func: { (client: any): Promise<void>; (arg0: any): void; }) {
     const username = await getBoaUsername();
     if (username) {
         const password = await getBoaPassword();
@@ -92,13 +92,19 @@ async function runQuery(uri:vscode.Uri) {
 
                 await client.login(username, password);
               
-                await client.datasets(boaapi.adminFilter)
-                    .then((datasets) => console.log(datasets));
+                func(client);
               
                 await client.close();
             }
         }
     }
+}
+
+async function runQuery(uri:vscode.Uri) {
+    runBoaCommands(async client => {
+        await client.datasets(boaapi.adminFilter)
+            .then((datasets) => console.log(datasets));
+    });
 }
 
 function showJob(uri:vscode.Uri) {

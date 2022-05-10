@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
-import { BoaClient, BOA_API_ENDPOINT } from '@boa/boa-api/lib/boaclient';
+import * as boaapi from '@boa/boa-api/lib/boaclient';
 import AuthSettings from './password'
 import { BoaJobsProvider } from './treeprovider';
 
@@ -45,10 +45,6 @@ async function selectDataset(): Promise<string> {
     return item ? item.dataset : undefined;
 }
 
-function showBoaJob(job) {
-    vscode.window.showInformationMessage(`TODO: show info for Job #${job}`);
-}
-
 async function getBoaUsername() {
     const username = boaConfig.get('login.username') as string;
     console.log(username);
@@ -61,7 +57,7 @@ async function getBoaUsername() {
         prompt: 'Enter your Boa website username to use the Boa API',
         // validateInput: commonUtils.sqlPasswordValidatorGenerator(adminUserName)
     });
-    boaConfig.update('login.username', newuser, true);
+    await boaConfig.update('login.username', newuser, true);
     return newuser;
 }
 
@@ -85,38 +81,47 @@ async function getBoaPassword(forceReset = false) {
     return pw;
 }
 
+async function runQuery(uri:vscode.Uri) {
+    const username = await getBoaUsername();
+    if (username) {
+        const password = await getBoaPassword();
+        if (password) {
+            const dataset = await selectDataset();
+            if (dataset) {
+                const client = new boaapi.BoaClient(boaapi.BOA_API_ENDPOINT);
+
+                await client.login(username, password);
+              
+                await client.datasets(boaapi.adminFilter)
+                    .then((datasets) => console.log(datasets));
+              
+                await client.close();
+            }
+        }
+    }
+}
+
+function showJob(uri:vscode.Uri) {
+    console.log('show job');
+    console.log(uri);
+    vscode.window.showInformationMessage(`TODO: show info for Job #${uri}`);
+}
+
+async function refreshJobs(uri:vscode.Uri) {
+    console.log('jobs refresh');
+}
+
 // this method is called when the extension is activated
 export function activate(context: vscode.ExtensionContext) {
     // handle password storage
     AuthSettings.init(context);
 
-    context.subscriptions.push(vscode.commands.registerCommand('boalang.jobInfo', async (uri:vscode.Uri) => {
-        console.log('show job');
-        console.log(uri);
-        showBoaJob(uri);
-    }));
+    // register all commands
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.showJob', showJob));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.refreshJobs', refreshJobs));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.runQuery', runQuery));
 
-    context.subscriptions.push(vscode.commands.registerCommand('boalang.refreshJobs', async (uri:vscode.Uri) => {
-        console.log('jobs refresh');
-    }));
-
-    context.subscriptions.push(vscode.commands.registerCommand('boalang.runQuery', async (uri:vscode.Uri) => {
-        const username = await getBoaUsername();
-        if (username) {
-            const password = await getBoaPassword();
-            if (password) {
-                const dataset = await selectDataset();
-                if (dataset) {
-                    new BoaClient(BOA_API_ENDPOINT).login(username, password, (client) => {
-                        client.datasets();
-                    }, (error) => {
-                        console.log(error);
-                    });
-                }
-            }
-        }
-    }));
-
+    // set up the job list TreeView
     vscode.window.registerTreeDataProvider('boalang.jobList', new BoaJobsProvider());
     // vscode.window.createTreeView('boalang.jobList', { treeDataProvider: new BoaJobsProvider() });
 }

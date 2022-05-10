@@ -31,7 +31,7 @@
         "onLanguage:boalang",
         "onView:boalang.jobList",
         "onCommand:boalang.runQuery",
-        "onCommand:boalang.jobInfo",
+        "onCommand:boalang.showJob",
         "onCommand:boalang.refreshJobs"
     ],
     "contributes": {
@@ -41,7 +41,7 @@
                 "title": "Run Boa Query"
             },
             {
-                "command": "boalang.jobInfo",
+                "command": "boalang.showJob",
                 "title": "Display Boa Job"
             },
             {

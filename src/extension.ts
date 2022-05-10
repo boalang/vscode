@@ -19,8 +19,15 @@ import * as boaapi from '@boa/boa-api/lib/boaclient';
 import AuthSettings from './password'
 import { BoaJobsProvider } from './treeprovider';
 
-const datasets = [ '2021 Aug/Python', '2021 Aug/Kotlin', '2019 October/GitHub', '2019 October/GitHub (small)' ];
+let datasets = null;
 const boaConfig = vscode.workspace.getConfiguration('boalang');
+
+async function getDatasets() {
+    runBoaCommands(async (client: boaapi.BoaClient) => {
+        await client.datasetNames()
+            .then((ds) => datasets = ds);
+    });
+}
 
 async function selectDataset(): Promise<string> {
 	interface DatasetQuickPickItem extends vscode.QuickPickItem {
@@ -28,6 +35,8 @@ async function selectDataset(): Promise<string> {
 	}
     const favDataset = boaConfig.get('dataset.favorite');
     const lastDataset = boaConfig.get('dataset.last') as string;
+    if (datasets == null)
+        await getDatasets();
     const items: DatasetQuickPickItem[] = datasets.map((t, i) => {
 		return {
 			label: (lastDataset == t ? '$(history)' : favDataset == t ? '$(star-full)' : '$(database)') + ' ' + t,
@@ -47,9 +56,8 @@ async function selectDataset(): Promise<string> {
 
 async function getBoaUsername() {
     const username = boaConfig.get('login.username') as string;
-    console.log(username);
-    // if (username)
-        // return username;
+    if (username)
+        return username;
     const newuser = await vscode.window.showInputBox({
         placeHolder: 'username',
         title: 'Boa API username',
@@ -81,30 +89,29 @@ async function getBoaPassword(forceReset = false) {
     return pw;
 }
 
-async function runBoaCommands(func: { (client: any): Promise<void>; (arg0: any): void; }) {
+async function runBoaCommands(func: { (client: boaapi.BoaClient): Promise<void>; (arg0: boaapi.BoaClient): void; }) {
     const username = await getBoaUsername();
     if (username) {
         const password = await getBoaPassword();
         if (password) {
-            const dataset = await selectDataset();
-            if (dataset) {
-                const client = new boaapi.BoaClient(boaapi.BOA_API_ENDPOINT);
-
-                await client.login(username, password);
-              
-                func(client);
-              
-                await client.close();
-            }
+            const client = new boaapi.BoaClient(boaapi.BOA_API_ENDPOINT);
+            await client.login(username, password);
+            
+            await func(client);
+            
+            await client.close();
         }
     }
 }
 
 async function runQuery(uri:vscode.Uri) {
-    runBoaCommands(async client => {
-        await client.datasets(boaapi.adminFilter)
-            .then((datasets) => console.log(datasets));
-    });
+    const dataset = await selectDataset();
+    if (dataset) {
+        runBoaCommands(async (client: boaapi.BoaClient) => {
+            await client.datasets(boaapi.adminFilter)
+                .then((datasets) => console.log(datasets));
+        });
+    }
 }
 
 function showJob(uri:vscode.Uri) {

@@ -23,10 +23,11 @@ let datasets = null;
 const boaConfig = vscode.workspace.getConfiguration('boalang');
 
 async function getDatasets() {
-    runBoaCommands(async (client: boaapi.BoaClient) => {
-        await client.datasetNames()
-            .then((ds) => datasets = ds);
-    });
+    if (datasets == null)
+        runBoaCommands(async (client: boaapi.BoaClient) => {
+            await client.datasetNames()
+                .then((ds) => datasets = ds);
+        });
 }
 
 async function selectDataset(): Promise<string> {
@@ -35,8 +36,7 @@ async function selectDataset(): Promise<string> {
 	}
     const favDataset = boaConfig.get('dataset.favorite');
     const lastDataset = boaConfig.get('dataset.last') as string;
-    if (datasets == null)
-        await getDatasets();
+    await getDatasets();
     const items: DatasetQuickPickItem[] = datasets.map((t, i) => {
 		return {
 			label: (lastDataset == t ? '$(history)' : favDataset == t ? '$(star-full)' : '$(database)') + ' ' + t,
@@ -128,6 +128,8 @@ async function refreshJobs(uri:vscode.Uri) {
 export function activate(context: vscode.ExtensionContext) {
     // handle password storage
     AuthSettings.init(context);
+
+    getDatasets();
 
     // register all commands
     context.subscriptions.push(vscode.commands.registerCommand('boalang.showJob', showJob));

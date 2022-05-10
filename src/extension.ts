@@ -139,9 +139,23 @@ async function runQuery(uri:vscode.Uri) {
                 uri = vscode.window.activeTextEditor.document.uri;
             }
 
-            console.log('uri: ' + uri);
-            await client.datasets(boaapi.adminFilter)
-                .then((datasets) => console.log(datasets));
+            // if the file has never been saved
+            if (uri.scheme == "untitled") {
+                runBoaCommands(async (client: boaapi.BoaClient) => {
+                    await client.query(vscode.window.activeTextEditor.document.getText());
+                });
+            } else {
+                // otherwise send the file contents
+                require('fs').readFile(uri.fsPath, 'utf8', (err, query) => {
+                    if (err) {
+                        console.error(err);
+                        return;
+                    }
+                    runBoaCommands(async (client: boaapi.BoaClient) => {
+                        await client.query(query);
+                    });
+                });
+            }
         });
     }
 }

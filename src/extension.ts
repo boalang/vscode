@@ -19,14 +19,14 @@ import * as boaapi from '@boa/boa-api/lib/boaclient';
 import AuthSettings from './password'
 import { BoaJobsProvider } from './treeprovider';
 
-let datasets = null;
 const boaConfig = vscode.workspace.getConfiguration('boalang');
 
+let datasets: string[] = null;
 async function getDatasets() {
     if (datasets == null)
         runBoaCommands(async (client: boaapi.BoaClient) => {
             await client.datasetNames()
-                .then((ds) => datasets = ds);
+                .then((ds: string[]) => datasets = ds);
         });
 }
 
@@ -34,21 +34,36 @@ async function selectDataset(): Promise<string> {
 	interface DatasetQuickPickItem extends vscode.QuickPickItem {
 		dataset: string;
 	}
-    const favDataset = boaConfig.get('dataset.favorite');
-    const lastDataset = boaConfig.get('dataset.last') as string;
+
     await getDatasets();
-    const items: DatasetQuickPickItem[] = datasets.map((t, i) => {
+
+    let sortedDatasets = [...datasets];
+    const favDataset = boaConfig.get('dataset.favorite') as string;
+    if (sortedDatasets.indexOf(favDataset) > -1) {
+        sortedDatasets.splice(sortedDatasets.indexOf(favDataset), 1)
+        sortedDatasets = [favDataset].concat(sortedDatasets)
+    }
+    const lastDataset = boaConfig.get('dataset.last') as string;
+    if (sortedDatasets.indexOf(lastDataset) > -1) {
+        sortedDatasets.splice(sortedDatasets.indexOf(lastDataset), 1)
+        sortedDatasets = [lastDataset].concat(sortedDatasets)
+    }
+
+    const items: DatasetQuickPickItem[] = sortedDatasets.map((t, i) => {
 		return {
-			label: (lastDataset == t ? '$(history)' : favDataset == t ? '$(star-full)' : '$(database)') + ' ' + t,
-			description: lastDataset == t ? 'last used' : favDataset == t ? 'favorite' : null,
+			label: (lastDataset == t ? '$(history)' : favDataset == t ? '$(star-full)' : '$(database)') + ' ' + t.replace('[admin] ', ''),
+			// detail: lastDataset == t ? 'last used' : favDataset == t ? 'favorite' : null,
+            description: t.indexOf('[admin] ') > -1 ? 'admin' : '',
             alwaysShow: true,
 			dataset: t
 		};
 	});
 	const item = await vscode.window.showQuickPick(items, {
+        placeHolder: lastDataset,
         title: 'Select the Boa dataset to query',
         ignoreFocusOut: false
     });
+
     if (item)
         boaConfig.update('dataset.last', item.dataset, true);
     return item ? item.dataset : undefined;

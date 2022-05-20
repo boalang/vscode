@@ -134,6 +134,8 @@ async function runQuery(uri:vscode.Uri) {
     const dataset = await selectDataset();
     if (dataset) {
         runBoaCommands(async (client: boaapi.BoaClient) => {
+            const datasetId = await client.getDataset(dataset);
+
             // if not a URI, it is probably a range from the code lens
             if (!(uri instanceof vscode.Uri)) {
                 uri = vscode.window.activeTextEditor.document.uri;
@@ -142,7 +144,7 @@ async function runQuery(uri:vscode.Uri) {
             // if the file has never been saved
             if (uri.scheme == "untitled") {
                 runBoaCommands(async (client: boaapi.BoaClient) => {
-                    await client.query(vscode.window.activeTextEditor.document.getText());
+                    await client.query(vscode.window.activeTextEditor.document.getText(), datasetId);
                 });
             } else {
                 // otherwise send the file contents
@@ -152,7 +154,7 @@ async function runQuery(uri:vscode.Uri) {
                         return;
                     }
                     runBoaCommands(async (client: boaapi.BoaClient) => {
-                        await client.query(query);
+                        await client.query(query, datasetId);
                     });
                 });
             }

@@ -125,6 +125,8 @@
         "watch": "tsc -watch -p ./"
     },
     "dependencies": {
+        "sax": "^1.2.4",
+        "xmlbuilder2": "^3.0.2",
         "@boa/boa-api": "file:../api-js/"
     },
     "devDependencies": {

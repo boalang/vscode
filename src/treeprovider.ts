@@ -17,8 +17,6 @@
 import * as vscode from 'vscode';
 import { getJobUri, refreshJobs } from './boa';
 
-const boaConfig = vscode.workspace.getConfiguration('boalang');
-
 class BoaJobsProvider implements vscode.TreeDataProvider<BoaJob> {
 	private _onDidChangeTreeData: vscode.EventEmitter<any> = new vscode.EventEmitter<any>();
 	readonly onDidChangeTreeData: vscode.Event<any> = this._onDidChangeTreeData.event;
@@ -46,8 +44,9 @@ class BoaJobsProvider implements vscode.TreeDataProvider<BoaJob> {
         // the root lists the jobs
         return Promise.resolve(this.jobs);
     }
+
     length() {
-        return boaConfig.get('joblist.pagesize', 10);
+        return vscode.workspace.getConfiguration('boalang').get('joblist.pagesize', 10);
     }
 
     setView(view) {

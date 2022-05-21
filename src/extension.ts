@@ -40,6 +40,12 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(treeProvider.setView(vscode.window.createTreeView('boalang.jobList', {
         treeDataProvider: treeProvider
     })));
+
+    vscode.workspace.onDidChangeConfiguration(event => {
+        if (event.affectsConfiguration("boalang.joblist.pagesize")) {
+            vscode.commands.executeCommand('boalang.refreshJobs');
+        }
+    })
 }
 
 // this method is called when the extension is deactivated

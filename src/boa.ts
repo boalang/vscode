@@ -20,6 +20,10 @@ import { getBoaUsername, getBoaPassword, removeCredentials } from './credentials
 
 const boaConfig = vscode.workspace.getConfiguration('boalang');
 
+export function getJobUri(id) {
+    return vscode.Uri.parse(`${vscode.env.uriScheme}://boalang/job/${id}`);
+}
+
 let datasets: string[] = null;
 export async function getDatasets() {
     if (datasets == null)
@@ -150,7 +154,7 @@ async function submitQuery(query, dataset) {
             await job.wait();
 
             progress.report({  increment: 95 });
-            showJob(vscode.Uri.parse(`${vscode.env.uriScheme}://boalang/job/${job.id}`));
+            showJob(getJobUri(job.id));
         });
 
         progress.report({ increment: 100 });
@@ -169,8 +173,7 @@ export async function refreshJobs(treeProvider, start, length) {
     await runBoaCommands(async (client: boaapi.BoaClient) => {
         const jobs = await client.jobList(false, start, length);
         jobs.map((job) => {
-            console.log(job);
-            treeProvider.append(job.id);
+            treeProvider.append(job);
         });
     });
 }

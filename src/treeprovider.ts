@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
-import { refreshJobs } from './boa';
+import { getJobUri, refreshJobs } from './boa';
 
 class BoaJobsProvider implements vscode.TreeDataProvider<BoaJob> {
 	private _onDidChangeTreeData: vscode.EventEmitter<any> = new vscode.EventEmitter<any>();
@@ -56,11 +56,14 @@ class BoaJobsProvider implements vscode.TreeDataProvider<BoaJob> {
 export const treeProvider = new BoaJobsProvider();
 
 class BoaJob extends vscode.TreeItem {
-    constructor(public readonly id: string) {
-        super('BoaJob#' + id, vscode.TreeItemCollapsibleState.None);
-        // this.tooltip = `BoaJob#${this.label}`;
-        // this.description = this.version;
-        // this.command = vscode.commands.getCommand('boalang.jobinfo')
+    constructor(public readonly job) {
+        super(`Job #${job.id}`, vscode.TreeItemCollapsibleState.None);
+        this.tooltip = job.submitted;
+        this.command = {
+            command: 'boalang.showJob',
+            arguments: [getJobUri(job.id)],
+            title: 'show job',
+        };
     }
     // iconPath = new vscode.ThemeIcon('bold');
 }

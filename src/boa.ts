@@ -171,6 +171,9 @@ export async function refreshJobs(treeProvider, start, length) {
     treeProvider.clear();
 
     await runBoaCommands(async (client: boaapi.BoaClient) => {
+        const max = await client.jobCount(false);
+        treeProvider.setMax(max);
+
         const jobs = await client.jobList(false, start, length);
         jobs.map((job) => {
             treeProvider.append(job);

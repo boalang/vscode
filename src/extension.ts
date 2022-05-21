@@ -29,13 +29,17 @@ export function activate(context: vscode.ExtensionContext) {
 
     // register all commands
     context.subscriptions.push(vscode.commands.registerCommand('boalang.showJob', showJob));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.prevPage', () => treeProvider.prevPage()));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.nextPage', () => treeProvider.nextPage()));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.refreshJobs', () => treeProvider.refresh()));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.runQuery', runQuery));
 
     context.subscriptions.push(vscode.languages.registerCodeLensProvider("boalang", new BoaCodelensProvider()));
 
     // set up the job list TreeView
-    vscode.window.registerTreeDataProvider('boalang.jobList', treeProvider);
+    context.subscriptions.push(treeProvider.setView(vscode.window.createTreeView('boalang.jobList', {
+        treeDataProvider: treeProvider
+    })));
 }
 
 // this method is called when the extension is deactivated

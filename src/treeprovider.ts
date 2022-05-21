@@ -17,13 +17,21 @@
 import * as vscode from 'vscode';
 import { getJobUri, refreshJobs } from './boa';
 
+const boaConfig = vscode.workspace.getConfiguration('boalang');
+
 class BoaJobsProvider implements vscode.TreeDataProvider<BoaJob> {
 	private _onDidChangeTreeData: vscode.EventEmitter<any> = new vscode.EventEmitter<any>();
 	readonly onDidChangeTreeData: vscode.Event<any> = this._onDidChangeTreeData.event;
 
     private start = 0;
-    private length = 10;
+    private max = 0;
     private jobs = [];
+    private view = null;
+
+    constructor() {
+        vscode.commands.executeCommand('setContext', 'boalang.prevPageEnabled', false);
+        vscode.commands.executeCommand('setContext', 'boalang.nextPageEnabled', false);
+    }
 
     getTreeItem(element: BoaJob): vscode.TreeItem {
         return element;
@@ -38,6 +46,32 @@ class BoaJobsProvider implements vscode.TreeDataProvider<BoaJob> {
         // the root lists the jobs
         return Promise.resolve(this.jobs);
     }
+    length() {
+        return boaConfig.get('joblist.pagesize', 10);
+    }
+
+    setView(view) {
+        this.view = view;
+        return view;
+    }
+
+    setMax(max) {
+        this.max = max;
+    }
+
+    async prevPage() {
+        if (this.start > 0)
+            this.start -= this.length();
+        if (this.start < 0)
+            this.start = 0;
+        this.refresh();
+    }
+
+    async nextPage() {
+        if (this.start + this.length() < this.max)
+            this.start += this.length();
+        this.refresh();
+    }
 
     clear() {
         this.jobs = [];
@@ -48,7 +82,11 @@ class BoaJobsProvider implements vscode.TreeDataProvider<BoaJob> {
     }
 
     async refresh() {
-        await refreshJobs(this, this.start, this.length);
+        await refreshJobs(this, this.start, this.length());
+
+        vscode.commands.executeCommand('setContext', 'boalang.prevPageEnabled', this.start > 0);
+        vscode.commands.executeCommand('setContext', 'boalang.nextPageEnabled', this.start + this.length() < this.max);
+        this.view.title = `Boa: Jobs ${this.start + 1}-${this.start + this.length()}/${this.max}`;
         this._onDidChangeTreeData.fire(undefined);
     }
 }

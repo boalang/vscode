@@ -29,7 +29,7 @@ async function getDatasets() {
             await client.datasetNames()
                 .then((ds: string[]) => datasets = ds);
         }).then(
-            () => vscode.window.showInformationMessage('Successfully logged into the Boa API.')
+            () => vscode.window.setStatusBarMessage('$(pass) Boa API: logged in', 10000)
         );
 }
 
@@ -122,9 +122,7 @@ async function runBoaCommands(func: { (client: boaapi.BoaClient): Promise<void> 
                 location: vscode.ProgressLocation.Window,
                 cancellable: false,
                 title: 'Boa API'
-            }, async (progress) => {
-                progress.report({  increment: 0 });
-
+            }, async () => {
                 const client = new boaapi.BoaClient(boaapi.BOA_API_ENDPOINT);
                 await client.login(username, password).then(
                     async () => await func(client)
@@ -139,8 +137,6 @@ async function runBoaCommands(func: { (client: boaapi.BoaClient): Promise<void> 
                 ).finally(
                     () => client.close()
                 );
-
-                progress.report({ increment: 100 });
             });
         }
     }

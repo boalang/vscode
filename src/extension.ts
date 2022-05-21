@@ -20,10 +20,6 @@ import { AuthSettings } from './credentials';
 import { treeProvider } from './treeprovider';
 import { BoaCodelensProvider } from './codelens';
 
-function refreshJobs(uri:vscode.Uri) {
-    treeProvider.refresh();
-}
-
 // this method is called when the extension is activated
 export function activate(context: vscode.ExtensionContext) {
     // initialize password storage
@@ -33,7 +29,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     // register all commands
     context.subscriptions.push(vscode.commands.registerCommand('boalang.showJob', showJob));
-    context.subscriptions.push(vscode.commands.registerCommand('boalang.refreshJobs', refreshJobs));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.refreshJobs', () => treeProvider.refresh()));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.runQuery', runQuery));
 
     context.subscriptions.push(vscode.languages.registerCodeLensProvider("boalang", new BoaCodelensProvider()));

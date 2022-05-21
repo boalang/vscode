@@ -28,7 +28,9 @@ async function getDatasets() {
         runBoaCommands(async (client: boaapi.BoaClient) => {
             await client.datasetNames()
                 .then((ds: string[]) => datasets = ds);
-        });
+        }).then(
+            () => vscode.window.showInformationMessage('Successfully logged into the Boa API.')
+        );
 }
 
 async function selectDataset(): Promise<string> {

@@ -111,7 +111,7 @@ export async function removeCredentials() {
     await settings.storePassword(null);
 }
 
-async function runBoaCommands(func: { (client: boaapi.BoaClient): Promise<void>; (arg0: boaapi.BoaClient): void; }) {
+async function runBoaCommands(func: { (client: boaapi.BoaClient): Promise<void> }) {
     const username = await getBoaUsername();
     if (username) {
         const password = await getBoaPassword();
@@ -124,11 +124,18 @@ async function runBoaCommands(func: { (client: boaapi.BoaClient): Promise<void>;
                 progress.report({  increment: 0 });
 
                 const client = new boaapi.BoaClient(boaapi.BOA_API_ENDPOINT);
-                await client.login(username, password);
-
-                await func(client);
-
-                await client.close();
+                await client.login(username, password).then(
+                    async () => await func(client)
+                ).catch(
+                    (err) => {
+                        if ((err as Error).message.indexOf('Wrong username or password.') > -1) {
+                            vscode.window.showInformationMessage('Boa API username/password were invalid. Please re-enter.');
+                            removeCredentials();
+                        }
+                    }
+                ).finally(
+                    () => client.close()
+                );
 
                 progress.report({ increment: 100 });
             });

@@ -15,10 +15,14 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
-import { getDatasets, showJob, refreshJobs, runQuery } from './boa';
+import { getDatasets, showJob, runQuery } from './boa';
 import { AuthSettings } from './credentials';
-import { BoaJobsProvider } from './treeprovider';
+import { treeProvider } from './treeprovider';
 import { BoaCodelensProvider } from './codelens';
+
+function refreshJobs(uri:vscode.Uri) {
+    treeProvider.refresh();
+}
 
 // this method is called when the extension is activated
 export function activate(context: vscode.ExtensionContext) {
@@ -35,7 +39,7 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.languages.registerCodeLensProvider("boalang", new BoaCodelensProvider()));
 
     // set up the job list TreeView
-    vscode.window.registerTreeDataProvider('boalang.jobList', new BoaJobsProvider());
+    vscode.window.registerTreeDataProvider('boalang.jobList', treeProvider);
 }
 
 // this method is called when the extension is deactivated

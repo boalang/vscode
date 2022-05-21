@@ -163,6 +163,14 @@ export function showJob(uri:vscode.Uri) {
     vscode.window.showInformationMessage(`TODO: show info for Boa job ${uri.path}`);
 }
 
-export async function refreshJobs(uri:vscode.Uri) {
-    console.log('jobs refresh');
+export async function refreshJobs(treeProvider, start, length) {
+    treeProvider.clear();
+
+    await runBoaCommands(async (client: boaapi.BoaClient) => {
+        const jobs = await client.jobList(false, start, length);
+        jobs.map((job) => {
+            console.log(job);
+            treeProvider.append(job.id);
+        });
+    });
 }

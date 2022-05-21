@@ -56,13 +56,13 @@
         "views": {
             "explorer": [{
                 "id": "boalang.jobList",
-                "name": "Boa Jobs"
+                "name": "Boa: Recent Jobs"
             }]
         },
         "viewsWelcome": [
             {
                 "view": "boalang.jobList",
-                "contents": "No Boa jobs currently listed. Click [Refresh](command:boalang.refreshJobs) to list recent jobs."
+                "contents": "Click [refresh](command:boalang.refreshJobs) to list recent Boa jobs."
             }
         ],
         "menus": {

@@ -15,8 +15,16 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
+import { refreshJobs } from './boa';
 
-export class BoaJobsProvider implements vscode.TreeDataProvider<BoaJob> {
+class BoaJobsProvider implements vscode.TreeDataProvider<BoaJob> {
+	private _onDidChangeTreeData: vscode.EventEmitter<any> = new vscode.EventEmitter<any>();
+	readonly onDidChangeTreeData: vscode.Event<any> = this._onDidChangeTreeData.event;
+
+    private start = 0;
+    private length = 10;
+    private jobs = [];
+
     getTreeItem(element: BoaJob): vscode.TreeItem {
         return element;
     }
@@ -28,14 +36,24 @@ export class BoaJobsProvider implements vscode.TreeDataProvider<BoaJob> {
         }
 
         // the root lists the jobs
-        return Promise.resolve([
-            new BoaJob('32982398'),
-            new BoaJob('32982394'),
-            new BoaJob('32982698'),
-            new BoaJob('32982098'),
-        ]);
+        return Promise.resolve(this.jobs);
+    }
+
+    clear() {
+        this.jobs = [];
+    }
+
+    append(item) {
+        this.jobs.push(new BoaJob(item));
+    }
+
+    async refresh() {
+        await refreshJobs(this, this.start, this.length);
+        this._onDidChangeTreeData.fire(undefined);
     }
 }
+
+export const treeProvider = new BoaJobsProvider();
 
 class BoaJob extends vscode.TreeItem {
     constructor(public readonly id: string) {

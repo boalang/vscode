@@ -17,11 +17,9 @@
 
 // remove configuration
 import * as vscode from 'vscode';
-vscode.workspace.getConfiguration('boalang').update('boalang.login.username', undefined);
 vscode.workspace.getConfiguration('boalang').update('boalang.dataset.favorite', undefined);
 vscode.workspace.getConfiguration('boalang').update('boalang.dataset.last', undefined);
 
-// remove secure stored data
-import AuthSettings from './password'
-const settings = AuthSettings.instance;
-settings.uninstall();
+// remove login credentials
+import {removeCredentials} from './extension';
+removeCredentials();

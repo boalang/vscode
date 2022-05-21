@@ -105,6 +105,12 @@ async function getBoaPassword(forceReset = false) {
     return pw;
 }
 
+export async function removeCredentials() {
+    await boaConfig.update('login.username', undefined);
+    const settings = AuthSettings.instance;
+    await settings.storePassword(null);
+}
+
 async function runBoaCommands(func: { (client: boaapi.BoaClient): Promise<void>; (arg0: boaapi.BoaClient): void; }) {
     const username = await getBoaUsername();
     if (username) {

@@ -81,7 +81,6 @@ async function getBoaUsername() {
         title: 'Boa API username',
         value: username,
         prompt: 'Enter your Boa website username to use the Boa API',
-        // validateInput: commonUtils.sqlPasswordValidatorGenerator(adminUserName)
     });
     await boaConfig.update('login.username', newuser, true);
     return newuser;
@@ -101,7 +100,6 @@ async function getBoaPassword(forceReset = false) {
         title: 'Boa API Password',
         prompt: 'Enter your Boa website password to use the Boa API',
         password: true,
-        // validateInput: commonUtils.sqlPasswordValidatorGenerator(adminUserName)
     });
     await settings.storePassword(pw);
     return pw;

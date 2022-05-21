@@ -17,8 +17,8 @@
 
 // remove configuration
 import * as vscode from 'vscode';
-vscode.workspace.getConfiguration('boalang').update('boalang.dataset.favorite', undefined);
-vscode.workspace.getConfiguration('boalang').update('boalang.dataset.last', undefined);
+vscode.workspace.getConfiguration('boalang').update('boalang.dataset.favorite', undefined, true);
+vscode.workspace.getConfiguration('boalang').update('boalang.dataset.last', undefined, true);
 
 // remove login credentials
 import {removeCredentials} from './extension';

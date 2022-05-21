@@ -16,8 +16,6 @@
 //
 import * as vscode from 'vscode';
 
-const boaConfig = vscode.workspace.getConfiguration('boalang');
-
 const passwordKey = 'boalang.login.password';
 
 export class AuthSettings {
@@ -51,6 +49,8 @@ export class AuthSettings {
 }
 
 export async function getBoaUsername() {
+    const boaConfig = vscode.workspace.getConfiguration('boalang');
+
     const username = boaConfig.get('login.username') as string;
     if (username)
         return username;
@@ -84,7 +84,9 @@ export async function getBoaPassword(forceReset = false) {
 }
 
 export async function removeCredentials() {
+    const boaConfig = vscode.workspace.getConfiguration('boalang');
     await boaConfig.update('login.username', undefined, true);
+
     const settings = AuthSettings.instance;
     await settings.storePassword(null);
 }

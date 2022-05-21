@@ -18,8 +18,6 @@ import * as vscode from 'vscode';
 import * as boaapi from '@boa/boa-api/lib/boaclient';
 import { getBoaUsername, getBoaPassword, removeCredentials } from './credentials';
 
-const boaConfig = vscode.workspace.getConfiguration('boalang');
-
 export function getJobUri(id) {
     return vscode.Uri.parse(`${vscode.env.uriScheme}://boalang/job/${id}`);
 }
@@ -41,6 +39,8 @@ async function selectDataset(): Promise<string> {
 	}
 
     await getDatasets();
+
+    const boaConfig = vscode.workspace.getConfiguration('boalang');
 
     let sortedDatasets = [...datasets];
     const favDataset = boaConfig.get('dataset.favorite') as string;

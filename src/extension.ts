@@ -16,7 +16,7 @@
 //
 import * as vscode from 'vscode';
 import * as boaapi from '@boa/boa-api/lib/boaclient';
-import AuthSettings from './password'
+import { AuthSettings, getBoaUsername, getBoaPassword, removeCredentials } from './credentials';
 import { BoaJobsProvider } from './treeprovider';
 import { BoaCodelensProvider } from './codelens';
 
@@ -70,45 +70,6 @@ async function selectDataset(): Promise<string> {
     if (item)
         boaConfig.update('dataset.last', item.dataset, true);
     return item ? item.dataset : undefined;
-}
-
-async function getBoaUsername() {
-    const username = boaConfig.get('login.username') as string;
-    if (username)
-        return username;
-    const newuser = await vscode.window.showInputBox({
-        placeHolder: 'username',
-        title: 'Boa API username',
-        value: username,
-        prompt: 'Enter your Boa website username to use the Boa API',
-    });
-    await boaConfig.update('login.username', newuser, true);
-    return newuser;
-}
-
-async function getBoaPassword(forceReset = false) {
-    const settings = AuthSettings.instance;
-
-    if (!forceReset) {
-        const existingPw = await settings.getPassword();
-        if (existingPw)
-            return existingPw;
-    }
-
-    const pw = await vscode.window.showInputBox({
-        placeHolder: 'password',
-        title: 'Boa API Password',
-        prompt: 'Enter your Boa website password to use the Boa API',
-        password: true,
-    });
-    await settings.storePassword(pw);
-    return pw;
-}
-
-export async function removeCredentials() {
-    await boaConfig.update('login.username', undefined, true);
-    const settings = AuthSettings.instance;
-    await settings.storePassword(null);
 }
 
 async function runBoaCommands(func: { (client: boaapi.BoaClient): Promise<void> }) {

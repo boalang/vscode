@@ -21,5 +21,5 @@ vscode.workspace.getConfiguration('boalang').update('boalang.dataset.favorite', 
 vscode.workspace.getConfiguration('boalang').update('boalang.dataset.last', undefined, true);
 
 // remove login credentials
-import {removeCredentials} from './extension';
+import {removeCredentials} from './credentials';
 removeCredentials();

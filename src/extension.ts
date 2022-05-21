@@ -15,163 +15,14 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
-import * as boaapi from '@boa/boa-api/lib/boaclient';
-import { AuthSettings, getBoaUsername, getBoaPassword, removeCredentials } from './credentials';
+import { getDatasets, showJob, refreshJobs, runQuery } from './boa';
+import { AuthSettings } from './credentials';
 import { BoaJobsProvider } from './treeprovider';
 import { BoaCodelensProvider } from './codelens';
 
-const boaConfig = vscode.workspace.getConfiguration('boalang');
-
-let datasets: string[] = null;
-async function getDatasets() {
-    if (datasets == null)
-        runBoaCommands(async (client: boaapi.BoaClient) => {
-            await client.datasetNames()
-                .then((ds: string[]) => datasets = ds);
-        }).then(
-            () => vscode.window.setStatusBarMessage('$(pass) Boa API: logged in', 10000)
-        );
-}
-
-async function selectDataset(): Promise<string> {
-	interface DatasetQuickPickItem extends vscode.QuickPickItem {
-		dataset: string;
-	}
-
-    await getDatasets();
-
-    let sortedDatasets = [...datasets];
-    const favDataset = boaConfig.get('dataset.favorite') as string;
-    if (sortedDatasets.indexOf(favDataset) > -1) {
-        sortedDatasets.splice(sortedDatasets.indexOf(favDataset), 1)
-        sortedDatasets = [favDataset].concat(sortedDatasets)
-    }
-    const lastDataset = boaConfig.get('dataset.last') as string;
-    if (sortedDatasets.indexOf(lastDataset) > -1) {
-        sortedDatasets.splice(sortedDatasets.indexOf(lastDataset), 1)
-        sortedDatasets = [lastDataset].concat(sortedDatasets)
-    }
-
-    const items: DatasetQuickPickItem[] = sortedDatasets.map((t, i) => {
-		return {
-			label: (lastDataset == t ? '$(history) ' : favDataset == t ? '$(star-full) ' : '') + t.replace('[admin] ', ''),
-			// detail: lastDataset == t ? 'last used' : favDataset == t ? 'favorite' : null,
-            description: t.indexOf('[admin] ') > -1 ? 'admin' : '',
-            alwaysShow: true,
-			dataset: t
-		};
-	});
-	const item = await vscode.window.showQuickPick(items, {
-        placeHolder: lastDataset,
-        title: 'Select the Boa dataset to query',
-        ignoreFocusOut: false
-    });
-
-    if (item)
-        boaConfig.update('dataset.last', item.dataset, true);
-    return item ? item.dataset : undefined;
-}
-
-async function runBoaCommands(func: { (client: boaapi.BoaClient): Promise<void> }) {
-    const username = await getBoaUsername();
-    if (username) {
-        const password = await getBoaPassword();
-        if (password) {
-            await vscode.window.withProgress({
-                location: vscode.ProgressLocation.Window,
-                cancellable: false,
-                title: 'Boa API'
-            }, async () => {
-                const client = new boaapi.BoaClient(boaapi.BOA_API_ENDPOINT);
-                await client.login(username, password).then(
-                    async () => await func(client)
-                ).catch(
-                    async (err: Error) => {
-                        if (err.message.indexOf('Wrong username or password.') > -1) {
-                            vscode.window.showInformationMessage('Boa API username/password were invalid. Please re-enter.');
-                            await removeCredentials();
-                            await runBoaCommands(func);
-                        }
-                    }
-                ).finally(
-                    () => client.close()
-                );
-            });
-        }
-    }
-}
-
-async function runQuery(uri:vscode.Uri) {
-    const dataset = await selectDataset();
-    if (dataset) {
-        runBoaCommands(async (client: boaapi.BoaClient) => {
-            const datasetId = await client.getDataset(dataset);
-
-            // if not a URI, it is probably a range from the code lens
-            if (!(uri instanceof vscode.Uri)) {
-                uri = vscode.window.activeTextEditor.document.uri;
-            }
-
-            // if the file has never been saved
-            if (uri.scheme == "untitled") {
-                submitQuery(vscode.window.activeTextEditor.document.getText(), datasetId);
-            } else {
-                // otherwise send the file contents
-                require('fs').readFile(uri.fsPath, 'utf8', (err, query) => {
-                    if (err) {
-                        console.error(err);
-                        return;
-                    }
-                    submitQuery(query, datasetId);
-                });
-            }
-        });
-    }
-}
-
-async function submitQuery(query, dataset) {
-    vscode.window.withProgress({
-        location: vscode.ProgressLocation.Notification,
-        cancellable: true,
-        title: 'Boa query submitted'
-    }, async (progress, cancel) => {
-        progress.report({  increment: 0 });
-
-        await runBoaCommands(async (client: boaapi.BoaClient) => {
-            progress.report({  increment: 10 });
-
-            const job = await client.query(query, dataset);
-            progress.report({  increment: 20 });
-
-            cancel.onCancellationRequested(async (e) => {
-                console.log(`stopping job ${job.id}`);
-                await job.stop();
-                progress.report({ increment: 100 });
-            });
-
-            await job.wait();
-
-            progress.report({  increment: 95 });
-            showJob(vscode.Uri.parse(`boa://job/${job.id}`));
-        });
-
-        progress.report({ increment: 100 });
-    });
-}
-
-function showJob(uri:vscode.Uri) {
-    console.log('show job');
-    console.log(uri);
-    vscode.window.showInformationMessage(`TODO: show info for Boa job ${uri.path}`);
-}
-
-async function refreshJobs(uri:vscode.Uri) {
-    console.log('jobs refresh');
-}
-
 // this method is called when the extension is activated
 export function activate(context: vscode.ExtensionContext) {
-    // handle password storage
+    // initialize password storage
     AuthSettings.init(context);
 
     getDatasets();
@@ -185,7 +36,6 @@ export function activate(context: vscode.ExtensionContext) {
 
     // set up the job list TreeView
     vscode.window.registerTreeDataProvider('boalang.jobList', new BoaJobsProvider());
-    // vscode.window.createTreeView('boalang.jobList', { treeDataProvider: new BoaJobsProvider() });
 }
 
 // this method is called when the extension is deactivated

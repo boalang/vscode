@@ -17,8 +17,6 @@
 import * as vscode from 'vscode';
 
 export class BoaJobsProvider implements vscode.TreeDataProvider<BoaJob> {
-    constructor(/*private workspaceRoot: string*/) {}
-
     getTreeItem(element: BoaJob): vscode.TreeItem {
         return element;
     }
@@ -28,7 +26,6 @@ export class BoaJobsProvider implements vscode.TreeDataProvider<BoaJob> {
         if (element) {
             return Promise.resolve([]);
         }
-        // return Promise.resolve([]);
 
         // the root lists the jobs
         return Promise.resolve([

@@ -106,7 +106,7 @@ async function getBoaPassword(forceReset = false) {
 }
 
 export async function removeCredentials() {
-    await boaConfig.update('login.username', undefined);
+    await boaConfig.update('login.username', undefined, true);
     const settings = AuthSettings.instance;
     await settings.storePassword(null);
 }
@@ -127,10 +127,11 @@ async function runBoaCommands(func: { (client: boaapi.BoaClient): Promise<void> 
                 await client.login(username, password).then(
                     async () => await func(client)
                 ).catch(
-                    (err) => {
-                        if ((err as Error).message.indexOf('Wrong username or password.') > -1) {
+                    async (err: Error) => {
+                        if (err.message.indexOf('Wrong username or password.') > -1) {
                             vscode.window.showInformationMessage('Boa API username/password were invalid. Please re-enter.');
-                            removeCredentials();
+                            await removeCredentials();
+                            await runBoaCommands(func);
                         }
                     }
                 ).finally(

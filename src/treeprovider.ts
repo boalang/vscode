@@ -16,6 +16,7 @@
 //
 import * as vscode from 'vscode';
 import { getJobUri, refreshJobs } from './boa';
+import { CompilerStatus, ExecutionStatus } from '@boa/boa-api/lib/jobhandle';
 
 class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
 	private _onDidChangeTreeData: vscode.EventEmitter<any> = new vscode.EventEmitter<any>();
@@ -114,11 +115,23 @@ class BoaJob extends vscode.TreeItem {
         super(`Job #${job.id}`, vscode.TreeItemCollapsibleState.Collapsed);
         this.tooltip = source;
         this.description = job.submitted.toString();
+
         this.command = {
             command: 'boalang.showJob',
             arguments: [getJobUri(job.id)],
             title: 'show job',
         };
+
+        if (job.compilerStatus == CompilerStatus.KILLED || job.executionStatus == ExecutionStatus.KILLED) {
+            this.iconPath = new vscode.ThemeIcon('close');
+        } else if (job.executionStatus == ExecutionStatus.ERROR) {
+           this.iconPath = new vscode.ThemeIcon('bug');
+        } else if (job.compilerStatus == CompilerStatus.ERROR) {
+           this.iconPath = new vscode.ThemeIcon('bracket-error');
+        } else if (job.isRunning) {
+           this.iconPath = new vscode.ThemeIcon('pulse');
+        } else {
+           this.iconPath = new vscode.ThemeIcon('pass');
     }
-    // iconPath = new vscode.ThemeIcon('bold');
+    }
 }

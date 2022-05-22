@@ -37,14 +37,21 @@ class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
     }
 
     async getChildren(element?: vscode.TreeItem): Promise<vscode.TreeItem[]> {
-        // jobs have no children
+        // jobs have status items
         if (element instanceof BoaJob) {
-            console.log(element.job);
+            const compiler = new vscode.TreeItem('compile: ' + element.job.compilerStatus);
+            if (element.job.compilerStatus == CompilerStatus.ERROR) {
+                const errs = await element.job.compilerErrors;
+                compiler.tooltip = errs.join('\n').replace('\\n', '\n');
+            }
             return Promise.resolve([
                 new vscode.TreeItem(element.job.input.name),
-                new vscode.TreeItem('compile: ' + element.job.compilerStatus),
+                compiler,
                 new vscode.TreeItem('exec: ' + element.job.executionStatus),
             ]);
+        } else if (element) {
+            // status items have no children
+            return Promise.resolve([]);
         }
 
         // the root lists the jobs

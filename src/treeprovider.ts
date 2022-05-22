@@ -17,7 +17,7 @@
 import * as vscode from 'vscode';
 import { getJobUri, refreshJobs } from './boa';
 
-class BoaJobsProvider implements vscode.TreeDataProvider<BoaJob> {
+class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
 	private _onDidChangeTreeData: vscode.EventEmitter<any> = new vscode.EventEmitter<any>();
 	readonly onDidChangeTreeData: vscode.Event<any> = this._onDidChangeTreeData.event;
 
@@ -31,14 +31,19 @@ class BoaJobsProvider implements vscode.TreeDataProvider<BoaJob> {
         vscode.commands.executeCommand('setContext', 'boalang.nextPageEnabled', false);
     }
 
-    getTreeItem(element: BoaJob): vscode.TreeItem {
+    getTreeItem(element: vscode.TreeItem): vscode.TreeItem {
         return element;
     }
 
-    getChildren(element?: BoaJob): Thenable<BoaJob[]> {
+    async getChildren(element?: vscode.TreeItem): Promise<vscode.TreeItem[]> {
         // jobs have no children
-        if (element) {
-            return Promise.resolve([]);
+        if (element instanceof BoaJob) {
+            console.log(element.job);
+            return Promise.resolve([
+                new vscode.TreeItem(element.job.input.name),
+                new vscode.TreeItem('compile: ' + element.job.compilerStatus),
+                new vscode.TreeItem('exec: ' + element.job.executionStatus),
+            ]);
         }
 
         // the root lists the jobs
@@ -106,8 +111,9 @@ export const treeProvider = new BoaJobsProvider();
 
 class BoaJob extends vscode.TreeItem {
     constructor(public readonly job, public readonly source) {
-        super(`Job #${job.id}`, vscode.TreeItemCollapsibleState.None);
+        super(`Job #${job.id}`, vscode.TreeItemCollapsibleState.Collapsed);
         this.tooltip = source;
+        this.description = job.submitted.toString();
         this.command = {
             command: 'boalang.showJob',
             arguments: [getJobUri(job.id)],

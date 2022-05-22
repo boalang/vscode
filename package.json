@@ -50,14 +50,14 @@
             },
             {
                 "command": "boalang.prevPage",
-                "title": "Previous Page",
+                "title": "Newer",
                 "icon": "$(arrow-left)",
                 "enablement": "boalang.prevPageEnabled",
                 "category": "Boa"
             },
             {
                 "command": "boalang.nextPage",
-                "title": "Next Page",
+                "title": "Older",
                 "icon": "$(arrow-right)",
                 "enablement": "boalang.nextPageEnabled",
                 "category": "Boa"

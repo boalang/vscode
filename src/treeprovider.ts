@@ -56,19 +56,26 @@ class BoaJobsProvider implements vscode.TreeDataProvider<BoaJob> {
 
     setMax(max) {
         this.max = max;
+        if (this.start > this.max) {
+            this.start = this.max - this.length();
+            this.refresh();
+        }
     }
 
     async prevPage() {
-        if (this.start > 0)
+        if (this.start > 0) {
             this.start -= this.length();
-        if (this.start < 0)
+        }
+        if (this.start < 0) {
             this.start = 0;
+        }
         this.refresh();
     }
 
     async nextPage() {
-        if (this.start + this.length() < this.max)
+        if (this.start + this.length() < this.max) {
             this.start += this.length();
+        }
         this.refresh();
     }
 
@@ -76,16 +83,21 @@ class BoaJobsProvider implements vscode.TreeDataProvider<BoaJob> {
         this.jobs = [];
     }
 
-    append(item) {
-        this.jobs.push(new BoaJob(item));
+    async append(job) {
+        this.jobs.push(new BoaJob(job, await job.source));
+        this.jobs.sort((a, b) => b.label.localeCompare(a.label))
+        this.changed();
     }
 
     async refresh() {
         await refreshJobs(this, this.start, this.length());
+        this.changed();
+    }
 
+    changed() {
         vscode.commands.executeCommand('setContext', 'boalang.prevPageEnabled', this.start > 0);
         vscode.commands.executeCommand('setContext', 'boalang.nextPageEnabled', this.start + this.length() < this.max);
-        this.view.title = `Boa: Jobs ${this.start + 1}-${this.start + this.length()}/${this.max}`;
+        this.view.title = `Boa: Jobs ${this.start + 1}-${this.start + this.length()} (${this.max})`;
         this._onDidChangeTreeData.fire(undefined);
     }
 }
@@ -93,9 +105,9 @@ class BoaJobsProvider implements vscode.TreeDataProvider<BoaJob> {
 export const treeProvider = new BoaJobsProvider();
 
 class BoaJob extends vscode.TreeItem {
-    constructor(public readonly job) {
+    constructor(public readonly job, public readonly source) {
         super(`Job #${job.id}`, vscode.TreeItemCollapsibleState.None);
-        this.tooltip = job.submitted;
+        this.tooltip = source;
         this.command = {
             command: 'boalang.showJob',
             arguments: [getJobUri(job.id)],

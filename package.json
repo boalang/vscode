@@ -51,6 +51,12 @@
                 "category": "Boa"
             },
             {
+                "command": "boalang.showFullOutput",
+                "title": "Full Boa Query Output",
+                "icon": "$(output)",
+                "category": "Boa"
+            },
+            {
                 "command": "boalang.showJob",
                 "title": "Display Boa Job",
                 "icon": "$(inspect)",
@@ -171,6 +177,10 @@
                 {
                     "command": "boalang.showOutput",
                     "group": "inline",
+                    "when": "view == boalang.jobList && viewItem == boalang.jobItem"
+                },
+                {
+                    "command": "boalang.showFullOutput",
                     "when": "view == boalang.jobList && viewItem == boalang.jobItem"
                 }
             ],

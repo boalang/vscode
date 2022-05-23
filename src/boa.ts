@@ -185,6 +185,25 @@ export function showOutput(channel: vscode.OutputChannel) {
     }
 }
 
+export function showFullOutput(uri:vscode.Uri|BoaJob) {
+    runBoaCommands(async (client: boaapi.BoaClient) => {
+        let jobId: string;
+        if (uri instanceof vscode.Uri) {
+            jobId = uri.path.substring('/job/'.length);
+        } else {
+            jobId = uri.job.id;
+        }
+        const job = await client.getJob(jobId);
+
+        vscode.workspace.openTextDocument({
+            language: 'boalang',
+            content: await job.outputFull
+        }).then(
+            (doc) => vscode.window.showTextDocument(doc)
+        );
+    });
+}
+
 export function showJob(uri:vscode.Uri) {
     console.log('show job');
     console.log(uri);

@@ -74,7 +74,7 @@ async function selectDataset(): Promise<string> {
     return item ? item.dataset : undefined;
 }
 
-async function runBoaCommands(func: { (client: boaapi.BoaClient): Promise<void> }) {
+export async function runBoaCommands(func: { (client: boaapi.BoaClient): Promise<void> }) {
     const username = await getBoaUsername();
     if (username) {
         const password = await getBoaPassword();
@@ -165,15 +165,4 @@ export function showJob(uri:vscode.Uri) {
     console.log('show job');
     console.log(uri);
     vscode.window.showInformationMessage(`TODO: show info for Boa job ${uri.path}`);
-}
-
-export async function refreshJobs(treeProvider, start, length) {
-    treeProvider.clear();
-
-    await runBoaCommands(async (client: boaapi.BoaClient) => {
-        treeProvider.setMax(await client.jobCount(false));
-
-        const jobs = await client.jobList(false, start, length);
-        jobs.map((job) => treeProvider.append(job));
-    });
 }

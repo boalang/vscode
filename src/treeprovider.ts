@@ -139,6 +139,6 @@ class BoaJob extends vscode.TreeItem {
            this.iconPath = new vscode.ThemeIcon('pulse');
         } else {
            this.iconPath = new vscode.ThemeIcon('pass');
-    }
+        }
     }
 }

@@ -155,6 +155,7 @@ async function submitQuery(query, dataset) {
 
             progress.report({  increment: 95 });
             showJob(getJobUri(job.id));
+            vscode.commands.executeCommand('boalang.refreshJobs');
         });
 
         progress.report({ increment: 100 });

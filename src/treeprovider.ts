@@ -124,17 +124,18 @@ class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
 
 export const treeProvider = new BoaJobsProvider();
 
-class BoaJob extends vscode.TreeItem {
+export class BoaJob extends vscode.TreeItem {
     constructor(public readonly job, public readonly source) {
         super(`Job #${job.id}`, vscode.TreeItemCollapsibleState.Collapsed);
         this.tooltip = source;
         this.description = job.submitted.toString();
+        this.contextValue = 'boalang.jobItem';
 
-        this.command = {
-            command: 'boalang.showOutput',
-            arguments: [getJobUri(job.id)],
-            title: 'show output',
-        };
+        // this.command = {
+        //     command: 'boalang.showOutput',
+        //     arguments: [getJobUri(job.id)],
+        //     title: 'show output',
+        // };
 
         if (job.compilerStatus == CompilerStatus.KILLED || job.executionStatus == ExecutionStatus.KILLED) {
             this.iconPath = new vscode.ThemeIcon('close', new vscode.ThemeColor('boalang.icon.jobCanceled'));

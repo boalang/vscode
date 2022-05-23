@@ -167,6 +167,13 @@
                   "group": "navigation"
                 }
             ],
+            "view/item/context": [
+                {
+                    "command": "boalang.showOutput",
+                    "group": "inline",
+                    "when": "view == boalang.jobList && viewItem == boalang.jobItem"
+                }
+            ],
             "explorer/context": [{
                 "when": "resourceLangId == boalang",
                 "command": "boalang.runQuery"

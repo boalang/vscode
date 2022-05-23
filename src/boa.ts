@@ -17,6 +17,7 @@
 import * as vscode from 'vscode';
 import * as boaapi from '@boa/boa-api/lib/boaclient';
 import { getBoaUsername, getBoaPassword, removeCredentials } from './credentials';
+import { BoaJob } from './treeprovider';
 
 export function getJobUri(id) {
     return vscode.Uri.parse(`${vscode.env.uriScheme}://boalang/job/${id}`);
@@ -167,9 +168,14 @@ async function submitQuery(query, dataset) {
 }
 
 export function showOutput(channel: vscode.OutputChannel) {
-    return function showOutput(uri:vscode.Uri) {
+    return function showOutput(uri:vscode.Uri|BoaJob) {
         runBoaCommands(async (client: boaapi.BoaClient) => {
-            const jobId = uri.path.substring('/job/'.length);
+            let jobId: string;
+            if (uri instanceof vscode.Uri) {
+                jobId = uri.path.substring('/job/'.length);
+            } else {
+                jobId = uri.job.id;
+            }
             const job = await client.getJob(jobId);
 
             channel.clear();

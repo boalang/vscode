@@ -20,7 +20,7 @@ export class BoaCodelensProvider implements vscode.CodeLensProvider {
     public provideCodeLenses(document: vscode.TextDocument, token: vscode.CancellationToken): vscode.CodeLens[] | Thenable<vscode.CodeLens[]> {
         const range = new vscode.Range(document.positionAt(0), document.positionAt(document.getText().length));
         return [new vscode.CodeLens(range, {
-                title: "$(cloud-upload) Run Query",
+                title: "$(play) Run Query",
                 tooltip: "Run this Boa query",
                 command: "boalang.runQuery",
                 arguments: [range]

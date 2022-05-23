@@ -69,6 +69,48 @@
                 "category": "Boa"
             }
         ],
+        "colors": [
+            {
+                "id": "boalang.icon.jobCanceled",
+                "description": "Icon color in the Boa job list for canceled jobs.",
+                "defaults": {
+                    "dark": "testing.iconSkipped",
+                    "light": "testing.iconSkipped"
+                }
+            },
+            {
+                "id": "boalang.icon.jobCompileError",
+                "description": "Icon color in the Boa job list for jobs with compile errors.",
+                "defaults": {
+                    "dark": "testing.iconErrored",
+                    "light": "testing.iconErrored"
+                }
+            },
+            {
+                "id": "boalang.icon.jobExecError",
+                "description": "Icon color in the Boa job list for jobs with execution errors.",
+                "defaults": {
+                    "dark": "testing.iconFailed",
+                    "light": "testing.iconFailed"
+                }
+            },
+            {
+                "id": "boalang.icon.jobRunning",
+                "description": "Icon color in the Boa job list for running jobs.",
+                "defaults": {
+                    "dark": "testing.iconQueued",
+                    "light": "testing.iconQueued"
+                }
+            },
+            {
+                "id": "boalang.icon.jobDone",
+                "description": "Icon color in the Boa job list for finished jobs.",
+                "defaults": {
+                    "dark": "testing.iconPassed",
+                    "light": "testing.iconPassed"
+                }
+            }
+        ],
         "views": {
             "explorer": [{
                 "id": "boalang.jobList",

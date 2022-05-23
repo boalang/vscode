@@ -137,15 +137,15 @@ class BoaJob extends vscode.TreeItem {
         };
 
         if (job.compilerStatus == CompilerStatus.KILLED || job.executionStatus == ExecutionStatus.KILLED) {
-            this.iconPath = new vscode.ThemeIcon('close', new vscode.ThemeColor('testing.iconSkipped'));
+            this.iconPath = new vscode.ThemeIcon('close', new vscode.ThemeColor('boalang.icon.jobCanceled'));
         } else if (job.executionStatus == ExecutionStatus.ERROR) {
-           this.iconPath = new vscode.ThemeIcon('bug', new vscode.ThemeColor('testing.iconFailed'));
+           this.iconPath = new vscode.ThemeIcon('bug', new vscode.ThemeColor('boalang.icon.jobExecError'));
         } else if (job.compilerStatus == CompilerStatus.ERROR) {
-           this.iconPath = new vscode.ThemeIcon('bracket-error', new vscode.ThemeColor('testing.iconErrored'));
+           this.iconPath = new vscode.ThemeIcon('bracket-error', new vscode.ThemeColor('boalang.icon.jobCompileError'));
         } else if (job.isRunning) {
-           this.iconPath = new vscode.ThemeIcon('pulse', new vscode.ThemeColor('testing.iconQueued'));
+           this.iconPath = new vscode.ThemeIcon('pulse', new vscode.ThemeColor('boalang.icon.jobRunning'));
         } else {
-           this.iconPath = new vscode.ThemeIcon('pass', new vscode.ThemeColor('testing.iconPassed'));
+           this.iconPath = new vscode.ThemeIcon('pass', new vscode.ThemeColor('boalang.icon.jobDone'));
         }
     }
 }

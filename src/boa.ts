@@ -117,14 +117,19 @@ export async function runQuery(uri:vscode.Uri) {
             if (uri.scheme == "untitled") {
                 submitQuery(vscode.window.activeTextEditor.document.getText(), datasetId);
             } else {
-                // otherwise send the file contents
-                require('fs').readFile(uri.fsPath, 'utf8', (err, query) => {
-                    if (err) {
-                        console.error(err);
-                        return;
-                    }
-                    submitQuery(query, datasetId);
-                });
+                const dirty = vscode.workspace.textDocuments.filter((doc) => doc.uri == uri && doc.isDirty);
+                if (dirty.length == 1) {
+                    submitQuery(dirty[0].getText(), datasetId);
+                } else {
+                    // otherwise send the file contents
+                    require('fs').readFile(uri.fsPath, 'utf8', (err, query) => {
+                        if (err) {
+                            console.error(err);
+                            return;
+                        }
+                        submitQuery(query, datasetId);
+                    });
+                }
             }
         });
     }

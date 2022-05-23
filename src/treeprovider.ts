@@ -137,15 +137,15 @@ class BoaJob extends vscode.TreeItem {
         };
 
         if (job.compilerStatus == CompilerStatus.KILLED || job.executionStatus == ExecutionStatus.KILLED) {
-            this.iconPath = new vscode.ThemeIcon('close');
+            this.iconPath = new vscode.ThemeIcon('close', new vscode.ThemeColor('testing.iconSkipped'));
         } else if (job.executionStatus == ExecutionStatus.ERROR) {
-           this.iconPath = new vscode.ThemeIcon('bug');
+           this.iconPath = new vscode.ThemeIcon('bug', new vscode.ThemeColor('testing.iconFailed'));
         } else if (job.compilerStatus == CompilerStatus.ERROR) {
-           this.iconPath = new vscode.ThemeIcon('bracket-error');
+           this.iconPath = new vscode.ThemeIcon('bracket-error', new vscode.ThemeColor('testing.iconErrored'));
         } else if (job.isRunning) {
-           this.iconPath = new vscode.ThemeIcon('pulse');
+           this.iconPath = new vscode.ThemeIcon('pulse', new vscode.ThemeColor('testing.iconQueued'));
         } else {
-           this.iconPath = new vscode.ThemeIcon('pass');
+           this.iconPath = new vscode.ThemeIcon('pass', new vscode.ThemeColor('testing.iconPassed'));
         }
     }
 }

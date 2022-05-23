@@ -26,8 +26,7 @@ let datasets: string[] = null;
 export async function getDatasets() {
     if (datasets == null)
         runBoaCommands(async (client: boaapi.BoaClient) => {
-            await client.datasetNames()
-                .then((ds: string[]) => datasets = ds);
+            await client.datasetNames().then((ds: string[]) => datasets = ds);
         }).then(
             () => vscode.window.setStatusBarMessage('$(pass) Boa API: logged in', 10000)
         );

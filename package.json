@@ -132,6 +132,24 @@
             }
         ],
         "menus": {
+            "commandPalette": [
+                {
+                    "command": "boalang.nextPage",
+                    "when": "false"
+                },
+                {
+                    "command": "boalang.prevPage",
+                    "when": "false"
+                },
+                {
+                    "command": "boalang.showJob",
+                    "when": "false"
+                },
+                {
+                    "command": "boalang.showOutput",
+                    "when": "false"
+                }
+            ],
             "view/title": [
                 {
                     "command": "boalang.prevPage",

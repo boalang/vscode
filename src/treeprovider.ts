@@ -131,9 +131,9 @@ class BoaJob extends vscode.TreeItem {
         this.description = job.submitted.toString();
 
         this.command = {
-            command: 'boalang.showJob',
+            command: 'boalang.showOutput',
             arguments: [getJobUri(job.id)],
-            title: 'show job',
+            title: 'show output',
         };
 
         if (job.compilerStatus == CompilerStatus.KILLED || job.executionStatus == ExecutionStatus.KILLED) {

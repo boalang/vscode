@@ -114,7 +114,7 @@ export async function runQuery(uri:vscode.Uri) {
             }
 
             // if the file has never been saved
-            if (uri.scheme == "untitled") {
+            if (uri.scheme == 'untitled') {
                 submitQuery(vscode.window.activeTextEditor.document.getText(), datasetId);
             } else {
                 const dirty = vscode.workspace.textDocuments.filter((doc) => doc.uri == uri && doc.isDirty);
@@ -148,6 +148,7 @@ async function submitQuery(query, dataset) {
 
             const job = await client.query(query, dataset);
             progress.report({  increment: 20 });
+            vscode.commands.executeCommand('boalang.refreshJobs');
 
             cancel.onCancellationRequested(async (e) => {
                 console.log(`stopping job ${job.id}`);
@@ -158,12 +159,24 @@ async function submitQuery(query, dataset) {
             await job.wait();
 
             progress.report({  increment: 95 });
-            showJob(getJobUri(job.id));
-            vscode.commands.executeCommand('boalang.refreshJobs');
+            vscode.commands.executeCommand('boalang.showOutput', getJobUri(job.id));
         });
 
         progress.report({ increment: 100 });
     });
+}
+
+export function showOutput(channel: vscode.OutputChannel) {
+    return function showOutput(uri:vscode.Uri) {
+        runBoaCommands(async (client: boaapi.BoaClient) => {
+            const jobId = uri.path.substring('/job/'.length);
+            const job = await client.getJob(jobId);
+
+            channel.clear();
+            channel.append(await job.output);
+            channel.show();
+        });
+    }
 }
 
 export function showJob(uri:vscode.Uri) {

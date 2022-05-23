@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
-import { getDatasets, showJob, runQuery } from './boa';
+import { getDatasets, showJob, runQuery, showOutput } from './boa';
 import { AuthSettings } from './credentials';
 import { treeProvider } from './treeprovider';
 import { BoaCodelensProvider } from './codelens';
@@ -27,14 +27,19 @@ export function activate(context: vscode.ExtensionContext) {
 
     getDatasets();
 
+    // create channel to show query outputs
+    const output = vscode.window.createOutputChannel('Boa: Query Output', 'boalang');
+    context.subscriptions.push(output);
+
     // register all commands
     context.subscriptions.push(vscode.commands.registerCommand('boalang.showJob', showJob));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.prevPage', () => treeProvider.prevPage()));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.nextPage', () => treeProvider.nextPage()));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.refreshJobs', () => treeProvider.refresh()));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.runQuery', runQuery));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.showOutput', showOutput(output)));
 
-    context.subscriptions.push(vscode.languages.registerCodeLensProvider("boalang", new BoaCodelensProvider()));
+    context.subscriptions.push(vscode.languages.registerCodeLensProvider('boalang', new BoaCodelensProvider()));
 
     // set up the job list TreeView
     context.subscriptions.push(treeProvider.setView(vscode.window.createTreeView('boalang.jobList', {
@@ -42,7 +47,7 @@ export function activate(context: vscode.ExtensionContext) {
     })));
 
     vscode.workspace.onDidChangeConfiguration(event => {
-        if (event.affectsConfiguration("boalang.joblist.pagesize")) {
+        if (event.affectsConfiguration('boalang.joblist.pagesize')) {
             vscode.commands.executeCommand('boalang.refreshJobs');
         }
     })

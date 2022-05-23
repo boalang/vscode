@@ -44,6 +44,11 @@
                 "category": "Boa"
             },
             {
+                "command": "boalang.showOutput",
+                "title": "Show Boa Query Output",
+                "category": "Boa"
+            },
+            {
                 "command": "boalang.showJob",
                 "title": "Display Boa Job",
                 "category": "Boa"

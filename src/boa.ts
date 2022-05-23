@@ -135,7 +135,7 @@ async function submitQuery(query, dataset) {
     vscode.window.withProgress({
         location: vscode.ProgressLocation.Notification,
         cancellable: true,
-        title: 'Boa query submitted'
+        title: 'Boa query submitted and running...'
     }, async (progress, cancel) => {
         progress.report({  increment: 0 });
 

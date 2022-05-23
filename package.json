@@ -41,16 +41,19 @@
             {
                 "command": "boalang.runQuery",
                 "title": "Run Boa Query",
+                "icon": "$(play)",
                 "category": "Boa"
             },
             {
                 "command": "boalang.showOutput",
                 "title": "Show Boa Query Output",
+                "icon": "$(output)",
                 "category": "Boa"
             },
             {
                 "command": "boalang.showJob",
                 "title": "Display Boa Job",
+                "icon": "$(inspect)",
                 "category": "Boa"
             },
             {

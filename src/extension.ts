@@ -20,6 +20,7 @@ import { AuthSettings } from './credentials';
 import { treeProvider } from './treeprovider';
 import { BoaSourceCodelensProvider } from './codelens';
 import { JobsJSONLinkProvider, StudyConfigJSONLinkProvider } from './linkproviders';
+import * as consts from './consts';
 
 // this method is called when the extension is activated
 export function activate(context: vscode.ExtensionContext) {

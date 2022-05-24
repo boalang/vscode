@@ -18,6 +18,7 @@ import * as vscode from 'vscode';
 import * as boaapi from '@boa/boa-api/lib/boaclient';
 import { getBoaUsername, getBoaPassword, removeCredentials } from './credentials';
 import { BoaJob } from './treeprovider';
+import * as consts from './consts';
 
 export function getJobUri(id) {
     return vscode.Uri.parse(`${vscode.env.uriScheme}://boalang/job/${id}`);
@@ -56,9 +57,9 @@ async function selectDataset(): Promise<string> {
 
     const items: DatasetQuickPickItem[] = sortedDatasets.map((t, i) => {
 		return {
-			label: (lastDataset == t ? '$(history) ' : favDataset == t ? '$(star-full) ' : '') + t.replace('[admin] ', ''),
+			label: (lastDataset == t ? '$(history) ' : favDataset == t ? '$(star-full) ' : '') + t.replace(consts.adminPrefix, ''),
 			// detail: lastDataset == t ? 'last used' : favDataset == t ? 'favorite' : null,
-            description: t.indexOf('[admin] ') > -1 ? 'admin' : '',
+            description: t.indexOf(consts.adminPrefix) > -1 ? 'admin' : '',
             alwaysShow: true,
 			dataset: t
 		};

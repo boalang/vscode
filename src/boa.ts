@@ -31,14 +31,14 @@ export async function getDatasets() {
     }
     datasets = [];
 
-        runBoaCommands(async (client: boaapi.BoaClient) => {
-            await client.datasetNames().then((ds: string[]) => datasets = ds);
-        }).then(
+    runBoaCommands(async (client: boaapi.BoaClient) => {
+        await client.datasetNames().then((ds: string[]) => datasets = ds);
+    }).then(
         () => {
             vscode.window.setStatusBarMessage('$(pass) Boa API: logged in', 10000);
             return datasets;
         }
-        );
+    );
 }
 
 async function selectDataset(): Promise<string> {

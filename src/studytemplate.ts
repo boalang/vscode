@@ -18,6 +18,9 @@ import * as vscode from 'vscode';
 import { getDatasets } from './boa';
 import * as consts from './consts';
 
+/**
+ * Provides intellisense completions for dataset names in the study-config.json file.
+ */
 class StudyConfigCompletionItemProvider implements vscode.CompletionItemProvider {
     public provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): vscode.ProviderResult<vscode.CompletionItem[]> {
         return getDatasets().then((datasets) => {

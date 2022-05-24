@@ -22,6 +22,16 @@ import { BoaSourceCodelensProvider } from './codelens';
 import { JobsJSONLinkProvider, StudyConfigJSONLinkProvider } from './linkproviders';
 import * as consts from './consts';
 
+class StudyConfigCompletionItemProvider implements vscode.CompletionItemProvider {
+    public provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): vscode.ProviderResult<vscode.CompletionItem[]> {
+        return getDatasets().then((datasets) => {
+            const items = datasets.map((ds) => new vscode.CompletionItem(ds, vscode.CompletionItemKind.Text));
+            items.forEach((item) => item.insertText = '"' + (item.label as string).replace(consts.adminPrefix, '') + '"');
+            return Promise.resolve(items);
+        });
+    }
+}
+
 // this method is called when the extension is activated
 export function activate(context: vscode.ExtensionContext) {
     // initialize password storage
@@ -55,6 +65,12 @@ export function activate(context: vscode.ExtensionContext) {
         scheme: 'file',
         pattern: '**/study-config.json',
     }, new StudyConfigJSONLinkProvider()));
+
+    context.subscriptions.push(vscode.languages.registerCompletionItemProvider({
+        language: 'json',
+        scheme: 'file',
+        pattern: '**/study-config.json',
+    }, new StudyConfigCompletionItemProvider(), '\"'));
 
     // set up the job list TreeView
     context.subscriptions.push(treeProvider.setView(vscode.window.createTreeView('boalang.jobList', {

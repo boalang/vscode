@@ -15,12 +15,23 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
+import { getDatasets } from './boa';
 import * as consts from './consts';
+
+class StudyConfigCompletionItemProvider implements vscode.CompletionItemProvider {
+    public provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): vscode.ProviderResult<vscode.CompletionItem[]> {
+        return getDatasets().then((datasets) => {
+            const items = datasets.map((ds) => new vscode.CompletionItem(ds, vscode.CompletionItemKind.Text));
+            items.forEach((item) => item.insertText = '"' + (item.label as string).replace(consts.adminPrefix, '') + '"');
+            return Promise.resolve(items);
+        });
+    }
+}
 
 /**
  * Processes the study template's jobs.json file to make file paths and job numbers into links.
  */
-export class JobsJSONLinkProvider implements vscode.DocumentLinkProvider {
+class JobsJSONLinkProvider implements vscode.DocumentLinkProvider {
 	provideDocumentLinks(document: vscode.TextDocument, token: vscode.CancellationToken): vscode.DocumentLink[] | undefined {
         const links = [];
 
@@ -41,7 +52,7 @@ export class JobsJSONLinkProvider implements vscode.DocumentLinkProvider {
 /**
  * Processes the study template's study-config.json file to make file paths into links.
  */
-export class StudyConfigJSONLinkProvider implements vscode.DocumentLinkProvider {
+class StudyConfigJSONLinkProvider implements vscode.DocumentLinkProvider {
 	provideDocumentLinks(document: vscode.TextDocument, token: vscode.CancellationToken): vscode.DocumentLink[] | undefined {
         const links = [];
 
@@ -83,4 +94,24 @@ export class StudyConfigJSONLinkProvider implements vscode.DocumentLinkProvider 
 
         return links;
 	}
+}
+
+export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
+    // process the study template JSON files to make things linkable
+    context.subscriptions.push(vscode.languages.registerDocumentLinkProvider({
+        language: 'json',
+        scheme: 'file',
+        pattern: '**/jobs.json',
+    }, new JobsJSONLinkProvider()));
+    context.subscriptions.push(vscode.languages.registerDocumentLinkProvider({
+        language: 'json',
+        scheme: 'file',
+        pattern: '**/study-config.json',
+    }, new StudyConfigJSONLinkProvider()));
+
+    context.subscriptions.push(vscode.languages.registerCompletionItemProvider({
+        language: 'json',
+        scheme: 'file',
+        pattern: '**/study-config.json',
+    }, new StudyConfigCompletionItemProvider(), '\"'));
 }

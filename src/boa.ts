@@ -199,7 +199,7 @@ export function showFullOutput(uri:vscode.Uri|BoaJob) {
             language: 'boalang',
             content: await job.outputFull
         }).then(
-            (doc) => vscode.window.showTextDocument(doc)
+            (doc) => vscode.window.showTextDocument(doc, vscode.ViewColumn.Beside)
         );
     });
 }

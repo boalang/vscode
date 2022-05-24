@@ -19,6 +19,7 @@ import { getDatasets, showJob, runQuery, showOutput, showFullOutput } from './bo
 import { AuthSettings } from './credentials';
 import { treeProvider } from './treeprovider';
 import { BoaCodelensProvider } from './codelens';
+import { JobsJSONLinkProvider, StudyConfigJSONLinkProvider } from './linkproviders';
 
 // this method is called when the extension is activated
 export function activate(context: vscode.ExtensionContext) {
@@ -41,6 +42,18 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('boalang.showFullOutput', showFullOutput));
 
     context.subscriptions.push(vscode.languages.registerCodeLensProvider('boalang', new BoaCodelensProvider()));
+
+    // process the study template JSON files to make things linkable
+    context.subscriptions.push(vscode.languages.registerDocumentLinkProvider({
+        language: 'json',
+        scheme: 'file',
+        pattern: '**/jobs.json',
+    }, new JobsJSONLinkProvider()));
+    context.subscriptions.push(vscode.languages.registerDocumentLinkProvider({
+        language: 'json',
+        scheme: 'file',
+        pattern: '**/study-config.json',
+    }, new StudyConfigJSONLinkProvider()));
 
     // set up the job list TreeView
     context.subscriptions.push(treeProvider.setView(vscode.window.createTreeView('boalang.jobList', {

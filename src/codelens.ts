@@ -16,9 +16,9 @@
 //
 import * as vscode from 'vscode';
 
-export class BoaCodelensProvider implements vscode.CodeLensProvider {
+export class BoaSourceCodelensProvider implements vscode.CodeLensProvider {
     public provideCodeLenses(document: vscode.TextDocument, token: vscode.CancellationToken): vscode.CodeLens[] | Thenable<vscode.CodeLens[]> {
-        const range = new vscode.Range(document.positionAt(0), document.positionAt(document.getText().length));
+        const range = new vscode.Range(document.positionAt(0), document.positionAt(0));
         return [new vscode.CodeLens(range, {
                 title: "$(play) Run Query",
                 tooltip: "Run this Boa query",

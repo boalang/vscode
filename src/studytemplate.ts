@@ -133,7 +133,7 @@ class StudyConfigCodelensProvider implements vscode.CodeLensProvider {
         for (const csv of document.getText().matchAll(/"([^"]+\.csv)"/g)) {
             const range = new vscode.Range(document.positionAt(csv.index + 1), document.positionAt(csv.index + 1 + csv[1].length));
             const lense = new vscode.CodeLens(range, {
-                title: "$(output) Generate CSV",
+                title: "$(table) Generate CSV",
                 tooltip: "Generates the CSV output - this might trigger a download on the input",
                 command: "boalang.generateCSV",
                 arguments: [csv[1]]
@@ -145,7 +145,7 @@ class StudyConfigCodelensProvider implements vscode.CodeLensProvider {
         for (const output of document.getText().matchAll(/"output"\s*:\s*"([^"]+\.txt)"/g)) {
             const range = new vscode.Range(document.positionAt(output.index + 1), document.positionAt(output.index + 1 + output[1].length));
             const lense = new vscode.CodeLens(range, {
-                title: "$(output) Generate Dupes",
+                title: "$(list-filter) Generate Dupes",
                 tooltip: "Generates the Dupes output - this might trigger a download on the input",
                 command: "boalang.generateDupes",
                 arguments: [output[1]]

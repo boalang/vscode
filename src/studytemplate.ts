@@ -99,22 +99,20 @@ class StudyConfigJSONLinkProvider implements vscode.DocumentLinkProvider {
 	}
 }
 
-export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
-    // process the study template JSON files to make things linkable
-    context.subscriptions.push(vscode.languages.registerDocumentLinkProvider({
-        language: 'json',
-        scheme: 'file',
-        pattern: '**/jobs.json',
-    }, new JobsJSONLinkProvider()));
-    context.subscriptions.push(vscode.languages.registerDocumentLinkProvider({
-        language: 'json',
-        scheme: 'file',
-        pattern: '**/study-config.json',
-    }, new StudyConfigJSONLinkProvider()));
+const jobsSelector: vscode.DocumentSelector = {
+    language: 'json',
+    scheme: 'file',
+    pattern: '**/jobs.json',
+};
+const studyConfigSelector: vscode.DocumentSelector = {
+    language: 'json',
+    scheme: 'file',
+    pattern: '**/study-config.json',
+};
 
-    context.subscriptions.push(vscode.languages.registerCompletionItemProvider({
-        language: 'json',
-        scheme: 'file',
-        pattern: '**/study-config.json',
-    }, new StudyConfigCompletionItemProvider(), '\"'));
+export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
+    context.subscriptions.push(vscode.languages.registerDocumentLinkProvider(jobsSelector, new JobsJSONLinkProvider()));
+    context.subscriptions.push(vscode.languages.registerDocumentLinkProvider(studyConfigSelector, new StudyConfigJSONLinkProvider()));
+
+    context.subscriptions.push(vscode.languages.registerCompletionItemProvider(studyConfigSelector, new StudyConfigCompletionItemProvider(), '\"'));
 }

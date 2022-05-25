@@ -140,12 +140,16 @@
         "menus": {
             "commandPalette": [
                 {
+                    "command": "boalang.runQuery",
+                    "when": "editorLangId == 'boalang'"
+                },
+                {
                     "command": "boalang.nextPage",
-                    "when": "false"
+                    "when": "sideBarFocus && activeViewlet == 'workbench.view.explorer'"
                 },
                 {
                     "command": "boalang.prevPage",
-                    "when": "false"
+                    "when": "sideBarFocus && activeViewlet == 'workbench.view.explorer'"
                 },
                 {
                     "command": "boalang.showJob",
@@ -154,6 +158,11 @@
                 {
                     "command": "boalang.showOutput",
                     "when": "false"
+                },
+                {
+                    "command": "boalang.showFullOutput",
+                    "when": "false"
+                }
                 }
             ],
             "view/title": [

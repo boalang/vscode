@@ -72,12 +72,12 @@ class StudyConfigJSONLinkProvider implements vscode.DocumentLinkProvider {
 	provideDocumentLinks(document: vscode.TextDocument, token: vscode.CancellationToken): vscode.DocumentLink[] | undefined {
         const links = [];
 
-        const jsonPath = document.uri.fsPath.substring(0, document.uri.fsPath.lastIndexOf('/'));
+        const docPath = document.uri.fsPath.substring(0, document.uri.fsPath.lastIndexOf('/'));
 
         // looks for query outputs, e.g.: "kotlin/rq1.txt": {
         for (const output of document.getText().matchAll(/"([^"]+\.txt)"/g)) {
             const range = new vscode.Range(document.positionAt(output.index + 1), document.positionAt(output.index + 1 + output[1].length));
-            const link = new vscode.DocumentLink(range, vscode.Uri.parse(`file://${jsonPath}/${consts.outputPath}/${output[1]}`));
+            const link = new vscode.DocumentLink(range, vscode.Uri.parse(`file://${docPath}/${consts.outputPath}/${output[1]}`));
             link.tooltip = `View the Boa query output file '${consts.outputPath}/${output[1]}'`;
             links.push(link);
         }
@@ -86,7 +86,7 @@ class StudyConfigJSONLinkProvider implements vscode.DocumentLinkProvider {
         for (const query of document.getText().matchAll(/"query":\s*"([^"]+\.boa)"/g)) {
             const startPos = query.index + query[0].length - query[1].length - 1;
             const range = new vscode.Range(document.positionAt(startPos), document.positionAt(startPos + query[1].length));
-            const link = new vscode.DocumentLink(range, vscode.Uri.parse(`file://${jsonPath}/${consts.scriptPath}/${query[1]}`));
+            const link = new vscode.DocumentLink(range, vscode.Uri.parse(`file://${docPath}/${consts.scriptPath}/${query[1]}`));
             link.tooltip = `View the Boa query '${consts.scriptPath}/${query[1]}'`;
             links.push(link);
         }
@@ -94,7 +94,7 @@ class StudyConfigJSONLinkProvider implements vscode.DocumentLinkProvider {
         // looks for CSV files, e.g.: "csv": "kotlin/dupes.csv"
         for (const csv of document.getText().matchAll(/"([^"]+\.csv)"/g)) {
             const range = new vscode.Range(document.positionAt(csv.index + 1), document.positionAt(csv.index + 1 + csv[1].length));
-            const link = new vscode.DocumentLink(range, vscode.Uri.parse(`file://${jsonPath}/${consts.csvPath}/${csv[1]}`));
+            const link = new vscode.DocumentLink(range, vscode.Uri.parse(`file://${docPath}/${consts.csvPath}/${csv[1]}`));
             link.tooltip = `View the Boa output CSV file '${consts.csvPath}/${csv[1]}'`;
             links.push(link);
         }
@@ -103,13 +103,76 @@ class StudyConfigJSONLinkProvider implements vscode.DocumentLinkProvider {
         for (const replacement of document.getText().matchAll(/"file":\s*"([^"]+\.boa)"/g)) {
             const startPos = replacement.index + replacement[0].length - replacement[1].length - 1;
             const range = new vscode.Range(document.positionAt(startPos), document.positionAt(startPos + replacement[1].length));
-            const link = new vscode.DocumentLink(range, vscode.Uri.parse(`file://${jsonPath}/${consts.snippetPath}/${replacement[1]}`));
+            const link = new vscode.DocumentLink(range, vscode.Uri.parse(`file://${docPath}/${consts.snippetPath}/${replacement[1]}`));
             link.tooltip = `View the Boa query output file '${consts.snippetPath}/${replacement[1]}'`;
             links.push(link);
         }
 
         return links;
 	}
+}
+
+class StudyConfigCodelensProvider implements vscode.CodeLensProvider {
+    public provideCodeLenses(document: vscode.TextDocument, token: vscode.CancellationToken): vscode.CodeLens[] | Thenable<vscode.CodeLens[]> {
+        const lenses = [];
+        const docPath = document.uri.fsPath.substring(0, document.uri.fsPath.lastIndexOf('/'));
+
+        // looks for query outputs, e.g.: "kotlin/rq1.txt": {
+        for (const output of document.getText().matchAll(/"([^"]+\.txt)"\s*:\s*{/g)) {
+            const range = new vscode.Range(document.positionAt(output.index + 1), document.positionAt(output.index + 1 + output[1].length));
+            const lense = new vscode.CodeLens(range, {
+                title: "$(cloud-download) Download Output",
+                tooltip: "Make sure this output is up to date and downloaded",
+                command: "boalang.downloadOutput",
+                arguments: [output[1]]
+            });
+            lenses.push(lense);
+        }
+
+        // looks for CSV files, e.g.: "csv": "kotlin/dupes.csv"
+        for (const csv of document.getText().matchAll(/"([^"]+\.csv)"/g)) {
+            const range = new vscode.Range(document.positionAt(csv.index + 1), document.positionAt(csv.index + 1 + csv[1].length));
+            const lense = new vscode.CodeLens(range, {
+                title: "$(output) Generate CSV",
+                tooltip: "Generates the CSV output - this might trigger a download on the input",
+                command: "boalang.generateCSV",
+                arguments: [csv[1]]
+            });
+            lenses.push(lense);
+        }
+
+        // looks for dupes output files, e.g.: "output": "kotlin/dupes.txt",
+        for (const output of document.getText().matchAll(/"output"\s*:\s*"([^"]+\.txt)"/g)) {
+            const range = new vscode.Range(document.positionAt(output.index + 1), document.positionAt(output.index + 1 + output[1].length));
+            const lense = new vscode.CodeLens(range, {
+                title: "$(output) Generate Dupes",
+                tooltip: "Generates the Dupes output - this might trigger a download on the input",
+                command: "boalang.generateDupes",
+                arguments: [output[1]]
+            });
+            lenses.push(lense);
+        }
+
+        return lenses;
+    }
+}
+
+function downloadOuput(filename) {
+    const terminal = vscode.window.createTerminal(`Boa makefile command`);
+    terminal.show(false);
+    terminal.sendText(`make ${consts.outputPath}/${filename}`);
+}
+
+function generateCSV(filename) {
+    const terminal = vscode.window.createTerminal(`Boa makefile command`);
+    terminal.show(false);
+    terminal.sendText(`make ${consts.csvPath}/${filename}`);
+}
+
+function generateDupes(filename) {
+    const terminal = vscode.window.createTerminal(`Boa makefile command`);
+    terminal.show(false);
+    terminal.sendText(`make ${consts.outputPath}/${filename}`);
 }
 
 const jobsSelector: vscode.DocumentSelector = {
@@ -124,8 +187,14 @@ const studyConfigSelector: vscode.DocumentSelector = {
 };
 
 export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.downloadOutput', downloadOuput));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.generateCSV', generateCSV));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.generateDupes', generateDupes));
+
     context.subscriptions.push(vscode.languages.registerDocumentLinkProvider(jobsSelector, new JobsJSONLinkProvider()));
     context.subscriptions.push(vscode.languages.registerDocumentLinkProvider(studyConfigSelector, new StudyConfigJSONLinkProvider()));
 
     context.subscriptions.push(vscode.languages.registerCompletionItemProvider(studyConfigSelector, new StudyConfigCompletionItemProvider(), '\"'));
+
+    context.subscriptions.push(vscode.languages.registerCodeLensProvider(studyConfigSelector, new StudyConfigCodelensProvider()));
 }

@@ -81,6 +81,24 @@
                 "title": "Refresh Jobs",
                 "icon": "$(refresh)",
                 "category": "Boa"
+            },
+            {
+                "command": "boalang.downloadOutput",
+                "title": "Download Query Output",
+                "icon": "$(cloud-download)",
+                "category": "Boa"
+            },
+            {
+                "command": "boalang.generateCSV",
+                "title": "Generate CSV Output",
+                "icon": "$(output)",
+                "category": "Boa"
+            },
+            {
+                "command": "boalang.generateDupes",
+                "title": "Generate Dupes Output",
+                "icon": "$(output)",
+                "category": "Boa"
             }
         ],
         "colors": [
@@ -162,7 +180,18 @@
                 {
                     "command": "boalang.showFullOutput",
                     "when": "false"
-                }
+                },
+                {
+                    "command": "boalang.downloadOutput",
+                    "when": "false"
+                },
+                {
+                    "command": "boalang.generateCSV",
+                    "when": "false"
+                },
+                {
+                    "command": "boalang.generateDupes",
+                    "when": "false"
                 }
             ],
             "view/title": [

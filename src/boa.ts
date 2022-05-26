@@ -77,8 +77,6 @@ async function selectDataset(): Promise<string> {
         ignoreFocusOut: false
     });
 
-    if (item)
-        boaConfig.update('dataset.last', item.dataset, true);
     return item ? item.dataset : undefined;
 }
 
@@ -114,6 +112,9 @@ export async function runBoaCommands(func: { (client: boaapi.BoaClient): Promise
 export async function runQuery(uri:vscode.Uri) {
     const dataset = await selectDataset();
     if (dataset) {
+        const boaConfig = vscode.workspace.getConfiguration('boalang');
+        boaConfig.update('dataset.last', dataset, true);
+
         runBoaCommands(async (client: boaapi.BoaClient) => {
             const datasetId = await client.getDataset(dataset);
 

@@ -118,6 +118,15 @@ class StudyConfigJSONLinkProvider implements vscode.DocumentLinkProvider {
             links.push(link);
         }
 
+        // looks for analyses, e.g.: "rq1.py": {
+        for (const script of document.getText().matchAll(/"([^"]+\.py)"\s*:/g)) {
+            const startPos = script.index + 1;
+            const range = new vscode.Range(document.positionAt(startPos), document.positionAt(startPos + script[1].length));
+            const link = new vscode.DocumentLink(range, vscode.Uri.parse(`file://${docPath}/${consts.analysesPath}/${script[1]}`));
+            link.tooltip = `View the analysis file '${consts.analysesPath}/${script[1]}'`;
+            links.push(link);
+        }
+
         return links;
 	}
 }
@@ -163,6 +172,18 @@ class StudyConfigCodelensProvider implements vscode.CodeLensProvider {
             lenses.push(lense);
         }
 
+        // looks for analyses, e.g.: "rq1.py": {
+        for (const target of document.getText().matchAll(/"([^"]+)\.py"\s*:/g)) {
+            const range = new vscode.Range(document.positionAt(target.index + 1), document.positionAt(target.index + 1 + target[1].length));
+            const lense = new vscode.CodeLens(range, {
+                title: "$(play) Run Analysis",
+                tooltip: "Runs the selected analysis script - this will download all inputs",
+                command: "boalang.runAnalysis",
+                arguments: [target[1]]
+            });
+            lenses.push(lense);
+        }
+    
         return lenses;
     }
 }
@@ -185,6 +206,12 @@ function generateDupes(filename) {
     terminal.sendText(`make ${consts.outputPath}/${filename}`);
 }
 
+function runAnalysis(target) {
+    const terminal = vscode.window.createTerminal(`Boa makefile command`);
+    terminal.show(false);
+    terminal.sendText(`make ${target}`);
+}
+
 const jobsSelector: vscode.DocumentSelector = {
     language: 'json',
     scheme: 'file',
@@ -200,6 +227,7 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('boalang.downloadOutput', downloadOuput));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.generateCSV', generateCSV));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.generateDupes', generateDupes));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.runAnalysis', runAnalysis));
 
     context.subscriptions.push(vscode.languages.registerDocumentLinkProvider(jobsSelector, new JobsJSONLinkProvider()));
     context.subscriptions.push(vscode.languages.registerDocumentLinkProvider(studyConfigSelector, new StudyConfigJSONLinkProvider()));

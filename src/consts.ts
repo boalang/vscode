@@ -23,3 +23,4 @@ export const scriptPath = 'boa';
 export const snippetPath = scriptPath + '/snippets';
 export const outputPath = 'data/txt';
 export const csvPath = 'data/csv';
+export const analysesPath = 'analyses';

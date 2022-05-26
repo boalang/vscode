@@ -40,7 +40,8 @@
         "onCommand:boalang.refreshJobs",
         "onCommand:boalang.downloadOutput",
         "onCommand:boalang.generateCSV",
-        "onCommand:boalang.generateDupes"
+        "onCommand:boalang.generateDupes",
+        "onCommand:boalang.runAnalysis"
     ],
     "contributes": {
         "commands": [
@@ -110,6 +111,12 @@
                 "command": "boalang.generateDupes",
                 "title": "Generate Dupes Output",
                 "icon": "$(list-filter)",
+                "category": "Boa"
+            },
+            {
+                "command": "boalang.runAnalysis",
+                "title": "Run Boa Analysis",
+                "icon": "$(play)",
                 "category": "Boa"
             }
         ],
@@ -203,6 +210,10 @@
                 },
                 {
                     "command": "boalang.generateDupes",
+                    "when": "false"
+                },
+                {
+                    "command": "boalang.runAnalysis",
                     "when": "false"
                 }
             ],

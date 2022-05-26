@@ -45,6 +45,12 @@
                 "category": "Boa"
             },
             {
+                "command": "boalang.setFavorite",
+                "title": "Set Favorite Output",
+                "icon": "$(star-full)",
+                "category": "Boa"
+            },
+            {
                 "command": "boalang.showOutput",
                 "title": "Show Boa Query Output",
                 "icon": "$(output)",

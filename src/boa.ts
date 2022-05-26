@@ -80,6 +80,15 @@ async function selectDataset(): Promise<string> {
     return item ? item.dataset : undefined;
 }
 
+export async function setFavorite() {
+    const boaConfig = vscode.workspace.getConfiguration('boalang');
+    const dataset = await selectDataset();
+    if (dataset) {
+        boaConfig.update('dataset.favorite', dataset, true);
+        vscode.window.showInformationMessage(`Boa favorite dataset: ${dataset}`);
+    }
+}
+
 export async function runBoaCommands(func: { (client: boaapi.BoaClient): Promise<void> }) {
     const username = await getBoaUsername();
     if (username) {

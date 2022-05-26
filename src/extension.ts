@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
-import { getDatasets, showJob, runQuery, showOutput, showFullOutput } from './boa';
+import { getDatasets, showJob, runQuery, showOutput, showFullOutput, setFavorite } from './boa';
 import { AuthSettings } from './credentials';
 import { treeProvider } from './treeprovider';
 import { BoaSourceCodelensProvider } from './codelens';
@@ -33,6 +33,7 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(output);
 
     // register all commands
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.setFavorite', setFavorite));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.showJob', showJob));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.prevPage', () => treeProvider.prevPage()));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.nextPage', () => treeProvider.nextPage()));

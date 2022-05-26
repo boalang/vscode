@@ -56,6 +56,11 @@ export function activate(context: vscode.ExtensionContext) {
             vscode.commands.executeCommand('boalang.refreshJobs');
         }
     })
+
+    const boaConfig = vscode.workspace.getConfiguration('boalang');
+    if (boaConfig.get('joblist.autoload', false)) {
+        vscode.commands.executeCommand('boalang.refreshJobs');
+    }
 }
 
 // this method is called when the extension is deactivated

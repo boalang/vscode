@@ -255,10 +255,16 @@
                     "order": 2,
                     "default": 10
                 },
+                "boalang.joblist.autoload": {
+                    "type": "boolean",
+                    "description": "Should the jobs tree view refresh on extension activation?",
+                    "order": 3,
+                    "default": false
+                },
                 "boalang.dataset.last": {
                     "type": "string",
                     "description": "Last used Boa dataset",
-                    "order": 3,
+                    "order": 4,
                     "default": null
                 }
             }

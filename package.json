@@ -237,7 +237,14 @@
             "explorer/context": [{
                 "when": "resourceLangId == boalang",
                 "command": "boalang.runQuery"
-            }]
+            }],
+            "editor/title": [
+                {
+                    "command": "boalang.showOutput",
+                    "group": "navigation",
+                    "when": "resourceScheme == boalang"
+                }
+            ]
         },
         "configuration": {
             "title": "Boa API Settings",

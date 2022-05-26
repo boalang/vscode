@@ -1,0 +1,23 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "Boa Output",
+	"patterns": [
+		{
+			"name": "keyword.control.boaoutput",
+			"match": "\\b[\\[\\]=]+\\b"
+		},
+		{
+			"name": "constant.numeric.boaoutput",
+			"match": "\\b-?\\d+\\b"
+		},
+		{
+			"name": "support.type.boaoutput",
+			"match": "^[a-zA-Z_]+"
+		},
+		{
+			"name": "keyword.control.boaoutput",
+			"match": "= .+$"
+		}
+	],
+	"scopeName": "source.boaoutput"
+}

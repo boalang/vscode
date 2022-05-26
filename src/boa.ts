@@ -204,7 +204,7 @@ export function showFullOutput(uri:vscode.Uri|BoaJob) {
         const job = await client.getJob(jobId);
 
         vscode.workspace.openTextDocument({
-            language: 'boalang',
+            language: 'boaoutput',
             content: await job.outputFull
         }).then(
             (doc) => vscode.window.showTextDocument(doc, vscode.ViewColumn.Beside)

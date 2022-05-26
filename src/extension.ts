@@ -29,7 +29,7 @@ export function activate(context: vscode.ExtensionContext) {
     getDatasets();
 
     // create channel to show query outputs
-    const output = vscode.window.createOutputChannel('Boa: Query Output', 'boalang');
+    const output = vscode.window.createOutputChannel('Boa: Query Output', 'boaoutput');
     context.subscriptions.push(output);
 
     // register all commands

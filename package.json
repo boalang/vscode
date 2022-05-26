@@ -257,17 +257,32 @@
                 }
             }
         },
-        "languages": [{
-            "id": "boalang",
-            "aliases": ["Boa", "boalang"],
-            "extensions": [".boa"],
-            "configuration": "./language-configuration.json"
-        }],
-        "grammars": [{
-            "language": "boalang",
-            "scopeName": "source.boalang",
-            "path": "./syntaxes/boalang.tmLanguage.json"
-        }],
+        "languages": [
+            {
+                "id": "boalang",
+                "aliases": ["Boa", "boalang"],
+                "extensions": [".boa"],
+                "configuration": "./language-configuration.json"
+            },
+            {
+                "id": "boaoutput",
+                "aliases": ["Boa Output", "boaoutput"],
+                "extensions": [".txt"],
+                "configuration": "./language-configuration.output.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "boalang",
+                "scopeName": "source.boalang",
+                "path": "./syntaxes/boalang.tmLanguage.json"
+            },
+            {
+                "language": "boaoutput",
+                "scopeName": "source.boaoutput",
+                "path": "./syntaxes/boalang.output.tmLanguage.json"
+            }
+        ],
         "snippets": [{
             "language": "boalang",
             "path": "./snippets/boalang.snippets.json"

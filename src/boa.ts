@@ -20,8 +20,8 @@ import { getBoaUsername, getBoaPassword, removeCredentials } from './credentials
 import { BoaJob } from './treeprovider';
 import * as consts from './consts';
 
-export function getJobUri(id) {
-    return vscode.Uri.parse(`${vscode.env.uriScheme}://boalang/job/${id}`);
+export function getJobUri(id: any) {
+    return vscode.Uri.parse(`boalang://${id}/`);
 }
 
 let datasets: string[] = null;
@@ -118,7 +118,7 @@ export async function runBoaCommands(func: { (client: boaapi.BoaClient): Promise
     }
 }
 
-export async function runQuery(uri:vscode.Uri) {
+export async function runQuery(uri: vscode.Uri) {
     const dataset = await selectDataset();
     if (dataset) {
         const boaConfig = vscode.workspace.getConfiguration('boalang');
@@ -141,7 +141,7 @@ export async function runQuery(uri:vscode.Uri) {
                     submitQuery(dirty[0].getText(), datasetId);
                 } else {
                     // otherwise send the file contents
-                    require('fs').readFile(uri.fsPath, 'utf8', (err, query) => {
+                    require('fs').readFile(uri.fsPath, 'utf8', (err: any, query: any) => {
                         if (err) {
                             console.error(err);
                             return;
@@ -154,7 +154,7 @@ export async function runQuery(uri:vscode.Uri) {
     }
 }
 
-async function submitQuery(query, dataset) {
+async function submitQuery(query: string, dataset: any) {
     vscode.window.withProgress({
         location: vscode.ProgressLocation.Notification,
         cancellable: true,
@@ -186,11 +186,11 @@ async function submitQuery(query, dataset) {
 }
 
 export function showOutput(channel: vscode.OutputChannel) {
-    return function showOutput(uri:vscode.Uri|BoaJob) {
+    return function showOutput(uri: vscode.Uri|BoaJob) {
         runBoaCommands(async (client: boaapi.BoaClient) => {
             let jobId: string;
             if (uri instanceof vscode.Uri) {
-                jobId = uri.path.substring('/job/'.length);
+                jobId = uri.authority;
             } else {
                 jobId = uri.job.id;
             }
@@ -203,27 +203,27 @@ export function showOutput(channel: vscode.OutputChannel) {
     }
 }
 
-export function showFullOutput(uri:vscode.Uri|BoaJob) {
-    runBoaCommands(async (client: boaapi.BoaClient) => {
-        let jobId: string;
-        if (uri instanceof vscode.Uri) {
-            jobId = uri.path.substring('/job/'.length);
-        } else {
-            jobId = uri.job.id;
-        }
-        const job = await client.getJob(jobId);
-
-        vscode.workspace.openTextDocument({
-            language: 'boaoutput',
-            content: await job.outputFull
-        }).then(
-            (doc) => vscode.window.showTextDocument(doc, vscode.ViewColumn.Beside)
-        );
+async function showUri(uri: vscode.Uri) {
+    const doc = await vscode.workspace.openTextDocument(uri);
+    await vscode.window.showTextDocument(doc, {
+        preview: false,
+        preserveFocus: false,
+        viewColumn: vscode.ViewColumn.Beside,
     });
 }
 
-export function showJob(uri:vscode.Uri) {
-    console.log('show job');
-    console.log(uri);
-    vscode.window.showInformationMessage(`TODO: show info for Boa job ${uri.path}`);
+function buildUri(uri: vscode.Uri|BoaJob, path: string, fragment: string) {
+    if (uri instanceof BoaJob) {
+        uri = getJobUri(uri.job.id);
+    }
+    path = path.replace('$id', uri.authority);
+    return vscode.Uri.parse(uri.toString() + path + `#${fragment}`);
+}
+
+export async function showFullOutput(uri: vscode.Uri|BoaJob) {
+    showUri(buildUri(uri, 'boa-job$id-output.txt', 'output'));
+}
+
+export async function showJob(uri: vscode.Uri|BoaJob) {
+    showUri(buildUri(uri, 'boa-job$id-source.boa', 'details'));
 }

@@ -20,6 +20,7 @@ import { AuthSettings } from './credentials';
 import { treeProvider } from './treeprovider';
 import { BoaSourceCodelensProvider } from './codelens';
 import { activateStudyTemplateSupport } from './studytemplate';
+import { boaDocumentProvider } from './contentprovider';
 
 // this method is called when the extension is activated
 export function activate(context: vscode.ExtensionContext) {
@@ -61,6 +62,8 @@ export function activate(context: vscode.ExtensionContext) {
     if (boaConfig.get('joblist.autoload', false)) {
         vscode.commands.executeCommand('boalang.refreshJobs');
     }
+
+	context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider('boalang', boaDocumentProvider));
 }
 
 // this method is called when the extension is deactivated

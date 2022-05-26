@@ -131,11 +131,11 @@ export class BoaJob extends vscode.TreeItem {
         this.description = job.submitted.toString();
         this.contextValue = 'boalang.jobItem';
 
-        // this.command = {
-        //     command: 'boalang.showOutput',
-        //     arguments: [getJobUri(job.id)],
-        //     title: 'show output',
-        // };
+        this.command = {
+            command: 'boalang.showJob',
+            arguments: [getJobUri(job.id)],
+            title: 'show job details',
+        };
 
         if (job.compilerStatus == CompilerStatus.KILLED || job.executionStatus == ExecutionStatus.KILLED) {
             this.iconPath = new vscode.ThemeIcon('close', new vscode.ThemeColor('boalang.icon.jobCanceled'));

@@ -31,10 +31,16 @@
         "onLanguage:boalang",
         "onView:boalang.jobList",
         "onCommand:boalang.runQuery",
+        "onCommand:boalang.setFavorite",
+        "onCommand:boalang.showOutput",
+        "onCommand:boalang.showFullOutput",
         "onCommand:boalang.showJob",
         "onCommand:boalang.prevPage",
         "onCommand:boalang.nextPage",
-        "onCommand:boalang.refreshJobs"
+        "onCommand:boalang.refreshJobs",
+        "onCommand:boalang.downloadOutput",
+        "onCommand:boalang.generateCSV",
+        "onCommand:boalang.generateDupes"
     ],
     "contributes": {
         "commands": [

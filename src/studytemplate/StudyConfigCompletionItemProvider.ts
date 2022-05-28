@@ -16,7 +16,7 @@ export class StudyConfigCompletionItemProvider implements vscode.CompletionItemP
                 const matches = prefix.match(/"datasets"\s*:\s*{/);
                 if (matches && matches.index + matches[0].length == bracePos + 1) {
                     return getDatasets().then((datasets) => {
-                        const items = datasets.map((ds) => new vscode.CompletionItem(ds, vscode.CompletionItemKind.Text));
+                        const items = datasets.map((ds) => new vscode.CompletionItem(ds, vscode.CompletionItemKind.Constant));
                         items.forEach((item) => item.insertText = '"' + (item.label as string).replace(consts.adminPrefix, '') + '"');
                         return Promise.resolve(items);
                     });

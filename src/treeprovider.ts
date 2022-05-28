@@ -18,6 +18,7 @@ import * as vscode from 'vscode';
 import { getJobUri, runBoaCommands } from './boa';
 import * as boaapi from '@boa/boa-api/lib/boaclient';
 import { CompilerStatus, ExecutionStatus } from '@boa/boa-api/lib/jobhandle';
+import JobCache from './cache';
 
 class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
 	private _onDidChangeTreeData: vscode.EventEmitter<any> = new vscode.EventEmitter<any>();
@@ -68,7 +69,7 @@ class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
     
             const jobs = await client.jobList(false, this.start, this.length());
             for (const job of jobs) {
-                const source = await job.source;
+                const source = await JobCache.getSource(job);
                 this.jobs.push(new BoaJob(job, source));
             }
         }).then(() => {

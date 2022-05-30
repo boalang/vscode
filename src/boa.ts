@@ -108,16 +108,10 @@ export async function runBoaCommands(func: { (client: boaapi.BoaClient): Promise
                             vscode.window.showInformationMessage('Boa API username/password were invalid. Please re-enter.');
                             await removeCredentials();
                             await runBoaCommands(func);
-                        } else if (err.message.indexOf('getaddrinfo ENOTFOUND') > -1) {
-                            vscode.window.showInformationMessage('Unable to connect to the Boa API.');
                         }
                     }
                 ).finally(
-                    () => client.close().catch(
-                        () => {
-                            // ignore errors during close
-                        }
-                    )
+                    () => client.close()
                 );
             });
         }
@@ -232,4 +226,128 @@ export async function showFullOutput(uri: vscode.Uri|BoaJob) {
 
 export async function showJob(uri: vscode.Uri|BoaJob) {
     showUri(buildUri(uri, 'boa-job$id-source.boa', 'details'));
+}
+
+export function showJobSourceCode(uri:vscode.Uri|BoaJob) {
+    runBoaCommands(async (client: boaapi.BoaClient) => {
+        let jobId: string;
+        if (uri instanceof vscode.Uri) {
+            jobId = uri.path.substring('/job/'.length);
+        } else {
+            jobId = uri.job.id;
+        }
+        const job = await client.getJob(jobId);
+
+        vscode.workspace.openTextDocument({
+            language: 'boalang',
+            content: await job.source
+        }).then(
+            (doc) => vscode.window.showTextDocument(doc, vscode.ViewColumn.Beside)
+        );
+    });
+}
+
+export function viewPublicUrl(uri:vscode.Uri|BoaJob) {
+    runBoaCommands(async (client: boaapi.BoaClient) => {
+        let jobId: string;
+        if (uri instanceof vscode.Uri) {
+            jobId = uri.path.substring('/job/'.length);
+        } else {
+            jobId = uri.job.id;
+        }
+        const job = await client.getJob(jobId);
+
+        if (await job.public == false) {
+            vscode.window.showInformationMessage(`Can't open url because Job is private`);
+
+        } else {
+            let jobUrl: string;
+            jobUrl = await job.publicUrl;
+    
+            vscode.env.openExternal(vscode.Uri.parse(jobUrl));
+        }
+    });
+}
+
+export function deleteJob(uri:vscode.Uri|BoaJob) {
+    runBoaCommands(async (client: boaapi.BoaClient) => {
+        let jobId: string;
+        if (uri instanceof vscode.Uri) {
+            jobId = uri.path.substring('/job/'.length);
+        } else {
+            jobId = uri.job.id;
+        }
+        const job = await client.getJob(jobId);
+
+        await job.delete();
+        vscode.window.showInformationMessage(`Job has been deleted`);
+    });
+}
+
+export function togglePublic(uri:vscode.Uri|BoaJob) {
+    runBoaCommands(async (client: boaapi.BoaClient) => {
+        let jobId: string;
+        if (uri instanceof vscode.Uri) {
+            jobId = uri.path.substring('/job/'.length);
+        } else {
+            jobId = uri.job.id;
+        }
+        const job = await client.getJob(jobId);
+
+        if (await job.public == true) {
+            job.public = false;
+
+            vscode.window.withProgress({
+                location: vscode.ProgressLocation.Notification,
+                cancellable: false,
+                title: 'Job status being set to private...'
+            }, async (progress, cancel) => {
+                progress.report({  increment: 0 });
+        
+                await runBoaCommands(async (client: boaapi.BoaClient) => {
+                    progress.report({  increment: 10 });
+
+                    progress.report({  increment: 20 });
+                    vscode.commands.executeCommand('boalang.refreshJobs');
+                });
+        
+                progress.report({ increment: 100 });
+            });
+
+        } else {
+            job.public = true;
+
+            vscode.window.withProgress({
+                location: vscode.ProgressLocation.Notification,
+                cancellable: false,
+                title: 'Job status being set to public...'
+            }, async (progress, cancel) => {
+                progress.report({  increment: 0 });
+        
+                await runBoaCommands(async (client: boaapi.BoaClient) => {
+                    progress.report({  increment: 10 });
+
+                    progress.report({  increment: 20 });
+                    vscode.commands.executeCommand('boalang.refreshJobs');
+                });
+        
+                progress.report({ increment: 100 });
+            });
+        }   
+    });
+}
+
+export function resubmitJob(uri:vscode.Uri|BoaJob) {
+    runBoaCommands(async (client: boaapi.BoaClient) => {
+        let jobId: string;
+        if (uri instanceof vscode.Uri) {
+            jobId = uri.path.substring('/job/'.length);
+        } else {
+            jobId = uri.job.id;
+        }
+        const job = await client.getJob(jobId);
+
+        await job.resubmit();
+        vscode.window.showInformationMessage(`Job has been resubmitted`);
+    });
 }

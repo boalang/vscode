@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
-import { getDatasets, showJob, runQuery, showOutput, showFullOutput, setFavorite } from './boa';
+import { getDatasets, showJob, runQuery, showOutput, showFullOutput, setFavorite, showJobSourceCode, viewPublicUrl, deleteJob, togglePublic, resubmitJob } from './boa';
 import { AuthSettings } from './credentials';
 import { treeProvider } from './treeprovider';
 import { BoaSourceCodelensProvider } from './codelens';
@@ -42,7 +42,14 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('boalang.runQuery', runQuery));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.showOutput', showOutput(output)));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.showFullOutput', showFullOutput));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.showJobSourceCode', showJobSourceCode));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.view_public_url', viewPublicUrl));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.delete', deleteJob));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.togglePublic', togglePublic));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.resubmit', resubmitJob));
 
+
+    
     context.subscriptions.push(vscode.languages.registerCodeLensProvider('boalang', new BoaSourceCodelensProvider()));
 
     activateStudyTemplateSupport(context);

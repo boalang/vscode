@@ -34,6 +34,11 @@
         "onCommand:boalang.setFavorite",
         "onCommand:boalang.showOutput",
         "onCommand:boalang.showFullOutput",
+        "onCommand:boalang.delete",
+        "onCommand:boalang.resubmit",
+        "onCommand:boalang.showJobSourceCode",
+        "onCommand:boalang.togglePublic",
+        "onCommand:boalang.view_public_url",
         "onCommand:boalang.showJob",
         "onCommand:boalang.prevPage",
         "onCommand:boalang.nextPage",
@@ -67,6 +72,36 @@
                 "command": "boalang.showFullOutput",
                 "title": "Full Boa Query Output",
                 "icon": "$(output)",
+                "category": "Boa"
+            },
+            {
+                "command": "boalang.delete",
+                "title": "delete job",
+                "icon": "$(deletion)",
+                "category": "Boa"
+            },
+            {
+                "command": "boalang.resubmit",
+                "title": "resubmit job",
+                "icon": "$(resubmition)",
+                "category": "Boa"
+            },
+            {
+                "command": "boalang.showJobSourceCode",
+                "title": "show job source code",
+                "icon": "$(job source code)",
+                "category": "Boa"
+            },
+            {
+                "command": "boalang.togglePublic",
+                "title": "Toggle Public",
+                "icon": "$(public or private)",
+                "category": "Boa"
+            },
+            {
+                "command": "boalang.view_public_url",
+                "title": "view public url",
+                "icon": "$(viewed public url)",
                 "category": "Boa"
             },
             {
@@ -201,6 +236,26 @@
                     "when": "false"
                 },
                 {
+                    "command": "boalang.delete",
+                    "when": "false"
+                },
+                {
+                    "command": "boalang.resubmit",
+                    "when": "false"
+                },
+                {
+                    "command": "boalang.showJobSourceCode",
+                    "when": "false"
+                },
+                {
+                    "command": "boalang.togglePublic",
+                    "when": "false"
+                },
+                {
+                    "command": "boalang.view_public_url",
+                    "when": "false"
+                },
+                {
                     "command": "boalang.downloadOutput",
                     "when": "false"
                 },
@@ -243,6 +298,30 @@
                 {
                     "command": "boalang.showFullOutput",
                     "when": "view == boalang.jobList && viewItem == boalang.jobItem"
+                },
+                {
+                    "command": "boalang.delete",
+                    "when": "view == boalang.jobList && viewItem == boalang.jobItem"
+                },
+                {
+                    "command": "boalang.resubmit",
+                    "when": "view == boalang.jobList && viewItem == boalang.jobItem"
+                },
+                {
+                    "command": "boalang.showJobSourceCode",
+                    "when": "view == boalang.jobList && viewItem == boalang.jobItem"
+                },
+                {
+                    "command": "boalang.downloadOutput",
+                    "when": "view == boalang.jobList && viewItem == boalang.jobItem"
+                },
+                {
+                    "command": "boalang.togglePublic",
+                    "when": "view == boalang.jobList && viewItem == boalang.jobItem"
+                },
+                {
+                    "command": "boalang.view_public_url",
+                    "when": "view == boalang.jobList && viewItem == boalang.jobItem"
                 }
             ],
             "explorer/context": [{
@@ -252,6 +331,41 @@
             "editor/title": [
                 {
                     "command": "boalang.showOutput",
+                    "group": "navigation",
+                    "when": "resourceScheme == boalang"
+                },
+                {
+                    "command": "boalang.showFullOutput",
+                    "group": "navigation",
+                    "when": "resourceScheme == boalang"
+                },
+                {
+                    "command": "boalang.delete",
+                    "group": "navigation",
+                    "when": "resourceScheme == boalang"
+                },
+                {
+                    "command": "boalang.resubmit",
+                    "group": "navigation",
+                    "when": "resourceScheme == boalang"
+                },
+                {
+                    "command": "boalang.showJobSourceCode",
+                    "group": "navigation",
+                    "when": "resourceScheme == boalang"
+                },
+                {
+                    "command": "boalang.downloadOutput",
+                    "group": "navigation",
+                    "when": "resourceScheme == boalang"
+                },
+                {
+                    "command": "boalang.togglePublic",
+                    "group": "navigation",
+                    "when": "resourceScheme == boalang"
+                },
+                {
+                    "command": "boalang.view_public_url",
                     "group": "navigation",
                     "when": "resourceScheme == boalang"
                 }

@@ -16,6 +16,7 @@
 //
 import * as vscode from 'vscode';
 import { runBoaCommands } from './boa';
+import JobCache from './cache';
 
 export const boaDocumentProvider = new class implements vscode.TextDocumentContentProvider {
     onDidChangeEmitter = new vscode.EventEmitter<vscode.Uri>();
@@ -27,7 +28,7 @@ export const boaDocumentProvider = new class implements vscode.TextDocumentConte
             case 'details':
                 await runBoaCommands(async (client) => {
                     const job = await client.getJob(uri.authority);
-                    data = await job.source;
+                    data = await JobCache.getSource(job);
                 });
                 break;
         

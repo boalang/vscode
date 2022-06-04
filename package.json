@@ -29,6 +29,7 @@
     "main": "./out/extension.js",
     "activationEvents": [
         "onLanguage:boalang",
+        "onLanguage:boaoutput",
         "onView:boalang.jobList",
         "onCommand:boalang.runQuery",
         "onCommand:boalang.setFavorite",

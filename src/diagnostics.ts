@@ -46,29 +46,30 @@ function errorToDiagnostic(error: string): vscode.Diagnostic {
     if (matches) {
         errStr = matches[4];
         const line = parseInt(matches[1]) - 1;
-        const col1 = parseInt(matches[2]) - 1;
-        const col2 = parseInt(matches[3]);
+        const col1 = parseInt(matches[2]);
+        const col2 = parseInt(matches[3]) + 1;
         start = new vscode.Position(line, col1);
         end = new vscode.Position(line, col2 > 0 ? col2 : col1 + 1);
     } else {
         matches = parseRegex.exec(error);
         if (matches) {
-            console.log(matches);
             errStr = matches[4];
             const line = parseInt(matches[1]) - 1;
-            const col1 = parseInt(matches[2]) - 1;
-            const col2 = parseInt(matches[3]);
+            const col1 = parseInt(matches[2]);
+            const col2 = parseInt(matches[3]) + 1;
             start = new vscode.Position(line, col1);
             end = new vscode.Position(line, col2 > 0 ? col2 : col1 + 1);
         } else {
             matches = typeRegex.exec(error);
             if (matches) {
                 errStr = matches[5];
-                start = new vscode.Position(parseInt(matches[1]) - 1, parseInt(matches[3]) - 1);
-                end = new vscode.Position(parseInt(matches[2]) - 1, parseInt(matches[4]));
+                start = new vscode.Position(parseInt(matches[1]) - 1, parseInt(matches[3]));
+                end = new vscode.Position(parseInt(matches[2]) - 1, parseInt(matches[4]) + 1);
             }
         }
     }
 
+    console.log(start);
+    console.log(end);
     return new vscode.Diagnostic(new vscode.Range(start, end), errStr);
 }

@@ -36,14 +36,12 @@
         "onCommand:boalang.showFullOutput",
         "onCommand:boalang.delete",
         "onCommand:boalang.resubmit",
-        "onCommand:boalang.showJobSourceCode",
         "onCommand:boalang.togglePublic",
-        "onCommand:boalang.view_public_url",
-        "onCommand:boalang.showJob",
+        "onCommand:boalang.viewPublicUrl",
+        "onCommand:boalang.showJobSource",
         "onCommand:boalang.prevPage",
         "onCommand:boalang.nextPage",
         "onCommand:boalang.refreshJobs",
-        "onCommand:boalang.downloadOutput",
         "onCommand:boalang.generateCSV",
         "onCommand:boalang.generateDupes",
         "onCommand:boalang.runAnalysis"
@@ -76,36 +74,30 @@
             },
             {
                 "command": "boalang.delete",
-                "title": "delete job",
-                "icon": "$(deletion)",
+                "title": "Delete Job",
+                "icon": "$(discard)",
                 "category": "Boa"
             },
             {
                 "command": "boalang.resubmit",
-                "title": "resubmit job",
-                "icon": "$(resubmition)",
-                "category": "Boa"
-            },
-            {
-                "command": "boalang.showJobSourceCode",
-                "title": "show job source code",
-                "icon": "$(job source code)",
+                "title": "Resubmit Job",
+                "icon": "$(redo)",
                 "category": "Boa"
             },
             {
                 "command": "boalang.togglePublic",
                 "title": "Toggle Public",
-                "icon": "$(public or private)",
+                "icon": "$(eye)",
                 "category": "Boa"
             },
             {
-                "command": "boalang.view_public_url",
-                "title": "view public url",
-                "icon": "$(viewed public url)",
+                "command": "boalang.viewPublicUrl",
+                "title": "View Public Url",
+                "icon": "$(telescope)",
                 "category": "Boa"
             },
             {
-                "command": "boalang.showJob",
+                "command": "boalang.showJobSource",
                 "title": "Display Boa Job",
                 "icon": "$(inspect)",
                 "category": "Boa"
@@ -128,12 +120,6 @@
                 "command": "boalang.refreshJobs",
                 "title": "Refresh Jobs",
                 "icon": "$(refresh)",
-                "category": "Boa"
-            },
-            {
-                "command": "boalang.downloadOutput",
-                "title": "Download Query Output",
-                "icon": "$(cloud-download)",
                 "category": "Boa"
             },
             {
@@ -224,7 +210,7 @@
                     "when": "sideBarFocus && activeViewlet == 'workbench.view.explorer'"
                 },
                 {
-                    "command": "boalang.showJob",
+                    "command": "boalang.showJobSource",
                     "when": "false"
                 },
                 {
@@ -244,19 +230,11 @@
                     "when": "false"
                 },
                 {
-                    "command": "boalang.showJobSourceCode",
-                    "when": "false"
-                },
-                {
                     "command": "boalang.togglePublic",
                     "when": "false"
                 },
                 {
-                    "command": "boalang.view_public_url",
-                    "when": "false"
-                },
-                {
-                    "command": "boalang.downloadOutput",
+                    "command": "boalang.viewPublicUrl",
                     "when": "false"
                 },
                 {
@@ -308,19 +286,15 @@
                     "when": "view == boalang.jobList && viewItem == boalang.jobItem"
                 },
                 {
-                    "command": "boalang.showJobSourceCode",
-                    "when": "view == boalang.jobList && viewItem == boalang.jobItem"
-                },
-                {
-                    "command": "boalang.downloadOutput",
-                    "when": "view == boalang.jobList && viewItem == boalang.jobItem"
-                },
-                {
                     "command": "boalang.togglePublic",
                     "when": "view == boalang.jobList && viewItem == boalang.jobItem"
                 },
                 {
-                    "command": "boalang.view_public_url",
+                    "command": "boalang.viewPublicUrl",
+                    "when": "view == boalang.jobList && viewItem == boalang.jobItem"
+                },
+                {
+                    "command": "boalang.showJobSource",
                     "when": "view == boalang.jobList && viewItem == boalang.jobItem"
                 }
             ],
@@ -341,7 +315,7 @@
                 },
                 {
                     "command": "boalang.delete",
-                    "group": "navigation",
+                    "group": "context menu",
                     "when": "resourceScheme == boalang"
                 },
                 {
@@ -350,22 +324,12 @@
                     "when": "resourceScheme == boalang"
                 },
                 {
-                    "command": "boalang.showJobSourceCode",
-                    "group": "navigation",
-                    "when": "resourceScheme == boalang"
-                },
-                {
-                    "command": "boalang.downloadOutput",
-                    "group": "navigation",
-                    "when": "resourceScheme == boalang"
-                },
-                {
                     "command": "boalang.togglePublic",
-                    "group": "navigation",
+                    "group": "context menu",
                     "when": "resourceScheme == boalang"
                 },
                 {
-                    "command": "boalang.view_public_url",
+                    "command": "boalang.viewPublicUrl",
                     "group": "navigation",
                     "when": "resourceScheme == boalang"
                 }

@@ -38,19 +38,54 @@ class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
         return element;
     }
 
+    /**
+     * Gets the size as a readable string.
+     * @param {number} size - the size to convert
+     * @return {number} the size as a readable string
+     */
+    private getSize(size) {
+        let remaining = size;
+        let power = 0;
+        while (remaining >= 1024) {
+            power++;
+            remaining = remaining / 1024;
+        }
+        switch (power) {
+        case 0:
+            return Math.floor(remaining) + 'b';
+        case 1:
+            return Math.floor(remaining) + 'k';
+        case 2:
+            return Math.floor(remaining) + 'M';
+        case 3:
+            return Math.floor(remaining) + 'G';
+        case 4:
+            return Math.floor(remaining) + 'T';
+        default:
+            return size;
+        }
+    }
+
     async getChildren(element?: vscode.TreeItem): Promise<vscode.TreeItem[]> {
         // jobs have status items
         if (element instanceof BoaJob) {
-            const compiler = new vscode.TreeItem('compile: ' + element.job.compilerStatus);
-            if (element.job.compilerStatus == CompilerStatus.ERROR) {
-                const errs = await element.job.compilerErrors;
-                compiler.tooltip = errs.join('\n').replace('\\n', '\n');
+            const children = [new vscode.TreeItem(element.job.input.name)];
+            if (element.job.executionStatus == ExecutionStatus.FINISHED) {
+                const sizeItem = new vscode.TreeItem('output size: ' + this.getSize(element.size));
+                sizeItem.tooltip = element.size.toLocaleString() + ' bytes';
+                children.push(sizeItem);
+            } else {
+                const compiler = new vscode.TreeItem('compile: ' + element.job.compilerStatus);
+                if (element.job.compilerStatus == CompilerStatus.ERROR) {
+                    const errs = await element.job.compilerErrors;
+                    compiler.tooltip = errs.join('\n').replace('\\n', '\n');
+                }
+                children.push(compiler);
+                if (element.job.compilerStatus != CompilerStatus.ERROR) {
+                    children.push(new vscode.TreeItem('exec: ' + element.job.executionStatus));
+                }
             }
-            return Promise.resolve([
-                new vscode.TreeItem(element.job.input.name),
-                compiler,
-                new vscode.TreeItem('exec: ' + element.job.executionStatus),
-            ]);
+            return Promise.resolve(children);
         }
 
         // status items have no children
@@ -70,7 +105,11 @@ class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
             const jobs = await client.jobList(false, this.start, this.length());
             for (const job of jobs) {
                 const source = await JobCache.getSource(job);
-                this.jobs.push(new BoaJob(job, source));
+                var size = 0;
+                if (job.executionStatus == ExecutionStatus.FINISHED) {
+                    size = await JobCache.getOutputSize(job);
+                }
+                this.jobs.push(new BoaJob(job, source, size));
             }
         }).then(() => {
             this.jobs.sort((a, b) => (b.label as string).localeCompare(a.label as string))
@@ -126,7 +165,7 @@ class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
 export const treeProvider = new BoaJobsProvider();
 
 export class BoaJob extends vscode.TreeItem {
-    constructor(public readonly job, public readonly source) {
+    constructor(public readonly job, public readonly source, public readonly size) {
         super(`Job #${job.id}`, vscode.TreeItemCollapsibleState.Collapsed);
         this.tooltip = source;
         this.description = job.submitted.toString();

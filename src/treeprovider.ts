@@ -127,6 +127,11 @@ class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
         return view;
     }
 
+    async firstPage() {
+        this.start = 0;
+        this.refresh();
+    }
+
     async prevPage() {
         if (this.start > 0) {
             this.start -= this.length();

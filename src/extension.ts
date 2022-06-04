@@ -39,6 +39,7 @@ export function activate(context: vscode.ExtensionContext) {
     // register all commands
     context.subscriptions.push(vscode.commands.registerCommand('boalang.setFavorite', setFavorite));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.showJob', showJob));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.firstPage', () => treeProvider.firstPage()));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.prevPage', () => treeProvider.prevPage()));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.nextPage', () => treeProvider.nextPage()));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.refreshJobs', () => treeProvider.refresh()));

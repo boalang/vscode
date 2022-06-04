@@ -36,6 +36,7 @@
         "onCommand:boalang.showOutput",
         "onCommand:boalang.showFullOutput",
         "onCommand:boalang.showJob",
+        "onCommand:boalang.firstPage",
         "onCommand:boalang.prevPage",
         "onCommand:boalang.nextPage",
         "onCommand:boalang.refreshJobs",
@@ -77,16 +78,23 @@
                 "category": "Boa"
             },
             {
+                "command": "boalang.firstPage",
+                "title": "First",
+                "icon": "$(arrow-left)",
+                "enablement": "boalang.prevPageEnabled",
+                "category": "Boa"
+            },
+            {
                 "command": "boalang.prevPage",
                 "title": "Newer",
-                "icon": "$(arrow-left)",
+                "icon": "$(chevron-left)",
                 "enablement": "boalang.prevPageEnabled",
                 "category": "Boa"
             },
             {
                 "command": "boalang.nextPage",
                 "title": "Older",
-                "icon": "$(arrow-right)",
+                "icon": "$(chevron-right)",
                 "enablement": "boalang.nextPageEnabled",
                 "category": "Boa"
             },
@@ -186,6 +194,10 @@
                     "when": "sideBarFocus && activeViewlet == 'workbench.view.explorer'"
                 },
                 {
+                    "command": "boalang.firstPage",
+                    "when": "sideBarFocus && activeViewlet == 'workbench.view.explorer'"
+                },
+                {
                     "command": "boalang.prevPage",
                     "when": "sideBarFocus && activeViewlet == 'workbench.view.explorer'"
                 },
@@ -219,6 +231,11 @@
                 }
             ],
             "view/title": [
+                {
+                    "command": "boalang.firstPage",
+                    "when": "view == boalang.jobList",
+                    "group": "navigation"
+                },
                 {
                     "command": "boalang.prevPage",
                     "when": "view == boalang.jobList",

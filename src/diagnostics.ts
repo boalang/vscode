@@ -47,16 +47,17 @@ function errorToDiagnostic(error: string): vscode.Diagnostic {
         errStr = matches[4];
         const line = parseInt(matches[1]) - 1;
         const col1 = parseInt(matches[2]) - 1;
-        const col2 = parseInt(matches[3]) - 1;
+        const col2 = parseInt(matches[3]);
         start = new vscode.Position(line, col1);
         end = new vscode.Position(line, col2 > 0 ? col2 : col1 + 1);
     } else {
         matches = parseRegex.exec(error);
         if (matches) {
+            console.log(matches);
             errStr = matches[4];
             const line = parseInt(matches[1]) - 1;
             const col1 = parseInt(matches[2]) - 1;
-            const col2 = parseInt(matches[3]) - 1;
+            const col2 = parseInt(matches[3]);
             start = new vscode.Position(line, col1);
             end = new vscode.Position(line, col2 > 0 ? col2 : col1 + 1);
         } else {
@@ -64,7 +65,7 @@ function errorToDiagnostic(error: string): vscode.Diagnostic {
             if (matches) {
                 errStr = matches[5];
                 start = new vscode.Position(parseInt(matches[1]) - 1, parseInt(matches[3]) - 1);
-                end = new vscode.Position(parseInt(matches[2]) - 1, parseInt(matches[4]) - 1);
+                end = new vscode.Position(parseInt(matches[2]) - 1, parseInt(matches[4]));
             }
         }
     }

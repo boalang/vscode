@@ -19,6 +19,7 @@ import * as boaapi from '@boa/boa-api/lib/boaclient';
 import { getBoaUsername, getBoaPassword, removeCredentials } from './credentials';
 import { BoaJob } from './treeprovider';
 import * as consts from './consts';
+import JobCache from './cache';
 
 export function getJobUri(id: any) {
     return vscode.Uri.parse(`boalang://${id}/`);
@@ -203,7 +204,7 @@ export function showOutput(channel: vscode.OutputChannel) {
             const job = await client.getJob(jobId);
 
             channel.clear();
-            channel.append(await job.output);
+            channel.append(await JobCache.getOutput(job));
             channel.show();
         });
     }

@@ -139,8 +139,8 @@ export async function runQuery(uri: vscode.Uri) {
                 uri = vscode.window.activeTextEditor.document.uri;
             }
 
-            // if the file has never been saved
-            if (uri.scheme == 'untitled') {
+            // if the file has never been saved, or it is an old job
+            if (uri.scheme == 'untitled' || uri.scheme == 'boalang') {
                 submitQuery(vscode.window.activeTextEditor.document.getText(), datasetId);
             } else {
                 const dirty = vscode.workspace.textDocuments.filter((doc) => doc.uri == uri && doc.isDirty);

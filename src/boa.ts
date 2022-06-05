@@ -66,7 +66,6 @@ async function selectDataset(): Promise<string> {
     const items: DatasetQuickPickItem[] = sortedDatasets.map((t, i) => {
         return {
             label: (favDataset == t ? '$(star-full) ' : lastDataset == t ? '$(history) ' : '') + t.replace(consts.adminPrefix, ''),
-            // detail: lastDataset == t ? 'last used' : favDataset == t ? 'favorite' : null,
             description: t.indexOf(consts.adminPrefix) > -1 ? 'admin' : '',
             alwaysShow: true,
             dataset: t
@@ -109,10 +108,16 @@ export async function runBoaCommands(func: { (client: boaapi.BoaClient): Promise
                             vscode.window.showInformationMessage('Boa API username/password were invalid. Please re-enter.');
                             await removeCredentials();
                             await runBoaCommands(func);
+                        } else if (err.message.indexOf('getaddrinfo ENOTFOUND') > -1) {
+                            vscode.window.showInformationMessage('Unable to connect to the Boa API.');
                         }
                     }
                 ).finally(
-                    () => client.close()
+                    () => client.close().catch(
+                        () => {
+                            // ignore errors during close
+                        }
+                    )
                 );
             });
         }

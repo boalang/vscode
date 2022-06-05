@@ -69,7 +69,5 @@ function errorToDiagnostic(error: string): vscode.Diagnostic {
         }
     }
 
-    console.log(start);
-    console.log(end);
     return new vscode.Diagnostic(new vscode.Range(start, end), errStr);
 }

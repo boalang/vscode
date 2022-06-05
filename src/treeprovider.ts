@@ -21,8 +21,8 @@ import { CompilerStatus, ExecutionStatus } from '@boa/boa-api/lib/jobhandle';
 import JobCache from './cache';
 
 class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
-	private _onDidChangeTreeData: vscode.EventEmitter<any> = new vscode.EventEmitter<any>();
-	readonly onDidChangeTreeData: vscode.Event<any> = this._onDidChangeTreeData.event;
+    private _onDidChangeTreeData: vscode.EventEmitter<any> = new vscode.EventEmitter<any>();
+    readonly onDidChangeTreeData: vscode.Event<any> = this._onDidChangeTreeData.event;
 
     private start = 0;
     private max = 0;
@@ -133,7 +133,7 @@ export class BoaJob extends vscode.TreeItem {
         this.contextValue = 'boalang.jobItem';
 
         this.command = {
-            command: 'boalang.showJob',
+            command: 'boalang.showJobSource',
             arguments: [getJobUri(job.id)],
             title: 'show job details',
         };

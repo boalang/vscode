@@ -42,9 +42,9 @@ export async function getDatasets() {
 }
 
 async function selectDataset(): Promise<string> {
-	interface DatasetQuickPickItem extends vscode.QuickPickItem {
-		dataset: string;
-	}
+    interface DatasetQuickPickItem extends vscode.QuickPickItem {
+        dataset: string;
+    }
 
     await getDatasets();
 
@@ -63,15 +63,15 @@ async function selectDataset(): Promise<string> {
     }
 
     const items: DatasetQuickPickItem[] = sortedDatasets.map((t, i) => {
-		return {
-			label: (favDataset == t ? '$(star-full) ' : lastDataset == t ? '$(history) ' : '') + t.replace(consts.adminPrefix, ''),
-			// detail: lastDataset == t ? 'last used' : favDataset == t ? 'favorite' : null,
+        return {
+            label: (favDataset == t ? '$(star-full) ' : lastDataset == t ? '$(history) ' : '') + t.replace(consts.adminPrefix, ''),
+            // detail: lastDataset == t ? 'last used' : favDataset == t ? 'favorite' : null,
             description: t.indexOf(consts.adminPrefix) > -1 ? 'admin' : '',
             alwaysShow: true,
-			dataset: t
-		};
-	});
-	const item = await vscode.window.showQuickPick(items, {
+            dataset: t
+        };
+    });
+    const item = await vscode.window.showQuickPick(items, {
         placeHolder: lastDataset,
         title: 'Select the Boa dataset to query',
         ignoreFocusOut: false
@@ -108,16 +108,10 @@ export async function runBoaCommands(func: { (client: boaapi.BoaClient): Promise
                             vscode.window.showInformationMessage('Boa API username/password were invalid. Please re-enter.');
                             await removeCredentials();
                             await runBoaCommands(func);
-                        } else if (err.message.indexOf('getaddrinfo ENOTFOUND') > -1) {
-                            vscode.window.showInformationMessage('Unable to connect to the Boa API.');
                         }
                     }
                 ).finally(
-                    () => client.close().catch(
-                        () => {
-                            // ignore errors during close
-                        }
-                    )
+                    () => client.close()
                 );
             });
         }
@@ -232,4 +226,75 @@ export async function showFullOutput(uri: vscode.Uri|BoaJob) {
 
 export async function showJob(uri: vscode.Uri|BoaJob) {
     showUri(buildUri(uri, 'boa-job$id-source.boa', 'details'));
+}
+
+export function viewPublicUrl(uri:vscode.Uri|BoaJob) {
+    runBoaCommands(async (client: boaapi.BoaClient) => {
+        let jobId: string;
+        if (uri instanceof vscode.Uri) {
+            jobId = uri.path.substring('/job/'.length);
+        } else {
+            jobId = uri.job.id;
+        }
+        const job = await client.getJob(jobId);
+
+        if (await job.public != true) {
+            vscode.window.showWarningMessage(`Can't open URL because job ${jobId} is private`);
+        } else {
+            const jobUrl = await job.publicUrl;
+            vscode.env.openExternal(vscode.Uri.parse(jobUrl));
+        }
+    });
+}
+
+export function deleteJob(uri:vscode.Uri|BoaJob) {
+    runBoaCommands(async (client: boaapi.BoaClient) => {
+        let jobId: string;
+        if (uri instanceof vscode.Uri) {
+            jobId = uri.path.substring('/job/'.length);
+        } else {
+            jobId = uri.job.id;
+        }
+        const job = await client.getJob(jobId);
+
+        await job.delete();
+        vscode.window.showInformationMessage(`Job ${jobId} has been deleted`);
+    });
+}
+
+export function togglePublic(uri:vscode.Uri|BoaJob) {
+    runBoaCommands(async (client: boaapi.BoaClient) => {
+        let jobId: string;
+        if (uri instanceof vscode.Uri) {
+            jobId = uri.path.substring('/job/'.length);
+        } else {
+            jobId = uri.job.id;
+        }
+        const job = await client.getJob(jobId);
+
+        const isPublic = await job.public;
+        job.public = !isPublic;
+        await job.public;
+
+        if (await job.public) {
+            vscode.window.showInformationMessage(`Job ${jobId} has been set to public`);
+        } else {
+            vscode.window.showInformationMessage(`Job ${jobId} has been set to private`);
+        }
+    });
+}
+
+export function resubmitJob(uri:vscode.Uri|BoaJob) {
+    runBoaCommands(async (client: boaapi.BoaClient) => {
+        let jobId: string;
+        if (uri instanceof vscode.Uri) {
+            jobId = uri.path.substring('/job/'.length);
+        } else {
+            jobId = uri.job.id;
+        }
+        const job = await client.getJob(jobId);
+
+        await job.resubmit();
+        vscode.window.showInformationMessage(`Job ${jobId} has been resubmitted`);
+    });
 }

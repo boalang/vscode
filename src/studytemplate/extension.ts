@@ -16,6 +16,7 @@
 //
 import * as vscode from 'vscode';
 import * as consts from '../consts';
+import SubstitutionHoverProvider from './hoverprovider';
 import { JobsJSONLinkProvider, StudyConfigJSONLinkProvider } from './linkproviders';
 import { StudyConfigCodelensProvider } from './StudyConfigCodelensProvider';
 import { StudyConfigCompletionItemProvider } from './StudyConfigCompletionItemProvider';
@@ -43,6 +44,8 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.languages.registerCompletionItemProvider(studyConfigSelector, new StudyConfigCompletionItemProvider(), '\"'));
 
     context.subscriptions.push(vscode.languages.registerCodeLensProvider(studyConfigSelector, new StudyConfigCodelensProvider()));
+
+    context.subscriptions.push(vscode.languages.registerHoverProvider('boalang', new SubstitutionHoverProvider()));
 }
 
 async function runMakeCommand(target) {

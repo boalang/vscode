@@ -77,13 +77,13 @@
             {
                 "command": "boalang.delete",
                 "title": "Delete Job",
-                "icon": "$(discard)",
+                "icon": "$(trash)",
                 "category": "Boa"
             },
             {
                 "command": "boalang.resubmit",
                 "title": "Resubmit Job",
-                "icon": "$(redo)",
+                "icon": "$(refresh)",
                 "category": "Boa"
             },
             {
@@ -95,7 +95,7 @@
             {
                 "command": "boalang.viewPublicUrl",
                 "title": "View Public Url",
-                "icon": "$(telescope)",
+                "icon": "$(preview)",
                 "category": "Boa"
             },
             {

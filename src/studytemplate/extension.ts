@@ -16,6 +16,7 @@
 //
 import * as vscode from 'vscode';
 import * as consts from '../consts';
+import { jobsFile } from '../consts';
 import SubstitutionHoverProvider from './hoverprovider';
 import { JobsJSONLinkProvider, StudyConfigJSONLinkProvider } from './linkproviders';
 import { StudyConfigCodelensProvider } from './StudyConfigCodelensProvider';
@@ -46,6 +47,14 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.languages.registerCodeLensProvider(studyConfigSelector, new StudyConfigCodelensProvider()));
 
     context.subscriptions.push(vscode.languages.registerHoverProvider('boalang', new SubstitutionHoverProvider()));
+
+    // watch jobs.json for changes, then refresh the jobs list
+    const cwd: string = vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0].uri.fsPath : '';
+    const watcher = vscode.workspace.createFileSystemWatcher(cwd + '/' + jobsFile, false, false, true);
+    context.subscriptions.push(watcher);
+
+    watcher.onDidChange(() => vscode.commands.executeCommand('boalang.refreshJobs'));
+    watcher.onDidCreate(() => vscode.commands.executeCommand('boalang.refreshJobs'));
 }
 
 async function runMakeCommand(target) {

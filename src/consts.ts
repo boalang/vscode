@@ -19,6 +19,7 @@
 export const adminPrefix = '[admin] ';
 
 export const studyConfigFile = 'study-config.json';
+export const jobsFile = 'jobs.json';
 
 // paths in the study template, used for linking
 export const scriptPath = 'boa';

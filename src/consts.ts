@@ -18,6 +18,8 @@
 // admin datasets have this string prefix
 export const adminPrefix = '[admin] ';
 
+export const studyConfigFile = 'study-config.json';
+
 // paths in the study template, used for linking
 export const scriptPath = 'boa';
 export const snippetPath = scriptPath + '/snippets';

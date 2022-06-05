@@ -31,7 +31,7 @@ export const boaDocumentProvider = new class implements vscode.TextDocumentConte
                     data = await JobCache.getSource(job);
                 });
                 break;
-        
+
             case 'output':
                 await runBoaCommands(async (client) => {
                     const job = await client.getJob(uri.authority);

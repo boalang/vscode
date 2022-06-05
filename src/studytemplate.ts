@@ -31,7 +31,7 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
         scheme: 'file',
         pattern: '**/study-config.json',
     };
-    
+
     context.subscriptions.push(vscode.commands.registerCommand('boalang.downloadOutput', function downloadOuput(filename) {
         const terminal = vscode.window.createTerminal(`Boa makefile command`);
         terminal.show(false);

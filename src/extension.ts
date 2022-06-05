@@ -67,7 +67,7 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.executeCommand('boalang.refreshJobs');
     }
 
-	context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider('boalang', boaDocumentProvider));
+    context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider('boalang', boaDocumentProvider));
 }
 
 // this method is called when the extension is deactivated

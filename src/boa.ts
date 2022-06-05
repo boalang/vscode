@@ -43,9 +43,9 @@ export async function getDatasets() {
 }
 
 async function selectDataset(): Promise<string> {
-	interface DatasetQuickPickItem extends vscode.QuickPickItem {
-		dataset: string;
-	}
+    interface DatasetQuickPickItem extends vscode.QuickPickItem {
+        dataset: string;
+    }
 
     await getDatasets();
 
@@ -64,15 +64,14 @@ async function selectDataset(): Promise<string> {
     }
 
     const items: DatasetQuickPickItem[] = sortedDatasets.map((t, i) => {
-		return {
-			label: (favDataset == t ? '$(star-full) ' : lastDataset == t ? '$(history) ' : '') + t.replace(consts.adminPrefix, ''),
-			// detail: lastDataset == t ? 'last used' : favDataset == t ? 'favorite' : null,
+        return {
+            label: (favDataset == t ? '$(star-full) ' : lastDataset == t ? '$(history) ' : '') + t.replace(consts.adminPrefix, ''),
             description: t.indexOf(consts.adminPrefix) > -1 ? 'admin' : '',
             alwaysShow: true,
-			dataset: t
-		};
-	});
-	const item = await vscode.window.showQuickPick(items, {
+            dataset: t
+        };
+    });
+    const item = await vscode.window.showQuickPick(items, {
         placeHolder: lastDataset,
         title: 'Select the Boa dataset to query',
         ignoreFocusOut: false

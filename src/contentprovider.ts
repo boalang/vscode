@@ -16,6 +16,9 @@
 //
 import * as vscode from 'vscode';
 import { runBoaCommands } from './boa';
+import JobCache from './cache';
+import { CompilerStatus, ExecutionStatus } from '@boa/boa-api/lib/jobhandle';
+import { reportErrors } from './diagnostics';
 
 export const boaDocumentProvider = new class implements vscode.TextDocumentContentProvider {
     onDidChangeEmitter = new vscode.EventEmitter<vscode.Uri>();
@@ -27,7 +30,14 @@ export const boaDocumentProvider = new class implements vscode.TextDocumentConte
             case 'details':
                 await runBoaCommands(async (client) => {
                     const job = await client.getJob(uri.authority);
-                    data = await job.source;
+                    if (job.compilerStatus == CompilerStatus.ERROR) {
+                        reportErrors(uri, await job.compilerErrors);
+                    } else if (job.executionStatus == ExecutionStatus.ERROR) {
+                        reportErrors(uri, ['There was a runtime error.']);
+                    } else {
+                        reportErrors(uri, undefined);
+                    }
+                    data = await JobCache.getSource(job);
                 });
                 break;
         

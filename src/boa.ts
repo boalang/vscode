@@ -19,6 +19,7 @@ import * as boaapi from '@boa/boa-api/lib/boaclient';
 import { getBoaUsername, getBoaPassword, removeCredentials } from './credentials';
 import { BoaJob } from './treeprovider';
 import * as consts from './consts';
+import JobCache from './cache';
 
 export function getJobUri(id: any) {
     return vscode.Uri.parse(`boalang://${id}/`);
@@ -132,8 +133,8 @@ export async function runQuery(uri: vscode.Uri) {
                 uri = vscode.window.activeTextEditor.document.uri;
             }
 
-            // if the file has never been saved
-            if (uri.scheme == 'untitled') {
+            // if the file has never been saved, or it is an old job
+            if (uri.scheme == 'untitled' || uri.scheme == 'boalang') {
                 submitQuery(vscode.window.activeTextEditor.document.getText(), datasetId);
             } else {
                 const dirty = vscode.workspace.textDocuments.filter((doc) => doc.uri == uri && doc.isDirty);
@@ -170,7 +171,6 @@ async function submitQuery(query: string, dataset: any) {
             vscode.commands.executeCommand('boalang.refreshJobs');
 
             cancel.onCancellationRequested(async (e) => {
-                console.log(`stopping job ${job.id}`);
                 await job.stop();
                 progress.report({ increment: 100 });
             });
@@ -197,7 +197,7 @@ export function showOutput(channel: vscode.OutputChannel) {
             const job = await client.getJob(jobId);
 
             channel.clear();
-            channel.append(await job.output);
+            channel.append(await JobCache.getOutput(job));
             channel.show();
         });
     }

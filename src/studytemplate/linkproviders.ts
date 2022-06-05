@@ -23,7 +23,6 @@ export class JobsJSONLinkProvider implements vscode.DocumentLinkProvider {
             const startPos = job.index + job[0].length - job[1].length;
             const range = new vscode.Range(document.positionAt(startPos), document.positionAt(startPos + job[1].length));
             const link = new vscode.DocumentLink(range, vscode.Uri.parse(`boalang://${job[1]}/boa-job${job[1]}-source.boa#details`));
-            console.log(link.target);
             link.tooltip = `View Boa Job ${job[1]}`;
             links.push(link);
         }

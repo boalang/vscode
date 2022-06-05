@@ -21,6 +21,7 @@ import { treeProvider } from './treeprovider';
 import { BoaSourceCodelensProvider } from './codelens';
 import { activateStudyTemplateSupport } from './studytemplate';
 import { boaDocumentProvider } from './contentprovider';
+import { enableDiagnostics } from './diagnostics';
 
 // this method is called when the extension is activated
 export function activate(context: vscode.ExtensionContext) {
@@ -29,6 +30,8 @@ export function activate(context: vscode.ExtensionContext) {
 
     getDatasets();
 
+    enableDiagnostics(context);
+
     // create channel to show query outputs
     const output = vscode.window.createOutputChannel('Boa: Query Output', 'boaoutput');
     context.subscriptions.push(output);
@@ -36,6 +39,7 @@ export function activate(context: vscode.ExtensionContext) {
     // register all commands
     context.subscriptions.push(vscode.commands.registerCommand('boalang.setFavorite', setFavorite));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.showJobSource', showJob));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.firstPage', () => treeProvider.firstPage()));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.prevPage', () => treeProvider.prevPage()));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.nextPage', () => treeProvider.nextPage()));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.refreshJobs', () => treeProvider.refresh()));

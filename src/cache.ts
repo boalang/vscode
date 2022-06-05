@@ -25,4 +25,44 @@ export default class JobCache {
 
         return this.source[job.id];
     }
+
+    private static outputSize = {};
+
+    static async getOutputSize(job) {
+        if (!this.outputSize[job.id]) {
+            this.outputSize[job.id] = await job.outputSize;
+        }
+
+        return this.outputSize[job.id];
+    }
+
+    private static url = {};
+
+    static async getUrl(job) {
+        if (!this.url[job.id]) {
+            this.url[job.id] = await job.url;
+        }
+
+        return this.url[job.id];
+    }
+
+    private static compilerErrors = {};
+
+    static async getCompilerErrors(job) {
+        if (!this.compilerErrors[job.id]) {
+            this.compilerErrors[job.id] = await job.compilerErrors;
+        }
+
+        return this.compilerErrors[job.id];
+    }
+
+    private static output = {};
+
+    static async getOutput(job) {
+        if (!this.output[job.id]) {
+            this.output[job.id] = await job.output;
+        }
+
+        return this.output[job.id];
+    }
 }

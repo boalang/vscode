@@ -177,7 +177,6 @@ async function submitQuery(query: string, dataset: any) {
             vscode.commands.executeCommand('boalang.refreshJobs');
 
             cancel.onCancellationRequested(async (e) => {
-                console.log(`stopping job ${job.id}`);
                 await job.stop();
                 progress.report({ increment: 100 });
             });

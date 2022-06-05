@@ -44,6 +44,7 @@
         "onCommand:boalang.prevPage",
         "onCommand:boalang.nextPage",
         "onCommand:boalang.refreshJobs",
+        "onCommand:boalang.downloadOutput",
         "onCommand:boalang.generateCSV",
         "onCommand:boalang.generateDupes",
         "onCommand:boalang.runAnalysis"
@@ -331,21 +332,6 @@
                 {
                     "command": "boalang.showFullOutput",
                     "group": "navigation",
-                    "when": "resourceScheme == boalang"
-                },
-                {
-                    "command": "boalang.delete",
-                    "group": "context menu",
-                    "when": "resourceScheme == boalang"
-                },
-                {
-                    "command": "boalang.resubmit",
-                    "group": "navigation",
-                    "when": "resourceScheme == boalang"
-                },
-                {
-                    "command": "boalang.togglePublic",
-                    "group": "context menu",
                     "when": "resourceScheme == boalang"
                 },
                 {

@@ -50,7 +50,7 @@ export default class SubstitutionHoverProvider implements vscode.HoverProvider {
 
         if (hovers.length == 0) return undefined;
 
-        return new vscode.Hover(new vscode.MarkdownString(hovers.join('\n\n'), true));
+        return new vscode.Hover(new vscode.MarkdownString(hovers.join('\n\n----\n\n'), true));
     }
 
     private async buildHover(cwd, replacement, local) {
@@ -61,7 +61,7 @@ export default class SubstitutionHoverProvider implements vscode.HoverProvider {
             const path = cwd + '/' + snippetPath + '/' + replacement['file'];
             const file = 'file://' + path;
             content = await this.getFileSnippet(path, 10);
-            scope += `[view included file](${file}) `;
+            scope += `[view included file](${file})\\\n`;
         } else {
             content = replacement['replacement'];
         }
@@ -72,7 +72,7 @@ export default class SubstitutionHoverProvider implements vscode.HoverProvider {
             scope += `**[scope: $(globe) global]**`;
         }
 
-        return `\`\`\`\`boalang\n${content}\n\`\`\`\`\n\n${scope}`;
+        return `\`\`\`\`boalang\n${content}\n\`\`\`\`\n\n----\n\n${scope}`;
     }
 
     private readJSON(path: string): object {

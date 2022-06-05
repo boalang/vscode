@@ -32,26 +32,10 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
         pattern: '**/study-config.json',
     };
 
-    context.subscriptions.push(vscode.commands.registerCommand('boalang.downloadOutput', function downloadOuput(filename) {
-        const terminal = vscode.window.createTerminal(`Boa makefile command`);
-        terminal.show(false);
-        terminal.sendText(`make ${consts.outputPath}/${filename}`);
-    }));
-    context.subscriptions.push(vscode.commands.registerCommand('boalang.generateCSV', function generateCSV(filename) {
-        const terminal = vscode.window.createTerminal(`Boa makefile command`);
-        terminal.show(false);
-        terminal.sendText(`make ${consts.csvPath}/${filename}`);
-    }));
-    context.subscriptions.push(vscode.commands.registerCommand('boalang.generateDupes', function generateDupes(filename) {
-        const terminal = vscode.window.createTerminal(`Boa makefile command`);
-        terminal.show(false);
-        terminal.sendText(`make ${consts.outputPath}/${filename}`);
-    }));
-    context.subscriptions.push(vscode.commands.registerCommand('boalang.runAnalysis', function runAnalysis(target) {
-        const terminal = vscode.window.createTerminal(`Boa makefile command`);
-        terminal.show(false);
-        terminal.sendText(`make ${target}`);
-    }));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.downloadOutput', filename => runMakeCommand(`${consts.outputPath}/${filename}`)));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.generateCSV', filename => runMakeCommand(`${consts.csvPath}/${filename}`)));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.generateDupes', filename => runMakeCommand(`${consts.outputPath}/${filename}`)));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.runAnalysis', target => runMakeCommand(target)));
 
     context.subscriptions.push(vscode.languages.registerDocumentLinkProvider(jobsSelector, new JobsJSONLinkProvider()));
     context.subscriptions.push(vscode.languages.registerDocumentLinkProvider(studyConfigSelector, new StudyConfigJSONLinkProvider()));
@@ -59,4 +43,19 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.languages.registerCompletionItemProvider(studyConfigSelector, new StudyConfigCompletionItemProvider(), '\"'));
 
     context.subscriptions.push(vscode.languages.registerCodeLensProvider(studyConfigSelector, new StudyConfigCodelensProvider()));
+}
+
+async function runMakeCommand(target) {
+    let taskCommand: vscode.ShellQuotedString = {value: 'make', quoting: vscode.ShellQuoting.Strong};
+    let taskArgs: vscode.ShellQuotedString[] = [{value: target, quoting: vscode.ShellQuoting.Strong}];
+
+    const cwd: string = vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0].uri.fsPath : '';
+    let myTaskOptions: vscode.ShellExecutionOptions = {env: process.env, cwd};
+
+    const makefileBuildTaskName = 'Boa template make tasks';
+
+    let shellExec = new vscode.ShellExecution(taskCommand, taskArgs, myTaskOptions);
+    let makeTask = new vscode.Task({type: 'shell', group: 'build', label: makefileBuildTaskName}, vscode.TaskScope.Workspace, makefileBuildTaskName, 'makefile', shellExec);
+
+    await vscode.tasks.executeTask(makeTask);
 }

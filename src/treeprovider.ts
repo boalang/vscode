@@ -81,7 +81,7 @@ class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
                     compiler.tooltip = errs.join('\n').replace('\\n', '\n');
                 }
                 children.push(compiler);
-                if (element.job.compilerStatus != CompilerStatus.ERROR) {
+                if (element.job.compilerStatus == CompilerStatus.FINISHED) {
                     children.push(new vscode.TreeItem('exec: ' + element.job.executionStatus));
                 }
             }
@@ -101,7 +101,7 @@ class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
         // the root lists the jobs for the current page
         return runBoaCommands(async (client: boaapi.BoaClient) => {
             this.setMax(await client.jobCount(false));
-    
+
             const jobs = await client.jobList(false, this.start, this.length());
             for (const job of jobs) {
                 const source = await JobCache.getSource(job);
@@ -117,7 +117,7 @@ class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
             vscode.commands.executeCommand('setContext', 'boalang.prevPageEnabled', this.start > 0);
             vscode.commands.executeCommand('setContext', 'boalang.nextPageEnabled', this.start + this.jobs.length < this.max);
             this.view.title = `Boa: Jobs ${this.start + 1}-${this.start + this.jobs.length} (${this.max})`;
-    
+
             return Promise.resolve(this.jobs);
         });
     }

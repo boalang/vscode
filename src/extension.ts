@@ -19,7 +19,7 @@ import { getDatasets, showJob, runQuery, showOutput, showFullOutput, setFavorite
 import { AuthSettings } from './credentials';
 import { treeProvider } from './treeprovider';
 import { BoaSourceCodelensProvider } from './codelens';
-import { activateStudyTemplateSupport } from './studytemplate';
+import { activateStudyTemplateSupport } from './studytemplate/extension';
 import { boaDocumentProvider } from './contentprovider';
 import { enableDiagnostics } from './diagnostics';
 

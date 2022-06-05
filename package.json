@@ -64,13 +64,13 @@
             },
             {
                 "command": "boalang.showOutput",
-                "title": "Show Boa Query Output",
+                "title": "Show Query Output",
                 "icon": "$(output)",
                 "category": "Boa"
             },
             {
                 "command": "boalang.showFullOutput",
-                "title": "Full Boa Query Output",
+                "title": "Show Full Query Output",
                 "icon": "$(output)",
                 "category": "Boa"
             },
@@ -288,6 +288,7 @@
             "view/item/context": [
                 {
                     "command": "boalang.showOutput",
+                    "alt": "boalang.showFullOutput",
                     "group": "inline",
                     "when": "view == boalang.jobList && viewItem == boalang.jobItem"
                 },
@@ -323,6 +324,7 @@
             "editor/title": [
                 {
                     "command": "boalang.showOutput",
+                    "alt": "boalang.showFullOutput",
                     "group": "navigation",
                     "when": "resourceScheme == boalang"
                 },
@@ -357,6 +359,12 @@
             "title": "Boa API Settings",
             "order": 0,
             "properties": {
+                "boalang.api.endpoint": {
+                    "type": "string",
+                    "description": "Boa API endpoint URL",
+                    "order": 0,
+                    "default": "https://boa.cs.iastate.edu/boa/?q=boa/api"
+                },
                 "boalang.login.username": {
                     "type": "string",
                     "description": "Boa API username",

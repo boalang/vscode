@@ -99,7 +99,8 @@ export async function runBoaCommands(func: { (client: boaapi.BoaClient): Promise
                 cancellable: false,
                 title: 'Boa API'
             }, async () => {
-                const client = new boaapi.BoaClient(boaapi.BOA_API_ENDPOINT);
+                const boaConfig = vscode.workspace.getConfiguration('boalang');
+                const client = new boaapi.BoaClient(boaConfig.get('api.endpoint', boaapi.BOA_API_ENDPOINT) as string);
                 await client.login(username, password).then(
                     async () => await func(client)
                 ).catch(
@@ -220,6 +221,8 @@ async function showUri(uri: vscode.Uri) {
 function buildUri(uri: vscode.Uri|BoaJob, path: string, fragment: string) {
     if (uri instanceof BoaJob) {
         uri = getJobUri(uri.job.id);
+    } else {
+        uri = getJobUri(uri.authority);
     }
     path = path.replace('$id', uri.authority);
     return vscode.Uri.parse(uri.toString() + path + `#${fragment}`);

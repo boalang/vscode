@@ -271,6 +271,7 @@
             "editor/title": [
                 {
                     "command": "boalang.showOutput",
+                    "alt": "boalang.showFullOutput",
                     "group": "navigation",
                     "when": "resourceScheme == boalang"
                 }

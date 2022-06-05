@@ -16,7 +16,7 @@
 //
 import * as vscode from 'vscode';
 import { snippetPath, studyConfigFile } from '../consts';
-let fs = require('fs');
+import * as fs from 'fs';
 
 export default class SubstitutionHoverProvider implements vscode.HoverProvider {
     async provideHover(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.Hover> {
@@ -53,7 +53,7 @@ export default class SubstitutionHoverProvider implements vscode.HoverProvider {
         return new vscode.Hover(new vscode.MarkdownString(hovers.join('\n\n----\n\n'), true));
     }
 
-    private async buildHover(cwd, replacement, local) {
+    private async buildHover(cwd: string, replacement, local: string|undefined) {
         let scope = '';
 
         let content = '';
@@ -80,7 +80,7 @@ export default class SubstitutionHoverProvider implements vscode.HoverProvider {
             return JSON.parse(fs.readFileSync(path).toString());
         } catch (e) {
         }
-    
+
         return {};
     }
 

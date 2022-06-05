@@ -81,7 +81,7 @@ class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
                     compiler.tooltip = errs.join('\n').replace('\\n', '\n');
                 }
                 children.push(compiler);
-                if (element.job.compilerStatus != CompilerStatus.ERROR) {
+                if (element.job.compilerStatus == CompilerStatus.FINISHED) {
                     children.push(new vscode.TreeItem('exec: ' + element.job.executionStatus));
                 }
             }

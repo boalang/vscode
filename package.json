@@ -79,21 +79,21 @@
             },
             {
                 "command": "boalang.firstPage",
-                "title": "First",
+                "title": "First Page",
                 "icon": "$(arrow-left)",
                 "enablement": "boalang.prevPageEnabled",
                 "category": "Boa"
             },
             {
                 "command": "boalang.prevPage",
-                "title": "Newer",
+                "title": "Previous Page",
                 "icon": "$(chevron-left)",
                 "enablement": "boalang.prevPageEnabled",
                 "category": "Boa"
             },
             {
                 "command": "boalang.nextPage",
-                "title": "Older",
+                "title": "Next Page",
                 "icon": "$(chevron-right)",
                 "enablement": "boalang.nextPageEnabled",
                 "category": "Boa"
@@ -234,22 +234,22 @@
                 {
                     "command": "boalang.firstPage",
                     "when": "view == boalang.jobList",
-                    "group": "navigation"
+                    "group": "navigation@1"
                 },
                 {
                     "command": "boalang.prevPage",
                     "when": "view == boalang.jobList",
-                    "group": "navigation"
+                    "group": "navigation@2"
                 },
                 {
                     "command": "boalang.nextPage",
                     "when": "view == boalang.jobList",
-                    "group": "navigation"
+                    "group": "navigation@3"
                 },
                 {
                   "command": "boalang.refreshJobs",
                   "when": "view == boalang.jobList",
-                  "group": "navigation"
+                  "group": "navigation@4"
                 }
             ],
             "view/item/context": [

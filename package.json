@@ -279,6 +279,12 @@
             "title": "Boa API Settings",
             "order": 0,
             "properties": {
+                "boalang.api.endpoint": {
+                    "type": "string",
+                    "description": "Boa API endpoint URL",
+                    "order": 0,
+                    "default": "https://boa.cs.iastate.edu/boa/?q=boa/api"
+                },
                 "boalang.login.username": {
                     "type": "string",
                     "description": "Boa API username",

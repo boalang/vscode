@@ -99,7 +99,8 @@ export async function runBoaCommands(func: { (client: boaapi.BoaClient): Promise
                 cancellable: false,
                 title: 'Boa API'
             }, async () => {
-                const client = new boaapi.BoaClient(boaapi.BOA_API_ENDPOINT);
+                const boaConfig = vscode.workspace.getConfiguration('boalang');
+                const client = new boaapi.BoaClient(boaConfig.get('api.endpoint', boaapi.BOA_API_ENDPOINT) as string);
                 await client.login(username, password).then(
                     async () => await func(client)
                 ).catch(

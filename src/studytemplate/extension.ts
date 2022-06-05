@@ -17,6 +17,7 @@
 import * as vscode from 'vscode';
 import * as consts from '../consts';
 import { jobsFile } from '../consts';
+import { getWorkspaceRoot } from '../utils';
 import SubstitutionHoverProvider from './hoverprovider';
 import { JobsJSONLinkProvider, StudyConfigJSONLinkProvider } from './linkproviders';
 import { StudyConfigCodelensProvider } from './StudyConfigCodelensProvider';
@@ -49,8 +50,7 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.languages.registerHoverProvider('boalang', new SubstitutionHoverProvider()));
 
     // watch jobs.json for changes, then refresh the jobs list
-    const cwd: string = vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0].uri.fsPath : '';
-    const watcher = vscode.workspace.createFileSystemWatcher(cwd + '/' + jobsFile, false, false, true);
+    const watcher = vscode.workspace.createFileSystemWatcher(getWorkspaceRoot() + '/' + jobsFile, false, false, true);
     context.subscriptions.push(watcher);
 
     watcher.onDidChange(() => vscode.commands.executeCommand('boalang.refreshJobs'));
@@ -61,8 +61,7 @@ async function runMakeCommand(target) {
     let taskCommand: vscode.ShellQuotedString = {value: 'make', quoting: vscode.ShellQuoting.Strong};
     let taskArgs: vscode.ShellQuotedString[] = [{value: target, quoting: vscode.ShellQuoting.Strong}];
 
-    const cwd: string = vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0].uri.fsPath : '';
-    let myTaskOptions: vscode.ShellExecutionOptions = {env: process.env, cwd};
+    let myTaskOptions: vscode.ShellExecutionOptions = {env: process.env, cwd: getWorkspaceRoot()};
 
     const makefileBuildTaskName = 'Boa template make tasks';
 

@@ -17,6 +17,7 @@
 import * as vscode from 'vscode';
 import { snippetPath, studyConfigFile } from '../consts';
 import * as fs from 'fs';
+import { getWorkspaceRoot } from '../utils';
 
 export default class SubstitutionHoverProvider implements vscode.HoverProvider {
     async provideHover(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.Hover> {
@@ -24,7 +25,7 @@ export default class SubstitutionHoverProvider implements vscode.HoverProvider {
         if (!range) return undefined;
         const word = document.getText(range);
 
-        const cwd: string = vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0].uri.fsPath : '';
+        const cwd = getWorkspaceRoot();
         const json = this.readJSON(cwd + '/' + studyConfigFile);
 
         const hovers = [];

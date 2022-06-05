@@ -15,10 +15,10 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
-import * as consts from './consts';
-import { JobsJSONLinkProvider, StudyConfigJSONLinkProvider } from './studytemplate/linkproviders';
-import { StudyConfigCodelensProvider } from './studytemplate/StudyConfigCodelensProvider';
-import { StudyConfigCompletionItemProvider } from './studytemplate/StudyConfigCompletionItemProvider';
+import * as consts from '../consts';
+import { JobsJSONLinkProvider, StudyConfigJSONLinkProvider } from './linkproviders';
+import { StudyConfigCodelensProvider } from './StudyConfigCodelensProvider';
+import { StudyConfigCompletionItemProvider } from './StudyConfigCompletionItemProvider';
 
 export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     const jobsSelector: vscode.DocumentSelector = {

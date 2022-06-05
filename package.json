@@ -61,13 +61,13 @@
             },
             {
                 "command": "boalang.showOutput",
-                "title": "Show Boa Query Output",
+                "title": "Show Query Output",
                 "icon": "$(output)",
                 "category": "Boa"
             },
             {
                 "command": "boalang.showFullOutput",
-                "title": "Full Boa Query Output",
+                "title": "Show Full Query Output",
                 "icon": "$(output)",
                 "category": "Boa"
             },

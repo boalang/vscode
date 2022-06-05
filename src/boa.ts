@@ -236,7 +236,7 @@ export async function showJob(uri: vscode.Uri|BoaJob) {
     showUri(buildUri(uri, 'boa-job$id-source.boa', 'details'));
 }
 
-function buildJob(uri: vscode.Uri|BoaJob) {
+function getJobId(uri: vscode.Uri|BoaJob) {
     let jobId: string;
     if (uri instanceof vscode.Uri) {
         jobId = uri.authority;
@@ -248,7 +248,7 @@ function buildJob(uri: vscode.Uri|BoaJob) {
 
 export function viewPublicUrl(uri: vscode.Uri|BoaJob) {
     runBoaCommands(async (client: boaapi.BoaClient) => {
-        const jobId = buildJob(uri);
+        const jobId = getJobId(uri);
         const job = await client.getJob(jobId);
 
         if (await job.public != true) {
@@ -262,7 +262,7 @@ export function viewPublicUrl(uri: vscode.Uri|BoaJob) {
 
 export function deleteJob(uri: vscode.Uri|BoaJob) {
     runBoaCommands(async (client: boaapi.BoaClient) => {
-        const jobId = buildJob(uri);
+        const jobId = getJobId(uri);
         const job = await client.getJob(jobId);
 
         await job.delete();
@@ -272,7 +272,7 @@ export function deleteJob(uri: vscode.Uri|BoaJob) {
 
 export function togglePublic(uri: vscode.Uri|BoaJob) {
     runBoaCommands(async (client: boaapi.BoaClient) => {
-        const jobId = buildJob(uri);
+        const jobId = getJobId(uri);
         const job = await client.getJob(jobId);
 
         const isPublic = await job.public;
@@ -288,7 +288,7 @@ export function togglePublic(uri: vscode.Uri|BoaJob) {
 
 export function resubmitJob(uri: vscode.Uri|BoaJob) {
     runBoaCommands(async (client: boaapi.BoaClient) => {
-        const jobId = buildJob(uri);
+        const jobId = getJobId(uri);
         const job = await client.getJob(jobId);
 
         await job.resubmit();

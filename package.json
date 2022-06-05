@@ -88,6 +88,12 @@
                 "category": "Boa"
             },
             {
+                "command": "boalang.downloadOutput",
+                "title": "Download Query Output",
+                "icon": "$(cloud-download)",
+                "category": "Boa"
+            },
+            {
                 "command": "boalang.togglePublic",
                 "title": "Toggle Public",
                 "icon": "$(eye)",
@@ -244,6 +250,10 @@
                     "when": "false"
                 },
                 {
+                    "command": "boalang.downloadOutput",
+                    "when": "false"
+                },
+                {
                     "command": "boalang.togglePublic",
                     "when": "false"
                 },
@@ -316,6 +326,10 @@
                 {
                     "command": "boalang.showJobSource",
                     "when": "view == boalang.jobList && viewItem == boalang.jobItem"
+                },
+                {
+                    "command": "boalang.downloadOutput",
+                    "when": "view == boalang.jobList && viewItem == boalang.jobItem"
                 }
             ],
             "explorer/context": [{
@@ -331,12 +345,32 @@
                 },
                 {
                     "command": "boalang.showFullOutput",
-                    "group": "navigation",
+                    "group": "context menu",
                     "when": "resourceScheme == boalang"
                 },
                 {
                     "command": "boalang.viewPublicUrl",
                     "group": "navigation",
+                    "when": "resourceScheme == boalang"
+                },
+                {
+                    "command": "boalang.downloadOutput",
+                    "group": "navigation",
+                    "when": "resourceScheme == boalang"
+                },
+                {
+                    "command": "boalang.delete",
+                    "group": "context menu",
+                    "when": "resourceScheme == boalang"
+                },
+                {
+                    "command": "boalang.resubmit",
+                    "group": "context menu",
+                    "when": "resourceScheme == boalang"
+                },
+                {
+                    "command": "boalang.togglePublic",
+                    "group": "context menu",
                     "when": "resourceScheme == boalang"
                 }
             ]

@@ -221,6 +221,8 @@ async function showUri(uri: vscode.Uri) {
 function buildUri(uri: vscode.Uri|BoaJob, path: string, fragment: string) {
     if (uri instanceof BoaJob) {
         uri = getJobUri(uri.job.id);
+    } else {
+        uri = getJobUri(uri.authority);
     }
     path = path.replace('$id', uri.authority);
     return vscode.Uri.parse(uri.toString() + path + `#${fragment}`);

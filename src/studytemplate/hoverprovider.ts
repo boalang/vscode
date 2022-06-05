@@ -34,7 +34,6 @@ export default class SubstitutionHoverProvider implements vscode.HoverProvider {
     }
 
     private updateJSON() {
-        console.log('updating JSON');
         try {
             this.json = JSON.parse(fs.readFileSync(getWorkspaceRoot() + '/' + studyConfigFile).toString());
         } catch (e) {

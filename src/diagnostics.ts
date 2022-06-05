@@ -15,21 +15,57 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
+import { runBoaCommands } from './boa';
+import { CompilerStatus, ExecutionStatus } from '@boa/boa-api/lib/jobhandle';
 
 let diagnosticCollection: vscode.DiagnosticCollection;
+const diagsCache = new Map();
 
-export function enableDiagnostics(context: vscode.ExtensionContext) {
+export async function enableDiagnostics(context: vscode.ExtensionContext) {
     diagnosticCollection = vscode.languages.createDiagnosticCollection('boalang');
     context.subscriptions.push(diagnosticCollection);
+
+    vscode.window.onDidChangeVisibleTextEditors(e => {
+        const editors = e.map(editor => editor.document.uri.toString());
+
+        // remove diagnostics for closed editors
+        diagnosticCollection.forEach(async (uri, diag) => {
+            if (editors.indexOf(uri.toString()) == -1) {
+                diagnosticCollection.set(uri, undefined);
+            }
+        });
+
+        // add diagnostics for open editors
+        e.map(editor => {
+            const uri = editor.document.uri;
+            if (uri.scheme == 'boalang' && !diagsCache.has(uri)) {
+                runBoaCommands(async (client) => {
+                    const job = await client.getJob(uri.authority);
+                    await job.wait();
+                    if (job.compilerStatus == CompilerStatus.ERROR) {
+                        reportErrors(uri, await job.compilerErrors);
+                    } else if (job.executionStatus == ExecutionStatus.ERROR) {
+                        reportErrors(uri, ['There was a runtime error.']);
+                    } else {
+                        diagsCache.set(uri, undefined);
+                    }
+                }).then((val) => {
+                    diagnosticCollection.set(uri, diagsCache.get(uri));
+                });
+            } else {
+                diagnosticCollection.set(uri, diagsCache.get(uri));
+            }
+        })
+    });
 }
 
 export function reportErrors(uri: vscode.Uri, errors: [string]) {
-    diagnosticCollection.clear();
-
     let diagnostics = errors.map((err) => errorToDiagnostic(err));
 
     if (diagnostics.length > 0) {
-        diagnosticCollection.set(uri, diagnostics);
+        diagsCache.set(uri, diagnostics);
+    } else {
+        diagsCache.set(uri, undefined);
     }
 }
 

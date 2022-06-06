@@ -24,15 +24,13 @@ export default class BoaCompletionItemProvider implements vscode.CompletionItemP
 
         if (position.character >= 0) {
             const substitutions = cache.getSubstitutions();
-            let keys = [];
+            let keys = Object.keys(substitutions.substitutions);
 
-            for (const filename in substitutions) {
-                if (document.fileName.endsWith(filename)) {
-                    keys = keys.concat(Object.keys(substitutions[filename]));
-                }
-            }
-            
-            keys = keys.concat(Object.keys(substitutions.substitutions));
+            Object.keys(substitutions)
+                .filter(filename => document.fileName.endsWith(filename))
+                .forEach(k => {
+                    keys = keys.concat(Object.keys(substitutions[k]));
+                })
 
             removeDuplicates(keys).forEach(k => items.push(this.makeCompletionItem(k)));
         }

@@ -18,10 +18,10 @@ import * as vscode from 'vscode';
 import * as consts from '../consts';
 import { jobsFile } from '../consts';
 import { getWorkspaceRoot } from '../utils';
-import SubstitutionHoverProvider from './hoverprovider';
+import SubstitutionHoverProvider from './SubstitutionHoverProvider';
 import { JobsJSONLinkProvider, StudyConfigJSONLinkProvider } from './linkproviders';
-import { StudyConfigCodelensProvider } from './StudyConfigCodelensProvider';
-import { StudyConfigCompletionItemProvider } from './StudyConfigCompletionItemProvider';
+import StudyConfigCodelensProvider from './StudyConfigCodelensProvider';
+import StudyConfigCompletionItemProvider from './StudyConfigCompletionItemProvider';
 
 export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     const jobsSelector: vscode.DocumentSelector = {

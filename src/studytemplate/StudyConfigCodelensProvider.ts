@@ -16,7 +16,7 @@
 //
 import * as vscode from 'vscode';
 
-export class StudyConfigCodelensProvider implements vscode.CodeLensProvider {
+export default class StudyConfigCodelensProvider implements vscode.CodeLensProvider {
     public provideCodeLenses(document: vscode.TextDocument, token: vscode.CancellationToken): vscode.CodeLens[] | Thenable<vscode.CodeLens[]> {
         const lenses = [];
         const docPath = document.uri.fsPath.substring(0, document.uri.fsPath.lastIndexOf('/'));

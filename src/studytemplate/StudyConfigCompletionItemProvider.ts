@@ -21,7 +21,7 @@ import * as consts from '../consts';
 /**
  * Provides intellisense completions for dataset names in the study-config.json file.
  */
-export class StudyConfigCompletionItemProvider implements vscode.CompletionItemProvider {
+export default class StudyConfigCompletionItemProvider implements vscode.CompletionItemProvider {
     public provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): vscode.ProviderResult<vscode.CompletionItem[]> {
         if (position.character >= 0) {
             // scope completions to just the "datasets" key

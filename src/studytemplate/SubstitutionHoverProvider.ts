@@ -28,23 +28,19 @@ export default class SubstitutionHoverProvider implements vscode.HoverProvider {
 
         const hovers = [];
 
-        for (const output in cache.json['queries']) {
-            const query = cache.json['queries'][output];
-            if (document.fileName.endsWith(query['query'])) {
-                for (const idx in query['substitutions']) {
-                    const subst = query['substitutions'][idx];
-                    if (subst['target'] == word) {
-                        hovers.push(await this.buildHover(subst, output));
-                    }
+        const substitutions = cache.getSubstitutions();
+        for (const filename in substitutions) {
+            if (document.fileName.endsWith(filename)) {
+                const sub = substitutions[filename][word];
+                if (sub) {
+                    hovers.push(await this.buildHover(sub.subst, sub.output));
                 }
             }
         }
-
-        for (const idx in cache.json['substitutions']) {
-            const subst = cache.json['substitutions'][idx];
-            if (subst['target'] == word) {
-                hovers.push(await this.buildHover(subst, undefined));
-            }
+        
+        const sub = substitutions.substitutions[word];
+        if (sub) {
+            hovers.push(await this.buildHover(sub.subst, sub.output));
         }
 
         if (hovers.length == 0) return new vscode.Hover(new vscode.MarkdownString('$(error) No substitution is defined for this template variable.', true));

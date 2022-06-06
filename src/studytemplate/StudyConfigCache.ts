@@ -37,6 +37,27 @@ class StudyConfigCache {
         return this._json;
     }
 
+    getSubstitutions() {
+        const result = { substitutions: {} };
+
+        for (const output in this._json['queries']) {
+            const query = this._json['queries'][output];
+            const items = {};
+            for (const idx in query['substitutions']) {
+                const subst = query['substitutions'][idx];
+                items[subst['target']] = { subst: subst, output: output };
+            }
+            result[query['query']] = items;
+        }
+
+        for (const idx in this._json['substitutions']) {
+            const subst = this._json['substitutions'][idx];
+            result.substitutions[subst['target']] = { subst: subst, output: undefined };
+        }
+
+        return result;
+    }
+
     private updateJSON() {
         try {
             this._json = JSON.parse(fs.readFileSync(getWorkspaceRoot() + '/' + studyConfigFile).toString());

@@ -177,7 +177,7 @@ export class BoaJob extends vscode.TreeItem {
         this.contextValue = 'boalang.jobItem';
 
         this.command = {
-            command: 'boalang.showJobSource',
+            command: 'boalang.job.showSource',
             arguments: [getJobUri(job.id)],
             title: 'show job details',
         };

@@ -38,18 +38,20 @@ export function activate(context: vscode.ExtensionContext) {
 
     // register all commands
     context.subscriptions.push(vscode.commands.registerCommand('boalang.setFavorite', setFavorite));
-    context.subscriptions.push(vscode.commands.registerCommand('boalang.showJobSource', showJob));
-    context.subscriptions.push(vscode.commands.registerCommand('boalang.firstPage', () => treeProvider.firstPage()));
-    context.subscriptions.push(vscode.commands.registerCommand('boalang.prevPage', () => treeProvider.prevPage()));
-    context.subscriptions.push(vscode.commands.registerCommand('boalang.nextPage', () => treeProvider.nextPage()));
-    context.subscriptions.push(vscode.commands.registerCommand('boalang.refreshJobs', () => treeProvider.refresh()));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.runQuery', runQuery));
-    context.subscriptions.push(vscode.commands.registerCommand('boalang.showOutput', showOutput(output)));
-    context.subscriptions.push(vscode.commands.registerCommand('boalang.showFullOutput', showFullOutput));
-    context.subscriptions.push(vscode.commands.registerCommand('boalang.viewPublicUrl', viewPublicUrl));
-    context.subscriptions.push(vscode.commands.registerCommand('boalang.delete', deleteJob));
-    context.subscriptions.push(vscode.commands.registerCommand('boalang.togglePublic', togglePublic));
-    context.subscriptions.push(vscode.commands.registerCommand('boalang.resubmit', resubmitJob));
+
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.joblist.first', () => treeProvider.firstPage()));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.joblist.prev', () => treeProvider.prevPage()));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.joblist.next', () => treeProvider.nextPage()));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.joblist.refresh', () => treeProvider.refresh()));
+
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.job.showSource', showJob));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.job.showOutput', showOutput(output)));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.job.showFullOutput', showFullOutput));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.job.viewPublicUrl', viewPublicUrl));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.job.delete', deleteJob));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.job.togglePublic', togglePublic));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.job.resubmit', resubmitJob));
 
 
     
@@ -64,13 +66,13 @@ export function activate(context: vscode.ExtensionContext) {
 
     vscode.workspace.onDidChangeConfiguration(event => {
         if (event.affectsConfiguration('boalang.joblist.pagesize')) {
-            vscode.commands.executeCommand('boalang.refreshJobs');
+            vscode.commands.executeCommand('boalang.joblist.refresh');
         }
     })
 
     const boaConfig = vscode.workspace.getConfiguration('boalang');
     if (boaConfig.get('joblist.autoload', false)) {
-        vscode.commands.executeCommand('boalang.refreshJobs');
+        vscode.commands.executeCommand('boalang.joblist.refresh');
     }
 
     context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider('boalang', boaDocumentProvider));

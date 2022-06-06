@@ -27,7 +27,7 @@ export default class StudyConfigCodelensProvider implements vscode.CodeLensProvi
             const lense = new vscode.CodeLens(range, {
                 title: "$(cloud-download) Download Output",
                 tooltip: "Make sure this output is up to date and downloaded",
-                command: "boalang.downloadOutput",
+                command: "boalang.template.downloadOutput",
                 arguments: [output[1]]
             });
             lenses.push(lense);
@@ -39,7 +39,7 @@ export default class StudyConfigCodelensProvider implements vscode.CodeLensProvi
             const lense = new vscode.CodeLens(range, {
                 title: "$(table) Generate CSV",
                 tooltip: "Generates the CSV output - this might trigger a download on the input",
-                command: "boalang.generateCSV",
+                command: "boalang.template.generateCSV",
                 arguments: [csv[1]]
             });
             lenses.push(lense);
@@ -51,7 +51,7 @@ export default class StudyConfigCodelensProvider implements vscode.CodeLensProvi
             const lense = new vscode.CodeLens(range, {
                 title: "$(list-filter) Generate Dupes",
                 tooltip: "Generates the Dupes output - this might trigger a download on the input",
-                command: "boalang.generateDupes",
+                command: "boalang.template.generateDupes",
                 arguments: [output[1]]
             });
             lenses.push(lense);
@@ -63,7 +63,7 @@ export default class StudyConfigCodelensProvider implements vscode.CodeLensProvi
             const lense = new vscode.CodeLens(range, {
                 title: "$(play) Run Analysis",
                 tooltip: "Runs the selected analysis script - this will download all inputs",
-                command: "boalang.runAnalysis",
+                command: "boalang.template.runAnalysis",
                 arguments: [target[1]]
             });
             lenses.push(lense);

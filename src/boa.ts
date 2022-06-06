@@ -174,7 +174,7 @@ async function submitQuery(query: string, dataset: any) {
 
             const job = await client.query(query, dataset);
             progress.report({  increment: 20 });
-            vscode.commands.executeCommand('boalang.refreshJobs');
+            vscode.commands.executeCommand('boalang.joblist.refresh');
 
             cancel.onCancellationRequested(async (e) => {
                 await job.stop();
@@ -184,7 +184,7 @@ async function submitQuery(query: string, dataset: any) {
             await job.wait();
 
             progress.report({  increment: 95 });
-            vscode.commands.executeCommand('boalang.showOutput', getJobUri(job.id));
+            vscode.commands.executeCommand('boalang.job.showOutput', getJobUri(job.id));
         });
 
         progress.report({ increment: 100 });

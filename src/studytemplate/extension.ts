@@ -36,10 +36,10 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
         pattern: '**/study-config.json',
     };
 
-    context.subscriptions.push(vscode.commands.registerCommand('boalang.downloadOutput', filename => runMakeCommand(`${consts.outputPath}/${filename}`)));
-    context.subscriptions.push(vscode.commands.registerCommand('boalang.generateCSV', filename => runMakeCommand(`${consts.csvPath}/${filename}`)));
-    context.subscriptions.push(vscode.commands.registerCommand('boalang.generateDupes', filename => runMakeCommand(`${consts.outputPath}/${filename}`)));
-    context.subscriptions.push(vscode.commands.registerCommand('boalang.runAnalysis', target => runMakeCommand(target)));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.template.downloadOutput', filename => runMakeCommand(`${consts.outputPath}/${filename}`)));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.template.generateCSV', filename => runMakeCommand(`${consts.csvPath}/${filename}`)));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.template.generateDupes', filename => runMakeCommand(`${consts.outputPath}/${filename}`)));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.template.runAnalysis', target => runMakeCommand(target)));
 
     context.subscriptions.push(vscode.languages.registerDocumentLinkProvider(jobsSelector, new JobsJSONLinkProvider()));
     context.subscriptions.push(vscode.languages.registerDocumentLinkProvider(studyConfigSelector, new StudyConfigJSONLinkProvider()));
@@ -55,8 +55,8 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     const watcher = vscode.workspace.createFileSystemWatcher(getWorkspaceRoot() + '/' + jobsFile, false, false, true);
     context.subscriptions.push(watcher);
 
-    watcher.onDidChange(() => vscode.commands.executeCommand('boalang.refreshJobs'));
-    watcher.onDidCreate(() => vscode.commands.executeCommand('boalang.refreshJobs'));
+    watcher.onDidChange(() => vscode.commands.executeCommand('boalang.joblist.refresh'));
+    watcher.onDidCreate(() => vscode.commands.executeCommand('boalang.joblist.refresh'));
 }
 
 async function runMakeCommand(target) {

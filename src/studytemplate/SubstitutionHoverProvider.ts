@@ -15,32 +15,12 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
-import { snippetPath, studyConfigFile } from '../consts';
 import * as fs from 'fs';
+import { snippetPath } from '../consts';
 import { getWorkspaceRoot } from '../utils';
+import { cache } from './StudyConfigCache';
 
 export default class SubstitutionHoverProvider implements vscode.HoverProvider {
-    private json: object = {};
-    private watcher: vscode.FileSystemWatcher;
-
-    constructor() {
-        // watch study-config.json for changes, then refresh the cached JSON
-        this.watcher = vscode.workspace.createFileSystemWatcher(getWorkspaceRoot() + '/' + studyConfigFile);
-        this.watcher.onDidChange(this.updateJSON);
-        this.watcher.onDidCreate(this.updateJSON);
-        this.watcher.onDidDelete(this.updateJSON);
-
-        this.updateJSON();
-    }
-
-    private updateJSON() {
-        try {
-            this.json = JSON.parse(fs.readFileSync(getWorkspaceRoot() + '/' + studyConfigFile).toString());
-        } catch (e) {
-            this.json = {};
-        }
-    }
-
     async provideHover(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.Hover> {
         const range = document.getWordRangeAtPosition(position, /<<[^>]+>>/);
         if (!range) return undefined;
@@ -48,8 +28,8 @@ export default class SubstitutionHoverProvider implements vscode.HoverProvider {
 
         const hovers = [];
 
-        for (const output in this.json['queries']) {
-            const query = this.json['queries'][output];
+        for (const output in cache.json['queries']) {
+            const query = cache.json['queries'][output];
             if (document.fileName.endsWith(query['query'])) {
                 for (const idx in query['substitutions']) {
                     const subst = query['substitutions'][idx];
@@ -60,8 +40,8 @@ export default class SubstitutionHoverProvider implements vscode.HoverProvider {
             }
         }
 
-        for (const idx in this.json['substitutions']) {
-            const subst = this.json['substitutions'][idx];
+        for (const idx in cache.json['substitutions']) {
+            const subst = cache.json['substitutions'][idx];
             if (subst['target'] == word) {
                 hovers.push(await this.buildHover(subst, undefined));
             }

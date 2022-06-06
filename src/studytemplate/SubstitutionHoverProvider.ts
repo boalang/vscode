@@ -59,6 +59,9 @@ export default class SubstitutionHoverProvider implements vscode.HoverProvider {
             scope += `[view included file](${file})\\\n`;
         } else {
             content = replacement['replacement'];
+            if (content.trim().length == 0) {
+                content = '# template is empty';
+            }
         }
 
         if (local) {

@@ -235,3 +235,63 @@ export async function showFullOutput(uri: vscode.Uri|BoaJob) {
 export async function showJob(uri: vscode.Uri|BoaJob) {
     showUri(buildUri(uri, 'boa-job$id-source.boa', 'details'));
 }
+
+function getJobId(uri: vscode.Uri|BoaJob) {
+    let jobId: string;
+    if (uri instanceof vscode.Uri) {
+        jobId = uri.authority;
+    } else {
+        jobId = uri.job.id;
+    }
+    return jobId;
+}
+
+export function viewPublicUrl(uri: vscode.Uri|BoaJob) {
+    runBoaCommands(async (client: boaapi.BoaClient) => {
+        const jobId = getJobId(uri);
+        const job = await client.getJob(jobId);
+
+        if (await job.public != true) {
+            vscode.window.showWarningMessage(`Can't open URL because job ${jobId} is private`);
+        } else {
+            const jobUrl = await job.publicUrl;
+            vscode.env.openExternal(vscode.Uri.parse(jobUrl));
+        }
+    });
+}
+
+export function deleteJob(uri: vscode.Uri|BoaJob) {
+    runBoaCommands(async (client: boaapi.BoaClient) => {
+        const jobId = getJobId(uri);
+        const job = await client.getJob(jobId);
+
+        await job.delete();
+        vscode.window.showInformationMessage(`Job ${jobId} has been deleted`);
+    });
+}
+
+export function togglePublic(uri: vscode.Uri|BoaJob) {
+    runBoaCommands(async (client: boaapi.BoaClient) => {
+        const jobId = getJobId(uri);
+        const job = await client.getJob(jobId);
+
+        const isPublic = await job.public;
+        job.public = !isPublic;
+
+        if (!isPublic) {
+            vscode.window.showInformationMessage(`Job ${jobId} has been set to public`);
+        } else {
+            vscode.window.showInformationMessage(`Job ${jobId} has been set to private`);
+        }
+    });
+}
+
+export function resubmitJob(uri: vscode.Uri|BoaJob) {
+    runBoaCommands(async (client: boaapi.BoaClient) => {
+        const jobId = getJobId(uri);
+        const job = await client.getJob(jobId);
+
+        await job.resubmit();
+        vscode.window.showInformationMessage(`Job ${jobId} has been resubmitted`);
+    });
+}

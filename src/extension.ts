@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
-import { getDatasets, showJob, runQuery, showOutput, showFullOutput, setFavorite } from './boa';
+import { getDatasets, showJob, runQuery, showOutput, showFullOutput, setFavorite, viewPublicUrl, deleteJob, togglePublic, resubmitJob } from './boa';
 import { AuthSettings } from './credentials';
 import { treeProvider } from './treeprovider';
 import { BoaSourceCodelensProvider } from './codelens';
@@ -38,7 +38,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     // register all commands
     context.subscriptions.push(vscode.commands.registerCommand('boalang.setFavorite', setFavorite));
-    context.subscriptions.push(vscode.commands.registerCommand('boalang.showJob', showJob));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.showJobSource', showJob));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.firstPage', () => treeProvider.firstPage()));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.prevPage', () => treeProvider.prevPage()));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.nextPage', () => treeProvider.nextPage()));
@@ -46,7 +46,13 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('boalang.runQuery', runQuery));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.showOutput', showOutput(output)));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.showFullOutput', showFullOutput));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.viewPublicUrl', viewPublicUrl));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.delete', deleteJob));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.togglePublic', togglePublic));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.resubmit', resubmitJob));
 
+
+    
     context.subscriptions.push(vscode.languages.registerCodeLensProvider('boalang', new BoaSourceCodelensProvider()));
 
     activateStudyTemplateSupport(context);

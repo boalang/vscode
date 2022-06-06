@@ -21,6 +21,7 @@ const boaConfig = vscode.workspace.getConfiguration('boalang');
 boaConfig.update('boalang.api.endpoint', undefined, true);
 boaConfig.update('boalang.dataset.favorite', undefined, true);
 boaConfig.update('boalang.joblist.pagesize', undefined, true);
+boaConfig.update('boalang.output.size', undefined, true);
 boaConfig.update('boalang.joblist.autoload', undefined, true);
 boaConfig.update('boalang.dataset.last', undefined, true);
 

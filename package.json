@@ -395,31 +395,37 @@
                 "boalang.login.username": {
                     "type": "string",
                     "description": "Boa API username",
-                    "order": 0,
+                    "order": 1,
                     "default": null
                 },
                 "boalang.dataset.favorite": {
                     "type": "string",
                     "description": "Favorite Boa dataset",
-                    "order": 1,
+                    "order": 2,
                     "default": "2019 October/GitHub (small)"
                 },
                 "boalang.joblist.pagesize": {
                     "type": "number",
                     "description": "Number of jobs to show in the jobs tree view",
-                    "order": 2,
+                    "order": 3,
                     "default": 10
+                },
+                "boalang.output.size": {
+                    "type": "number",
+                    "description": "Size (in bytes) to limit displaying query outputs",
+                    "order": 4,
+                    "default": 65536
                 },
                 "boalang.joblist.autoload": {
                     "type": "boolean",
                     "description": "Should the jobs tree view refresh on extension activation?",
-                    "order": 3,
+                    "order": 5,
                     "default": false
                 },
                 "boalang.dataset.last": {
                     "type": "string",
                     "description": "Last used Boa dataset",
-                    "order": 4,
+                    "order": 6,
                     "default": null
                 }
             }

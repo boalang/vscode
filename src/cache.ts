@@ -14,6 +14,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
+import * as vscode from 'vscode';
 
 export default class JobCache {
     private static source = {};
@@ -60,6 +61,8 @@ export default class JobCache {
 
     static async getOutput(job) {
         if (!this.output[job.id]) {
+            const boaConfig = vscode.workspace.getConfiguration('boalang');
+            job.outputSize = boaConfig.get<number>('output.size', 64 * 1024);
             this.output[job.id] = await job.output;
         }
 

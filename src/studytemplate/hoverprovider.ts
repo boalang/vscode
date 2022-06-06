@@ -17,34 +17,53 @@
 import * as vscode from 'vscode';
 import { snippetPath, studyConfigFile } from '../consts';
 import * as fs from 'fs';
+import { getWorkspaceRoot } from '../utils';
 
 export default class SubstitutionHoverProvider implements vscode.HoverProvider {
+    private json: object = {};
+    private watcher: vscode.FileSystemWatcher;
+
+    constructor() {
+        // watch study-config.json for changes, then refresh the cached JSON
+        this.watcher = vscode.workspace.createFileSystemWatcher(getWorkspaceRoot() + '/' + studyConfigFile);
+        this.watcher.onDidChange(this.updateJSON);
+        this.watcher.onDidCreate(this.updateJSON);
+        this.watcher.onDidDelete(this.updateJSON);
+
+        this.updateJSON();
+    }
+
+    private updateJSON() {
+        try {
+            this.json = JSON.parse(fs.readFileSync(getWorkspaceRoot() + '/' + studyConfigFile).toString());
+        } catch (e) {
+            this.json = {};
+        }
+    }
+
     async provideHover(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.Hover> {
         const range = document.getWordRangeAtPosition(position, /<<[^>]+>>/);
         if (!range) return undefined;
         const word = document.getText(range);
 
-        const cwd: string = vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0].uri.fsPath : '';
-        const json = this.readJSON(cwd + '/' + studyConfigFile);
-
         const hovers = [];
 
-        for (const output in json['queries']) {
-            const query = json['queries'][output];
+        for (const output in this.json['queries']) {
+            const query = this.json['queries'][output];
             if (document.fileName.endsWith(query['query'])) {
                 for (const idx in query['substitutions']) {
                     const subst = query['substitutions'][idx];
                     if (subst['target'] == word) {
-                        hovers.push(await this.buildHover(cwd, subst, output));
+                        hovers.push(await this.buildHover(subst, output));
                     }
                 }
             }
         }
 
-        for (const idx in json['substitutions']) {
-            const subst = json['substitutions'][idx];
+        for (const idx in this.json['substitutions']) {
+            const subst = this.json['substitutions'][idx];
             if (subst['target'] == word) {
-                hovers.push(await this.buildHover(cwd, subst, undefined));
+                hovers.push(await this.buildHover(subst, undefined));
             }
         }
 
@@ -53,12 +72,12 @@ export default class SubstitutionHoverProvider implements vscode.HoverProvider {
         return new vscode.Hover(new vscode.MarkdownString(hovers.join('\n\n----\n\n'), true));
     }
 
-    private async buildHover(cwd: string, replacement, local: string|undefined) {
+    private async buildHover(replacement, local: string|undefined) {
         let scope = '';
 
         let content = '';
         if (replacement.hasOwnProperty('file')) {
-            const path = cwd + '/' + snippetPath + '/' + replacement['file'];
+            const path = getWorkspaceRoot() + '/' + snippetPath + '/' + replacement['file'];
             const file = 'file://' + path;
             content = await this.getFileSnippet(path, 10);
             scope += `[view included file](${file})\\\n`;
@@ -73,15 +92,6 @@ export default class SubstitutionHoverProvider implements vscode.HoverProvider {
         }
 
         return `\`\`\`\`boalang\n${content}\n\`\`\`\`\n\n----\n\n${scope}`;
-    }
-
-    private readJSON(path: string): object {
-        try {
-            return JSON.parse(fs.readFileSync(path).toString());
-        } catch (e) {
-        }
-
-        return {};
     }
 
     private async getFileSnippet(path: string, limit: number): Promise<string> {

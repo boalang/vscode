@@ -14,16 +14,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
+import * as vscode from 'vscode';
 
-// admin datasets have this string prefix
-export const adminPrefix = '[admin] ';
-
-export const studyConfigFile = 'study-config.json';
-export const jobsFile = 'jobs.json';
-
-// paths in the study template, used for linking
-export const scriptPath = 'boa';
-export const snippetPath = scriptPath + '/snippets';
-export const outputPath = 'data/txt';
-export const csvPath = 'data/csv';
-export const analysesPath = 'analyses';
+export function getWorkspaceRoot() {
+    return vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0].uri.fsPath : '';
+}

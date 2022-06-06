@@ -26,9 +26,9 @@ class StudyConfigCache {
     constructor() {
         // watch study-config.json for changes, then refresh the cached JSON
         this.watcher = vscode.workspace.createFileSystemWatcher(getWorkspaceRoot() + '/' + studyConfigFile);
-        this.watcher.onDidChange(this.updateJSON);
-        this.watcher.onDidCreate(this.updateJSON);
-        this.watcher.onDidDelete(this.updateJSON);
+        this.watcher.onDidChange(this.updateJSON.bind(this));
+        this.watcher.onDidCreate(this.updateJSON.bind(this));
+        this.watcher.onDidDelete(this.updateJSON.bind(this));
 
         this.updateJSON();
     }

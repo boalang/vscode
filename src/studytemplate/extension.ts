@@ -18,6 +18,7 @@ import * as vscode from 'vscode';
 import * as consts from '../consts';
 import { jobsFile } from '../consts';
 import { getWorkspaceRoot } from '../utils';
+import BoaCompletionItemProvider from './BoaCompletionItemProvider';
 import SubstitutionHoverProvider from './SubstitutionHoverProvider';
 import { JobsJSONLinkProvider, StudyConfigJSONLinkProvider } from './linkproviders';
 import StudyConfigCodelensProvider from './StudyConfigCodelensProvider';
@@ -44,6 +45,7 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.languages.registerDocumentLinkProvider(studyConfigSelector, new StudyConfigJSONLinkProvider()));
 
     context.subscriptions.push(vscode.languages.registerCompletionItemProvider(studyConfigSelector, new StudyConfigCompletionItemProvider(), '\"'));
+    context.subscriptions.push(vscode.languages.registerCompletionItemProvider('boalang', new BoaCompletionItemProvider(), '<'));
 
     context.subscriptions.push(vscode.languages.registerCodeLensProvider(studyConfigSelector, new StudyConfigCodelensProvider()));
 

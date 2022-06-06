@@ -19,3 +19,16 @@ import * as vscode from 'vscode';
 export function getWorkspaceRoot() {
     return vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0].uri.fsPath : '';
 }
+
+export function removeDuplicates(src: string[]) : string[] {
+    let seen: {[key: string]: boolean} = {};
+    let result: string[] = [];
+    src.forEach(item => {
+        if (!seen[item]) {
+            seen[item] = true;
+            result.push(item);
+        }
+    });
+
+    return result;
+}

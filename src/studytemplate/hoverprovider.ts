@@ -67,7 +67,7 @@ export default class SubstitutionHoverProvider implements vscode.HoverProvider {
             }
         }
 
-        if (hovers.length == 0) return undefined;
+        if (hovers.length == 0) return new vscode.Hover(new vscode.MarkdownString('$(error) No substitution is defined for this template variable.', true));
 
         return new vscode.Hover(new vscode.MarkdownString(hovers.join('\n\n----\n\n'), true));
     }

@@ -68,4 +68,8 @@ export default class JobCache {
 
         return this.output[job.id];
     }
+
+    static clearOutputs() {
+        this.output = {};
+    }
 }

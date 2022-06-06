@@ -22,6 +22,7 @@ import { BoaSourceCodelensProvider } from './codelens';
 import { activateStudyTemplateSupport } from './studytemplate/extension';
 import { boaDocumentProvider } from './contentprovider';
 import { enableDiagnostics } from './diagnostics';
+import JobCache from './cache';
 
 // this method is called when the extension is activated
 export function activate(context: vscode.ExtensionContext) {
@@ -67,6 +68,8 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.workspace.onDidChangeConfiguration(event => {
         if (event.affectsConfiguration('boalang.joblist.pagesize')) {
             vscode.commands.executeCommand('boalang.joblist.refresh');
+        } else if (event.affectsConfiguration('boalang.output.size')) {
+            JobCache.clearOutputs();
         }
     })
 

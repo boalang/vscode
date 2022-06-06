@@ -345,7 +345,6 @@
                 },
                 {
                     "command": "boalang.showFullOutput",
-                    "group": "context menu",
                     "when": "resourceScheme == boalang"
                 },
                 {
@@ -360,17 +359,14 @@
                 },
                 {
                     "command": "boalang.delete",
-                    "group": "context menu",
                     "when": "resourceScheme == boalang"
                 },
                 {
                     "command": "boalang.resubmit",
-                    "group": "context menu",
                     "when": "resourceScheme == boalang"
                 },
                 {
                     "command": "boalang.togglePublic",
-                    "group": "context menu",
                     "when": "resourceScheme == boalang"
                 }
             ]

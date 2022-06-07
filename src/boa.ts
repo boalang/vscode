@@ -20,6 +20,7 @@ import { getBoaUsername, getBoaPassword, removeCredentials } from './credentials
 import { BoaJob } from './treeprovider';
 import * as consts from './consts';
 import JobCache from './cache';
+import { promptUser } from './utils';
 
 export function getJobUri(id: any) {
     return vscode.Uri.parse(`boalang://${id}/`);
@@ -162,6 +163,12 @@ export async function runQuery(uri: vscode.Uri) {
 }
 
 async function submitQuery(query: string, dataset: any) {
+    if (query.indexOf('{@') != -1) {
+        if (!(await promptUser('The query contains template variables and will not run directly.  Continue anyway?'))) {
+            return;
+        }
+    }
+
     vscode.window.withProgress({
         location: vscode.ProgressLocation.Notification,
         cancellable: true,

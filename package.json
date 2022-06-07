@@ -406,7 +406,7 @@
                 {
                     "command": "boalang.runQuery",
                     "group": "navigation",
-                    "when": "editorLangId == boalang && resourceDirname =~ /(?<!\\/snippets)$/"
+                    "when": "editorLangId == boalang && resourceDirname =~ /(?<!\\/snippets(\\/[^/]+)*)$/"
                 },
                 {
                     "command": "boalang.job.showOutput",

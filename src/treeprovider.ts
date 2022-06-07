@@ -30,8 +30,8 @@ class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
     private view = null;
 
     constructor() {
-        vscode.commands.executeCommand('setContext', 'boalang.prevPageEnabled', false);
-        vscode.commands.executeCommand('setContext', 'boalang.nextPageEnabled', false);
+        vscode.commands.executeCommand('setContext', 'boalang.joblist.prevEnabled', false);
+        vscode.commands.executeCommand('setContext', 'boalang.joblist.nextEnabled', false);
     }
 
     getTreeItem(element: vscode.TreeItem): vscode.TreeItem {
@@ -114,8 +114,8 @@ class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
         }).then(() => {
             this.jobs.sort((a, b) => (b.label as string).localeCompare(a.label as string))
 
-            vscode.commands.executeCommand('setContext', 'boalang.prevPageEnabled', this.start > 0);
-            vscode.commands.executeCommand('setContext', 'boalang.nextPageEnabled', this.start + this.jobs.length < this.max);
+            vscode.commands.executeCommand('setContext', 'boalang.joblist.prevEnabled', this.start > 0);
+            vscode.commands.executeCommand('setContext', 'boalang.joblist.nextEnabled', this.start + this.jobs.length < this.max);
             this.view.title = `Boa: Jobs ${this.start + 1}-${this.start + this.jobs.length} (${this.max})`;
 
             return Promise.resolve(this.jobs);

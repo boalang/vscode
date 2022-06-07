@@ -18,7 +18,6 @@ import * as vscode from 'vscode';
 import { getDatasets, showJob, runQuery, showOutput, showFullOutput, setFavorite, viewPublicUrl, deleteJob, togglePublic, resubmitJob } from './boa';
 import { AuthSettings } from './credentials';
 import { treeProvider } from './treeprovider';
-import { BoaSourceCodelensProvider } from './codelens';
 import { activateStudyTemplateSupport } from './studytemplate/extension';
 import { boaDocumentProvider } from './contentprovider';
 import { enableDiagnostics } from './diagnostics';
@@ -53,8 +52,6 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('boalang.job.delete', deleteJob));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.job.togglePublic', togglePublic));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.job.resubmit', resubmitJob));
-
-    context.subscriptions.push(vscode.languages.registerCodeLensProvider('boalang', new BoaSourceCodelensProvider()));
 
     activateStudyTemplateSupport(context);
 

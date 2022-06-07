@@ -274,6 +274,7 @@ export async function deleteJob(uri: vscode.Uri|BoaJob) {
             const job = await client.getJob(jobId);
 
             await job.delete();
+            vscode.commands.executeCommand('boalang.joblist.refresh');
             vscode.window.showInformationMessage(`Job ${jobId} has been deleted`);
         });
     }
@@ -302,6 +303,7 @@ export async function resubmitJob(uri: vscode.Uri|BoaJob) {
             const job = await client.getJob(jobId);
 
             await job.resubmit();
+            vscode.commands.executeCommand('boalang.joblist.refresh');
             vscode.window.showInformationMessage(`Job ${jobId} has been resubmitted`);
         });
     }

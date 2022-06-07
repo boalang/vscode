@@ -438,17 +438,17 @@
                 {
                     "command": "boalang.template.make",
                     "group": "navigation@1",
-                    "when": "resourceLangId == json && resourceFilename =~ /study-config\\.json$/"
+                    "when": "resourceLangId == json && resourceFilename == study-config.json"
                 },
                 {
                     "command": "boalang.template.clean",
                     "group": "navigation@2",
-                    "when": "resourceLangId == json && resourceFilename =~ /study-config\\.json$/"
+                    "when": "resourceLangId == json && resourceFilename == study-config.json"
                 },
                 {
                     "command": "boalang.template.cleanData",
                     "group": "navigation@3",
-                    "when": "resourceLangId == json && resourceFilename =~ /study-config\\.json$/"
+                    "when": "resourceLangId == json && resourceFilename == study-config.json"
                 }
             ]
         },

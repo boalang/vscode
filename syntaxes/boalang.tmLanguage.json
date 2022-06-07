@@ -9,6 +9,9 @@
 			"include": "#keywords"
 		},
 		{
+			"include": "#templates"
+		},
+		{
 			"include": "#types"
 		},
 		{
@@ -55,6 +58,14 @@
 				{
 					"name": "keyword.control.boalang",
 					"match": "\\b(if|else|while|for|foreach|exists|ifall|switch|return|break|stop|continue)\\b"
+				}
+			]
+		},
+		"templates": {
+			"patterns": [
+				{
+					"name": "markup.heading.boalang",
+					"match": "{@[^@]+@}"
 				}
 			]
 		},

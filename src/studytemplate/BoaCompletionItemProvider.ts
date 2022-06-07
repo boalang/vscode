@@ -42,7 +42,6 @@ export default class BoaCompletionItemProvider implements vscode.CompletionItemP
         const trimmed = label.substring(2, label.length - 2);
         const item = new vscode.CompletionItem(trimmed, vscode.CompletionItemKind.Value);
         item.detail = 'template';
-        item.commitCharacters = ['>'];
         return item;
     }
 }

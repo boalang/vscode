@@ -50,7 +50,7 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.languages.registerDocumentLinkProvider(studyConfigSelector, new StudyConfigJSONLinkProvider()));
 
     context.subscriptions.push(vscode.languages.registerCompletionItemProvider(studyConfigSelector, new StudyConfigCompletionItemProvider(), '\"'));
-    context.subscriptions.push(vscode.languages.registerCompletionItemProvider('boalang', new BoaCompletionItemProvider(), '<'));
+    context.subscriptions.push(vscode.languages.registerCompletionItemProvider('boalang', new BoaCompletionItemProvider(), '@'));
 
     context.subscriptions.push(vscode.languages.registerCodeLensProvider(studyConfigSelector, new StudyConfigCodelensProvider()));
 

@@ -21,6 +21,17 @@ export default class StudyConfigCodelensProvider implements vscode.CodeLensProvi
         const lenses = [];
         const docPath = document.uri.fsPath.substring(0, document.uri.fsPath.lastIndexOf('/'));
 
+        // looks for the analysis section, e.g.: "analyses": {
+        for (const output of document.getText().matchAll(/"analyses"\s*:\s*{/g)) {
+            const range = new vscode.Range(document.positionAt(output.index), document.positionAt(output.index + 1));
+            const lense = new vscode.CodeLens(range, {
+                title: "$(run-all) Run All Analyses",
+                tooltip: "Run all analyses",
+                command: "boalang.template.runAllAnalyses"
+            });
+            lenses.push(lense);
+        }
+
         // looks for query outputs, e.g.: "kotlin/rq1.txt": {
         for (const output of document.getText().matchAll(/"([^"]+\.txt)"\s*:\s*{/g)) {
             const range = new vscode.Range(document.positionAt(output.index + 1), document.positionAt(output.index + 1 + output[1].length));

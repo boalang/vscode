@@ -48,7 +48,8 @@
         "onCommand:boalang.template.downloadOutput",
         "onCommand:boalang.template.generateCSV",
         "onCommand:boalang.template.generateDupes",
-        "onCommand:boalang.template.runAnalysis"
+        "onCommand:boalang.template.runAnalysis",
+        "onCommand:boalang.template.runAllAnalyses"
     ],
     "contributes": {
         "commands": [
@@ -161,6 +162,12 @@
                 "command": "boalang.template.runAnalysis",
                 "title": "Run Boa Analysis",
                 "icon": "$(play)",
+                "category": "Boa"
+            },
+            {
+                "command": "boalang.template.runAllAnalyses",
+                "title": "Run All Analyses",
+                "icon": "$(run-all)",
                 "category": "Boa"
             }
         ],
@@ -282,6 +289,10 @@
                 },
                 {
                     "command": "boalang.template.runAnalysis",
+                    "when": "false"
+                },
+                {
+                    "command": "boalang.template.runAllAnalyses",
                     "when": "false"
                 }
             ],

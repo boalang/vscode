@@ -36,7 +36,7 @@ export default class SubstitutionHoverProvider implements vscode.HoverProvider {
                 }
             }
         }
-        
+
         const sub = substitutions.substitutions[word];
         if (sub) {
             hovers.push(await cache.renderSubstitution(sub.subst, sub.output));

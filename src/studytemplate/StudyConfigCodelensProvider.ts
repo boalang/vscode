@@ -42,7 +42,7 @@ export default class StudyConfigCodelensProvider implements vscode.CodeLensProvi
             });
             lenses.push(lense);
         }
-    
+
         // looks for query outputs, e.g.: "kotlin/rq1.txt": {
         for (const output of document.getText().matchAll(/"([^"]+\.txt)"\s*:\s*{/g)) {
             const range = new vscode.Range(document.positionAt(output.index + 1), document.positionAt(output.index + 1 + output[1].length));

@@ -54,8 +54,6 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('boalang.job.togglePublic', togglePublic));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.job.resubmit', resubmitJob));
 
-
-    
     context.subscriptions.push(vscode.languages.registerCodeLensProvider('boalang', new BoaSourceCodelensProvider()));
 
     activateStudyTemplateSupport(context);

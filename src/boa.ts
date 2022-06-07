@@ -267,14 +267,16 @@ export function viewPublicUrl(uri: vscode.Uri|BoaJob) {
     });
 }
 
-export function deleteJob(uri: vscode.Uri|BoaJob) {
-    runBoaCommands(async (client: boaapi.BoaClient) => {
-        const jobId = getJobId(uri);
-        const job = await client.getJob(jobId);
+export async function deleteJob(uri: vscode.Uri|BoaJob) {
+    if (await promptUser('Are you sure you want to delete this job?')) {
+            runBoaCommands(async (client: boaapi.BoaClient) => {
+            const jobId = getJobId(uri);
+            const job = await client.getJob(jobId);
 
-        await job.delete();
-        vscode.window.showInformationMessage(`Job ${jobId} has been deleted`);
-    });
+            await job.delete();
+            vscode.window.showInformationMessage(`Job ${jobId} has been deleted`);
+        });
+    }
 }
 
 export function togglePublic(uri: vscode.Uri|BoaJob) {
@@ -293,12 +295,14 @@ export function togglePublic(uri: vscode.Uri|BoaJob) {
     });
 }
 
-export function resubmitJob(uri: vscode.Uri|BoaJob) {
-    runBoaCommands(async (client: boaapi.BoaClient) => {
-        const jobId = getJobId(uri);
-        const job = await client.getJob(jobId);
+export async function resubmitJob(uri: vscode.Uri|BoaJob) {
+    if (await promptUser('Are you sure you want to resubmit this job?')) {
+        runBoaCommands(async (client: boaapi.BoaClient) => {
+            const jobId = getJobId(uri);
+            const job = await client.getJob(jobId);
 
-        await job.resubmit();
-        vscode.window.showInformationMessage(`Job ${jobId} has been resubmitted`);
-    });
+            await job.resubmit();
+            vscode.window.showInformationMessage(`Job ${jobId} has been resubmitted`);
+        });
+    }
 }

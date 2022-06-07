@@ -41,6 +41,10 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.generateDupes', filename => runMakeCommand(`${consts.outputPath}/${filename}`)));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.runAnalysis', target => runMakeCommand(target)));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.runAllAnalyses', _ => runMakeCommand('analysis')));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.template.generateData', _ => runMakeCommand('data')));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.template.clean', _ => runMakeCommand('clean')));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.template.cleanData', _ => runMakeCommand('clean-data')));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.template.make', _ => runMakeCommand(undefined)));
 
     context.subscriptions.push(vscode.languages.registerDocumentLinkProvider(jobsSelector, new JobsJSONLinkProvider()));
     context.subscriptions.push(vscode.languages.registerDocumentLinkProvider(studyConfigSelector, new StudyConfigJSONLinkProvider()));
@@ -62,7 +66,10 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
 
 async function runMakeCommand(target) {
     let taskCommand: vscode.ShellQuotedString = {value: 'make', quoting: vscode.ShellQuoting.Strong};
-    let taskArgs: vscode.ShellQuotedString[] = [{value: target, quoting: vscode.ShellQuoting.Strong}];
+    let taskArgs: vscode.ShellQuotedString[] = [];
+    if (target) {
+        taskArgs.push({value: target, quoting: vscode.ShellQuoting.Strong});
+    }
 
     let myTaskOptions: vscode.ShellExecutionOptions = {env: process.env, cwd: getWorkspaceRoot()};
 

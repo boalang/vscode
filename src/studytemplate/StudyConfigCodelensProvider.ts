@@ -32,6 +32,17 @@ export default class StudyConfigCodelensProvider implements vscode.CodeLensProvi
             lenses.push(lense);
         }
 
+        // looks for the analysis section, e.g.: "queries": {
+        for (const output of document.getText().matchAll(/"queries"\s*:\s*{/g)) {
+            const range = new vscode.Range(document.positionAt(output.index), document.positionAt(output.index + 1));
+            const lense = new vscode.CodeLens(range, {
+                title: "$(graph) Generate All Data",
+                tooltip: "Generate All Data",
+                command: "boalang.template.generateData"
+            });
+            lenses.push(lense);
+        }
+    
         // looks for query outputs, e.g.: "kotlin/rq1.txt": {
         for (const output of document.getText().matchAll(/"([^"]+\.txt)"\s*:\s*{/g)) {
             const range = new vscode.Range(document.positionAt(output.index + 1), document.positionAt(output.index + 1 + output[1].length));

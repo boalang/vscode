@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
+import * as consts from '../consts';
 
 export default class StudyConfigCodelensProvider implements vscode.CodeLensProvider {
     public provideCodeLenses(document: vscode.TextDocument, token: vscode.CancellationToken): vscode.CodeLens[] | Thenable<vscode.CodeLens[]> {
@@ -28,6 +29,12 @@ export default class StudyConfigCodelensProvider implements vscode.CodeLensProvi
                 title: '$(run-all) Run All Analyses',
                 command: 'boalang.template.make'
             }));
+
+            lenses.push(new vscode.CodeLens(range, {
+                title: '$(trash) Clean Analysis Output',
+                tooltip: 'Cleans all tables and figures',
+                command: 'boalang.template.clean'
+            }));
         }
 
         // looks for the analysis section, e.g.: "queries": {
@@ -37,6 +44,12 @@ export default class StudyConfigCodelensProvider implements vscode.CodeLensProvi
                 title: '$(graph) Generate All Data',
                 tooltip: 'Runs queries, downloads outputs, and converts to CSV as necessary',
                 command: 'boalang.template.generateData'
+            }));
+
+            lenses.push(new vscode.CodeLens(range, {
+                title: '$(trash) Clean All Data',
+                tooltip: 'Cleans all downloaded and generated output files',
+                command: 'boalang.template.cleanData'
             }));
         }
 
@@ -51,8 +64,8 @@ export default class StudyConfigCodelensProvider implements vscode.CodeLensProvi
             }));
 
             lenses.push(new vscode.CodeLens(range, {
-                title: '$(clear-all) Clean Output',
-                tooltip: `Cleans downloaded and generated output files for ${output[1]}`,
+                title: '$(trash) Clean Output',
+                tooltip: `Cleans downloaded and generated output files for ${consts.outputPath}/${output[1]}`,
                 command: 'boalang.template.cleanOutput',
                 arguments: [output[1]]
             }));

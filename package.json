@@ -184,13 +184,13 @@
             {
                 "command": "boalang.template.cleanData",
                 "title": "Clean Analysis Data",
-                "icon": "$(clear-all)",
+                "icon": "$(trash)",
                 "category": "Boa"
             },
             {
                 "command": "boalang.template.cleanOutput",
                 "title": "Clean Related Output",
-                "icon": "$(clear-all)",
+                "icon": "$(trash)",
                 "category": "Boa"
             },
             {
@@ -434,16 +434,6 @@
                 {
                     "command": "boalang.template.make",
                     "group": "navigation@1",
-                    "when": "editorLangId == json && resourceFilename == study-config.json"
-                },
-                {
-                    "command": "boalang.template.clean",
-                    "group": "navigation@2",
-                    "when": "editorLangId == json && resourceFilename == study-config.json"
-                },
-                {
-                    "command": "boalang.template.cleanData",
-                    "group": "navigation@3",
                     "when": "editorLangId == json && resourceFilename == study-config.json"
                 },
                 {

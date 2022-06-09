@@ -26,8 +26,7 @@ export default class StudyConfigCodelensProvider implements vscode.CodeLensProvi
             const range = new vscode.Range(document.positionAt(output.index), document.positionAt(output.index + 1));
             const lense = new vscode.CodeLens(range, {
                 title: "$(run-all) Run All Analyses",
-                tooltip: "Run all analyses",
-                command: "boalang.template.runAllAnalyses"
+                command: "boalang.template.make"
             });
             lenses.push(lense);
         }
@@ -37,7 +36,7 @@ export default class StudyConfigCodelensProvider implements vscode.CodeLensProvi
             const range = new vscode.Range(document.positionAt(output.index), document.positionAt(output.index + 1));
             const lense = new vscode.CodeLens(range, {
                 title: "$(graph) Generate All Data",
-                tooltip: "Generate All Data",
+                tooltip: "Runs queries, downloads outputs, and converts to CSV as necessary",
                 command: "boalang.template.generateData"
             });
             lenses.push(lense);

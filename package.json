@@ -50,7 +50,6 @@
         "onCommand:boalang.template.generateDupes",
         "onCommand:boalang.template.generateData",
         "onCommand:boalang.template.runAnalysis",
-        "onCommand:boalang.template.runAllAnalyses",
         "onCommand:boalang.template.clean",
         "onCommand:boalang.template.cleanData",
         "onCommand:boalang.template.make",
@@ -173,12 +172,6 @@
                 "command": "boalang.template.runAnalysis",
                 "title": "Run Boa Analysis",
                 "icon": "$(play)",
-                "category": "Boa"
-            },
-            {
-                "command": "boalang.template.runAllAnalyses",
-                "title": "Run All Analyses",
-                "icon": "$(run-all)",
                 "category": "Boa"
             },
             {
@@ -323,27 +316,7 @@
                     "when": "false"
                 },
                 {
-                    "command": "boalang.template.generateData",
-                    "when": "false"
-                },
-                {
                     "command": "boalang.template.runAnalysis",
-                    "when": "false"
-                },
-                {
-                    "command": "boalang.template.runAllAnalyses",
-                    "when": "false"
-                },
-                {
-                    "command": "boalang.template.clean",
-                    "when": "false"
-                },
-                {
-                    "command": "boalang.template.cleanData",
-                    "when": "false"
-                },
-                {
-                    "command": "boalang.template.make",
                     "when": "false"
                 }
             ],

@@ -16,8 +16,7 @@
 //
 import * as vscode from 'vscode';
 import { getJobUri, runBoaCommands } from './boa';
-import * as boaapi from '@boalang/boa-api/lib/boaclient';
-import { CompilerStatus, ExecutionStatus } from '@boalang/boa-api/lib/jobhandle';
+import * as boaapi from '@boalang/boa-api';
 import JobCache from './cache';
 
 class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
@@ -70,18 +69,18 @@ class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
         // jobs have status items
         if (element instanceof BoaJob) {
             const children = [new vscode.TreeItem(element.job.input.name)];
-            if (element.job.executionStatus == ExecutionStatus.FINISHED) {
+            if (element.job.executionStatus == boaapi.ExecutionStatus.FINISHED) {
                 const sizeItem = new vscode.TreeItem('output size: ' + this.getSize(element.size));
                 sizeItem.tooltip = element.size.toLocaleString() + ' bytes';
                 children.push(sizeItem);
             } else {
                 const compiler = new vscode.TreeItem('compile: ' + element.job.compilerStatus);
-                if (element.job.compilerStatus == CompilerStatus.ERROR) {
+                if (element.job.compilerStatus == boaapi.CompilerStatus.ERROR) {
                     const errs = await element.job.compilerErrors;
                     compiler.tooltip = errs.join('\n').replace('\\n', '\n');
                 }
                 children.push(compiler);
-                if (element.job.compilerStatus == CompilerStatus.FINISHED) {
+                if (element.job.compilerStatus == boaapi.CompilerStatus.FINISHED) {
                     children.push(new vscode.TreeItem('exec: ' + element.job.executionStatus));
                 }
             }
@@ -106,7 +105,7 @@ class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
             for (const job of jobs) {
                 const source = await JobCache.getSource(job);
                 var size = 0;
-                if (job.executionStatus == ExecutionStatus.FINISHED) {
+                if (job.executionStatus == boaapi.ExecutionStatus.FINISHED) {
                     size = await JobCache.getOutputSize(job);
                 }
                 this.jobs.push(new BoaJob(job, source, size));
@@ -182,11 +181,11 @@ export class BoaJob extends vscode.TreeItem {
             title: 'show job details',
         };
 
-        if (job.compilerStatus == CompilerStatus.KILLED || job.executionStatus == ExecutionStatus.KILLED) {
+        if (job.compilerStatus == boaapi.CompilerStatus.KILLED || job.executionStatus == boaapi.ExecutionStatus.KILLED) {
             this.iconPath = new vscode.ThemeIcon('close', new vscode.ThemeColor('boalang.icon.jobCanceled'));
-        } else if (job.executionStatus == ExecutionStatus.ERROR) {
+        } else if (job.executionStatus == boaapi.ExecutionStatus.ERROR) {
            this.iconPath = new vscode.ThemeIcon('bug', new vscode.ThemeColor('boalang.icon.jobExecError'));
-        } else if (job.compilerStatus == CompilerStatus.ERROR) {
+        } else if (job.compilerStatus == boaapi.CompilerStatus.ERROR) {
            this.iconPath = new vscode.ThemeIcon('bracket-error', new vscode.ThemeColor('boalang.icon.jobCompileError'));
         } else if (job.isRunning) {
            this.iconPath = new vscode.ThemeIcon('pulse', new vscode.ThemeColor('boalang.icon.jobRunning'));

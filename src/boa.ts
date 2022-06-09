@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
-import * as boaapi from '@boalang/boa-api/lib/boaclient';
+import * as boaapi from '@boalang/boa-api';
 import { getBoaUsername, getBoaPassword, removeCredentials } from './credentials';
 import { BoaJob } from './treeprovider';
 import * as consts from './consts';

@@ -1,7 +1,5 @@
 # Change Log
 
-All notable changes to the "boalang" extension will be documented in this file.
+## [0.1.0] - 2022-06-09
 
-## [Unreleased]
-
-- Initial release
+- Initial release of Boa VS Code extension

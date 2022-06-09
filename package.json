@@ -52,6 +52,7 @@
         "onCommand:boalang.template.runAnalysis",
         "onCommand:boalang.template.clean",
         "onCommand:boalang.template.cleanData",
+        "onCommand:boalang.template.cleanOutput",
         "onCommand:boalang.template.make",
         "onCommand:boalang.template.zip"
     ],
@@ -187,6 +188,12 @@
                 "category": "Boa"
             },
             {
+                "command": "boalang.template.cleanOutput",
+                "title": "Clean Related Output",
+                "icon": "$(clear-all)",
+                "category": "Boa"
+            },
+            {
                 "command": "boalang.template.make",
                 "title": "Make Full Analysis",
                 "icon": "$(debug-continue)",
@@ -313,6 +320,10 @@
                 },
                 {
                     "command": "boalang.template.generateDupes",
+                    "when": "false"
+                },
+                {
+                    "command": "boalang.template.cleanOutput",
                     "when": "false"
                 },
                 {

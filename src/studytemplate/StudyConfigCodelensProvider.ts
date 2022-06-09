@@ -49,6 +49,13 @@ export default class StudyConfigCodelensProvider implements vscode.CodeLensProvi
                 command: 'boalang.template.downloadOutput',
                 arguments: [output[1]]
             }));
+
+            lenses.push(new vscode.CodeLens(range, {
+                title: '$(clear-all) Clean Output',
+                tooltip: `Cleans downloaded and generated output files for ${output[1]}`,
+                command: 'boalang.template.cleanOutput',
+                arguments: [output[1]]
+            }));
         }
 
         // looks for CSV files, e.g.: "csv": "kotlin/dupes.csv"

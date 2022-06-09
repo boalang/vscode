@@ -47,6 +47,7 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
             runMakeCommand('clean-data');
         }
     }));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.template.cleanOutput', target => runMakeCommand('clean-' + target)));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.make', _ => runMakeCommand(undefined)));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.zip', _ => runMakeCommand('zip')));
 

@@ -16,7 +16,7 @@
 //
 import * as vscode from 'vscode';
 import { runBoaCommands } from './boa';
-import { CompilerStatus, ExecutionStatus } from '@boa/boa-api/lib/jobhandle';
+import { CompilerStatus, ExecutionStatus } from '@boalang/boa-api/lib/jobhandle';
 
 let diagnosticCollection: vscode.DiagnosticCollection;
 const diagsCache = new Map();

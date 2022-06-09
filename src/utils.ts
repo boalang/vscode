@@ -35,8 +35,8 @@ export function removeDuplicates(src: string[]) : string[] {
 
 export async function promptUser(message: string) {
     const chosen = await vscode.window.showErrorMessage<vscode.MessageItem>(message,
-        { title: "Yes", isCloseAffordance: false },
-        { title: "No", isCloseAffordance: true });
+        { title: 'Yes', isCloseAffordance: false },
+        { title: 'No', isCloseAffordance: true });
 
-    return chosen !== undefined && chosen.title === "Yes";
+    return chosen !== undefined && chosen.title === 'Yes';
 }

@@ -45,6 +45,7 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.clean', _ => runMakeCommand('clean')));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.cleanData', _ => runMakeCommand('clean-data')));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.make', _ => runMakeCommand(undefined)));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.template.zip', _ => runMakeCommand('zip')));
 
     context.subscriptions.push(vscode.languages.registerDocumentLinkProvider(jobsSelector, new JobsJSONLinkProvider()));
     context.subscriptions.push(vscode.languages.registerDocumentLinkProvider(studyConfigSelector, new StudyConfigJSONLinkProvider()));

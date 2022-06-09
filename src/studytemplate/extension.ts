@@ -17,7 +17,7 @@
 import * as vscode from 'vscode';
 import * as consts from '../consts';
 import { jobsFile } from '../consts';
-import { getWorkspaceRoot } from '../utils';
+import { getWorkspaceRoot, promptUser } from '../utils';
 import BoaCompletionItemProvider from './BoaCompletionItemProvider';
 import SubstitutionHoverProvider from './SubstitutionHoverProvider';
 import { JobsJSONLinkProvider, StudyConfigJSONLinkProvider } from './linkproviders';
@@ -42,7 +42,11 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.runAnalysis', target => runMakeCommand(target)));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.generateData', _ => runMakeCommand('data')));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.clean', _ => runMakeCommand('clean')));
-    context.subscriptions.push(vscode.commands.registerCommand('boalang.template.cleanData', _ => runMakeCommand('clean-data')));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.template.cleanData', async _ => {
+        if (await promptUser('This deletes *all* output files. Are you sure you want to do this?')) {
+            runMakeCommand('clean-data');
+        }
+    }));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.make', _ => runMakeCommand(undefined)));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.zip', _ => runMakeCommand('zip')));
 

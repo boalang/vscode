@@ -41,15 +41,15 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.generateDupes', filename => runMakeCommand(`${consts.outputPath}/${filename}`)));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.runAnalysis', target => runMakeCommand(target)));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.generateData', _ => runMakeCommand('data')));
-    context.subscriptions.push(vscode.commands.registerCommand('boalang.template.clean', _ => runMakeCommand('clean')));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.template.clean', _ => runMakeCommand('clean', false)));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.cleanData', async _ => {
         if (await promptUser('This deletes *all* output files. Are you sure you want to do this?')) {
-            runMakeCommand('clean-data');
+            runMakeCommand('clean-data', false);
         }
     }));
-    context.subscriptions.push(vscode.commands.registerCommand('boalang.template.cleanOutput', filename => runMakeCommand(`clean-${consts.outputPath}/${filename}`)));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.template.cleanOutput', filename => runMakeCommand(`clean-${consts.outputPath}/${filename}`, false)));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.make', _ => runMakeCommand(undefined)));
-    context.subscriptions.push(vscode.commands.registerCommand('boalang.template.zip', _ => runMakeCommand('zip')));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.template.zip', _ => runMakeCommand('zip', false)));
 
     context.subscriptions.push(vscode.languages.registerDocumentLinkProvider(jobsSelector, new JobsJSONLinkProvider()));
     context.subscriptions.push(vscode.languages.registerDocumentLinkProvider(studyConfigSelector, new StudyConfigJSONLinkProvider()));
@@ -69,7 +69,7 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     watcher.onDidCreate(() => vscode.commands.executeCommand('boalang.joblist.refresh'));
 }
 
-async function runMakeCommand(target) {
+async function runMakeCommand(target, shouldRefresh = true) {
     let taskCommand: vscode.ShellQuotedString = {value: 'make', quoting: vscode.ShellQuoting.Strong};
     let taskArgs: vscode.ShellQuotedString[] = [];
     if (target) {
@@ -84,4 +84,7 @@ async function runMakeCommand(target) {
     let makeTask = new vscode.Task({type: 'shell', group: 'build', label: makefileBuildTaskName}, vscode.TaskScope.Workspace, makefileBuildTaskName, 'makefile', shellExec);
 
     await vscode.tasks.executeTask(makeTask);
+    if (shouldRefresh) {
+        vscode.commands.executeCommand('boalang.joblist.first');
+    }
 }

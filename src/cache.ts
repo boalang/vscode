@@ -21,7 +21,9 @@ export default class JobCache {
 
     static async getSource(job) {
         if (!this.source[job.id]) {
-            this.source[job.id] = await job.source;
+            try {
+                this.source[job.id] = await job.source;
+            } catch (err) { }
         }
 
         return this.source[job.id];
@@ -31,7 +33,9 @@ export default class JobCache {
 
     static async getOutputSize(job) {
         if (!this.outputSize[job.id]) {
-            this.outputSize[job.id] = await job.outputSize;
+            try {
+                this.outputSize[job.id] = await job.outputSize;
+            } catch (err) { }
         }
 
         return this.outputSize[job.id];
@@ -41,7 +45,9 @@ export default class JobCache {
 
     static async getUrl(job) {
         if (!this.url[job.id]) {
-            this.url[job.id] = await job.url;
+            try {
+                this.url[job.id] = await job.url;
+            } catch (err) { }
         }
 
         return this.url[job.id];
@@ -51,7 +57,9 @@ export default class JobCache {
 
     static async getCompilerErrors(job) {
         if (!this.compilerErrors[job.id]) {
-            this.compilerErrors[job.id] = await job.compilerErrors;
+            try {
+                this.compilerErrors[job.id] = await job.compilerErrors;
+            } catch (err) { }
         }
 
         return this.compilerErrors[job.id];
@@ -61,9 +69,11 @@ export default class JobCache {
 
     static async getOutput(job) {
         if (!this.output[job.id]) {
-            const boaConfig = vscode.workspace.getConfiguration('boalang');
-            job.outputSize = boaConfig.get<number>('output.size', 64 * 1024);
-            this.output[job.id] = await job.output;
+            try {
+                const boaConfig = vscode.workspace.getConfiguration('boalang');
+                job.outputSize = boaConfig.get<number>('output.size', 64 * 1024);
+                this.output[job.id] = await job.output;
+            } catch (err) { }
         }
 
         return this.output[job.id];

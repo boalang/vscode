@@ -259,11 +259,15 @@ export function viewPublicUrl(uri: vscode.Uri|BoaJob) {
         const job = await client.getJob(jobId);
 
         if (await job.public != true) {
-            vscode.window.showWarningMessage(`Can't open URL because job ${jobId} is private`);
-        } else {
-            const jobUrl = await job.publicUrl;
-            vscode.env.openExternal(vscode.Uri.parse(jobUrl));
+            if (await promptUser(`Can't open URL because job ${jobId} is private. Do you want to make it public?`)) {
+                await togglePublic(uri);
+            } else {
+                return;
+            }
         }
+
+        const jobUrl = await job.publicUrl;
+        vscode.env.openExternal(vscode.Uri.parse(jobUrl));
     });
 }
 

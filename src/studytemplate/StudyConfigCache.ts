@@ -89,29 +89,8 @@ class StudyConfigCache {
     }
 
     private getFileSnippet(path: string, limit: number): string {
-        let lines = [];
-        let acc = '';
-
         const contents = fs.readFileSync(path).toString();
-        return contents;
-        // let rs = fs.createReadStream(path, {encoding: 'utf8'});
-        // return new Promise((resolve, reject) =>
-        //     rs.on('data', function (chunk: string) {
-        //         acc += chunk;
-        //         let parts = chunk.split('\n', limit - lines.length);
-        //         parts.forEach(l => lines.push(l));
-        //         if (lines.length === limit) {
-        //             rs.close();
-        //         }
-        //     }).on('close', function () {
-        //         let content = lines.join('\n');
-        //         if (acc.trim().length > content.trim().length) {
-        //             content += '\n...';
-        //         }
-        //         return resolve(content);
-        //     }).on('error', function (err) {
-        //         return resolve(`*Error loading file contents: ${err}.*`);
-        //     }));
+        return contents.trim().split('\n').slice(0, limit).join('\n');
     }
 
     private updateJSON() {

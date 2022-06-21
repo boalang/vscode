@@ -19,7 +19,7 @@ import { removeDuplicates } from '../utils';
 import { cache } from './StudyConfigCache';
 
 export default class BoaCompletionItemProvider implements vscode.CompletionItemProvider {
-    public provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): vscode.ProviderResult<vscode.CompletionItem[]> {
+    public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.CompletionItem[]> {
         const items = [];
 
         if (position.character >= 0) {
@@ -27,24 +27,21 @@ export default class BoaCompletionItemProvider implements vscode.CompletionItemP
             let keys = Object.keys(substitutions.substitutions);
             const hovers = new Map<string,string[]>();
 
-            keys.forEach(k => {
+            for (const k of keys) {
                 if (!hovers.has(k)) hovers.set(k, []);
                 const sub = substitutions.substitutions[k];
-                const hover = cache.renderSubstitution(sub.subst, sub.output);
-                hovers.get(k).push(hover);
-            });
+                hovers.get(k).push(await cache.renderSubstitution(sub.subst, sub.output));
+            }
 
-            Object.keys(substitutions)
-                .filter(filename => document.fileName.endsWith(filename))
-                .forEach(k => {
-                    const newKeys = Object.keys(substitutions[k]);
-                    newKeys.forEach(k2 => {
-                        if (!hovers.has(k2)) hovers.set(k2, []);
-                        const sub = substitutions[k][k2];
-                        hovers.get(k2).push(cache.renderSubstitution(sub.subst, sub.output));
-                    });
-                    keys = keys.concat(newKeys);
-                });
+            for (const k of Object.keys(substitutions).filter(filename => document.fileName.endsWith(filename))) {
+                const newKeys = Object.keys(substitutions[k]);
+                for (const k2 of newKeys) {
+                    if (!hovers.has(k2)) hovers.set(k2, []);
+                    const sub = substitutions[k][k2];
+                    hovers.get(k2).push(await cache.renderSubstitution(sub.subst, sub.output));
+                }
+                keys = keys.concat(newKeys);
+            }
 
             removeDuplicates(keys).forEach(k => {
                 items.push(this.makeCompletionItem(k, hovers.get(k).reverse()));

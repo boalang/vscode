@@ -40,3 +40,11 @@ export async function promptUser(message: string) {
 
     return chosen !== undefined && chosen.title === 'Yes';
 }
+
+export async function getFileContents(path: string): Promise<string> {
+    return vscode.workspace.fs.readFile(vscode.Uri.file(path)).then(
+        (val) => {
+            return val.toString();
+        }
+    );
+}

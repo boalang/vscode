@@ -15,9 +15,8 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
-import * as fs from 'fs';
 import { snippetPath, studyConfigFile } from '../consts';
-import { getWorkspaceRoot } from '../utils';
+import { getFileContents, getWorkspaceRoot } from '../utils';
 
 class StudyConfigCache {
     private _json: object;
@@ -63,14 +62,14 @@ class StudyConfigCache {
         return this.substitutions;
     }
 
-    renderSubstitution(replacement, local: string|undefined) {
+    async renderSubstitution(replacement, local: string|undefined) {
         let scope = '';
 
         let content = '';
         if (replacement.hasOwnProperty('file')) {
             const path = getWorkspaceRoot() + '/' + snippetPath + '/' + replacement['file'];
             const file = 'file://' + path;
-            content = this.getFileSnippet(path, 10);
+            content = await this.getFileSnippet(path, 10);
             scope += `[view included file](${file})\\\n`;
         } else {
             content = replacement['replacement'];
@@ -88,20 +87,28 @@ class StudyConfigCache {
         return `\`\`\`\`boalang\n${content}\n\`\`\`\`\n\n----\n\n${scope}`;
     }
 
-    private getFileSnippet(path: string, limit: number): string {
-        const contents = fs.readFileSync(path).toString();
-        return contents.trim().split('\n').slice(0, limit).join('\n');
+    private async getFileSnippet(path: string, limit: number) {
+        return getFileContents(path).then(
+            (val) => {
+                return val.trim().split('\n').slice(0, limit).join('\n');
+            }
+        );
     }
 
-    private updateJSON() {
+    private async updateJSON() {
         try {
-            this._json = JSON.parse(fs.readFileSync(getWorkspaceRoot() + '/' + studyConfigFile).toString());
+            getFileContents(getWorkspaceRoot() + '/' + studyConfigFile).then(
+                (val) => {
+                    this._json = JSON.parse(val);
+                }
+            );
         } catch (e) {
             this._json = {};
         }
 
         this.substitutions = null;
     }
+
 }
 
 export const cache = new StudyConfigCache();

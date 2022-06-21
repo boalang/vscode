@@ -115,7 +115,11 @@ class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
 
             vscode.commands.executeCommand('setContext', 'boalang.joblist.prevEnabled', this.start > 0);
             vscode.commands.executeCommand('setContext', 'boalang.joblist.nextEnabled', this.start + this.jobs.length < this.max);
-            this.view.title = `Boa: Jobs ${this.start + 1}-${this.start + this.jobs.length} (${this.max})`;
+            if (this.max < 1) {
+                this.view.title = 'Boa: Recent Jobs';
+            } else {
+                this.view.title = `Boa: Jobs ${this.start + 1}-${this.start + this.jobs.length} (${this.max})`;
+            }
 
             return Promise.resolve(this.jobs);
         });

@@ -502,7 +502,7 @@
                 "id": "boaoutput",
                 "aliases": ["Boa Output", "boaoutput"],
                 "extensions": [".txt"],
-                "configuration": "./language-configuration.output.json"
+                "configuration": "./output-language-configuration.json"
             }
         ],
         "grammars": [

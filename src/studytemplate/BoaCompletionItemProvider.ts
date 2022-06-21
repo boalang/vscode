@@ -54,7 +54,7 @@ export default class BoaCompletionItemProvider implements vscode.CompletionItemP
     private makeCompletionItem(label: string, hovers: string[]) {
         const trimmed = label.substring(2, label.length - 2);
         const item = new vscode.CompletionItem(trimmed, vscode.CompletionItemKind.Value);
-        item.detail = 'template';
+        item.detail = 'substitution';
         if (hovers) {
             item.documentation = new vscode.MarkdownString(hovers.join('\n\n----\n\n'), true);
         }

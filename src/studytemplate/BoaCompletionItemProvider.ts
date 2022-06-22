@@ -22,11 +22,6 @@ export default class BoaCompletionItemProvider implements vscode.CompletionItemP
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.CompletionItem[]> {
         const items = [];
 
-        const match = document.getWordRangeAtPosition(position, /{@[^@]*(\s*@})?/);
-        const tags = document.getText(match);
-        const hasStartTag = tags.startsWith("{@");
-        const hasEndTag = tags.endsWith("@}");
-
         const substitutions = cache.getSubstitutions();
         let keys = Object.keys(substitutions.substitutions);
         const hovers = new Map<string,string[]>();
@@ -47,20 +42,25 @@ export default class BoaCompletionItemProvider implements vscode.CompletionItemP
             keys = keys.concat(newKeys);
         }
 
+        const range = document.getWordRangeAtPosition(position, /{@?\s*[-_.:a-zA-Z0-9]*\s*@?}?/);
+        const text = range ? document.getText(range) : document.getText(document.getWordRangeAtPosition(position));
+        const start = text.startsWith('{') ? 0 : 2;
+
         removeDuplicates(keys).forEach(k => {
-            items.push(this.makeCompletionItem(k, hasStartTag, hasEndTag, hovers.get(k).reverse()));
+            items.push(this.makeCompletionItem(k, range, start, hovers.get(k).reverse()));
         });
 
         return items;
     }
 
-    private makeCompletionItem(label: string, hasStartTag, hasEndTag, hovers: string[]) {
-        const trimmed = label.substring(2, label.length - 2);
-        const item = new vscode.CompletionItem(trimmed, vscode.CompletionItemKind.Value);
-        item.detail = 'substitution';
-        if (!hasStartTag || !hasEndTag) {
-            item.insertText = label.substring(hasStartTag ? 2 : 0, hasEndTag ? -2 : label.length);
+    private makeCompletionItem(label: string, range, start, hovers: string[]) {
+        const item = new vscode.CompletionItem(label, vscode.CompletionItemKind.Value);
+        if (range) {
+            item.range = range;
         }
+        item.filterText = label.substring(start, label.length - 2).trim();
+        item.sortText = item.filterText;
+        item.detail = 'substitution';
         if (hovers) {
             item.documentation = new vscode.MarkdownString(hovers.join('\n\n----\n\n'), true);
         }

@@ -20,7 +20,7 @@
     "preview": true,
     "homepage": "https://boa.cs.iastate.edu/",
     "bugs": {
-      "url": "https://github.com/boalang/vscode/issues"
+        "url": "https://github.com/boalang/vscode/issues"
     },
     "repository": {
         "type": "git",
@@ -251,10 +251,12 @@
             }
         ],
         "views": {
-            "explorer": [{
-                "id": "boalang.jobList",
-                "name": "Boa: Recent Jobs"
-            }]
+            "explorer": [
+                {
+                    "id": "boalang.jobList",
+                    "name": "Boa: Recent Jobs"
+                }
+            ]
         },
         "viewsWelcome": [
             {
@@ -350,9 +352,9 @@
                     "group": "navigation@3"
                 },
                 {
-                  "command": "boalang.joblist.refresh",
-                  "when": "view == boalang.jobList",
-                  "group": "navigation@4"
+                    "command": "boalang.joblist.refresh",
+                    "when": "view == boalang.jobList",
+                    "group": "navigation@4"
                 }
             ],
             "view/item/context": [
@@ -391,10 +393,12 @@
                     "when": "view == boalang.jobList && viewItem == boalang.jobItem"
                 }
             ],
-            "explorer/context": [{
-                "when": "resourceLangId == boalang",
-                "command": "boalang.runQuery"
-            }],
+            "explorer/context": [
+                {
+                    "when": "resourceLangId == boalang",
+                    "command": "boalang.runQuery"
+                }
+            ],
             "editor/title": [
                 {
                     "command": "boalang.runQuery",
@@ -496,14 +500,24 @@
         "languages": [
             {
                 "id": "boalang",
-                "aliases": ["Boa", "boalang"],
-                "extensions": [".boa"],
+                "aliases": [
+                    "Boa",
+                    "boalang"
+                ],
+                "extensions": [
+                    ".boa"
+                ],
                 "configuration": "./language-configuration.json"
             },
             {
                 "id": "boaoutput",
-                "aliases": ["Boa Output", "boaoutput"],
-                "extensions": [".txt"],
+                "aliases": [
+                    "Boa Output",
+                    "boaoutput"
+                ],
+                "extensions": [
+                    ".txt"
+                ],
                 "configuration": "./output-language-configuration.json"
             }
         ],
@@ -519,10 +533,12 @@
                 "path": "./syntaxes/boalang.output.tmLanguage.json"
             }
         ],
-        "snippets": [{
-            "language": "boalang",
-            "path": "./snippets/boalang.snippets.json"
-        }]
+        "snippets": [
+            {
+                "language": "boalang",
+                "path": "./snippets/boalang.snippets.json"
+            }
+        ]
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
@@ -531,9 +547,9 @@
         "watch": "tsc -watch -p ./"
     },
     "dependencies": {
+        "@boalang/boa-api": "^0.1.3",
         "sax": "^1.2.4",
-        "xmlbuilder2": "^3.0.2",
-        "@boalang/boa-api": "^0.1.3"
+        "xmlbuilder2": "^3.0.2"
     },
     "devDependencies": {
         "@types/node": "^8.10.25",

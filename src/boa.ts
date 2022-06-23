@@ -170,13 +170,13 @@ async function submitQuery(query: string, dataset: any) {
         cancellable: true,
         title: 'Boa query submitted and running...'
     }, async (progress, cancel) => {
-        progress.report({  increment: 0 });
+        progress.report({ increment: 0 });
 
         await runBoaCommands(async (client: boaapi.BoaClient) => {
-            progress.report({  increment: 10 });
+            progress.report({ increment: 10 });
 
             const job = await client.query(query, dataset);
-            progress.report({  increment: 20 });
+            progress.report({ increment: 20 });
             vscode.commands.executeCommand('boalang.joblist.refresh');
 
             cancel.onCancellationRequested(async (e) => {
@@ -186,7 +186,7 @@ async function submitQuery(query: string, dataset: any) {
 
             await job.wait();
 
-            progress.report({  increment: 95 });
+            progress.report({ increment: 95 });
             vscode.commands.executeCommand('boalang.job.showOutput', getJobUri(job.id));
         });
 

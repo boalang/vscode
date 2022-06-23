@@ -30,6 +30,8 @@
     "activationEvents": [
         "onLanguage:boalang",
         "onLanguage:boaoutput",
+        "workspaceContains:**/*.boa",
+        "workspaceContains:**/study-config.json",
         "onView:boalang.jobList",
         "onCommand:boalang.runQuery",
         "onCommand:boalang.setFavorite",

@@ -184,10 +184,12 @@ async function submitQuery(query: string, dataset: any) {
                 progress.report({ increment: 100 });
             });
 
-            await job.wait();
+            const worked = await job.wait();
 
             progress.report({ increment: 95 });
-            vscode.commands.executeCommand('boalang.job.showOutput', getJobUri(job.id));
+            if (worked) {
+                vscode.commands.executeCommand('boalang.job.showOutput', getJobUri(job.id));
+            }
         });
 
         progress.report({ increment: 100 });

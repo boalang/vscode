@@ -20,7 +20,7 @@ import { getBoaUsername, getBoaPassword, removeCredentials } from './credentials
 import { BoaJob } from './treeprovider';
 import * as consts from './consts';
 import JobCache from './cache';
-import { promptUser } from './utils';
+import { getFileContents, promptUser } from './utils';
 
 export function getJobUri(id: any) {
     return vscode.Uri.parse(`boalang://${id}/`);
@@ -149,13 +149,9 @@ export async function runQuery(uri: vscode.Uri) {
                     submitQuery(dirty[0].getText(), datasetId);
                 } else {
                     // otherwise send the file contents
-                    require('fs').readFile(uri.fsPath, 'utf8', (err: any, query: any) => {
-                        if (err) {
-                            console.error(err);
-                            return;
-                        }
-                        submitQuery(query, datasetId);
-                    });
+                    getFileContents(uri.fsPath)
+                        .then(query => submitQuery(query, datasetId))
+                        .catch(err => console.error(err));
                 }
             }
         });

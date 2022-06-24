@@ -16,3 +16,4 @@ gulpfile.js
 tslint.json
 webpack.config.js
 .DS_Store
+**/*.psd

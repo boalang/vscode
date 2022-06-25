@@ -3,6 +3,8 @@
 typings/**
 test/**
 src/**
+out/**
+node_modules
 **/*.map
 .gitignore
 .github/**

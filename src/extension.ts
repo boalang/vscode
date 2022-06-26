@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
-import { getDatasets, showJob, runQuery, showOutput, showFullOutput, setFavorite, viewPublicUrl, deleteJob, togglePublic, resubmitJob } from './boa';
+import { getDatasets, showJob, runQuery, showOutput, showFullOutput, setFavorite, setEndpoint, viewPublicUrl, deleteJob, togglePublic, resubmitJob } from './boa';
 import { AuthSettings } from './credentials';
 import { treeProvider } from './treeprovider';
 import { activateStudyTemplateSupport } from './studytemplate/extension';
@@ -38,6 +38,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     // register all commands
     context.subscriptions.push(vscode.commands.registerCommand('boalang.setFavorite', setFavorite));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.setEndpoint', setEndpoint));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.runQuery', runQuery));
 
     context.subscriptions.push(vscode.commands.registerCommand('boalang.joblist.first', () => treeProvider.firstPage()));

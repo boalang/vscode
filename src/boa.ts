@@ -90,6 +90,52 @@ export async function setFavorite() {
     }
 }
 
+const endpoints = [
+    boaapi.BOA_API_ENDPOINT,
+    boaapi.BOAC_API_ENDPOINT
+];
+
+async function selectEndpoint(): Promise<string> {
+    return new Promise((resolve) => {
+        const quickPick = vscode.window.createQuickPick();
+
+        const boaConfig = vscode.workspace.getConfiguration('boalang');
+        quickPick.placeholder = boaConfig.get<string>('api.endpoint');
+        quickPick.title = 'Select the Boa API endpoint';
+
+        const sortedItems = [quickPick.placeholder, ...endpoints.filter(item => item != quickPick.placeholder)];
+        let defaultItems = sortedItems.map(label => ({ label: label }));
+        if (!sortedItems.includes(quickPick.placeholder)) {
+            defaultItems = [{ label: quickPick.placeholder }, ...defaultItems];
+        }
+        quickPick.items = [...defaultItems];
+
+        quickPick.onDidChangeValue(() => {
+            if (quickPick.value.trim().length == 0) {
+                quickPick.items = defaultItems;
+            } else if (!sortedItems.includes(quickPick.value)) {
+                quickPick.items = [{ label: quickPick.value }, ...defaultItems];
+            }
+        })
+
+        quickPick.onDidAccept(() => {
+            resolve(quickPick.activeItems[0].label);
+            quickPick.dispose();
+        });
+
+        quickPick.show();
+    });
+}
+
+export async function setEndpoint() {
+    const boaConfig = vscode.workspace.getConfiguration('boalang');
+    const endpoint = await selectEndpoint();
+    if (endpoint) {
+        boaConfig.update('api.endpoint', endpoint, true);
+        vscode.window.showInformationMessage(`Boa API endpoint: ${endpoint}`);
+    }
+}
+
 export async function runBoaCommands(func: { (client: boaapi.BoaClient): Promise<void> }) {
     const username = await getBoaUsername();
     if (username) {

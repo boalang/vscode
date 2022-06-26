@@ -35,6 +35,7 @@
         "onView:boalang.jobList",
         "onCommand:boalang.runQuery",
         "onCommand:boalang.setFavorite",
+        "onCommand:boalang.setEndpoint",
         "onCommand:boalang.job.showOutput",
         "onCommand:boalang.job.showFullOutput",
         "onCommand:boalang.job.downloadOutput",
@@ -70,6 +71,12 @@
                 "command": "boalang.setFavorite",
                 "title": "Set Favorite Output",
                 "icon": "$(star-full)",
+                "category": "Boa"
+            },
+            {
+                "command": "boalang.setEndpoint",
+                "title": "Set Boa API Endpoint",
+                "icon": "$(call-outgoing)",
                 "category": "Boa"
             },
             {

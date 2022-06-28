@@ -263,9 +263,9 @@ export function showOutput(channel: vscode.OutputChannel) {
 async function showUri(uri: vscode.Uri) {
     const doc = await vscode.workspace.openTextDocument(uri);
     await vscode.window.showTextDocument(doc, {
-        preview: false,
-        preserveFocus: false,
-        viewColumn: vscode.ViewColumn.Beside,
+        preview: true,
+        preserveFocus: true,
+        viewColumn: vscode.ViewColumn.Two,
     });
 }
 

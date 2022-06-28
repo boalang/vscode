@@ -322,8 +322,15 @@ export async function deleteJob(uri: vscode.Uri|BoaJob) {
             const job = await client.getJob(jobId);
 
             await job.delete();
-            if (vscode.window.activeTextEditor.document.uri.authority == jobId) {
-                vscode.commands.executeCommand('workbench.action.closeActiveEditor');
+            for (const grp of vscode.window.tabGroups.all) {
+                for (const tab of grp.tabs) {
+                    if (tab.input) {
+                        const uri = (tab.input as any).uri as vscode.Uri;
+                        if (uri && uri.scheme == 'boalang' && uri.authority == jobId) {
+                            vscode.window.tabGroups.close(tab, true);
+                        }
+                    }
+                }
             }
             vscode.commands.executeCommand('boalang.joblist.refresh');
             vscode.window.showInformationMessage(`Job ${jobId} has been deleted`);

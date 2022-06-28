@@ -20,7 +20,7 @@ import { getBoaUsername, getBoaPassword, removeCredentials } from './credentials
 import { BoaJob } from './treeprovider';
 import * as consts from './consts';
 import JobCache from './cache';
-import { getFileContents, promptUser } from './utils';
+import { getFileContents, getWorkspaceRoot, promptUser } from './utils';
 
 export function getJobUri(id: any) {
     return vscode.Uri.parse(`boalang://${id}/`);
@@ -239,6 +239,15 @@ async function submitQuery(query: string, dataset: any) {
         });
 
         progress.report({ increment: 100 });
+    });
+}
+
+export function downloadOutput(uri: vscode.Uri|BoaJob) {
+    runBoaCommands(async (client: boaapi.BoaClient) => {
+        const jobId = getJobId(uri);
+        const job = await client.getJob(jobId);
+        await job.downloadOutput(getWorkspaceRoot() + `/boa-job${jobId}-output.txt`);
+        vscode.window.showInformationMessage(`Output for Job ${jobId} downloaded`);
     });
 }
 

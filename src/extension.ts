@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
-import { getDatasets, showJob, runQuery, showOutput, showFullOutput, setFavorite, setEndpoint, viewPublicUrl, deleteJob, togglePublic, resubmitJob } from './boa';
+import { getDatasets, showJob, runQuery, showOutput, showFullOutput, downloadOutput, setFavorite, setEndpoint, viewPublicUrl, deleteJob, togglePublic, resubmitJob } from './boa';
 import { AuthSettings } from './credentials';
 import { treeProvider } from './treeprovider';
 import { activateStudyTemplateSupport } from './studytemplate/extension';
@@ -49,6 +49,7 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('boalang.job.showSource', showJob));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.job.showOutput', showOutput(output)));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.job.showFullOutput', showFullOutput));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.job.downloadOutput', downloadOutput));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.job.viewPublicUrl', viewPublicUrl));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.job.delete', deleteJob));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.job.togglePublic', togglePublic));

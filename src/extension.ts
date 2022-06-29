@@ -23,6 +23,8 @@ import { boaDocumentProvider } from './contentprovider';
 import { enableDiagnostics } from './diagnostics';
 import JobCache from './cache';
 
+export var outputChannel: vscode.OutputChannel;
+
 // this method is called when the extension is activated
 export function activate(context: vscode.ExtensionContext) {
     // initialize password storage
@@ -33,8 +35,8 @@ export function activate(context: vscode.ExtensionContext) {
     enableDiagnostics(context);
 
     // create channel to show query outputs
-    const output = vscode.window.createOutputChannel('Boa: Query Output', 'boaoutput');
-    context.subscriptions.push(output);
+    outputChannel = vscode.window.createOutputChannel('Boa: Query Output', 'boaoutput');
+    context.subscriptions.push(outputChannel);
 
     // register all commands
     context.subscriptions.push(vscode.commands.registerCommand('boalang.setFavorite', setFavorite));
@@ -47,7 +49,7 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('boalang.joblist.refresh', () => treeProvider.refresh()));
 
     context.subscriptions.push(vscode.commands.registerCommand('boalang.job.showSource', showJob));
-    context.subscriptions.push(vscode.commands.registerCommand('boalang.job.showOutput', showOutput(output)));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.job.showOutput', showOutput()));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.job.showFullOutput', showFullOutput));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.job.downloadOutput', downloadOutput));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.job.viewPublicUrl', viewPublicUrl));

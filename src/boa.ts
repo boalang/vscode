@@ -21,6 +21,7 @@ import { BoaJob } from './treeprovider';
 import * as consts from './consts';
 import JobCache from './cache';
 import { getFileContents, getWorkspaceRoot, promptUser } from './utils';
+import { outputChannel } from './extension';
 
 export function getJobUri(id: any) {
     return vscode.Uri.parse(`boalang://${id}/`);
@@ -251,7 +252,7 @@ export function downloadOutput(uri: vscode.Uri|BoaJob) {
     });
 }
 
-export function showOutput(channel: vscode.OutputChannel) {
+export function showOutput() {
     return function showOutput(uri: vscode.Uri|BoaJob) {
         runBoaCommands(async (client: boaapi.BoaClient) => {
             let jobId: string;
@@ -262,9 +263,9 @@ export function showOutput(channel: vscode.OutputChannel) {
             }
             const job = await client.getJob(jobId);
 
-            channel.clear();
-            channel.append(await JobCache.getOutput(job));
-            channel.show();
+            outputChannel.clear();
+            outputChannel.append(await JobCache.getOutput(job));
+            outputChannel.show();
         });
     }
 }

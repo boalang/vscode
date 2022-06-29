@@ -157,8 +157,12 @@ export async function runBoaCommands(func: { (client: boaapi.BoaClient): Promise
                             vscode.window.showInformationMessage('Boa API username/password were invalid. Please re-enter.');
                             await removeCredentials();
                             await runBoaCommands(func);
+                        } else if (err.message.indexOf('Account is temporarily blocked') > -1) {
+                            vscode.window.showInformationMessage('Your Boa account is blocked for too many invalid logins. Please wait an hour.');
                         } else if (err.message.indexOf('getaddrinfo ENOTFOUND') > -1) {
                             vscode.window.showInformationMessage('Unable to connect to the Boa API.');
+                        } else {
+                            throw err;
                         }
                     }
                 ).finally(

@@ -17,6 +17,7 @@
 import * as vscode from 'vscode';
 import { runBoaCommands } from './boa';
 import JobCache from './cache';
+import { getQuery } from './studytemplate/extension';
 
 export const boaDocumentProvider = new class implements vscode.TextDocumentContentProvider {
     onDidChangeEmitter = new vscode.EventEmitter<vscode.Uri>();
@@ -25,6 +26,10 @@ export const boaDocumentProvider = new class implements vscode.TextDocumentConte
     async provideTextDocumentContent(uri: vscode.Uri): Promise<string> {
         var data: string = '';
         switch (uri.fragment) {
+            case 'preview':
+                data += await getQuery(vscode.Uri.parse(uri.query), uri.authority);
+                break;
+
             case 'details':
                 await runBoaCommands(async (client) => {
                     const job = await client.getJob(uri.authority);

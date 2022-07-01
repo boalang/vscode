@@ -17,12 +17,14 @@
 import * as vscode from 'vscode';
 import * as consts from '../consts';
 import { jobsFile } from '../consts';
-import { getWorkspaceRoot, promptUser } from '../utils';
+import { getFileContents, getWorkspaceRoot, promptUser } from '../utils';
 import BoaCompletionItemProvider from './BoaCompletionItemProvider';
 import SubstitutionHoverProvider from './SubstitutionHoverProvider';
 import { JobsJSONLinkProvider, StudyConfigJSONLinkProvider } from './linkproviders';
 import StudyConfigCodelensProvider from './StudyConfigCodelensProvider';
 import StudyConfigCompletionItemProvider from './StudyConfigCompletionItemProvider';
+import { showUri } from '../boa';
+import { cache } from './StudyConfigCache';
 
 export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     const jobsSelector: vscode.DocumentSelector = {
@@ -36,6 +38,7 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
         pattern: '**/study-config.json',
     };
 
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.template.preview', showPreview));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.downloadOutput', filename => runMakeCommand(`${consts.outputPath}/${filename}`)));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.generateCSV', filename => runMakeCommand(`${consts.csvPath}/${filename}`)));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.generateDupes', filename => runMakeCommand(`${consts.outputPath}/${filename}`)));
@@ -87,4 +90,37 @@ async function runMakeCommand(target, shouldRefresh = true) {
     if (shouldRefresh) {
         vscode.commands.executeCommand('boalang.joblist.first');
     }
+}
+
+export async function showPreview(uri) {
+    const items = cache.getQueryTargets(uri);
+    if (items.length == 0) {
+        showUri(vscode.Uri.parse(`boalang:///template-preview.boa?${uri}#preview`));
+        return;
+    }
+
+    const target = await vscode.window.showQuickPick(items, {
+        title: 'Select the query to preview',
+        ignoreFocusOut: false
+    });
+    if (target) {
+        showUri(vscode.Uri.parse(`boalang://${encodeURIComponent(target)}/template-preview.boa?${uri}#preview`));
+    }
+}
+
+export async function getQuery(uri: vscode.Uri, authority) {
+    let query = '';
+    if (uri.scheme == 'untitled' || uri.scheme == 'boalang') {
+        query = vscode.window.activeTextEditor.document.getText();
+    } else {
+        const dirty = vscode.workspace.textDocuments.filter((doc) => doc.uri == uri && doc.isDirty);
+        if (dirty.length == 1) {
+            query = dirty[0].getText();
+        } else {
+            query = await getFileContents(uri.fsPath);
+        }
+    }
+
+    const subs = await cache.resolveSubstitutions(decodeURIComponent(authority));
+    return await cache.performSubstitutions(query, subs);
 }

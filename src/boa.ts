@@ -274,7 +274,7 @@ export function showOutput() {
     }
 }
 
-async function showUri(uri: vscode.Uri) {
+export async function showUri(uri: vscode.Uri) {
     const doc = await vscode.workspace.openTextDocument(uri);
     await vscode.window.showTextDocument(doc, {
         preview: true,

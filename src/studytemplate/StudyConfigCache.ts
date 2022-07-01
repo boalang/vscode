@@ -67,6 +67,42 @@ class StudyConfigCache {
         return this.substitutions;
     }
 
+    async resolveSubstitutions(filename) {
+        const subDefinitions = this.getSubstitutions();
+        const subs = {};
+        for (const s of Object.keys(subDefinitions['substitutions'])) {
+            subs[s] = subDefinitions['substitutions'][s];
+        }
+        for (const s in subDefinitions) {
+            if (s != 'substitutions') {
+                for (const items of subDefinitions[s]) {
+                    for (const sub in items) {
+                        if (items[sub].output == filename) {
+                            subs[sub] = items[sub];
+                        }
+                    }
+                }
+            }
+        }
+        return subs;
+    }
+
+    async performSubstitutions(query: string, subs) {
+        const orig = query;
+        for (const k of Object.keys(subs)) {
+            const escaped = k.replace(/[{}]/g, '\\$&');
+            let replacement = (await this.getSubst(subs[k].subst)).trim();
+            if (replacement.length > 0) {
+                replacement = replacement + '\n';
+            }
+            query = query.replace(new RegExp(escaped + '\n?', 'g'), replacement);
+        }
+        if (orig != query) {
+            return this.performSubstitutions(query, subs);
+        }
+        return query;
+    }
+
     private async getSubst(replacement) {
         let content = '';
         if (replacement.hasOwnProperty('file')) {
@@ -75,9 +111,6 @@ class StudyConfigCache {
             content = await this.getFileSnippet(path, 10);
         } else {
             content = replacement['replacement'];
-            if (content.trim().length == 0) {
-                content = '# template is empty';
-            }
         }
         return content;
     }
@@ -86,6 +119,9 @@ class StudyConfigCache {
         let scope = '';
 
         let content = await this.getSubst(replacement);
+        if (content.trim().length == 0) {
+            content = '# template is empty';
+        }
 
         if (replacement.hasOwnProperty('file')) {
             const path = getWorkspaceRoot() + '/' + snippetPath + '/' + replacement['file'];
@@ -108,6 +144,18 @@ class StudyConfigCache {
                 return val.trim().split('\n').slice(0, limit).join('\n');
             }
         );
+    }
+
+    getQueryTargets(uri) {
+        const uriStr = uri.toString();
+
+        const targets = [];
+        for (const output in this._json['queries']) {
+            if (uriStr.endsWith(this._json['queries'][output]['query'])) {
+                targets.push(output);
+            }
+        }
+        return targets;
     }
 
     private async updateJSON() {

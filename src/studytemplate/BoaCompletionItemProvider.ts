@@ -33,13 +33,15 @@ export default class BoaCompletionItemProvider implements vscode.CompletionItemP
         }
 
         for (const k of Object.keys(substitutions).filter(filename => document.fileName.endsWith(filename))) {
-            const newKeys = Object.keys(substitutions[k]);
-            for (const k2 of newKeys) {
-                if (!hovers.has(k2)) hovers.set(k2, []);
-                const sub = substitutions[k][k2];
-                hovers.get(k2).push(await cache.renderSubstitution(sub.subst, sub.output));
+            for (const items of substitutions[k]) {
+                const newKeys = Object.keys(items);
+                for (const k2 of newKeys) {
+                    if (!hovers.has(k2)) hovers.set(k2, []);
+                    const sub = items[k2];
+                    hovers.get(k2).push(await cache.renderSubstitution(sub.subst, sub.output));
+                }
+                keys = keys.concat(newKeys);
             }
-            keys = keys.concat(newKeys);
         }
 
         const range = document.getWordRangeAtPosition(position, /{@?\s*[-_.:a-zA-Z0-9]*\s*@?}?/);

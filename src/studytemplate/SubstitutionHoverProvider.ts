@@ -29,10 +29,12 @@ export default class SubstitutionHoverProvider implements vscode.HoverProvider {
 
         const substitutions = cache.getSubstitutions();
         for (const filename in substitutions) {
-            if (document.fileName.endsWith(filename)) {
-                const sub = substitutions[filename][word];
-                if (sub) {
-                    hovers.push(await cache.renderSubstitution(sub.subst, sub.output));
+            if (filename != 'substitutions' && document.fileName.endsWith(filename)) {
+                for (const items of substitutions[filename]) {
+                    const sub = items[word];
+                    if (sub) {
+                        hovers.push(await cache.renderSubstitution(sub.subst, sub.output));
+                    }
                 }
             }
         }

@@ -46,12 +46,15 @@ class StudyConfigCache {
 
         for (const output in this._json['queries']) {
             const query = this._json['queries'][output];
+            if (!this.substitutions[query['query']]) {
+            this.substitutions[query['query']] = [];
+            }
             const items = {};
             for (const idx in query['substitutions']) {
                 const subst = query['substitutions'][idx];
                 items[subst['target']] = { subst: subst, output: output };
             }
-            this.substitutions[query['query']] = items;
+            this.substitutions[query['query']].push(items);
         }
 
         for (const idx in this._json['substitutions']) {
@@ -62,20 +65,30 @@ class StudyConfigCache {
         return this.substitutions;
     }
 
-    async renderSubstitution(replacement, local: string|undefined) {
-        let scope = '';
-
+    private async getSubst(replacement) {
         let content = '';
         if (replacement.hasOwnProperty('file')) {
             const path = getWorkspaceRoot() + '/' + snippetPath + '/' + replacement['file'];
             const file = 'file://' + path;
             content = await this.getFileSnippet(path, 10);
-            scope += `[view included file](${file})\\\n`;
         } else {
             content = replacement['replacement'];
             if (content.trim().length == 0) {
                 content = '# template is empty';
             }
+        }
+        return content;
+    }
+
+    async renderSubstitution(replacement, local: string|undefined) {
+        let scope = '';
+
+        let content = await this.getSubst(replacement);
+
+        if (replacement.hasOwnProperty('file')) {
+            const path = getWorkspaceRoot() + '/' + snippetPath + '/' + replacement['file'];
+            const file = 'file://' + path;
+            scope += `[view included file](${file})\\\n`;
         }
 
         if (local) {

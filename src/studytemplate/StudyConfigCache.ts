@@ -46,15 +46,17 @@ class StudyConfigCache {
 
         for (const output in this._json['queries']) {
             const query = this._json['queries'][output];
-            if (!this.substitutions[query['query']]) {
-            this.substitutions[query['query']] = [];
-            }
             const items = {};
             for (const idx in query['substitutions']) {
                 const subst = query['substitutions'][idx];
                 items[subst['target']] = { subst: subst, output: output };
             }
-            this.substitutions[query['query']].push(items);
+            if (Object.keys(items).length > 0) {
+                if (!this.substitutions[query['query']]) {
+                    this.substitutions[query['query']] = [];
+                }
+                this.substitutions[query['query']].push(items);
+            }
         }
 
         for (const idx in this._json['substitutions']) {

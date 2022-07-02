@@ -25,6 +25,7 @@ import StudyConfigCodelensProvider from './StudyConfigCodelensProvider';
 import StudyConfigCompletionItemProvider from './StudyConfigCompletionItemProvider';
 import { showUri } from '../boa';
 import { cache } from './StudyConfigCache';
+import { boaDocumentProvider } from '../contentprovider';
 
 export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     const jobsSelector: vscode.DocumentSelector = {
@@ -93,18 +94,24 @@ async function runMakeCommand(target, shouldRefresh = true) {
 }
 
 export async function showPreview(uri) {
+    let targetUri = null;
+
     const items = cache.getQueryTargets(uri);
     if (items.length == 0) {
-        showUri(vscode.Uri.parse(`boalang:///template-preview.boa?${uri}#preview`));
-        return;
+        targetUri = vscode.Uri.parse(`boalang:///template-preview.boa?${uri}#preview`);
+    } else {
+        const target = await vscode.window.showQuickPick(items, {
+            title: 'Select the query to preview',
+            ignoreFocusOut: false
+        });
+        if (target) {
+            targetUri = vscode.Uri.parse(`boalang://${encodeURIComponent(target)}/template-preview.boa?${uri}#preview`);
+        }
     }
 
-    const target = await vscode.window.showQuickPick(items, {
-        title: 'Select the query to preview',
-        ignoreFocusOut: false
-    });
-    if (target) {
-        showUri(vscode.Uri.parse(`boalang://${encodeURIComponent(target)}/template-preview.boa?${uri}#preview`));
+    if (targetUri != null) {
+        boaDocumentProvider.onDidChangeEmitter.fire(targetUri);
+        showUri(targetUri);
     }
 }
 

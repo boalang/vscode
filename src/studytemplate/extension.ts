@@ -120,7 +120,7 @@ export async function getQuery(uri: vscode.Uri, authority) {
     if (uri.scheme == 'untitled' || uri.scheme == 'boalang') {
         query = vscode.window.activeTextEditor.document.getText();
     } else {
-        const dirty = vscode.workspace.textDocuments.filter((doc) => doc.uri == uri && doc.isDirty);
+        const dirty = vscode.workspace.textDocuments.filter((doc) => doc.uri.toString() == uri.toString() && doc.isDirty);
         if (dirty.length == 1) {
             query = dirty[0].getText();
         } else {

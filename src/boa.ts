@@ -195,7 +195,7 @@ export async function runQuery(uri: vscode.Uri) {
             if (uri.scheme == 'untitled' || uri.scheme == 'boalang') {
                 submitQuery(vscode.window.activeTextEditor.document.getText(), datasetId);
             } else {
-                const dirty = vscode.workspace.textDocuments.filter((doc) => doc.uri == uri && doc.isDirty);
+                const dirty = vscode.workspace.textDocuments.filter((doc) => doc.uri.toString() == uri.toString() && doc.isDirty);
                 if (dirty.length == 1) {
                     submitQuery(dirty[0].getText(), datasetId);
                 } else {

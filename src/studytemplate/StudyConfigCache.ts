@@ -91,11 +91,9 @@ class StudyConfigCache {
         const orig = query;
         for (const k of Object.keys(subs)) {
             const escaped = k.replace(/[{}]/g, '\\$&');
-            let replacement = (await this.getSubst(subs[k].subst)).trim();
-            if (replacement.length > 0) {
-                replacement = replacement + '\n';
-            }
-            query = query.replace(new RegExp(escaped + '\n?', 'g'), replacement);
+            let replacement = '$1' + (await this.getSubst(subs[k].subst)).trim();
+            replacement = replacement.replace(new RegExp('\n', 'g'), '\n\$1');
+            query = query.replace(new RegExp('([ \t]*)' + escaped + '(\n?)', 'g'), replacement + '$2');
         }
         if (orig != query) {
             return this.performSubstitutions(query, subs);

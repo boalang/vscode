@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.1.4] - 2022-07-01
+ - better window management, closes windows after deleting jobs
+ - add ability to download outputs (vs just viewing them)
+ - add way to more easiliy change API endpoints
+ - add way to preview fully-substituted template queries
+
 ## [0.1.3] - 2022-06-25
  - first beta release of extension
  - now uses webpack for faster installs and loading

@@ -93,25 +93,41 @@ async function runMakeCommand(target, shouldRefresh = true) {
     }
 }
 
+let previewMap: { [key: string]: [string] } = {};
 export async function showPreview(uri) {
     let targetUri = null;
+    const uriStr = uri.toString();
 
     const items = cache.getQueryTargets(uri);
     if (items.length == 0) {
-        targetUri = vscode.Uri.parse(`boalang:///template-preview.boa?${uri}#preview`);
+        targetUri = `boalang:///template-preview.boa?${uriStr}#preview`;
     } else {
         const target = await vscode.window.showQuickPick(items, {
             title: 'Select the query to preview',
             ignoreFocusOut: false
         });
         if (target) {
-            targetUri = vscode.Uri.parse(`boalang://${encodeURIComponent(target)}/template-preview.boa?${uri}#preview`);
+            targetUri = `boalang://${encodeURIComponent(target)}/template-preview.boa?${uriStr}#preview`;
         }
     }
 
     if (targetUri != null) {
-        boaDocumentProvider.onDidChangeEmitter.fire(targetUri);
-        showUri(targetUri);
+        if (!(uriStr in previewMap)) {
+            previewMap[uriStr] = [targetUri];
+            vscode.workspace.onDidChangeTextDocument(e => {
+                if (e.document.uri.toString() == uriStr) {
+                    for (const t of previewMap[uriStr]) {
+                        boaDocumentProvider.onDidChangeEmitter.fire(vscode.Uri.parse(t));
+                    }
+                }
+            })
+        } else {
+            if (previewMap[uriStr].indexOf(targetUri) == -1) {
+                previewMap[uriStr].push(targetUri);
+            }
+        }
+        boaDocumentProvider.onDidChangeEmitter.fire(vscode.Uri.parse(targetUri));
+        showUri(vscode.Uri.parse(targetUri));
     }
 }
 

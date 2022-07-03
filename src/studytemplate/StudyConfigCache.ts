@@ -19,6 +19,9 @@ import { snippetPath, studyConfigFile } from '../consts';
 import { getFileContents, getWorkspaceRoot } from '../utils';
 
 class StudyConfigCache {
+    onDidChangeEmitter = new vscode.EventEmitter<StudyConfigCache>();
+    onDidChange = this.onDidChangeEmitter.event;
+
     private _json: object;
     private watcher: vscode.FileSystemWatcher;
 
@@ -168,6 +171,7 @@ class StudyConfigCache {
         }
 
         this.substitutions = null;
+        this.onDidChangeEmitter.fire(this);
     }
 
 }

@@ -127,7 +127,6 @@ export async function showPreview(uri) {
                 previewMap[uriStr].push(targetUri);
             }
         }
-        boaDocumentProvider.onDidChangeEmitter.fire(vscode.Uri.parse(targetUri));
         showUri(vscode.Uri.parse(targetUri));
     }
 }

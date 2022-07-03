@@ -1,5 +1,5 @@
 [![version](https://vsmarketplacebadge.apphb.com/version/Boa.boalang.svg)](https://marketplace.visualstudio.com/items?itemName=Boa.boalang)
-[![Downloads](https://vsmarketplacebadge.apphb.com/installs-short/Boa.boalang.svg)](https://marketplace.visualstudio.com/items?itemName=Boa.boalang)
+[![Downloads](https://vsmarketplacebadge.apphb.com/downloads-short/Boa.boalang.svg)](https://marketplace.visualstudio.com/items?itemName=Boa.boalang)
 [![Installs](https://vsmarketplacebadge.apphb.com/installs-short/Boa.boalang.svg)](https://marketplace.visualstudio.com/items?itemName=Boa.boalang)
 [![Rating](https://vsmarketplacebadge.apphb.com/rating-short/Boa.boalang.svg)](https://marketplace.visualstudio.com/items?itemName=Boa.boalang&ssr=false#review-details)
 [![license](https://img.shields.io/badge/license-Apache2.0-brightgreen.svg)](https://raw.githubusercontent.com/boalang/vscode/main/LICENSE)

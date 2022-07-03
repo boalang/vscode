@@ -171,9 +171,9 @@ class StudyConfigCache {
         }
 
         this.substitutions = null;
+
         this.onDidChangeEmitter.fire(this);
     }
-
 }
 
 export const cache = new StudyConfigCache();

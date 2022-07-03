@@ -97,17 +97,18 @@ let previewMap: { [key: string]: [string] } = {};
 export async function showPreview(uri) {
     let targetUri = null;
     const uriStr = uri.toString();
+    const uriPath = uri.path.substring(getWorkspaceRoot().length);
 
     const items = cache.getQueryTargets(uri);
     if (items.length == 0) {
-        targetUri = `boalang:///template-preview.boa?${uriStr}#preview`;
+        targetUri = `boalang:///preview/global/from/${uriPath}?${uriStr}#preview`;
     } else {
         const target = await vscode.window.showQuickPick(items, {
             title: 'Select the query to preview',
             ignoreFocusOut: false
         });
         if (target) {
-            targetUri = `boalang://${encodeURIComponent(target)}/template-preview.boa?${uriStr}#preview`;
+            targetUri = `boalang://${encodeURIComponent(target)}/preview/${encodeURIComponent(target)}/from/${uriPath}?${uriStr}#preview`;
         }
     }
 

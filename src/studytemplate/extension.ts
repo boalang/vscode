@@ -101,14 +101,14 @@ export async function showPreview(uri) {
 
     const items = cache.getQueryTargets(uri);
     if (items.length == 0) {
-        targetUri = `boalang:///preview/global/from/${uriPath}?${uriStr}#preview`;
+        targetUri = `boalang:///preview/from${uriPath}?${uriStr}#preview`;
     } else {
         const target = await vscode.window.showQuickPick(items, {
             title: 'Select the query to preview',
             ignoreFocusOut: false
         });
         if (target) {
-            targetUri = `boalang://${encodeURIComponent(target)}/preview/${encodeURIComponent(target)}/from/${uriPath}?${uriStr}#preview`;
+            targetUri = `boalang://${encodeURIComponent(target)}/preview/${target}/from${uriPath}?${uriStr}#preview`;
         }
     }
 

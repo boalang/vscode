@@ -161,7 +161,7 @@ class StudyConfigCache {
 
     private async updateJSON() {
         try {
-            getFileContents(getWorkspaceRoot() + '/' + studyConfigFile).then(
+            await getFileContents(getWorkspaceRoot() + '/' + studyConfigFile).then(
                 (val) => {
                     this._json = JSON.parse(val);
                 }

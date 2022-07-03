@@ -71,6 +71,12 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
 
     watcher.onDidChange(() => vscode.commands.executeCommand('boalang.joblist.refresh'));
     watcher.onDidCreate(() => vscode.commands.executeCommand('boalang.joblist.refresh'));
+
+    cache.onDidChange(e => {
+        Object.keys(previewMap).forEach(
+            uriStr => previewMap[uriStr].forEach(
+                t => boaDocumentProvider.onDidChangeEmitter.fire(vscode.Uri.parse(t))));
+    });
 }
 
 async function runMakeCommand(target, shouldRefresh = true) {

@@ -17,7 +17,7 @@
 import * as vscode from 'vscode';
 import * as boaapi from '@boalang/boa-api';
 import { getBoaUsername, getBoaPassword, removeCredentials } from './credentials';
-import { BoaJob } from './treeprovider';
+import { BoaJob, treeProvider } from './treeprovider';
 import * as consts from './consts';
 import JobCache from './cache';
 import { getFileContents, getWorkspaceRoot, promptUser } from './utils';
@@ -148,6 +148,8 @@ export async function closeClient() {
         );
         client = null;
     }
+    datasets = null;
+    treeProvider.reset();
 }
 
 let client = null;

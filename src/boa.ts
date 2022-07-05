@@ -139,42 +139,74 @@ export async function setEndpoint() {
     }
 }
 
-export async function runBoaCommands(func: { (client: boaapi.BoaClient): Promise<void> }) {
-    const username = await getBoaUsername();
-    if (username) {
-        const password = await getBoaPassword();
-        if (password) {
+export async function closeClient() {
+    if (client != null) {
+        await client.close().catch(
+            () => {
+                // ignore errors during close
+            }
+        );
+        client = null;
+    }
+}
+
+let client = null;
+export async function runBoaCommands(func: { (client: boaapi.BoaClient): Promise<void> }, retrying = false) {
+    if (client == null) {
+        const username = await getBoaUsername();
+        if (username) {
+            const password = await getBoaPassword();
+            if (password) {
+                await vscode.window.withProgress({
+                    location: vscode.ProgressLocation.Window,
+                    cancellable: false,
+                    title: 'Boa API'
+                }, async () => {
+                    const boaConfig = vscode.workspace.getConfiguration('boalang');
+                    client = new boaapi.BoaClient(boaConfig.get('api.endpoint', boaapi.BOA_API_ENDPOINT) as string);
+                    await client.login(username, password).then(
+                        async () => await func(client)
+                    ).catch(
+                        async (err: Error) => {
+                            if (err.message.indexOf('Wrong username or password.') > -1) {
+                                vscode.window.showInformationMessage('Boa API username/password were invalid. Please re-enter.');
+                                await removeCredentials();
+                                if (!retrying) {
+                                    await runBoaCommands(func, true);
+                                }
+                            } else if (err.message.indexOf('Account is temporarily blocked') > -1) {
+                                vscode.window.showInformationMessage('Your Boa account is blocked for too many invalid logins. Please wait an hour.');
+                                throw err;
+                            } else if (err.message.indexOf('getaddrinfo ENOTFOUND') > -1) {
+                                vscode.window.showInformationMessage('Unable to connect to the Boa API.');
+                                throw err;
+                            } else {
+                                vscode.window.showInformationMessage(err.message);
+                                throw err;
+                            }
+                        }
+                    );
+                });
+            }
+        }
+    } else {
+        if (!retrying) {
             await vscode.window.withProgress({
                 location: vscode.ProgressLocation.Window,
                 cancellable: false,
                 title: 'Boa API'
             }, async () => {
-                const boaConfig = vscode.workspace.getConfiguration('boalang');
-                const client = new boaapi.BoaClient(boaConfig.get('api.endpoint', boaapi.BOA_API_ENDPOINT) as string);
-                await client.login(username, password).then(
-                    async () => await func(client)
-                ).catch(
+                await func(client).catch(
                     async (err: Error) => {
-                        if (err.message.indexOf('Wrong username or password.') > -1) {
-                            vscode.window.showInformationMessage('Boa API username/password were invalid. Please re-enter.');
-                            await removeCredentials();
-                            await runBoaCommands(func);
-                        } else if (err.message.indexOf('Account is temporarily blocked') > -1) {
-                            vscode.window.showInformationMessage('Your Boa account is blocked for too many invalid logins. Please wait an hour.');
-                        } else if (err.message.indexOf('getaddrinfo ENOTFOUND') > -1) {
-                            vscode.window.showInformationMessage('Unable to connect to the Boa API.');
-                        } else {
-                            throw err;
-                        }
+                        console.error(err);
+                        await closeClient();
+                        await runBoaCommands(func, true);
                     }
-                ).finally(
-                    () => client.close().catch(
-                        () => {
-                            // ignore errors during close
-                        }
-                    )
                 );
             });
+        } else {
+            vscode.window.showInformationMessage('Unable to connect to the Boa API.');
+            throw new Error('Unable to connect to the Boa API.');
         }
     }
 }

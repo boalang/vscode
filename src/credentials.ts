@@ -65,6 +65,10 @@ export async function getBoaUsername() {
 }
 
 export async function getBoaPassword(forceReset = false) {
+    const username = await getBoaUsername();
+    if (!username)
+        return undefined;
+
     const settings = AuthSettings.instance;
 
     if (!forceReset) {
@@ -75,7 +79,7 @@ export async function getBoaPassword(forceReset = false) {
 
     const pw = await vscode.window.showInputBox({
         placeHolder: 'password',
-        title: 'Boa API Password',
+        title: `Boa API Password for '${username}'`,
         prompt: 'Enter your Boa website password to use the Boa API',
         password: true,
     });
@@ -83,10 +87,17 @@ export async function getBoaPassword(forceReset = false) {
     return pw;
 }
 
-export async function removeCredentials() {
+export async function resetUsername() {
     const boaConfig = vscode.workspace.getConfiguration('boalang');
     await boaConfig.update('login.username', undefined, true);
+    resetPassword();
+}
 
+export async function resetPassword() {
     const settings = AuthSettings.instance;
     await settings.storePassword(null);
+}
+
+export async function removeCredentials() {
+    resetUsername();
 }

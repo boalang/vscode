@@ -152,6 +152,14 @@ class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
         this.refresh();
     }
 
+    async reset() {
+        this.jobs = null;
+        this.max = 0;
+        this.start = 0;
+        this.view.title = 'Boa: Recent Jobs';
+        this._onDidChangeTreeData.fire(undefined);
+    }
+
     async refresh() {
         this.jobs = [];
         this._onDidChangeTreeData.fire(undefined);

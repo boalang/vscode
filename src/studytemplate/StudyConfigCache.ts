@@ -119,7 +119,7 @@ class StudyConfigCache {
     async performSubstitutions(query: string, subs) {
         const orig = query;
         for (const k of Object.keys(subs)) {
-            let replacement = '$1' + (await this.getSubst(subs[k].subst)).trim();
+            let replacement = '$1' + (await this.getSubst(subs[k].subst, Number.MAX_VALUE)).trim();
             replacement = replacement.replace(new RegExp('\n', 'g'), '\n\$1');
             query = query.replace(new RegExp('([ \t]*)' + k.replace(/[{}]/g, '\\$&') + '(\n?)', 'g'), replacement + '$2');
         }
@@ -129,12 +129,11 @@ class StudyConfigCache {
         return query;
     }
 
-    private async getSubst(replacement) {
+    private async getSubst(replacement, limit) {
         let content = '';
         if (replacement.hasOwnProperty('file')) {
             const path = getWorkspaceRoot() + '/' + snippetPath + '/' + replacement['file'];
-            const file = 'file://' + path;
-            content = await this.getFileSnippet(path, 10);
+            content = await this.getFileSnippet(path, limit);
         } else {
             content = replacement['replacement'];
         }
@@ -144,7 +143,7 @@ class StudyConfigCache {
     async renderSubstitution(replacement, local: string|undefined) {
         let scope = '';
 
-        let content = await this.getSubst(replacement);
+        let content = await this.getSubst(replacement, 10);
         if (content.trim().length == 0) {
             content = '# template is empty';
         }

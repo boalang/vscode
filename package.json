@@ -36,6 +36,7 @@
         "onCommand:boalang.runQuery",
         "onCommand:boalang.setFavorite",
         "onCommand:boalang.setEndpoint",
+        "onCommand:boalang.resetLogin",
         "onCommand:boalang.job.showOutput",
         "onCommand:boalang.job.showFullOutput",
         "onCommand:boalang.job.downloadOutput",
@@ -78,6 +79,12 @@
                 "command": "boalang.setEndpoint",
                 "title": "Set Boa API Endpoint",
                 "icon": "$(call-outgoing)",
+                "category": "Boa"
+            },
+            {
+                "command": "boalang.resetLogin",
+                "title": "Reset Login Information",
+                "icon": "$(clear-all)",
                 "category": "Boa"
             },
             {

@@ -16,7 +16,7 @@
 //
 import * as vscode from 'vscode';
 import { getDatasets, showJob, runQuery, showOutput, showFullOutput, downloadOutput, setFavorite, setEndpoint, viewPublicUrl, deleteJob, togglePublic, resubmitJob, closeClient } from './boa';
-import { AuthSettings, resetPassword } from './credentials';
+import { AuthSettings, removeCredentials, resetPassword } from './credentials';
 import { treeProvider } from './treeprovider';
 import { activateStudyTemplateSupport } from './studytemplate/extension';
 import { boaDocumentProvider } from './contentprovider';
@@ -41,6 +41,7 @@ export function activate(context: vscode.ExtensionContext) {
     // register all commands
     context.subscriptions.push(vscode.commands.registerCommand('boalang.setFavorite', setFavorite));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.setEndpoint', setEndpoint));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.resetLogin', removeCredentials));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.runQuery', runQuery));
 
     context.subscriptions.push(vscode.commands.registerCommand('boalang.joblist.first', () => treeProvider.firstPage()));
@@ -70,7 +71,6 @@ export function activate(context: vscode.ExtensionContext) {
         } else if (event.affectsConfiguration('boalang.output.size')) {
             JobCache.clearOutputs();
         } else if (event.affectsConfiguration('boalang.login.username')) {
-            vscode.window.showInformationMessage('Boa username change - resetting password.');
             resetPassword();
             closeClient();
         }

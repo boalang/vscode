@@ -66,7 +66,7 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
 
     context.subscriptions.push(vscode.languages.registerHoverProvider('boalang', new SubstitutionHoverProvider()));
 
-    enableDiagnostics(context);
+    enableDiagnostics(context, studyConfigSelector);
 
     // watch jobs.json for changes, then refresh the jobs list
     const watcher = vscode.workspace.createFileSystemWatcher(getWorkspaceRoot() + '/' + jobsFile, false, false, true);

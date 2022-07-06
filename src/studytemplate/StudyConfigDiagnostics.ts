@@ -21,8 +21,8 @@ import { cache } from './StudyConfigCache';
 
 let diagnosticCollection: vscode.DiagnosticCollection;
 
-export async function enableDiagnostics(context: vscode.ExtensionContext) {
-    diagnosticCollection = vscode.languages.createDiagnosticCollection('study-config.json');
+export async function enableDiagnostics(context: vscode.ExtensionContext, studyConfigSelector: vscode.DocumentSelector) {
+    diagnosticCollection = vscode.languages.createDiagnosticCollection(studyConfigSelector.toString());
     context.subscriptions.push(diagnosticCollection);
 
     cache.onDidChange(e => checkStudyConfig());

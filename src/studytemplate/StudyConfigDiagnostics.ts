@@ -42,7 +42,14 @@ export async function checkStudyConfig() {
 
             const line = splits.length - 1;
             const col = splits.pop().indexOf(ds);
-            diags.push(new vscode.Diagnostic(new vscode.Range(line, col, line, col + ds.length), ds + ' is not a valid Boa dataset.'));
+            const diag = new vscode.Diagnostic(
+                new vscode.Range(line, col, line, col + ds.length),
+                '"' + ds + '" is not a valid Boa dataset.',
+                vscode.DiagnosticSeverity.Error
+            );
+            diag.code = 'invalid-dataset';
+            diag.source = 'boa';
+            diags.push(diag);
         }
     }
 

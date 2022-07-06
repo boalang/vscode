@@ -56,7 +56,10 @@ async function selectDataset(): Promise<string> {
         dataset: string;
     }
 
-    await getDatasets();
+    const datasets = await getDatasets();
+    if (datasets === null) {
+        return undefined;
+    }
 
     const boaConfig = vscode.workspace.getConfiguration('boalang');
 

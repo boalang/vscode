@@ -29,7 +29,7 @@ export async function enableDiagnostics(context: vscode.ExtensionContext, studyC
     context.subscriptions.push(diagnosticCollection);
 
     cache.onDidChange(e => checkStudyConfig());
-    onDatasetsChange(e => checkStudyConfig());
+    onDatasetsChange(e => { if (e !== null) checkStudyConfig(); });
 
     context.subscriptions.push(vscode.languages.registerCodeActionsProvider(studyConfigSelector, new DatasetActionProvider(), {
         providedCodeActionKinds: [vscode.CodeActionKind.QuickFix]
@@ -45,22 +45,24 @@ export async function checkStudyConfig() {
 
     const datasets = await getDatasets();
 
-    for (const dsidx in cache.json['datasets']) {
-        const ds = cache.json['datasets'][dsidx];
-        if (datasets.indexOf(ds) == -1 && datasets.indexOf(adminPrefix + ds) == -1) {
-            const idx = cache.raw.indexOf('"' + ds + '"', cache.raw.indexOf('"' + dsidx + '"'));
-            const splits = cache.raw.slice(0, idx + ds.length + 2).split('\n');
+    if (datasets !== null && datasets.length > 0) {
+        for (const dsidx in cache.json['datasets']) {
+            const ds = cache.json['datasets'][dsidx];
+            if (datasets.indexOf(ds) == -1 && datasets.indexOf(adminPrefix + ds) == -1) {
+                const idx = cache.raw.indexOf('"' + ds + '"', cache.raw.indexOf('"' + dsidx + '"'));
+                const splits = cache.raw.slice(0, idx + ds.length + 2).split('\n');
 
-            const line = splits.length - 1;
-            const col = splits.pop().indexOf('"' + ds + '"');
-            const diag = new vscode.Diagnostic(
-                new vscode.Range(line, col + 1, line, col + 1 + ds.length),
-                '"' + ds + '" is not a valid Boa dataset.',
-                vscode.DiagnosticSeverity.Error
-            );
-            diag.code = CODE_INVALID_DS;
-            diag.source = 'boa';
-            diags.push(diag);
+                const line = splits.length - 1;
+                const col = splits.pop().indexOf('"' + ds + '"');
+                const diag = new vscode.Diagnostic(
+                    new vscode.Range(line, col + 1, line, col + 1 + ds.length),
+                    '"' + ds + '" is not a valid Boa dataset.',
+                    vscode.DiagnosticSeverity.Error
+                );
+                diag.code = CODE_INVALID_DS;
+                diag.source = 'boa';
+                diags.push(diag);
+            }
         }
     }
 

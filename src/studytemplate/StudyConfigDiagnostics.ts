@@ -27,6 +27,14 @@ export async function enableDiagnostics(context: vscode.ExtensionContext, studyC
 
     cache.onDidChange(e => checkStudyConfig());
     onDatasetsChange(e => checkStudyConfig());
+
+    context.subscriptions.push(vscode.languages.registerCodeActionsProvider(studyConfigSelector, new DatasetActionProvider(), {
+        providedCodeActionKinds: [vscode.CodeActionKind.QuickFix]
+    }));
+
+    context.subscriptions.push(vscode.languages.registerCodeActionsProvider(studyConfigSelector, new StudyDatasetActionProvider(), {
+        providedCodeActionKinds: [vscode.CodeActionKind.QuickFix]
+    }));
 }
 
 export async function checkStudyConfig() {
@@ -76,4 +84,42 @@ export async function checkStudyConfig() {
     }
 
     diagnosticCollection.set(cache.uri, diags);
+}
+
+export class DatasetActionProvider implements vscode.CodeActionProvider {
+	async provideCodeActions(document: vscode.TextDocument, range: vscode.Range | vscode.Selection, context: vscode.CodeActionContext, token: vscode.CancellationToken): Promise<vscode.CodeAction[]> {
+        const datasets = await getDatasets();
+        return context.diagnostics
+			.filter(diagnostic => diagnostic.code === 'invalid-dataset')
+			.map(diagnostic => datasets.map(ds => this.createCodeAction(diagnostic, ds.replace(adminPrefix, ''))))
+            .flat();
+	}
+
+    private createCodeAction(diagnostic: vscode.Diagnostic, ds): vscode.CodeAction {
+		const action = new vscode.CodeAction('replace with: ' + ds, vscode.CodeActionKind.QuickFix);
+        const edit = new vscode.WorkspaceEdit();
+        edit.replace(cache.uri, diagnostic.range, ds);
+        action.edit = edit;
+		action.diagnostics = [diagnostic];
+		return action;
+	}
+}
+
+export class StudyDatasetActionProvider implements vscode.CodeActionProvider {
+	provideCodeActions(document: vscode.TextDocument, range: vscode.Range | vscode.Selection, context: vscode.CodeActionContext, token: vscode.CancellationToken): vscode.CodeAction[] {
+		const datasetNames = cache.getDatasets();
+        return context.diagnostics
+			.filter(diagnostic => diagnostic.code === 'unknown-study-dataset')
+			.map(diagnostic => datasetNames.map(ds => this.createCodeAction(diagnostic, ds)))
+            .flat();
+	}
+
+    private createCodeAction(diagnostic: vscode.Diagnostic, ds): vscode.CodeAction {
+		const action = new vscode.CodeAction('replace with: ' + ds, vscode.CodeActionKind.QuickFix);
+        const edit = new vscode.WorkspaceEdit();
+        edit.replace(cache.uri, diagnostic.range, ds);
+        action.edit = edit;
+		action.diagnostics = [diagnostic];
+		return action;
+	}
 }

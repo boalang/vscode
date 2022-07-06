@@ -1,8 +1,9 @@
 # Change Log
 
-## [0.1.6] - 2022-07-06
+## [0.1.7] - 2022-07-06
  - better handling of changing usernames/passwords
- - provides diagnostics for study-config.json dataset names
+ - provides diagnostics for study-config.json
+ - fixed a bug with live preview of templated queries
 
 ## [0.1.5] - 2022-07-05
  - connections to the Boa API are reused for better performance

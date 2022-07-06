@@ -27,6 +27,9 @@ export function getJobUri(id: any) {
     return vscode.Uri.parse(`boalang://${id}/`);
 }
 
+let onDatasetsChangeEmitter = new vscode.EventEmitter<string[]>();
+export let onDatasetsChange = onDatasetsChangeEmitter.event;
+
 let datasets: string[] = null;
 export async function getDatasets() {
     if (datasets != null) {
@@ -43,6 +46,8 @@ export async function getDatasets() {
     ).catch(
         () => datasets = null
     );
+
+    onDatasetsChangeEmitter.fire(datasets);
     return datasets;
 }
 

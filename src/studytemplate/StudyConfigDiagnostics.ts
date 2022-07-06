@@ -53,5 +53,27 @@ export async function checkStudyConfig() {
         }
     }
 
+    const datasetNames = cache.getDatasets();
+
+    for (const idx in cache.json['queries']) {
+        const query = cache.json['queries'][idx];
+        const ds = query['dataset'];
+        if (datasetNames.indexOf(ds) == -1) {
+            const idx = cache.raw.indexOf(ds);
+            const splits = cache.raw.slice(0, idx + ds.length).split('\n');
+
+            const line = splits.length - 1;
+            const col = splits.pop().indexOf(ds);
+            const diag = new vscode.Diagnostic(
+                new vscode.Range(line, col, line, col + ds.length),
+                '"' + ds + '" is not a valid study dataset.' + ' Current study datasets are: ' + datasetNames.join(', '),
+                vscode.DiagnosticSeverity.Error
+            );
+            diag.code = 'unknown-study-dataset';
+            diag.source = 'boa';
+            diags.push(diag);
+        }
+    }
+
     diagnosticCollection.set(cache.uri, diags);
 }

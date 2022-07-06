@@ -26,6 +26,7 @@ import StudyConfigCompletionItemProvider from './StudyConfigCompletionItemProvid
 import { showUri } from '../boa';
 import { cache } from './StudyConfigCache';
 import { boaDocumentProvider } from '../contentprovider';
+import { enableDiagnostics } from './StudyConfigDiagnostics';
 
 export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     const jobsSelector: vscode.DocumentSelector = {
@@ -64,6 +65,8 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.languages.registerCodeLensProvider(studyConfigSelector, new StudyConfigCodelensProvider()));
 
     context.subscriptions.push(vscode.languages.registerHoverProvider('boalang', new SubstitutionHoverProvider()));
+
+    enableDiagnostics(context);
 
     // watch jobs.json for changes, then refresh the jobs list
     const watcher = vscode.workspace.createFileSystemWatcher(getWorkspaceRoot() + '/' + jobsFile, false, false, true);

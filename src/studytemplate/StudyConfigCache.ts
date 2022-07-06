@@ -23,11 +23,16 @@ class StudyConfigCache {
     onDidChange = this.onDidChangeEmitter.event;
 
     private _json: object;
+    private _raw: string;
+
     private watcher: vscode.FileSystemWatcher;
+    private _file: string;
 
     constructor() {
+        this._file = getWorkspaceRoot() + '/' + studyConfigFile;
+
         // watch study-config.json for changes, then refresh the cached JSON
-        this.watcher = vscode.workspace.createFileSystemWatcher(getWorkspaceRoot() + '/' + studyConfigFile);
+        this.watcher = vscode.workspace.createFileSystemWatcher(this._file);
         this.watcher.onDidChange(this.updateJSON.bind(this));
         this.watcher.onDidCreate(this.updateJSON.bind(this));
         this.watcher.onDidDelete(this.updateJSON.bind(this));
@@ -35,8 +40,20 @@ class StudyConfigCache {
         this.updateJSON();
     }
 
+    get filename() {
+        return this._file;
+    }
+
+    get uri() {
+        return vscode.Uri.file(this._file);
+    }
+
     get json() {
         return this._json;
+    }
+
+    get raw() {
+        return this._raw;
     }
 
     private datasets: string[] = null;
@@ -169,12 +186,14 @@ class StudyConfigCache {
 
     private async updateJSON() {
         try {
-            await getFileContents(getWorkspaceRoot() + '/' + studyConfigFile).then(
+            await getFileContents(this._file).then(
                 (val) => {
+                    this._raw = val;
                     this._json = JSON.parse(val);
                 }
             );
         } catch (e) {
+            this._raw = '';
             this._json = {};
         }
 

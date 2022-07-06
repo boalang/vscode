@@ -39,6 +39,15 @@ class StudyConfigCache {
         return this._json;
     }
 
+    private datasets: string[] = null;
+    getDatasets() {
+        if (this.datasets === null) {
+            this.datasets = Object.keys(this._json['datasets']);
+        }
+
+        return this.datasets;
+    }
+
     private substitutions = null;
     getSubstitutions() {
         if (this.substitutions !== null) {
@@ -170,6 +179,7 @@ class StudyConfigCache {
         }
 
         this.substitutions = null;
+        this.datasets = null;
 
         this.onDidChangeEmitter.fire(this);
     }

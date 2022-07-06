@@ -194,7 +194,6 @@ export async function runBoaCommands(func: { (client: boaapi.BoaClient): Promise
                                 vscode.window.showInformationMessage('Unable to connect to the Boa API.');
                                 throw err;
                             } else {
-                                vscode.window.showInformationMessage(err.message);
                                 throw err;
                             }
                         }

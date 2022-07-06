@@ -42,6 +42,7 @@ export async function enableDiagnostics(context: vscode.ExtensionContext, studyC
 
 export async function checkStudyConfig() {
     const diags = [];
+    const rawJson = cache.raw;
 
     const datasets = await getDatasets();
 
@@ -50,8 +51,8 @@ export async function checkStudyConfig() {
             let ds = cache.json['datasets'][dsidx];
             if (datasets.indexOf(ds) == -1 && datasets.indexOf(adminPrefix + ds) == -1) {
                 ds = '"' + ds + '"';
-                const idx = cache.raw.indexOf(ds, cache.raw.indexOf('"' + dsidx + '"'));
-                const splits = cache.raw.slice(0, idx + ds.length).split('\n');
+                const idx = rawJson.indexOf(ds, rawJson.indexOf('"' + dsidx + '"'));
+                const splits = rawJson.slice(0, idx + ds.length).split('\n');
 
                 const line = splits.length - 1;
                 const col = splits.pop().indexOf(ds);
@@ -74,8 +75,8 @@ export async function checkStudyConfig() {
         let ds = query['dataset'];
         if (datasetNames.indexOf(ds) == -1) {
             ds = '"' + ds + '"';
-            const idx = cache.raw.indexOf(ds, cache.raw.indexOf('"' + dsidx + '"'));
-            const splits = cache.raw.slice(0, idx + ds.length).split('\n');
+            const idx = rawJson.indexOf(ds, rawJson.indexOf('"' + dsidx + '"'));
+            const splits = rawJson.slice(0, idx + ds.length).split('\n');
 
             const line = splits.length - 1;
             const col = splits.pop().indexOf(ds);
@@ -96,6 +97,9 @@ export async function checkStudyConfig() {
 export class DatasetActionProvider implements vscode.CodeActionProvider {
 	async provideCodeActions(document: vscode.TextDocument, range: vscode.Range | vscode.Selection, context: vscode.CodeActionContext, token: vscode.CancellationToken): Promise<vscode.CodeAction[]> {
         const datasets = await getDatasets();
+        if (datasets === null) {
+            return [];
+        }
         return context.diagnostics
 			.filter(diagnostic => diagnostic.code === CODE_INVALID_DS)
 			.map(diagnostic => datasets.map(ds => createCodeAction(diagnostic, ds.replace(adminPrefix, ''))))
@@ -113,11 +117,10 @@ export class StudyDatasetActionProvider implements vscode.CodeActionProvider {
 	}
 }
 
-function createCodeAction(diagnostic: vscode.Diagnostic, ds): vscode.CodeAction {
+function createCodeAction(diagnostic: vscode.Diagnostic, ds: string): vscode.CodeAction {
     const action = new vscode.CodeAction('replace with: ' + ds, vscode.CodeActionKind.QuickFix);
-    const edit = new vscode.WorkspaceEdit();
-    edit.replace(cache.uri, diagnostic.range, ds);
-    action.edit = edit;
     action.diagnostics = [diagnostic];
+    action.edit = new vscode.WorkspaceEdit();
+    action.edit.replace(cache.uri, diagnostic.range, ds);
     return action;
 }

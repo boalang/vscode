@@ -90,7 +90,6 @@ export async function getBoaPassword(forceReset = false) {
 export async function resetUsername() {
     const boaConfig = vscode.workspace.getConfiguration('boalang');
     await boaConfig.update('login.username', undefined, true);
-    resetPassword();
 }
 
 export async function resetPassword() {

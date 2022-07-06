@@ -47,16 +47,17 @@ export async function checkStudyConfig() {
 
     if (datasets !== null && datasets.length > 0) {
         for (const dsidx in cache.json['datasets']) {
-            const ds = cache.json['datasets'][dsidx];
+            let ds = cache.json['datasets'][dsidx];
             if (datasets.indexOf(ds) == -1 && datasets.indexOf(adminPrefix + ds) == -1) {
-                const idx = cache.raw.indexOf('"' + ds + '"', cache.raw.indexOf('"' + dsidx + '"'));
-                const splits = cache.raw.slice(0, idx + ds.length + 2).split('\n');
+                ds = '"' + ds + '"';
+                const idx = cache.raw.indexOf(ds, cache.raw.indexOf('"' + dsidx + '"'));
+                const splits = cache.raw.slice(0, idx + ds.length).split('\n');
 
                 const line = splits.length - 1;
-                const col = splits.pop().indexOf('"' + ds + '"');
+                const col = splits.pop().indexOf(ds);
                 const diag = new vscode.Diagnostic(
-                    new vscode.Range(line, col + 1, line, col + 1 + ds.length),
-                    '"' + ds + '" is not a valid Boa dataset.',
+                    new vscode.Range(line, col + 1, line, col + ds.length - 1),
+                    ds + ' is not a valid Boa dataset.',
                     vscode.DiagnosticSeverity.Error
                 );
                 diag.code = CODE_INVALID_DS;
@@ -70,16 +71,17 @@ export async function checkStudyConfig() {
 
     for (const dsidx in cache.json['queries']) {
         const query = cache.json['queries'][dsidx];
-        const ds = query['dataset'];
+        let ds = query['dataset'];
         if (datasetNames.indexOf(ds) == -1) {
-            const idx = cache.raw.indexOf('"' + ds + '"', cache.raw.indexOf('"' + dsidx + '"'));
-            const splits = cache.raw.slice(0, idx + ds.length + 2).split('\n');
+            ds = '"' + ds + '"';
+            const idx = cache.raw.indexOf(ds, cache.raw.indexOf('"' + dsidx + '"'));
+            const splits = cache.raw.slice(0, idx + ds.length).split('\n');
 
             const line = splits.length - 1;
-            const col = splits.pop().indexOf('"' + ds + '"');
+            const col = splits.pop().indexOf(ds);
             const diag = new vscode.Diagnostic(
-                new vscode.Range(line, col + 1, line, col + 1 + ds.length),
-                '"' + ds + '" is not a valid study dataset.' + ' Current study datasets are: ' + datasetNames.join(', '),
+                new vscode.Range(line, col + 1, line, col + ds.length - 1),
+                ds + ' is not a valid study dataset.' + ' Current study datasets are: ' + datasetNames.join(', '),
                 vscode.DiagnosticSeverity.Error
             );
             diag.code = CODE_UNKNOWN_STUDY_DS;

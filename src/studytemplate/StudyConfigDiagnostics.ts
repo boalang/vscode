@@ -34,16 +34,16 @@ export async function checkStudyConfig() {
 
     const datasets = await getDatasets();
 
-    for (const idx in cache.json['datasets']) {
-        const ds = cache.json['datasets'][idx];
+    for (const dsidx in cache.json['datasets']) {
+        const ds = cache.json['datasets'][dsidx];
         if (datasets.indexOf(ds) == -1 && datasets.indexOf(adminPrefix + ds) == -1) {
-            const idx = cache.raw.indexOf(ds);
-            const splits = cache.raw.slice(0, idx + ds.length).split('\n');
+            const idx = cache.raw.indexOf('"' + ds + '"', cache.raw.indexOf('"' + dsidx + '"'));
+            const splits = cache.raw.slice(0, idx + ds.length + 2).split('\n');
 
             const line = splits.length - 1;
-            const col = splits.pop().indexOf(ds);
+            const col = splits.pop().indexOf('"' + ds + '"');
             const diag = new vscode.Diagnostic(
-                new vscode.Range(line, col, line, col + ds.length),
+                new vscode.Range(line, col + 1, line, col + 1 + ds.length),
                 '"' + ds + '" is not a valid Boa dataset.',
                 vscode.DiagnosticSeverity.Error
             );
@@ -55,17 +55,17 @@ export async function checkStudyConfig() {
 
     const datasetNames = cache.getDatasets();
 
-    for (const idx in cache.json['queries']) {
-        const query = cache.json['queries'][idx];
+    for (const dsidx in cache.json['queries']) {
+        const query = cache.json['queries'][dsidx];
         const ds = query['dataset'];
         if (datasetNames.indexOf(ds) == -1) {
-            const idx = cache.raw.indexOf(ds);
-            const splits = cache.raw.slice(0, idx + ds.length).split('\n');
+            const idx = cache.raw.indexOf('"' + ds + '"', cache.raw.indexOf('"' + dsidx + '"'));
+            const splits = cache.raw.slice(0, idx + ds.length + 2).split('\n');
 
             const line = splits.length - 1;
-            const col = splits.pop().indexOf(ds);
+            const col = splits.pop().indexOf('"' + ds + '"');
             const diag = new vscode.Diagnostic(
-                new vscode.Range(line, col, line, col + ds.length),
+                new vscode.Range(line, col + 1, line, col + 1 + ds.length),
                 '"' + ds + '" is not a valid study dataset.' + ' Current study datasets are: ' + datasetNames.join(', '),
                 vscode.DiagnosticSeverity.Error
             );

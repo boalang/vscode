@@ -102,6 +102,7 @@ class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
             this.setMax(await client.jobCount(false));
 
             const jobs = await client.jobList(false, this.start, this.length());
+            this.jobs = [];
             for (const job of jobs) {
                 const source = await JobCache.getSource(job);
                 var size = 0;

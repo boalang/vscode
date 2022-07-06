@@ -45,101 +45,62 @@ export async function enableDiagnostics(context: vscode.ExtensionContext, studyC
 
 export async function checkStudyConfig() {
     const diags = [];
-    const rawJson = cache.raw;
 
     const datasets = await getDatasets(false);
 
     if (datasets !== null && datasets.length > 0) {
-        for (const dsidx in cache.json['datasets']) {
-            let ds = cache.json['datasets'][dsidx];
+        for (const dsName in cache.json['datasets']) {
+            let ds = cache.json['datasets'][dsName];
             if (datasets.indexOf(ds) == -1 && datasets.indexOf(adminPrefix + ds) == -1) {
-                ds = '"' + ds + '"';
-                const idx = rawJson.indexOf(ds, rawJson.indexOf('"' + dsidx + '"'));
-                const splits = rawJson.slice(0, idx + ds.length).split('\n');
-
-                const line = splits.length - 1;
-                const col = splits.pop().indexOf(ds);
-                const diag = new vscode.Diagnostic(
-                    new vscode.Range(line, col + 1, line, col + ds.length - 1),
-                    `${ds} is not a valid Boa dataset.`,
-                    vscode.DiagnosticSeverity.Error
-                );
-                diag.code = CODE_INVALID_DS;
-                diag.source = 'boa';
-                diags.push(diag);
+                diags.push(makeJsonDiagnostic(ds, dsName, CODE_INVALID_DS, `${ds} is not a valid Boa dataset.`));
             }
         }
     }
 
     const datasetNames = cache.getDatasets();
 
-    for (const dsidx in cache.json['queries']) {
-        const query = cache.json['queries'][dsidx];
-        let ds = query['dataset'];
+    for (const outputPath in cache.json['queries']) {
+        let ds = cache.json['queries'][outputPath]['dataset'];
         if (datasetNames.indexOf(ds) == -1) {
-            ds = '"' + ds + '"';
-            const idx = rawJson.indexOf(ds, rawJson.indexOf('"' + dsidx + '"'));
-            const splits = rawJson.slice(0, idx + ds.length).split('\n');
-
-            const line = splits.length - 1;
-            const col = splits.pop().indexOf(ds);
-            const diag = new vscode.Diagnostic(
-                new vscode.Range(line, col + 1, line, col + ds.length - 1),
-                `${ds} is not a valid study dataset. Current study datasets are: ${datasetNames.join(', ')}`,
-                vscode.DiagnosticSeverity.Error
-            );
-            diag.code = CODE_UNKNOWN_STUDY_DS;
-            diag.source = 'boa';
-            diags.push(diag);
+            diags.push(makeJsonDiagnostic(ds, outputPath, CODE_UNKNOWN_STUDY_DS, `${ds} is not a valid study dataset. Current study datasets are: ${datasetNames.join(', ')}`));
         }
     }
 
-    for (const dsidx in cache.json['queries']) {
-        const query = cache.json['queries'][dsidx];
-        let q = query['query'];
+    for (const outputPath in cache.json['queries']) {
+        let q = cache.json['queries'][outputPath]['query'];
         try {
             await vscode.workspace.fs.stat(vscode.Uri.file(getWorkspaceRoot() + '/' + scriptPath + '/' + q));
         } catch {
-            q = '"' + q + '"';
-            const idx = rawJson.indexOf(q, rawJson.indexOf('"' + dsidx + '"'));
-            const splits = rawJson.slice(0, idx + q.length).split('\n');
-
-            const line = splits.length - 1;
-            const col = splits.pop().indexOf(q);
-            const diag = new vscode.Diagnostic(
-                new vscode.Range(line, col + 1, line, col + q.length - 1),
-                `The Boa query ${q}' does not exist in the "${scriptPath}/" folder.`,
-                vscode.DiagnosticSeverity.Error
-            );
-            diag.code = CODE_BAD_QUERY;
-            diag.source = 'boa';
-            diags.push(diag);
+            diags.push(makeJsonDiagnostic(q, outputPath, CODE_BAD_QUERY, `The Boa query ${q}' does not exist in the "${scriptPath}/" folder.`));
         }
     }
 
-    for (const dsidx in cache.json['analyses']) {
-        let a = dsidx;
+    for (const analysis in cache.json['analyses']) {
         try {
-            await vscode.workspace.fs.stat(vscode.Uri.file(getWorkspaceRoot() + '/' + analysesPath + '/' + a));
+            await vscode.workspace.fs.stat(vscode.Uri.file(getWorkspaceRoot() + '/' + analysesPath + '/' + analysis));
         } catch {
-            a = '"' + a + '"';
-            const idx = rawJson.indexOf(a, rawJson.indexOf('"' + dsidx + '"'));
-            const splits = rawJson.slice(0, idx + a.length).split('\n');
-
-            const line = splits.length - 1;
-            const col = splits.pop().indexOf(a);
-            const diag = new vscode.Diagnostic(
-                new vscode.Range(line, col + 1, line, col + a.length - 1),
-                `The analysis script ${a}' does not exist in the "${analysesPath}/" folder.`,
-                vscode.DiagnosticSeverity.Error
-            );
-            diag.code = CODE_BAD_ANALYSIS;
-            diag.source = 'boa';
-            diags.push(diag);
+            diags.push(makeJsonDiagnostic(analysis, analysis, CODE_BAD_ANALYSIS, `The analysis script ${analysis}' does not exist in the "${analysesPath}/" folder.`));
         }
     }
 
     diagnosticCollection.set(cache.uri, diags);
+}
+
+function makeJsonDiagnostic(badStr: string, jsonKey: string, code, err) {
+    const rawJson = cache.raw;
+
+    badStr = '"' + badStr + '"';
+
+    const idx = rawJson.indexOf(badStr, rawJson.indexOf('"' + jsonKey + '"'));
+    const splits = rawJson.slice(0, idx + badStr.length).split('\n');
+
+    const line = splits.length - 1;
+    const col = splits.pop().indexOf(badStr);
+
+    const diag = new vscode.Diagnostic(new vscode.Range(line, col + 1, line, col + badStr.length - 1), err, vscode.DiagnosticSeverity.Error);
+    diag.code = code;
+    diag.source = 'boa';
+    return diag;
 }
 
 export class DatasetActionProvider implements vscode.CodeActionProvider {

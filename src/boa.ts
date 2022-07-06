@@ -31,8 +31,8 @@ let onDatasetsChangeEmitter = new vscode.EventEmitter<string[]>();
 export let onDatasetsChange = onDatasetsChangeEmitter.event;
 
 let datasets: string[] = null;
-export async function getDatasets() {
-    if (datasets !== null) {
+export async function getDatasets(tryLoad = true) {
+    if (!tryLoad || datasets !== null) {
         return datasets;
     }
     datasets = [];
@@ -40,9 +40,7 @@ export async function getDatasets() {
     await runBoaCommands(async (client: boaapi.BoaClient) => {
         await client.datasetNames().then((ds: string[]) => datasets = ds);
     }).then(
-        () => {
-            vscode.window.setStatusBarMessage('$(pass) Boa API: logged in', 10000);
-        }
+        () => vscode.window.setStatusBarMessage('$(pass) Boa API: logged in', 10000)
     ).catch(
         () => datasets = null
     );
@@ -195,9 +193,12 @@ export async function runBoaCommands(func: { (client: boaapi.BoaClient): Promise
                         }
                     );
                 });
+            } else {
+                throw new Error('No username/password given.');
             }
+        } else {
+            throw new Error('No username/password given.');
         }
-        throw new Error('No username/password given.');
     } else {
         if (!retrying) {
             await vscode.window.withProgress({

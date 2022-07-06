@@ -44,7 +44,7 @@ export async function checkStudyConfig() {
     const diags = [];
     const rawJson = cache.raw;
 
-    const datasets = await getDatasets();
+    const datasets = await getDatasets(false);
 
     if (datasets !== null && datasets.length > 0) {
         for (const dsidx in cache.json['datasets']) {
@@ -96,8 +96,8 @@ export async function checkStudyConfig() {
 
 export class DatasetActionProvider implements vscode.CodeActionProvider {
 	async provideCodeActions(document: vscode.TextDocument, range: vscode.Range | vscode.Selection, context: vscode.CodeActionContext, token: vscode.CancellationToken): Promise<vscode.CodeAction[]> {
-        const datasets = await getDatasets();
-        if (datasets === null) {
+        const datasets = await getDatasets(false);
+        if (datasets === null || datasets.length == 0) {
             return [];
         }
         return context.diagnostics

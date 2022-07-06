@@ -184,18 +184,14 @@ export async function runBoaCommands(func: { (client: boaapi.BoaClient): Promise
                                 await removeCredentials();
                                 if (!retrying) {
                                     await runBoaCommands(func, true);
-                                } else {
-                                    throw err;
+                                    return;
                                 }
                             } else if (err.message.indexOf('Account is temporarily blocked') > -1) {
                                 vscode.window.showInformationMessage('Your Boa account is blocked for too many invalid logins. Please wait an hour.');
-                                throw err;
                             } else if (err.message.indexOf('getaddrinfo ENOTFOUND') > -1) {
                                 vscode.window.showInformationMessage('Unable to connect to the Boa API.');
-                                throw err;
-                            } else {
-                                throw err;
                             }
+                            throw err;
                         }
                     );
                 });

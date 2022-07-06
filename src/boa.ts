@@ -201,7 +201,7 @@ export async function runBoaCommands(func: { (client: boaapi.BoaClient): Promise
                 });
             }
         }
-        throw new Error('Unable to connect to the Boa API.');
+        throw new Error('No username/password given.');
     } else {
         if (!retrying) {
             await vscode.window.withProgress({

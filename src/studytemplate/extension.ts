@@ -121,7 +121,7 @@ export async function showPreview(uri) {
         }
     }
 
-    if (targetUri != null) {
+    if (targetUri !== null) {
         if (!(uriStr in previewMap)) {
             previewMap[uriStr] = [targetUri];
             vscode.workspace.onDidChangeTextDocument(e => {

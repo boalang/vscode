@@ -32,7 +32,7 @@ export let onDatasetsChange = onDatasetsChangeEmitter.event;
 
 let datasets: string[] = null;
 export async function getDatasets() {
-    if (datasets != null) {
+    if (datasets !== null) {
         return datasets;
     }
     datasets = [];
@@ -145,7 +145,7 @@ export async function setEndpoint() {
 }
 
 export async function closeClient() {
-    if (client != null) {
+    if (client !== null) {
         await client.close().catch(
             () => {
                 // ignore errors during close
@@ -159,7 +159,7 @@ export async function closeClient() {
 
 let client = null;
 export async function runBoaCommands(func: { (client: boaapi.BoaClient): Promise<void> }, retrying = false) {
-    if (client == null) {
+    if (client === null) {
         const username = await getBoaUsername();
         if (username) {
             const password = await getBoaPassword();

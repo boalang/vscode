@@ -93,7 +93,7 @@ class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
         }
 
         // on initial load, do nothing
-        if (this.jobs == null) {
+        if (this.jobs === null) {
             return Promise.resolve([]);
         }
 

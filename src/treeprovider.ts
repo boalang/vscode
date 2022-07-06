@@ -122,7 +122,7 @@ class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
             }
 
             return Promise.resolve(this.jobs);
-        });
+        }).catch(() => { return Promise.resolve([]); });
     }
 
     setView(view: vscode.TreeView<vscode.TreeItem>): vscode.TreeView<vscode.TreeItem> {

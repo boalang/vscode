@@ -45,6 +45,7 @@
         "onCommand:boalang.job.togglePublic",
         "onCommand:boalang.job.viewPublicUrl",
         "onCommand:boalang.job.showSource",
+        "onCommand:boalang.job.stop",
         "onCommand:boalang.joblist.first",
         "onCommand:boalang.joblist.prev",
         "onCommand:boalang.joblist.next",
@@ -133,6 +134,12 @@
                 "command": "boalang.job.showSource",
                 "title": "Display Boa Job",
                 "icon": "$(inspect)",
+                "category": "Boa"
+            },
+            {
+                "command": "boalang.job.stop",
+                "title": "Stop Job",
+                "icon": "$(close)",
                 "category": "Boa"
             },
             {
@@ -328,6 +335,10 @@
                     "when": "false"
                 },
                 {
+                    "command": "boalang.job.stop",
+                    "when": "false"
+                },
+                {
                     "command": "boalang.job.togglePublic",
                     "when": "false"
                 },
@@ -398,6 +409,10 @@
                     "when": "view == boalang.jobList && viewItem == boalang.jobItem"
                 },
                 {
+                    "command": "boalang.job.stop",
+                    "when": "view == boalang.jobList && viewItem == boalang.jobItem"
+                },
+                {
                     "command": "boalang.job.resubmit",
                     "when": "view == boalang.jobList && viewItem == boalang.jobItem"
                 },
@@ -456,6 +471,10 @@
                 },
                 {
                     "command": "boalang.job.delete",
+                    "when": "resourceScheme == boalang"
+                },
+                {
+                    "command": "boalang.job.stop",
                     "when": "resourceScheme == boalang"
                 },
                 {

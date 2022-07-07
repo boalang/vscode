@@ -424,3 +424,18 @@ export async function resubmitJob(uri: vscode.Uri|BoaJob) {
         });
     }
 }
+
+export function stopJob(uri: vscode.Uri|BoaJob) {
+    runBoaCommands(async (client: boaapi.BoaClient) => {
+        const jobId = getJobId(uri);
+        const job = await client.getJob(jobId);
+
+        if (job.running) {
+            await job.stop();
+            vscode.commands.executeCommand('boalang.joblist.refresh');
+            vscode.window.showInformationMessage(`Job ${jobId} was stopped`);
+        } else {
+            vscode.window.showInformationMessage(`Job ${jobId} is not currently running`);
+        }
+    });
+}

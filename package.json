@@ -448,7 +448,7 @@
                 {
                     "command": "boalang.template.preview",
                     "group": "navigation",
-                    "when": "editorLangId == boalang && resourceDirname =~ /(?<!\\/snippets(\\/[^/]+)*)$/"
+                    "when": "editorLangId == boalang && resourceScheme != boalang && resourceDirname =~ /(?<!\\/snippets(\\/[^/]+)*)$/"
                 },
                 {
                     "command": "boalang.job.showOutput",

@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
-import { getDatasets, showJob, runQuery, showOutput, showFullOutput, downloadOutput, setFavorite, setEndpoint, viewPublicUrl, deleteJob, togglePublic, resubmitJob, closeClient } from './boa';
+import { getDatasets, showJob, runQuery, showOutput, showFullOutput, downloadOutput, setFavorite, setEndpoint, viewPublicUrl, deleteJob, togglePublic, resubmitJob, closeClient, stopJob } from './boa';
 import { AuthSettings, removeCredentials, resetPassword } from './credentials';
 import { treeProvider } from './treeprovider';
 import { activateStudyTemplateSupport } from './studytemplate/extension';
@@ -57,6 +57,8 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('boalang.job.delete', deleteJob));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.job.togglePublic', togglePublic));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.job.resubmit', resubmitJob));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.job.stopJob', stopJob));
+
 
     activateStudyTemplateSupport(context);
 

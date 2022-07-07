@@ -45,7 +45,7 @@
         "onCommand:boalang.job.togglePublic",
         "onCommand:boalang.job.viewPublicUrl",
         "onCommand:boalang.job.showSource",
-        "onCommand:boalang.job.stopJob",
+        "onCommand:boalang.job.stop",
         "onCommand:boalang.joblist.first",
         "onCommand:boalang.joblist.prev",
         "onCommand:boalang.joblist.next",
@@ -137,7 +137,7 @@
                 "category": "Boa"
             },
             {
-                "command": "boalang.job.stopJob",
+                "command": "boalang.job.stop",
                 "title": "Stop Job",
                 "icon": "$(close)",
                 "category": "Boa"
@@ -335,7 +335,7 @@
                     "when": "false"
                 },
                 {
-                    "command": "boalang.job.stopJob",
+                    "command": "boalang.job.stop",
                     "when": "false"
                 },
                 {
@@ -409,7 +409,7 @@
                     "when": "view == boalang.jobList && viewItem == boalang.jobItem"
                 },
                 {
-                    "command": "boalang.job.stopJob",
+                    "command": "boalang.job.stop",
                     "when": "view == boalang.jobList && viewItem == boalang.jobItem"
                 },
                 {
@@ -474,7 +474,7 @@
                     "when": "resourceScheme == boalang"
                 },
                 {
-                    "command": "boalang.job.stopJob",
+                    "command": "boalang.job.stop",
                     "when": "resourceScheme == boalang"
                 },
                 {

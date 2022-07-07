@@ -430,13 +430,10 @@ export function stopJob(uri: vscode.Uri|BoaJob) {
         const jobId = getJobId(uri);
         const job = await client.getJob(jobId);
 
-        const isRunning = await job.running;
-
-        if (isRunning) {
+        if (job.running) {
             await job.stop();
             vscode.commands.executeCommand('boalang.joblist.refresh');
-            vscode.window.showInformationMessage(`Job ${jobId} has been stopped from running`);
-
+            vscode.window.showInformationMessage(`Job ${jobId} was stopped`);
         } else {
             vscode.window.showInformationMessage(`Job ${jobId} is not currently running`);
         }

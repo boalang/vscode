@@ -57,7 +57,7 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('boalang.job.delete', deleteJob));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.job.togglePublic', togglePublic));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.job.resubmit', resubmitJob));
-    context.subscriptions.push(vscode.commands.registerCommand('boalang.job.stopJob', stopJob));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.job.stop', stopJob));
 
 
     activateStudyTemplateSupport(context);

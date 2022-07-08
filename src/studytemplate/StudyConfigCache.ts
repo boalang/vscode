@@ -119,9 +119,12 @@ class StudyConfigCache {
     async performSubstitutions(query: string, subs) {
         const orig = query;
         for (const k of Object.keys(subs)) {
-            let replacement = '$1' + (await this.getSubst(subs[k].subst, Number.MAX_VALUE)).trim();
+            let replacement = (await this.getSubst(subs[k].subst, Number.MAX_VALUE)).trim();
             replacement = replacement.replace(new RegExp('\n', 'g'), '\n\$1');
-            query = query.replace(new RegExp('([ \t]*)' + k.replace(/[{}]/g, '\\$&') + '(\n?)', 'g'), replacement + '$2');
+            if (replacement.length == 0) {
+                query = query.replace(new RegExp('^' + k.replace(/[{}]/g, '\\$&') + '\n', 'gm'), '');
+            }
+            query = query.replace(new RegExp('([ \t]*)' + k.replace(/[{}]/g, '\\$&') + '(\n?)', 'g'), '$1' + replacement + '$2');
         }
         if (orig != query) {
             return this.performSubstitutions(query, subs);

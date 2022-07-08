@@ -83,18 +83,24 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
 }
 
 async function runMakeCommand(target, shouldRefresh = true) {
-    let taskCommand: vscode.ShellQuotedString = {value: 'make', quoting: vscode.ShellQuoting.Strong};
     let taskArgs: vscode.ShellQuotedString[] = [];
     if (target) {
-        taskArgs.push({value: target, quoting: vscode.ShellQuoting.Strong});
+        taskArgs.push({
+            value: target,
+            quoting: vscode.ShellQuoting.Escape
+        });
     }
+    let myTaskOptions: vscode.ShellExecutionOptions = {
+        env: process.env,
+        cwd: getWorkspaceRoot()
+    };
 
-    let myTaskOptions: vscode.ShellExecutionOptions = {env: process.env, cwd: getWorkspaceRoot()};
+    let shellExec = new vscode.ShellExecution('make', taskArgs, myTaskOptions);
 
-    const makefileBuildTaskName = 'Boa template make tasks';
-
-    let shellExec = new vscode.ShellExecution(taskCommand, taskArgs, myTaskOptions);
-    let makeTask = new vscode.Task({type: 'shell', group: 'build', label: makefileBuildTaskName}, vscode.TaskScope.Workspace, makefileBuildTaskName, 'makefile', shellExec);
+    let makeTask = new vscode.Task({
+        type: 'boa',
+        icon: { id: 'bold', color: 'terminal.ansiRed'},
+    }, vscode.TaskScope.Workspace, 'Boa study template', 'makefile', shellExec);
 
     await vscode.tasks.executeTask(makeTask);
     if (shouldRefresh) {

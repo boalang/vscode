@@ -15,12 +15,16 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
-import { removeDuplicates } from '../utils';
+import { functionDefinitions, removeDuplicates } from '../utils';
 import { cache } from './StudyConfigCache';
 
 export default class BoaCompletionItemProvider implements vscode.CompletionItemProvider {
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.CompletionItem[]> {
         const items = [];
+
+        for (const func of Object.keys(functionDefinitions)) {
+            items.push(new vscode.CompletionItem(func, vscode.CompletionItemKind.Function));
+        }
 
         const substitutions = cache.getSubstitutions();
         let keys = Object.keys(substitutions.substitutions);

@@ -55,10 +55,60 @@ interface IType {
 export const builtinTypes: { [name: string]: IType } = {
     Project: {
         attrs: [
+			{ name: 'audiences', var: { type: 'array of string', help: 'A list of the target audiences for the project.', } },
             { name: 'code_repositories', var: { type: 'array of CodeRepository', help: 'A list of all code repositories associated with this project.', } },
+			{ name: 'created_date', var: { type: 'time?', help: 'The time the project was created.', } },
+			{ name: 'databases', var: { type: 'array of string', help: 'A list of all databases used by the project.', } },
+			{ name: 'description', var: { type: 'string?', help: 'A description of the project.', } },
+			{ name: 'developers', var: { type: 'array of Person', help: 'A list of all software developers currently on the project.', } },
+			{ name: 'donations', var: { type: 'bool?', help: 'If true, this project explicitly states it accepts donations.', } },
+			{ name: 'homepage_url', var: { type: 'string?', help: 'A URL to the project\'s homepage.', } },
+			{ name: 'id', var: { type: 'string', help: 'Unique identifier for the project.', } },
+			{ name: 'interfaces', var: { type: 'array of string', help: 'A list of all interfaces supported by the project.', } },
+			{ name: 'licenses', var: { type: 'array of string', help: 'A list of all licenses used by the project.', } },
+			{ name: 'maintainers', var: { type: 'array of Person', help: 'A list of all people currently maintaining the project.', } },
+			{ name: 'name', var: { type: 'string', help: 'The name of the project.', } },
+			{ name: 'operating_systems', var: { type: 'array of string', help: 'A list of all OSes supported by the project.', } },
+			{ name: 'programming_languages', var: { type: 'array of string', help: 'A list of all programming languages used by the project.', } },
             { name: 'project_url', var: { type: 'string', help: 'A URL to the project\'s page on the forge.', } },
+			{ name: 'topics', var: { type: 'array of string', help: 'A list of self-categorized topics the project belongs to.', } },
         ],
         help: 'Top-level type, represents a single project on a forge.',
+    },
+    CodeRepository: {
+        attrs: [
+			{ name: 'kind', var: { type: 'RepositoryKind', help: 'The kind of code repository (SVN, GIT, etc).', } },
+			{ name: 'revisions', var: { type: 'array of Revision', help: 'All of the revisions contained in the code repository.', } },
+			{ name: 'url', var: { type: 'string', help: 'The URL to access the code repository.', } },
+        ],
+        help: 'A source code repository (SVN, CVS, Git, etc.).',
+    },
+    Revision: {
+        attrs: [
+			{ name: 'author', var: { type: 'Person', help: 'The person who authored the revision, if known, otherwise the same as committer.', } },
+			{ name: 'commit_date', var: { type: 'time', help: 'The time the revision was committed.', } },
+			{ name: 'committer', var: { type: 'Person', help: 'The person who committed the revision.', } },
+			{ name: 'files', var: { type: 'array of ChangedFile', help: 'A list of all files committed in the revision.', } },
+			{ name: 'id', var: { type: 'string', help: 'A unique identifier for the revision.', } },
+			{ name: 'log', var: { type: 'string', help: 'The log message attached to the revision.', } },
+        ],
+        help: 'A single revision inside a `CodeRepository`.',
+    },
+    ChangedFile: {
+        attrs: [
+            { name: 'change', var: { type: 'ChangeKind', help: 'The kind of change for this file.', } },
+            { name: 'kind', var: { type: 'FileKind', help: 'The kind of file.', } },
+            { name: 'name', var: { type: 'string', help: 'The full name and path of the file.', } },
+        ],
+        help: 'A file committed in a `Revision`.',
+    },
+    Person: {
+        attrs: [
+            { name: 'email', var: { type: 'string', help: 'The person\'s email address, if known.', } },
+            { name: 'real_name', var: { type: 'string', help: 'The person\'s real name, if known, otherwise the same as username.', } },
+            { name: 'username', var: { type: 'string', help: 'The person\'s username.', } },
+        ],
+        help: 'A unique person\'s information.',
     },
 };
 

@@ -25,7 +25,7 @@ import StudyConfigCodelensProvider from './codelens';
 import { showUri } from '../boa';
 import { cache } from './jsoncache';
 import { boaDocumentProvider } from '../contentprovider';
-import { enableDiagnostics } from './diagnostics';
+import enableDiagnostics from './diagnostics';
 
 export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     const jobsSelector: vscode.DocumentSelector = {

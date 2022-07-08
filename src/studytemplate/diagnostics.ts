@@ -27,7 +27,7 @@ const CODE_BAD_ANALYSIS = 'bad-analysis-filename';
 
 let diagnosticCollection: vscode.DiagnosticCollection;
 
-export async function enableDiagnostics(context: vscode.ExtensionContext, studyConfigSelector: vscode.DocumentSelector) {
+export default async function enableDiagnostics(context: vscode.ExtensionContext, studyConfigSelector: vscode.DocumentSelector) {
     diagnosticCollection = vscode.languages.createDiagnosticCollection(studyConfigSelector.toString());
     context.subscriptions.push(diagnosticCollection);
 
@@ -43,7 +43,7 @@ export async function enableDiagnostics(context: vscode.ExtensionContext, studyC
     }));
 }
 
-export async function checkStudyConfig() {
+async function checkStudyConfig() {
     const diags = [];
 
     const datasets = await getDatasets(false);
@@ -103,7 +103,7 @@ function makeJsonDiagnostic(badStr: string, jsonKey: string, code, err) {
     return diag;
 }
 
-export class DatasetActionProvider implements vscode.CodeActionProvider {
+class DatasetActionProvider implements vscode.CodeActionProvider {
 	async provideCodeActions(document: vscode.TextDocument, range: vscode.Range | vscode.Selection, context: vscode.CodeActionContext, token: vscode.CancellationToken): Promise<vscode.CodeAction[]> {
         const datasets = await getDatasets(false);
         if (datasets === null || datasets.length == 0) {
@@ -116,7 +116,7 @@ export class DatasetActionProvider implements vscode.CodeActionProvider {
 	}
 }
 
-export class StudyDatasetActionProvider implements vscode.CodeActionProvider {
+class StudyDatasetActionProvider implements vscode.CodeActionProvider {
 	provideCodeActions(document: vscode.TextDocument, range: vscode.Range | vscode.Selection, context: vscode.CodeActionContext, token: vscode.CancellationToken): vscode.CodeAction[] {
 		const datasetNames = cache.getDatasets();
         return context.diagnostics

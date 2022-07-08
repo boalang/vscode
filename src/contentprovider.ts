@@ -16,7 +16,7 @@
 //
 import * as vscode from 'vscode';
 import { runBoaCommands } from './boa';
-import JobCache from './cache';
+import JobCache from './jobcache';
 import { getQuery } from './studytemplate/extension';
 
 export const boaDocumentProvider = new class implements vscode.TextDocumentContentProvider {

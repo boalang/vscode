@@ -19,7 +19,7 @@ import * as boaapi from '@boalang/boa-api';
 import { getBoaUsername, getBoaPassword, removeCredentials } from './credentials';
 import { BoaJob, treeProvider } from './treeprovider';
 import * as consts from './consts';
-import JobCache from './cache';
+import JobCache from './jobcache';
 import { getFileContents, getWorkspaceRoot, promptUser } from './utils';
 import { outputChannel } from './extension';
 
@@ -27,8 +27,8 @@ export function getJobUri(id: any) {
     return vscode.Uri.parse(`boalang://${id}/`);
 }
 
-let onDatasetsChangeEmitter = new vscode.EventEmitter<string[]>();
-export let onDatasetsChange = onDatasetsChangeEmitter.event;
+const onDatasetsChangeEmitter = new vscode.EventEmitter<string[]>();
+export const onDatasetsChange = onDatasetsChangeEmitter.event;
 
 let datasets: string[] = null;
 export async function getDatasets(tryLoad = true) {

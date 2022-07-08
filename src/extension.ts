@@ -21,7 +21,10 @@ import { treeProvider } from './treeprovider';
 import { activateStudyTemplateSupport } from './studytemplate/extension';
 import { boaDocumentProvider } from './contentprovider';
 import { enableDiagnostics } from './diagnostics';
-import JobCache from './cache';
+import JobCache from './jobcache';
+import { BuiltInsCompletionItemProvider, EnumValuesCompletionItemProvider } from './completions';
+import BoaSignatureHelpProvider from './signatures';
+import FunctionsHoverProvider from './hoverproviders';
 
 export var outputChannel: vscode.OutputChannel;
 
@@ -59,6 +62,11 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('boalang.job.resubmit', resubmitJob));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.job.stop', stopJob));
 
+    context.subscriptions.push(vscode.languages.registerCompletionItemProvider('boalang', new BuiltInsCompletionItemProvider()));
+    context.subscriptions.push(vscode.languages.registerCompletionItemProvider('boalang', new EnumValuesCompletionItemProvider(), '.'));
+
+    context.subscriptions.push(vscode.languages.registerHoverProvider('boalang', new FunctionsHoverProvider()));
+    context.subscriptions.push(vscode.languages.registerSignatureHelpProvider('boalang', new BoaSignatureHelpProvider(), '(', ','));
 
     activateStudyTemplateSupport(context);
 

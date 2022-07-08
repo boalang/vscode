@@ -18,7 +18,7 @@ import * as vscode from 'vscode';
 import { getDatasets, onDatasetsChange } from '../boa';
 import { adminPrefix, analysesPath, scriptPath } from '../consts';
 import { getWorkspaceRoot } from '../utils';
-import { cache } from './StudyConfigCache';
+import { cache } from './jsoncache';
 
 const CODE_INVALID_DS = 'invalid-dataset';
 const CODE_UNKNOWN_STUDY_DS = 'unknown-study-dataset';
@@ -27,7 +27,7 @@ const CODE_BAD_ANALYSIS = 'bad-analysis-filename';
 
 let diagnosticCollection: vscode.DiagnosticCollection;
 
-export async function enableDiagnostics(context: vscode.ExtensionContext, studyConfigSelector: vscode.DocumentSelector) {
+export default async function enableDiagnostics(context: vscode.ExtensionContext, studyConfigSelector: vscode.DocumentSelector) {
     diagnosticCollection = vscode.languages.createDiagnosticCollection(studyConfigSelector.toString());
     context.subscriptions.push(diagnosticCollection);
 
@@ -43,14 +43,14 @@ export async function enableDiagnostics(context: vscode.ExtensionContext, studyC
     }));
 }
 
-export async function checkStudyConfig() {
+async function checkStudyConfig() {
     const diags = [];
 
     const datasets = await getDatasets(false);
 
     if (datasets !== null && datasets.length > 0) {
         for (const dsName in cache.json['datasets']) {
-            let ds = cache.json['datasets'][dsName];
+            const ds = cache.json['datasets'][dsName];
             if (datasets.indexOf(ds) == -1 && datasets.indexOf(adminPrefix + ds) == -1) {
                 diags.push(makeJsonDiagnostic(ds, dsName, CODE_INVALID_DS, `${ds} is not a valid Boa dataset.`));
             }
@@ -60,14 +60,14 @@ export async function checkStudyConfig() {
     const datasetNames = cache.getDatasets();
 
     for (const outputPath in cache.json['queries']) {
-        let ds = cache.json['queries'][outputPath]['dataset'];
+        const ds = cache.json['queries'][outputPath]['dataset'];
         if (datasetNames.indexOf(ds) == -1) {
             diags.push(makeJsonDiagnostic(ds, outputPath, CODE_UNKNOWN_STUDY_DS, `${ds} is not a valid study dataset. Current study datasets are: ${datasetNames.join(', ')}`));
         }
     }
 
     for (const outputPath in cache.json['queries']) {
-        let q = cache.json['queries'][outputPath]['query'];
+        const q = cache.json['queries'][outputPath]['query'];
         try {
             await vscode.workspace.fs.stat(vscode.Uri.file(getWorkspaceRoot() + '/' + scriptPath + '/' + q));
         } catch {
@@ -103,7 +103,7 @@ function makeJsonDiagnostic(badStr: string, jsonKey: string, code, err) {
     return diag;
 }
 
-export class DatasetActionProvider implements vscode.CodeActionProvider {
+class DatasetActionProvider implements vscode.CodeActionProvider {
 	async provideCodeActions(document: vscode.TextDocument, range: vscode.Range | vscode.Selection, context: vscode.CodeActionContext, token: vscode.CancellationToken): Promise<vscode.CodeAction[]> {
         const datasets = await getDatasets(false);
         if (datasets === null || datasets.length == 0) {
@@ -116,7 +116,7 @@ export class DatasetActionProvider implements vscode.CodeActionProvider {
 	}
 }
 
-export class StudyDatasetActionProvider implements vscode.CodeActionProvider {
+class StudyDatasetActionProvider implements vscode.CodeActionProvider {
 	provideCodeActions(document: vscode.TextDocument, range: vscode.Range | vscode.Selection, context: vscode.CodeActionContext, token: vscode.CancellationToken): vscode.CodeAction[] {
 		const datasetNames = cache.getDatasets();
         return context.diagnostics

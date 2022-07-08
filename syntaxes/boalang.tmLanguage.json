@@ -77,7 +77,7 @@
 				},
 				{
 					"name": "support.class.boalang",
-					"match": "\\b(RepositoryKind|FileKind|ChangeKind|TypeKind|StatementKind|ExpressionKind|Visibility|ModifierKind|Visibility|TraversalKind|TraversalDirection|NodeType|EdgeType|EdgeLabel)(\\.[A-Z_0-9]+)?\\b"
+					"match": "\\b(ForgeKind|RepositoryKind|FileKind|ChangeKind|TypeKind|StatementKind|ExpressionKind|Visibility|ModifierKind|Visibility|TraversalKind|TraversalDirection|NodeType|EdgeType|EdgeLabel)(\\.[A-Z_0-9]+)?\\b"
 				},
 				{
 					"name": "support.type.boalang",

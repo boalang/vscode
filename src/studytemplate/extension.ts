@@ -18,15 +18,14 @@ import * as vscode from 'vscode';
 import * as consts from '../consts';
 import { jobsFile } from '../consts';
 import { functionDefinitions, getFileContents, getWorkspaceRoot, promptUser } from '../utils';
-import BoaCompletionItemProvider from './BoaCompletionItemProvider';
-import SubstitutionHoverProvider from './SubstitutionHoverProvider';
+import { StudyConfigCompletionItemProvider, TemplateCompletionItemProvider } from './completions';
+import { FunctionsHoverProvider, SubstitutionHoverProvider } from './hoverproviders';
 import { JobsJSONLinkProvider, StudyConfigJSONLinkProvider } from './linkproviders';
-import StudyConfigCodelensProvider from './StudyConfigCodelensProvider';
-import StudyConfigCompletionItemProvider from './StudyConfigCompletionItemProvider';
+import StudyConfigCodelensProvider from './codelens';
 import { showUri } from '../boa';
-import { cache } from './StudyConfigCache';
+import { cache } from './jsoncache';
 import { boaDocumentProvider } from '../contentprovider';
-import { enableDiagnostics } from './StudyConfigDiagnostics';
+import { enableDiagnostics } from './diagnostics';
 
 export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     const jobsSelector: vscode.DocumentSelector = {
@@ -60,11 +59,13 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.languages.registerDocumentLinkProvider(studyConfigSelector, new StudyConfigJSONLinkProvider()));
 
     context.subscriptions.push(vscode.languages.registerCompletionItemProvider(studyConfigSelector, new StudyConfigCompletionItemProvider(), '\"'));
-    context.subscriptions.push(vscode.languages.registerCompletionItemProvider('boalang', new BoaCompletionItemProvider(), '@'));
+    context.subscriptions.push(vscode.languages.registerCompletionItemProvider('boalang', new TemplateCompletionItemProvider(), '@'));
 
     context.subscriptions.push(vscode.languages.registerCodeLensProvider(studyConfigSelector, new StudyConfigCodelensProvider()));
 
     context.subscriptions.push(vscode.languages.registerHoverProvider('boalang', new SubstitutionHoverProvider()));
+
+    context.subscriptions.push(vscode.languages.registerHoverProvider('boalang', new FunctionsHoverProvider()));
     context.subscriptions.push(vscode.languages.registerSignatureHelpProvider('boalang', new BoaSignatureHelpProvider(), '(', ','));
 
     enableDiagnostics(context, studyConfigSelector);

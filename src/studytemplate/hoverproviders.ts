@@ -16,11 +16,12 @@
 //
 import * as vscode from 'vscode';
 import { functionDefinitions } from '../utils';
-import { cache } from './StudyConfigCache';
+import { cache } from './jsoncache';
 
-export default class SubstitutionHoverProvider implements vscode.HoverProvider {
+export class FunctionsHoverProvider implements vscode.HoverProvider {
     async provideHover(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.Hover> {
         const funcRange = document.getWordRangeAtPosition(position, /[a-zA-Z0-9]+(?=\s*\()/);
+
         if (funcRange && document.getText(new vscode.Range(position, position.translate(0, 1))) != '(') {
             const funcName = document.getText(funcRange);
             if (funcName in functionDefinitions) {
@@ -33,6 +34,12 @@ export default class SubstitutionHoverProvider implements vscode.HoverProvider {
             }
         }
 
+        return undefined;
+    }
+}
+
+export class SubstitutionHoverProvider implements vscode.HoverProvider {
+    async provideHover(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.Hover> {
         const templateRange = document.getWordRangeAtPosition(position, /{@[^>]+@}/);
         if (!templateRange) {
             return undefined;

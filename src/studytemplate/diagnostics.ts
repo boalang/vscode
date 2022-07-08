@@ -18,7 +18,7 @@ import * as vscode from 'vscode';
 import { getDatasets, onDatasetsChange } from '../boa';
 import { adminPrefix, analysesPath, scriptPath } from '../consts';
 import { getWorkspaceRoot } from '../utils';
-import { cache } from './StudyConfigCache';
+import { cache } from './jsoncache';
 
 const CODE_INVALID_DS = 'invalid-dataset';
 const CODE_UNKNOWN_STUDY_DS = 'unknown-study-dataset';

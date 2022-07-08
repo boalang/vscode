@@ -17,7 +17,7 @@
 import * as vscode from 'vscode';
 import { getJobUri, runBoaCommands } from './boa';
 import * as boaapi from '@boalang/boa-api';
-import JobCache from './cache';
+import JobCache from './jobcache';
 
 class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
     private _onDidChangeTreeData: vscode.EventEmitter<any> = new vscode.EventEmitter<any>();

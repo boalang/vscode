@@ -24,7 +24,7 @@ export default class FunctionsHoverProvider implements vscode.HoverProvider {
         if (funcRange && document.getText(new vscode.Range(position, position.translate(0, 1))) != '(') {
             const funcName = document.getText(funcRange);
             if (funcName in builtinFunctions) {
-                return new vscode.Hover(getFuncDoc(funcName));
+                return new vscode.Hover(new vscode.MarkdownString(`\`\`\`boalang\n${getFuncSignature(funcName)}\n\`\`\`\n\n----\n\n${getFuncDoc(funcName)}`));
             }
         }
 
@@ -43,5 +43,5 @@ export function getFuncDoc(funcName: string) {
     const argHelp = func.args.map(arg => `*@param* \`${arg.name}\` - ${arg.help}`).join('\n\n');
     const ret = func.ret.help.length > 0 ? `\n\n*@return* ${func.ret.help}` : '';
 
-    return new vscode.MarkdownString(`\`\`\`boalang\n${getFuncSignature(funcName)}\n\`\`\`\n\n----\n\n${func.help}\n\n${argHelp}${ret}`);
+    return `${func.help}\n\n${argHelp}${ret}`;
 }

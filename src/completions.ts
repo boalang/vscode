@@ -43,8 +43,8 @@ export default class BuiltInFunctionsCompletionItemProvider implements vscode.Co
         for (const funcName of Object.keys(builtinFunctions)) {
             if (token.isCancellationRequested) return [];
             const item = new vscode.CompletionItem(funcName, vscode.CompletionItemKind.Function);
-            // item.detail = getFuncSignature(funcName);
-            item.documentation = getFuncDoc(funcName);
+            item.detail = getFuncSignature(funcName);
+            item.documentation = new vscode.MarkdownString(getFuncDoc(funcName));
             items.push(item);
         }
 

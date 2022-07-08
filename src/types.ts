@@ -112,6 +112,29 @@ export const builtinTypes: { [name: string]: IType } = {
     },
 };
 
+interface IEnumValue {
+    name: string,
+    doc: string,
+}
+
+interface IEnum {
+    attrs: IEnumValue[],
+    doc: string,
+}
+
+export const builtinEnums: { [name: string]: IEnum } = {
+    ForgeKind: {
+        attrs: [
+            { name: 'APACHE', doc: 'Apache' },
+            { name: 'GITHUB', doc: 'GitHub.com' },
+            { name: 'OTHER', doc: 'Any other kind of forge' },
+            { name: 'QUALITAS', doc: 'Qualitas Corpus' },
+            { name: 'SOURCEFORGE', doc: 'SourceForge.net' },
+        ],
+        doc: 'Describes the kind of forge.',
+    },
+};
+
 interface IFunctionArg {
     name: string,
     doc: string,

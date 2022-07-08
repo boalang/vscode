@@ -16,9 +16,9 @@
 //
 import * as vscode from 'vscode';
 import { getFuncDoc, getFuncSignature } from './hoverproviders';
-import { builtinConsts, builtinFunctions, builtinTypes, builtinVars } from './types';
+import { builtinConsts, builtinEnums, builtinFunctions, builtinTypes, builtinVars } from './types';
 
-export default class BuiltInFunctionsCompletionItemProvider implements vscode.CompletionItemProvider {
+export class BuiltInsCompletionItemProvider implements vscode.CompletionItemProvider {
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.CompletionItem[]> {
         const items = [];
 
@@ -54,6 +54,36 @@ export default class BuiltInFunctionsCompletionItemProvider implements vscode.Co
             item.detail = `(type) ${typeName}`;
             item.documentation = new vscode.MarkdownString(builtinTypes[typeName].doc);
             items.push(item);
+        }
+
+        for (const enumName of Object.keys(builtinEnums)) {
+            if (token.isCancellationRequested) return items;
+            const item = new vscode.CompletionItem(enumName, vscode.CompletionItemKind.Function);
+            item.detail = `(enum) ${enumName}`;
+            item.documentation = new vscode.MarkdownString(builtinEnums[enumName].doc);
+            items.push(item);
+        }
+
+        return items;
+    }
+}
+
+export class EnumValuesCompletionItemProvider implements vscode.CompletionItemProvider {
+    public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.CompletionItem[]> {
+        const items = [];
+
+        const word = document.getText(document.getWordRangeAtPosition(position.translate(0, -1))).trim();
+
+        if (Object.keys(builtinEnums).indexOf(word) != -1) {
+            builtinEnums[word].attrs.forEach(attr => {
+                const item = new vscode.CompletionItem(attr.name, vscode.CompletionItemKind.Function);
+                item.detail = `(enum) ${word}.${attr.name}`;
+                item.documentation = new vscode.MarkdownString(attr.doc);
+                items.push(item);
+            });
+        }
+
+        for (const enumName of Object.keys(builtinEnums)) {
         }
 
         return items;

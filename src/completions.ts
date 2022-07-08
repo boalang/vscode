@@ -83,9 +83,6 @@ export class EnumValuesCompletionItemProvider implements vscode.CompletionItemPr
             });
         }
 
-        for (const enumName of Object.keys(builtinEnums)) {
-        }
-
         return items;
     }
 }

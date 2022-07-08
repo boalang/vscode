@@ -17,7 +17,7 @@
 import * as vscode from 'vscode';
 import * as consts from '../consts';
 import { jobsFile } from '../consts';
-import { getFileContents, getWorkspaceRoot, promptUser } from '../utils';
+import { functionDefinitions, getFileContents, getWorkspaceRoot, promptUser } from '../utils';
 import BoaCompletionItemProvider from './BoaCompletionItemProvider';
 import SubstitutionHoverProvider from './SubstitutionHoverProvider';
 import { JobsJSONLinkProvider, StudyConfigJSONLinkProvider } from './linkproviders';
@@ -65,6 +65,7 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.languages.registerCodeLensProvider(studyConfigSelector, new StudyConfigCodelensProvider()));
 
     context.subscriptions.push(vscode.languages.registerHoverProvider('boalang', new SubstitutionHoverProvider()));
+    context.subscriptions.push(vscode.languages.registerSignatureHelpProvider('boalang', new BoaSignatureHelpProvider(), '(', ','));
 
     enableDiagnostics(context, studyConfigSelector);
 
@@ -161,4 +162,80 @@ export async function getQuery(uri: vscode.Uri, authority) {
 
     const subs = await cache.resolveSubstitutions(decodeURIComponent(authority));
     return await cache.performSubstitutions(query, subs);
+}
+
+class BoaSignatureHelpProvider implements vscode.SignatureHelpProvider {
+    public provideSignatureHelp(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.SignatureHelp> {
+        const { funcName, paramNum } = findFunction(document, position);
+        if (funcName === null || paramNum === null)
+            return undefined;
+        if (!(funcName in functionDefinitions))
+            return undefined;
+
+        const func = functionDefinitions[funcName];
+
+        const help = new vscode.SignatureHelp();
+        const args = func.args.map(arg => arg.name).join(', ');
+        const sig = new vscode.SignatureInformation(`${funcName}(${args})${func.ret.type}`, new vscode.MarkdownString(func.help));
+        sig.parameters = func.args.map(arg => new vscode.ParameterInformation(arg.name, new vscode.MarkdownString(`**${arg.name}** - ${arg.help}`)));
+        help.signatures = [sig];
+        help.activeSignature = 0;
+        help.activeParameter = paramNum;
+        return Promise.resolve(help);
+    }
+}
+
+function findFunction(document, position) {
+    const text = document.getText(new vscode.Range(new vscode.Position(0, 0), position));
+    const offset = document.offsetAt(position);
+
+    let openParenPos = 0;
+    let paramNum = 0;
+    for (let i = offset; i >= 0; i--) {
+        switch (text.charAt(i)) {
+            case ')':
+                openParenPos++;
+                break;
+            case '(':
+                openParenPos--;
+                break;
+            case '{':
+                if (openParenPos == 0)
+                    return { funcName: null, paramNum: null };
+                break;
+            case ',':
+                if (openParenPos == 0)
+                    paramNum++;
+                break;
+        }
+        if (openParenPos == -1) {
+            openParenPos = i;
+            break;
+        }
+    }
+
+    let closeParenPos = 0;
+    for (let i = offset; i < text.length; i++) {
+        switch (text.charAt(i)) {
+            case '(':
+                closeParenPos++;
+                break;
+            case ')':
+                closeParenPos--;
+                break;
+            case ';':
+            case '}':
+                if (closeParenPos == 0)
+                    return { funcName: null, paramNum: null };
+                break;
+        }
+        if (closeParenPos == -1) {
+            closeParenPos = i;
+            break;
+        }
+    }
+
+    const funcName = document.getText(document.getWordRangeAtPosition(document.positionAt(openParenPos - 1)));
+
+    return { funcName, paramNum };
 }

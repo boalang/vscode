@@ -15,10 +15,24 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
+import { functionDefinitions } from '../utils';
 import { cache } from './StudyConfigCache';
 
 export default class SubstitutionHoverProvider implements vscode.HoverProvider {
     async provideHover(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.Hover> {
+        const funcRange = document.getWordRangeAtPosition(position, /[a-zA-Z0-9]+(?=\s*\()/);
+        if (funcRange && document.getText(new vscode.Range(position, position.translate(0, 1))) != '(') {
+            const funcName = document.getText(funcRange);
+            if (funcName in functionDefinitions) {
+                const func = functionDefinitions[funcName];
+                const args = func.args.map(arg => arg.name).join(', ');
+                const argHelp = func.args.map(arg => `*@param* \`${arg.name}\` - ${arg.help}`).join('\n\n');
+                const ret = func.ret.help.length > 0 ? `\n\n*@return* ${func.ret.help}` : '';
+
+                return new vscode.Hover(new vscode.MarkdownString(`\`\`\`boalang\n(method) ${funcName}(${args})${func.ret.type}\n\`\`\`\n\n----\n\n${func.help}\n\n${argHelp}${ret}`));
+            }
+        }
+
         const templateRange = document.getWordRangeAtPosition(position, /{@[^>]+@}/);
         if (!templateRange) {
             return undefined;

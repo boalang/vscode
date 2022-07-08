@@ -19,11 +19,11 @@ import { cache } from './StudyConfigCache';
 
 export default class SubstitutionHoverProvider implements vscode.HoverProvider {
     async provideHover(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.Hover> {
-        const range = document.getWordRangeAtPosition(position, /{@[^>]+@}/);
-        if (!range) {
+        const templateRange = document.getWordRangeAtPosition(position, /{@[^>]+@}/);
+        if (!templateRange) {
             return undefined;
         }
-        const word = document.getText(range);
+        const word = document.getText(templateRange);
 
         const hovers = [];
 

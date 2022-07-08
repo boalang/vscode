@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
-import { functionDefinitions } from './utils';
+import { builtinFunctions } from './types';
 
 export default class FunctionsHoverProvider implements vscode.HoverProvider {
     async provideHover(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.Hover> {
@@ -23,8 +23,8 @@ export default class FunctionsHoverProvider implements vscode.HoverProvider {
 
         if (funcRange && document.getText(new vscode.Range(position, position.translate(0, 1))) != '(') {
             const funcName = document.getText(funcRange);
-            if (funcName in functionDefinitions) {
-                const func = functionDefinitions[funcName];
+            if (funcName in builtinFunctions) {
+                const func = builtinFunctions[funcName];
                 const args = func.args.map(arg => arg.name).join(', ');
                 const argHelp = func.args.map(arg => `*@param* \`${arg.name}\` - ${arg.help}`).join('\n\n');
                 const ret = func.ret.help.length > 0 ? `\n\n*@return* ${func.ret.help}` : '';

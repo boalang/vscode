@@ -15,13 +15,22 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
-import { functionDefinitions } from './utils';
+import { builtinConsts, builtinFunctions } from './types';
 
 export default class BuiltInFunctionsCompletionItemProvider implements vscode.CompletionItemProvider {
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.CompletionItem[]> {
         const items = [];
+        true
 
-        for (const func of Object.keys(functionDefinitions)) {
+        for (const c of Object.keys(builtinConsts)) {
+            const item = new vscode.CompletionItem(c, vscode.CompletionItemKind.Value);
+            item.detail = c;
+            if (builtinConsts[c].length > 0)
+                item.documentation = new vscode.MarkdownString(builtinConsts[c]);
+            items.push(item);
+        }
+
+        for (const func of Object.keys(builtinFunctions)) {
             const item = new vscode.CompletionItem(func, vscode.CompletionItemKind.Function);
             item.detail = 'method';
             item.documentation = 'test';

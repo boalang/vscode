@@ -15,17 +15,17 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
-import { functionDefinitions } from './utils';
+import { builtinFunctions } from './types';
 
 export default class BoaSignatureHelpProvider implements vscode.SignatureHelpProvider {
     public provideSignatureHelp(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.SignatureHelp> {
         const { funcName, paramNum } = findFunction(document, position);
         if (funcName === null || paramNum === null)
             return undefined;
-        if (!(funcName in functionDefinitions))
+        if (!(funcName in builtinFunctions))
             return undefined;
 
-        const func = functionDefinitions[funcName];
+        const func = builtinFunctions[funcName];
 
         const help = new vscode.SignatureHelp();
         const args = func.args.map(arg => arg.name).join(', ');

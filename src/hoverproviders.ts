@@ -40,8 +40,8 @@ export function getFuncSignature(funcName: string) {
 
 export function getFuncDoc(funcName: string) {
     const func = builtinFunctions[funcName];
-    const argHelp = func.args.map(arg => `*@param* \`${arg.name}\` - ${arg.help}`).join('\n\n');
-    const ret = func.ret.help.length > 0 ? `\n\n*@return* ${func.ret.help}` : '';
+    const argDocs = func.args.map(arg => `*@param* \`${arg.name}\` - ${arg.doc}`).join('\n\n');
+    const ret = func.ret.doc.length > 0 ? `\n\n*@return* ${func.ret.doc}` : '';
 
-    return `${func.help}\n\n${argHelp}${ret}`;
+    return `${func.doc}\n\n${argDocs}${ret}`;
 }

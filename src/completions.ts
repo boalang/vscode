@@ -35,8 +35,8 @@ export default class BuiltInFunctionsCompletionItemProvider implements vscode.Co
             if (token.isCancellationRequested) return items;
             const item = new vscode.CompletionItem(v, vscode.CompletionItemKind.Variable);
             item.detail = `(var) ${v}: ${builtinVars[v].type}`;
-            if (builtinVars[v].help.length > 0)
-                item.documentation = new vscode.MarkdownString(builtinVars[v].help);
+            if (builtinVars[v].doc.length > 0)
+                item.documentation = new vscode.MarkdownString(builtinVars[v].doc);
             items.push(item);
         }
 
@@ -52,7 +52,7 @@ export default class BuiltInFunctionsCompletionItemProvider implements vscode.Co
             if (token.isCancellationRequested) return items;
             const item = new vscode.CompletionItem(typeName, vscode.CompletionItemKind.Function);
             item.detail = `(type) ${typeName}`;
-            item.documentation = new vscode.MarkdownString(builtinTypes[typeName].help);
+            item.documentation = new vscode.MarkdownString(builtinTypes[typeName].doc);
             items.push(item);
         }
 

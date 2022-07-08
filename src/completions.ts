@@ -79,6 +79,7 @@ export class EnumValuesCompletionItemProvider implements vscode.CompletionItemPr
                 const item = new vscode.CompletionItem(attr.name, vscode.CompletionItemKind.Function);
                 item.detail = `(enum) ${word}.${attr.name}`;
                 item.documentation = new vscode.MarkdownString(attr.doc);
+                item.sortText = '-' + item.label;
                 items.push(item);
             });
         }

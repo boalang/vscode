@@ -22,7 +22,10 @@ export default class BuiltInFunctionsCompletionItemProvider implements vscode.Co
         const items = [];
 
         for (const func of Object.keys(functionDefinitions)) {
-            items.push(new vscode.CompletionItem(func, vscode.CompletionItemKind.Function));
+            const item = new vscode.CompletionItem(func, vscode.CompletionItemKind.Function);
+            item.detail = 'method';
+            item.documentation = 'test';
+            items.push(item);
         }
 
         return items;

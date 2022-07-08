@@ -23,6 +23,8 @@ import { boaDocumentProvider } from './contentprovider';
 import { enableDiagnostics } from './diagnostics';
 import JobCache from './jobcache';
 import BuiltInFunctionsCompletionItemProvider from './completions';
+import BoaSignatureHelpProvider from './signatures';
+import FunctionsHoverProvider from './hoverproviders';
 
 export var outputChannel: vscode.OutputChannel;
 
@@ -61,6 +63,9 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('boalang.job.stop', stopJob));
 
     context.subscriptions.push(vscode.languages.registerCompletionItemProvider('boalang', new BuiltInFunctionsCompletionItemProvider()));
+
+    context.subscriptions.push(vscode.languages.registerHoverProvider('boalang', new FunctionsHoverProvider()));
+    context.subscriptions.push(vscode.languages.registerSignatureHelpProvider('boalang', new BoaSignatureHelpProvider(), '(', ','));
 
     activateStudyTemplateSupport(context);
 

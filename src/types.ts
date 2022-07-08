@@ -779,4 +779,118 @@ export const builtinFunctions = {
         ret: { type: ': bool', help: '' },
         help: 'Returns a boolean value according to whether `v` has a defined value.',
     },
+    dot: {
+        args: [
+            { name: 'g: graph', help: '' },
+        ],
+        ret: { type: ': string', help: '' },
+        help: 'Returns a string representation of the graph `g`, in Graphviz DOT format.',
+    },
+    getvalue: {
+        args: [
+            { name: 'n: graph_node', help: '' },
+            { name: 't: traversal?', help: '' },
+        ],
+        ret: { type: ': T', help: '' },
+        help: 'Returns the value associated with the graph node `n` for the current traversal, or the optional traversal `t`. The type of the value returned depends on the return type of the traversal.',
+    },
+    getcfg: {
+        args: [
+            { name: 'm: Method', help: '' },
+        ],
+        ret: { type: ': CFG', help: '' },
+        help: 'Returns a control-flow graph (`CFG`) for the given Method `m`.',
+    },
+    getcdg: {
+        args: [
+            { name: 'm: Method', help: '' },
+        ],
+        ret: { type: ': CDG', help: '' },
+        help: 'Returns a control-dependence graph (`CDG`) for the given Method `m`.',
+    },
+    getddg: {
+        args: [
+            { name: 'm: Method', help: '' },
+        ],
+        ret: { type: ': DDG', help: '' },
+        help: 'Returns a data-dependence graph (`DDG`) for the given Method `m`.',
+    },
+    getpdg: {
+        args: [
+            { name: 'm: Method', help: '' },
+        ],
+        ret: { type: ': PDG', help: '' },
+        help: 'Returns a program-dependence graph (`PDG`) for the given Method `m`.',
+    },
+    getinedge: {
+        args: [
+            { name: 'node1: graph_node', help: '' },
+            { name: 'node2: graph_node', help: '' },
+        ],
+        ret: { type: ': graph_edge', help: '' },
+        help: 'Returns a graph edge (`CFGEdge`, `CDGEdge`, `DDGEdge`, or `PDGEdge`) from `node2` to `node1`, if such edge exists. If no such edge exists it returns a `NIL` edge. The two nodes `node1` and `node2` must be the same type of node.',
+    },
+    getoutedge: {
+        args: [
+            { name: 'node1: graph_node', help: '' },
+            { name: 'node2: graph_node', help: '' },
+        ],
+        ret: { type: ': graph_edge', help: '' },
+        help: 'Returns a graph edge (`CFGEdge`, `CDGEdge`, `DDGEdge`, or `PDGEdge`) from `node1` to `node2`, if such edge exists. If no such edge exists it returns a `NIL` edge. The two nodes `node1` and `node2` must be the same type of node.',
+    },
+    getast: {
+        args: [
+            { name: 'file: ChangedFile', help: '' },
+        ],
+        ret: { type: ': ASTRoot', help: '' },
+        help: 'Returns the `ASTRoot` of the specified `file`, if it exists. Otherwise returns an empty `ASTRoot`.',
+    },
+    getsnapshot: {
+        args: [
+            { name: 'cr: CodeRepository', help: '' },
+            { name: 't: time?', help: '' },
+            { name: 'filters: string...', help: '' },
+        ],
+        ret: { type: ': array of ChangedFile', help: '' },
+        help: 'Returns a snapshot of `ChangedFile`s.  A snapshot is the last version of a file before a given time `t` (if no time is given, `now()` is used).  If any `filters` are given, they are used to filter out files.  The file kind is checked against each string and must match one or more filters.  Matches are performed by comparing the filter against the start of the file kind.\n\n```boalang\ngetsnapshot := function(cr: CodeRepository, t: time, filters: array of string) : array of ChangedFile {\n\tsnapshot: map[string] of ChangedFile;\n\n\tvisit(cr, visitor {\n\t\tbefore node: Revision ->\n\t\t\tif (node.commit_date > t)\n\t\t\t\tstop;\n\t\tbefore node: ChangedFile -> {\n\t\t\tif (node.change == ChangeKind.DELETED) {\n\t\t\t\tremove(snapshot, node.name);\n\t\t\t} else {\n\t\t\t\tfilter := len(filters) > 0;\n\n\t\t\t\texists (i: int; iskind(filters[i], node.kind))\n\t\t\t\t\tfilter = false;\n\n\t\t\t\tif (!filter)\n\t\t\t\t\tsnapshot[node.name] = node;\n\t\t\t}\n\t\t\tstop;\n\t\t}\n\t});\n\n\treturn values(snapshot);\n};\n```',
+    },
+    hasfiletype: {
+        args: [
+            { name: 'data: dsl_type', help: '' },
+            { name: 'extension: string', help: '' },
+        ],
+        ret: { type: ': bool', help: '' },
+        help: 'Does the `data` contain a file of the specified type? This compares based on the given file `extension`. Valid `dsl_type`s are: `Project`, `CodeRepository`, and `Revision`.\n\n```boalang\nhasfiletype := function(rev: Revision, ext: string) : bool {\n\texists (i: int; match(format(`\\.%s$`, ext), lowercase(rev.files[i].name)))\n\t\treturn true;\n\treturn false;\n};\n```',
+    },
+    isfixingrevision: {
+        args: [
+            { name: 'log: string|Revision', help: '' },
+        ],
+        ret: { type: ': bool', help: '' },
+        help: 'Is the given `log` message indicating it is a fixing revision? A message is considered indicating a bug fix if it matches a set of regular expressions.\n\n```boalang\nisfixingrevision := function(log: string) : bool {\n\tif (match(`\bfix(s|es|ing|ed)?\b`, log)) return true;\n\tif (match(`\b(error|bug|issue)(s)\b`, log)) return true;\n\treturn false;\n};\n```\n\n```boalang\nisfixingrevision := function(rev: Revision) : bool {\n\treturn isfixingrevision(rev.log);\n};\n```',
+    },
+    // TODO fix this
+    // isfixingrevision: {
+    //     args: [
+    //         { name: 'rev: Revision', help: '' },
+    //     ],
+    //     ret: { type: ': bool', help: '' },
+    //     help: 'Is the given revision `rev`\'s log message indicating it is a fixing revision? A message is considered indicating a bug fix if it matches a set of regular expressions.',
+    // },
+    iskind: {
+        args: [
+            { name: 's: string', help: '' },
+            { name: 'k: dsl_type', help: '' },
+        ],
+        ret: { type: ': bool', help: '' },
+        help: 'Returns `true` if the kind `k` starts with the string `s`. Valid `dsl_type`s are: `FileKind`.\n\n```boalang\niskind := function(s: string, k: FileKind) : bool {\n\treturn match(format(`^%s`, s), string(k));\n};\n```',
+    },
+    isliteral: {
+        args: [
+            { name: 'e: Expression', help: '' },
+            { name: 's: string', help: '' },
+        ],
+        ret: { type: ': bool', help: '' },
+        help: 'Returns `true` if the expression `e` is of kind LITERAL and the literal matches the string `s`.\n\n```boalang\nisliteral := function(e: Expression, s: string) : bool {\n\treturn e.kind == ExpressionKind.LITERAL && def(e.literal) && e.literal == s;\n};\n```',
+    },
 };

@@ -21,8 +21,8 @@ export function getWorkspaceRoot() {
 }
 
 export function removeDuplicates(src: string[]) : string[] {
-    let seen: {[key: string]: boolean} = {};
-    let result: string[] = [];
+    const seen: {[key: string]: boolean} = {};
+    const result: string[] = [];
     src.forEach(item => {
         if (!seen[item]) {
             seen[item] = true;

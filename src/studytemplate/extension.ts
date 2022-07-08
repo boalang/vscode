@@ -83,21 +83,21 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
 }
 
 async function runMakeCommand(target, shouldRefresh = true) {
-    let taskArgs: vscode.ShellQuotedString[] = [];
+    const taskArgs: vscode.ShellQuotedString[] = [];
     if (target) {
         taskArgs.push({
             value: target,
             quoting: vscode.ShellQuoting.Escape
         });
     }
-    let myTaskOptions: vscode.ShellExecutionOptions = {
+    const myTaskOptions: vscode.ShellExecutionOptions = {
         env: process.env,
         cwd: getWorkspaceRoot()
     };
 
-    let shellExec = new vscode.ShellExecution('make', taskArgs, myTaskOptions);
+    const shellExec = new vscode.ShellExecution('make', taskArgs, myTaskOptions);
 
-    let makeTask = new vscode.Task({
+    const makeTask = new vscode.Task({
         type: 'boa',
         icon: { id: 'bold', color: 'terminal.ansiRed'},
     }, vscode.TaskScope.Workspace, 'Boa study template', 'makefile', shellExec);
@@ -108,7 +108,7 @@ async function runMakeCommand(target, shouldRefresh = true) {
     }
 }
 
-let previewMap: { [key: string]: [string] } = {};
+const previewMap: { [key: string]: [string] } = {};
 export async function showPreview(uri) {
     let targetUri = null;
     const uriStr = uri.toString();

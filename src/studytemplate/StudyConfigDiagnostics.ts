@@ -50,7 +50,7 @@ export async function checkStudyConfig() {
 
     if (datasets !== null && datasets.length > 0) {
         for (const dsName in cache.json['datasets']) {
-            let ds = cache.json['datasets'][dsName];
+            const ds = cache.json['datasets'][dsName];
             if (datasets.indexOf(ds) == -1 && datasets.indexOf(adminPrefix + ds) == -1) {
                 diags.push(makeJsonDiagnostic(ds, dsName, CODE_INVALID_DS, `${ds} is not a valid Boa dataset.`));
             }
@@ -60,14 +60,14 @@ export async function checkStudyConfig() {
     const datasetNames = cache.getDatasets();
 
     for (const outputPath in cache.json['queries']) {
-        let ds = cache.json['queries'][outputPath]['dataset'];
+        const ds = cache.json['queries'][outputPath]['dataset'];
         if (datasetNames.indexOf(ds) == -1) {
             diags.push(makeJsonDiagnostic(ds, outputPath, CODE_UNKNOWN_STUDY_DS, `${ds} is not a valid study dataset. Current study datasets are: ${datasetNames.join(', ')}`));
         }
     }
 
     for (const outputPath in cache.json['queries']) {
-        let q = cache.json['queries'][outputPath]['query'];
+        const q = cache.json['queries'][outputPath]['query'];
         try {
             await vscode.workspace.fs.stat(vscode.Uri.file(getWorkspaceRoot() + '/' + scriptPath + '/' + q));
         } catch {

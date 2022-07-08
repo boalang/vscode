@@ -34,7 +34,23 @@ export const builtinVars = {
     input: { type: 'Project', help: 'Set to each successive input `Project`. Boa programs process a single `Project` at a time, and then emit data to output variables for further aggregation.' }
 };
 
-export const builtinFunctions = {
+interface IFunctionArg {
+    name: string,
+    help: string,
+}
+
+interface IReturnType {
+    type: string,
+    help: string,
+}
+
+interface IFunction {
+    args: IFunctionArg[],
+    ret: IReturnType,
+    help: string,
+}
+
+export const builtinFunctions: { [name: string]: IFunction } = {
     current: {
         args: [
             { name: 'T', help: 'the domain-specific type to match' },
@@ -243,6 +259,7 @@ export const builtinFunctions = {
             { name: 'q: queue of val_type', help: '' },
             { name: 'val: val_type', help: '' },
         ],
+        ret: { type: '', help: '' },
         help: 'Offers the value `val` to the queue `q`.',
     },
     poll: {
@@ -256,6 +273,7 @@ export const builtinFunctions = {
         args: [
             { name: 'c: map[key_type] of val_type|set of val_type|stack of val_type|queue of val_type', help: '' },
         ],
+        ret: { type: '', help: '' },
         help: 'Clears all values from `c`.',
     },
     peek: {
@@ -302,6 +320,7 @@ export const builtinFunctions = {
             { name: 's: set of val_type', help: '' },
             { name: 'v: val_type', help: '' },
         ],
+        ret: { type: '', help: '' },
         help: 'Adds the value `v` to the set.',
     },
     contains: {
@@ -324,6 +343,7 @@ export const builtinFunctions = {
         args: [
             { name: 'c: set of val_type|map[key_type] of val_type', help: '' },
         ],
+        ret: { type: '', help: '' },
         help: 'Creates a clone of the collection `c`.',
     },
     haskey: {
@@ -373,6 +393,7 @@ export const builtinFunctions = {
         help: 'Return the element of the map `m` indexed by the `key` or, if there is no such element, the specified default `value`. Assuming the map, key, and value are defined, equivalent to: `def(m[key]) ? m[key] : value`',
     },
     rand: {
+        args: [],
         ret: { type: ': float', help: '' },
         help: 'Return a random floating point number `x` in the range 0.0 &lt; `x` &lt; 1.0.',
     },
@@ -598,6 +619,7 @@ export const builtinFunctions = {
         help: 'Return the maximum of `v1` and `v2`. The type must be one of `int`, `time`, `string`, or `float`.',
     },
     now: {
+        args: [],
         ret: { type: ': time', help: '' },
         help: 'Return the current time at the moment of execution. Note that the time value returned does not depend on a timezone.',
     },

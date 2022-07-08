@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
+import { getFuncDoc, getFuncSignature } from './hoverproviders';
 import { builtinConsts, builtinFunctions, builtinVars } from './types';
 
 export default class BuiltInFunctionsCompletionItemProvider implements vscode.CompletionItemProvider {
@@ -39,11 +40,11 @@ export default class BuiltInFunctionsCompletionItemProvider implements vscode.Co
             items.push(item);
         }
 
-        for (const func of Object.keys(builtinFunctions)) {
+        for (const funcName of Object.keys(builtinFunctions)) {
             if (token.isCancellationRequested) return [];
-            const item = new vscode.CompletionItem(func, vscode.CompletionItemKind.Function);
-            item.detail = 'method';
-            item.documentation = 'test';
+            const item = new vscode.CompletionItem(funcName, vscode.CompletionItemKind.Function);
+            // item.detail = getFuncSignature(funcName);
+            item.documentation = getFuncDoc(funcName);
             items.push(item);
         }
 

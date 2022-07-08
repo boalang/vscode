@@ -30,6 +30,10 @@ export const builtinConsts = {
     HR: 'Synonym for `HOUR`',
 };
 
+export const builtinVars = {
+    input: { type: 'Project', help: 'Set to each successive input `Project`. Boa programs process a single `Project` at a time, and then emit data to output variables for further aggregation.' }
+};
+
 export const builtinFunctions = {
     current: {
         args: [

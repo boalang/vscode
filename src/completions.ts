@@ -22,6 +22,11 @@ export class BuiltInsCompletionItemProvider implements vscode.CompletionItemProv
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.CompletionItem[]> {
         const items = [];
 
+        // if autocompleting an enum, dont suggest other built-ins
+        const word = document.getText(document.getWordRangeAtPosition(position.translate(0, -1))).trim();
+        if (Object.keys(builtinEnums).indexOf(word) != -1)
+            return items;
+
         for (const c of Object.keys(builtinConsts)) {
             if (token.isCancellationRequested) return items;
             const item = new vscode.CompletionItem(c, vscode.CompletionItemKind.Value);
@@ -79,7 +84,6 @@ export class EnumValuesCompletionItemProvider implements vscode.CompletionItemPr
                 const item = new vscode.CompletionItem(attr.name, vscode.CompletionItemKind.Function);
                 item.detail = `(enum) ${word}.${attr.name}`;
                 item.documentation = new vscode.MarkdownString(attr.doc);
-                item.sortText = '-' + item.label;
                 items.push(item);
             });
         }

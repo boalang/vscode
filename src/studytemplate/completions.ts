@@ -19,11 +19,17 @@ import { removeDuplicates } from '../utils';
 import { cache } from './jsoncache';
 import { getDatasets } from '../boa';
 import * as consts from '../consts';
+import { builtinEnums } from '../types';
 
 export class TemplateCompletionItemProvider implements vscode.CompletionItemProvider {
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.CompletionItem[]> {
         const items = [];
 
+        // if autocompleting an enum, dont suggest other built-ins
+        const word = document.getText(document.getWordRangeAtPosition(position.translate(0, -1))).trim();
+        if (Object.keys(builtinEnums).indexOf(word) != -1)
+            return items;
+        
         const substitutions = cache.getSubstitutions();
         let keys = Object.keys(substitutions.substitutions);
         const hovers = new Map<string,string[]>();

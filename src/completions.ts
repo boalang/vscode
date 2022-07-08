@@ -16,7 +16,7 @@
 //
 import * as vscode from 'vscode';
 import { getFuncDoc, getFuncSignature } from './hoverproviders';
-import { builtinConsts, builtinFunctions, builtinVars } from './types';
+import { builtinConsts, builtinFunctions, builtinTypes, builtinVars } from './types';
 
 export default class BuiltInFunctionsCompletionItemProvider implements vscode.CompletionItemProvider {
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.CompletionItem[]> {
@@ -45,6 +45,14 @@ export default class BuiltInFunctionsCompletionItemProvider implements vscode.Co
             const item = new vscode.CompletionItem(funcName, vscode.CompletionItemKind.Function);
             item.detail = getFuncSignature(funcName);
             item.documentation = new vscode.MarkdownString(getFuncDoc(funcName));
+            items.push(item);
+        }
+
+        for (const typeName of Object.keys(builtinTypes)) {
+            if (token.isCancellationRequested) return [];
+            const item = new vscode.CompletionItem(typeName, vscode.CompletionItemKind.Function);
+            item.detail = `(type) ${typeName}`;
+            item.documentation = new vscode.MarkdownString(builtinTypes[typeName].help);
             items.push(item);
         }
 

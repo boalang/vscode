@@ -30,8 +30,36 @@ export const builtinConsts = {
     HR: 'Synonym for `HOUR`',
 };
 
-export const builtinVars = {
-    input: { type: 'Project', help: 'Set to each successive input `Project`. Boa programs process a single `Project` at a time, and then emit data to output variables for further aggregation.' }
+interface IVariable {
+    type: string,
+    help: string,
+}
+
+export const builtinVars: { [name: string]: IVariable } = {
+    input: {
+        type: 'Project',
+        help: 'Set to each successive input `Project`. Boa programs process a single `Project` at a time, and then emit data to output variables for further aggregation.'
+    },
+};
+
+interface ITypeAttr {
+    name: string,
+    var: IVariable,
+}
+
+interface IType {
+    attrs: ITypeAttr[],
+    help: string,
+}
+
+export const builtinTypes: { [name: string]: IType } = {
+    Project: {
+        attrs: [
+            { name: 'code_repositories', var: { type: 'array of CodeRepository', help: 'A list of all code repositories associated with this project.', } },
+            { name: 'project_url', var: { type: 'string', help: 'A URL to the project\'s page on the forge.', } },
+        ],
+        help: 'Top-level type, represents a single project on a forge.',
+    },
 };
 
 interface IFunctionArg {

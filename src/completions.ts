@@ -22,6 +22,7 @@ export default class BuiltInFunctionsCompletionItemProvider implements vscode.Co
         const items = [];
 
         for (const c of Object.keys(builtinConsts)) {
+            if (token.isCancellationRequested) return [];
             const item = new vscode.CompletionItem(c, vscode.CompletionItemKind.Value);
             item.detail = c;
             if (builtinConsts[c].length > 0)
@@ -30,6 +31,7 @@ export default class BuiltInFunctionsCompletionItemProvider implements vscode.Co
         }
 
         for (const v of Object.keys(builtinVars)) {
+            if (token.isCancellationRequested) return [];
             const item = new vscode.CompletionItem(v, vscode.CompletionItemKind.Variable);
             item.detail = `(var) ${v}: ${builtinVars[v].type}`;
             if (builtinVars[v].help.length > 0)
@@ -38,6 +40,7 @@ export default class BuiltInFunctionsCompletionItemProvider implements vscode.Co
         }
 
         for (const func of Object.keys(builtinFunctions)) {
+            if (token.isCancellationRequested) return [];
             const item = new vscode.CompletionItem(func, vscode.CompletionItemKind.Function);
             item.detail = 'method';
             item.documentation = 'test';

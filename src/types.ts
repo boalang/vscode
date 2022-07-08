@@ -133,6 +133,39 @@ export const builtinEnums: { [name: string]: IEnum } = {
         ],
         doc: 'Describes the kind of forge.',
     },
+    RepositoryKind: {
+        attrs: [
+            { name: 'BZR', doc: 'For Bazaar code repositories.' },
+            { name: 'CVS', doc: 'For CVS code repositories.' },
+            { name: 'GIT', doc: 'For Git code repositories.' },
+            { name: 'HG', doc: 'For Mercurial code repositories.' },
+            { name: 'OTHER', doc: 'Any other code repository.' },
+            { name: 'SVN', doc: 'For Subversion code repositories.' },
+        ],
+        doc: 'Describes the kind of code repository.',
+    },
+    ChangeKind: {
+        attrs: [
+            { name: 'ADDED', doc: 'The file did not already exist and was added.' },
+            { name: 'DELETED', doc: 'The file was deleted.' },
+            { name: 'MODIFIED', doc: 'The file already existed and was modified.' },
+        ],
+        doc: 'Describes the kind of change for the file.',
+    },
+    FileKind: {
+        attrs: [
+            { name: 'BINARY', doc: 'The file represents a binary file.' },
+            { name: 'OTHER', doc: 'The file\'s type was unknown.' },
+            { name: 'SOURCE_JAVA_ERROR', doc: 'The file represents a Java source file that had a parse error.' },
+            { name: 'SOURCE_JAVA_JLS2', doc: 'The file represents a Java source file that parsed without error as JLS2.' },
+            { name: 'SOURCE_JAVA_JLS3', doc: 'The file represents a Java source file that parsed without error as JLS3.' },
+            { name: 'SOURCE_JAVA_JLS4', doc: 'The file represents a Java source file that parsed without error as JLS4.' },
+            { name: 'SOURCE_JAVA_JLS8', doc: 'The file represents a Java source file that parsed without error as JLS8.' },
+            { name: 'TEXT', doc: 'The file represents a text file.' },
+            { name: 'XML', doc: 'The file represents an XML file.' },
+        ],
+        doc: 'Describes the kind of the file.',
+    },
 };
 
 interface IFunctionArg {

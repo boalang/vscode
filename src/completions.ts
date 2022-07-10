@@ -91,3 +91,23 @@ export class EnumValuesCompletionItemProvider implements vscode.CompletionItemPr
         return items;
     }
 }
+
+export class DSLTypesCompletionItemProvider implements vscode.CompletionItemProvider {
+    public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.CompletionItem[]> {
+        const items = [];
+
+        const word = document.getText(document.getWordRangeAtPosition(position, /:/)).trim();
+        if (word != ':')
+            return items;
+
+        Object.keys(builtinTypes).forEach(t => {
+            const item = new vscode.CompletionItem(t, vscode.CompletionItemKind.Function);
+            item.detail = `(type) ${t}`;
+            item.insertText = ' ' + item.label + ' -> ';
+            item.documentation = new vscode.MarkdownString(builtinTypes[t].doc);
+            items.push(item);
+        });
+
+        return items;
+    }
+}

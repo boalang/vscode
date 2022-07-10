@@ -80,10 +80,10 @@ export class EnumValuesCompletionItemProvider implements vscode.CompletionItemPr
         const word = document.getText(document.getWordRangeAtPosition(position.translate(0, -1))).trim();
 
         if (Object.keys(builtinEnums).indexOf(word) != -1) {
-            builtinEnums[word].attrs.forEach(attr => {
-                const item = new vscode.CompletionItem(attr.name, vscode.CompletionItemKind.Function);
-                item.detail = `(enum) ${word}.${attr.name}`;
-                item.documentation = new vscode.MarkdownString(attr.doc);
+            Object.keys(builtinEnums[word].attrs).forEach(attr => {
+                const item = new vscode.CompletionItem(attr, vscode.CompletionItemKind.Function);
+                item.detail = `(enum) ${word}.${attr}`;
+                item.documentation = new vscode.MarkdownString(builtinEnums[word].attrs[attr]);
                 items.push(item);
             });
         }

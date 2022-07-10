@@ -110,6 +110,103 @@ export const builtinTypes: { [name: string]: IType } = {
         ],
         doc: 'A unique person\'s information.',
     },
+	ASTRoot: {
+		attrs: [
+			{ name: 'imports', var: { type: 'array of string', doc: 'The imported namespaces and types', } },
+			{ name: 'namespaces', var: { type: 'array of Namespace', doc: 'The top-level namespaces in the file', } },
+		],
+		doc: 'Container class that holds a file\'s parsed AST',
+	},
+	Namespace: {
+		attrs: [
+			{ name: 'declarations', var: { type: 'array of Declaration', doc: 'Declarations contained in this namespace', } },
+			{ name: 'modifiers', var: { type: 'array of Modifier', doc: 'Any modifiers/annotations on the namespace', } },
+			{ name: 'name', var: { type: 'string', doc: 'The name of the namespace', } },
+		],
+		doc: 'A namespace (aka, package) in a source file',
+	},
+	Declaration: {
+		attrs: [
+			{ name: 'fields', var: { type: 'array of Variable', doc: 'The fields in the declaration', } },
+			{ name: 'generic_parameters', var: { type: 'array of Type', doc: 'Any generic parameters to this declaration', } },
+			{ name: 'kind', var: { type: 'TypeKind', doc: 'The kind of this declaration', } },
+			{ name: 'methods', var: { type: 'array of Method', doc: 'The methods in the declaration', } },
+			{ name: 'modifiers', var: { type: 'array of Modifier', doc: 'The modifiers/annotations on this declaration', } },
+			{ name: 'name', var: { type: 'string', doc: 'The name of this declaration', } },
+			{ name: 'nested_declarations', var: { type: 'array of Declaration', doc: 'Any nested declarations', } },
+			{ name: 'parents', var: { type: 'array of Type', doc: 'The explicitly named parent type(s) of this declaration', } },
+		],
+		doc: 'A type declaration, such as a class or interface',
+	},
+	Type: {
+		attrs: [
+			{ name: 'kind', var: { type: 'TypeKind', doc: 'The kind of the type', } },
+			{ name: 'name', var: { type: 'string', doc: 'The name of the type', } },
+		],
+		doc: 'A type in an AST',
+	},
+	Method: {
+		attrs: [
+			{ name: 'arguments', var: { type: 'array of Variable', doc: 'The arguments the method takes', } },
+			{ name: 'exception_types', var: { type: 'array of Type', doc: 'The list of exceptions thrown by this method', } },
+			{ name: 'generic_parameters', var: { type: 'array of Type', doc: 'The list of generic parameters for this method', } },
+			{ name: 'modifiers', var: { type: 'array of Modifier', doc: 'A list of all modifiers on the variable', } },
+			{ name: 'name', var: { type: 'string?', doc: 'The name of the method', } },
+			{ name: 'return_type', var: { type: 'Type', doc: 'The type returned from the method; if the method returns nothing, this type will be void', } },
+			{ name: 'statements', var: { type: 'array of Statement', doc: 'The statements in the method body. Note that most methods (in C-like languages, such as Java) contain a single statement of type BLOCK, which contains the list of statements within it!', } },
+		],
+		doc: 'A method declaration',
+	},
+	Variable: {
+		attrs: [
+			{ name: 'initializer', var: { type: 'Expression?', doc: 'If the variable has an initial assignment, the expression is stored here', } },
+			{ name: 'modifiers', var: { type: 'array of Modifier', doc: 'A list of all modifiers on the variable', } },
+			{ name: 'name', var: { type: 'string', doc: 'The name of the variable', } },
+			{ name: 'variable_type', var: { type: 'Type', doc: 'The type of the variable', } },
+		],
+		doc: 'A variable declaration - can be a field, local, parameter, etc',
+	},
+	Statement: {
+		attrs: [
+			{ name: 'condition', var: { type: 'Expression?', doc: '', } },
+			{ name: 'expression', var: { type: 'Expression?', doc: '', } },
+			{ name: 'initializations', var: { type: 'array of Expression', doc: '', } },
+			{ name: 'kind', var: { type: 'StatementKind', doc: 'The kind of statement', } },
+			{ name: 'statements', var: { type: 'array of Statement', doc: '', } },
+			{ name: 'type_declaration', var: { type: 'Declaration?', doc: '', } },
+			{ name: 'updates', var: { type: 'array of Expression', doc: '', } },
+			{ name: 'variable_declaration', var: { type: 'Variable?', doc: '', } },
+		],
+		doc: 'A single statement',
+	},
+	Expression: {
+		attrs: [
+			{ name: 'annotation', var: { type: 'Modifier?', doc: '', } },
+			{ name: 'anon_declaration', var: { type: 'Declaration?', doc: '', } },
+			{ name: 'expressions', var: { type: 'array of Expression', doc: '', } },
+			{ name: 'generic_parameters', var: { type: 'array of Type', doc: '', } },
+			{ name: 'is_postfix', var: { type: 'bool?', doc: '', } },
+			{ name: 'kind', var: { type: 'ExpressionKind', doc: 'The kind of expression', } },
+			{ name: 'literal', var: { type: 'string?', doc: '', } },
+			{ name: 'method', var: { type: 'string?', doc: '', } },
+			{ name: 'method_args', var: { type: 'array of Expression', doc: '', } },
+			{ name: 'new_type', var: { type: 'Type?', doc: '', } },
+			{ name: 'variable', var: { type: 'string?', doc: '', } },
+			{ name: 'variable_decls', var: { type: 'array of Variable', doc: '', } },
+		],
+		doc: 'A single expression',
+	},
+	Modifier: {
+		attrs: [
+			{ name: 'annotation_members', var: { type: 'array of string', doc: 'If the `kind` is `ANNOTATION`, then a list of all members explicitly assigned values', } },
+			{ name: 'annotation_name', var: { type: 'string?', doc: 'If the `kind` is `ANNOTATION`, then the name of the annotation', } },
+			{ name: 'annotation_values', var: { type: 'array of Expression', doc: 'If the `kind` is `ANNOTATION`, then a list of all values that were assigned to members', } },
+			{ name: 'kind', var: { type: 'ModifierKind', doc: 'The kind of modifier', } },
+			{ name: 'other', var: { type: 'string?', doc: 'If the `kind` is `OTHER`, the modifier string from the source code', } },
+			{ name: 'visibility', var: { type: 'Visibility?', doc: 'A kind of visibility modifier', } },
+		],
+		doc: 'A single modifier',
+	},
 };
 
 interface IEnumValue {

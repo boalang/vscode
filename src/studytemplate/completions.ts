@@ -94,28 +94,39 @@ export class TemplateCompletionItemProvider implements vscode.CompletionItemProv
                 return items;
             } else if (prefix.match(/"file"\s*:\s*$/)) {
                 // scope completions to just the "file" key
-                const files = await getAllFiles(getWorkspaceRoot() + '/' + consts.snippetPath);
+                const files = await getAllFiles(getWorkspaceRoot() + '/' + consts.snippetPath, '.boa');
                 const items = files.map(f => new vscode.CompletionItem(f, vscode.CompletionItemKind.File));
                 items.forEach((item) => item.insertText = ensureSpace('"' + item.label + '"', hasSpace));
                 return items;
             } else if (prefix.match(/"query"\s*:\s*$/)) {
                 // scope completions to just the "query" key
-                const files = await getAllFiles(getWorkspaceRoot() + '/' + consts.scriptPath);
+                const files = await getAllFiles(getWorkspaceRoot() + '/' + consts.scriptPath, '.boa');
                 const items = files.map(f => new vscode.CompletionItem(f, vscode.CompletionItemKind.File));
                 items.forEach((item) => item.insertText = ensureSpace('"' + item.label + '"', hasSpace));
                 return items;
             } else {
-                // scope completions to just the "datasets" key
-                const bracePos = prefix.lastIndexOf('{');
+                const parts = prefix.split(/\s+|,|:/).filter(s => s.trim().length > 0);
+                let braceCount = 0;
+                let i = parts.length - 1
+                for (; i >= 0 && braceCount >= 0; i--) {
+                    if (parts[i] == '}') braceCount++;
+                    else if (parts[i] == '{') braceCount--;
+                }
 
-                if (bracePos > -1) {
-                    const matches = prefix.match(/"datasets"\s*:\s*{/);
-                    if (matches && matches.index + matches[0].length == bracePos + 1) {
+                if (braceCount < 0) {
+                    if (parts[i] == '"datasets"') {
+                        // scope completions to just the "datasets" key
                         return getDatasets().then((datasets) => {
                             const items = datasets.map((ds) => new vscode.CompletionItem(ds, vscode.CompletionItemKind.Constant));
                             items.forEach((item) => item.insertText = ensureSpace('"' + (item.label as string).replace(consts.adminPrefix, '') + '"', hasSpace));
                             return Promise.resolve(items);
                         });
+                    } else if (parts[i] == '"queries"') {
+                        // scope completions to just the individual queries
+                        const files = await getAllFiles(getWorkspaceRoot() + '/' + consts.outputPath, '.txt');
+                        const items = files.map(f => new vscode.CompletionItem(f, vscode.CompletionItemKind.File));
+                        items.forEach((item) => item.insertText = ensureSpace('"' + item.label + '": {\n\t\n}', hasSpace));
+                        return items;
                     }
                 }
             }
@@ -129,12 +140,12 @@ function ensureSpace(text: string, hasSpace: boolean) {
     return hasSpace ? text : ' ' + text;
 }
 
-async function getAllFiles(path: string) {
+async function getAllFiles(path: string, extension: string) {
     const items = await vscode.workspace.fs.readDirectory(vscode.Uri.file(path));
     const subdirs = items.filter(item => item[1] == vscode.FileType.Directory).map(dir => dir[0]);
-    let files = items.filter(item => item[1] == vscode.FileType.File && item[0].endsWith('.boa')).map(item => item[0]);
+    let files = items.filter(item => item[1] == vscode.FileType.File && item[0].endsWith(extension)).map(item => item[0]);
     for (const dir of subdirs) {
-        files = files.concat((await getAllFiles(path + '/' + dir)).map(f => dir + '/' + f));
+        files = files.concat((await getAllFiles(path + '/' + dir, extension)).map(f => dir + '/' + f));
     }
     return files;
 }

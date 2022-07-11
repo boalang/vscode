@@ -114,7 +114,22 @@ export class TemplateCompletionItemProvider implements vscode.CompletionItemProv
                 }
 
                 if (braceCount < 0) {
-                    if (parts[i] == '"datasets"') {
+                    if (parts[i] == '"gendupes"') {
+                        // scope completions to just the "gendupes" key
+                        if (prefix.match(/"output"\s*:\s*$/)) {
+                            // scope completions to just the "output" key
+                            const files = await getAllFiles(getWorkspaceRoot() + '/' + consts.outputPath, '.txt');
+                            const items = files.map(f => new vscode.CompletionItem(f, vscode.CompletionItemKind.File));
+                            items.forEach((item) => item.insertText = ensureSpace('"' + item.label + '"', hasSpace));
+                            return items;
+                        } else if (prefix.match(/"csv"\s*:\s*$/)) {
+                            // scope completions to just the "csv" key
+                            const files = await getAllFiles(getWorkspaceRoot() + '/' + consts.csvPath, '.csv');
+                            const items = files.map(f => new vscode.CompletionItem(f, vscode.CompletionItemKind.File));
+                            items.forEach((item) => item.insertText = ensureSpace('"' + item.label + '"', hasSpace));
+                            return items;
+                        }
+                    } else if (parts[i] == '"datasets"') {
                         // scope completions to just the "datasets" key
                         return getDatasets().then((datasets) => {
                             const items = datasets.map((ds) => new vscode.CompletionItem(ds, vscode.CompletionItemKind.Constant));
@@ -122,11 +137,38 @@ export class TemplateCompletionItemProvider implements vscode.CompletionItemProv
                             return Promise.resolve(items);
                         });
                     } else if (parts[i] == '"queries"') {
-                        // scope completions to just the individual queries
+                        // scope completions to just the "queries" key
                         const files = await getAllFiles(getWorkspaceRoot() + '/' + consts.outputPath, '.txt');
                         const items = files.map(f => new vscode.CompletionItem(f, vscode.CompletionItemKind.File));
                         items.forEach((item) => item.insertText = ensureSpace('"' + item.label + '": {\n\t\n}', hasSpace));
                         return items;
+                    } else if (parts[i] == '"csv"') {
+                        // scope completions to just the "csv" key
+                        if (prefix.match(/"output"\s*:\s*$/)) {
+                            // scope completions to just the "output" key
+                            const files = await getAllFiles(getWorkspaceRoot() + '/' + consts.csvPath, '.csv');
+                            const items = files.map(f => new vscode.CompletionItem(f, vscode.CompletionItemKind.File));
+                            items.forEach((item) => item.insertText = ensureSpace('"' + item.label + '"', hasSpace));
+                            return items;
+                        }
+                    } else {
+                        const parts = prefix.split(/\s+|,|:/).filter(s => s.trim().length > 0);
+                        let braceCount = 0;
+                        let i = parts.length - 1
+                        for (; i >= 0 && braceCount >= 0; i--) {
+                            if (parts[i] == ']') braceCount++;
+                            else if (parts[i] == '[') braceCount--;
+                        }
+        
+                        if (braceCount < 0) {
+                            if (parts[i] == '"input"') {
+                                // scope completions to just the "input" key
+                                const files = await getAllFiles(getWorkspaceRoot() + '/' + consts.csvPath, '.csv');
+                                const items = files.map(f => new vscode.CompletionItem(f, vscode.CompletionItemKind.File));
+                                items.forEach((item) => item.insertText = ensureSpace('"' + item.label + '"', hasSpace));
+                                return items;
+                            }
+                        }
                     }
                 }
             }

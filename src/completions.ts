@@ -78,8 +78,8 @@ export class AttributeCompletionItemProvider implements vscode.CompletionItemPro
             for (const attr of builtinTypes[type].attrs) {
                 if (token.isCancellationRequested) return items;
                 const item = new vscode.CompletionItem(attr.name, vscode.CompletionItemKind.Field);
-                item.detail = `(attr) ${attr.var.type} ${type}.${attr.name}`;
-                item.documentation = new vscode.MarkdownString(attr.var.doc);
+                item.detail = `(attr) ${attr.type} ${type}.${attr.name}`;
+                item.documentation = new vscode.MarkdownString(attr.doc);
                 items.push(item);
             }
         }

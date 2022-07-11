@@ -65,6 +65,29 @@ export class BuiltInsCompletionItemProvider implements vscode.CompletionItemProv
     }
 }
 
+export class AttributeCompletionItemProvider implements vscode.CompletionItemProvider {
+    public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.CompletionItem[]> {
+        const items = [];
+
+        // if autocompleting an enum, dont suggest attributes
+        const word = document.getText(document.getWordRangeAtPosition(position.translate(0, -1))).trim();
+        if (Object.keys(builtinEnums).indexOf(word) != -1)
+            return items;
+
+        for (const type of Object.keys(builtinTypes)) {
+            for (const attr of builtinTypes[type].attrs) {
+                if (token.isCancellationRequested) return items;
+                const item = new vscode.CompletionItem(attr.name, vscode.CompletionItemKind.Field);
+                item.detail = `(attr) ${attr.var.type} ${type}.${attr.name}`;
+                item.documentation = new vscode.MarkdownString(attr.var.doc);
+                items.push(item);
+            }
+        }
+
+        return items;
+    }
+}
+
 export class EnumValuesCompletionItemProvider implements vscode.CompletionItemProvider {
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.CompletionItem[]> {
         const items = [];

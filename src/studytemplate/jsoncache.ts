@@ -49,7 +49,7 @@ class StudyConfigCache {
     }
 
     get json() {
-        return this._json;
+        return this._json ? this._json : { };
     }
 
     get raw() {
@@ -59,7 +59,7 @@ class StudyConfigCache {
     private datasets: string[] = null;
     getDatasets() {
         if (this.datasets === null) {
-            this.datasets = Object.keys(this._json['datasets']);
+            this.datasets = Object.keys(this.json['datasets']);
         }
 
         return this.datasets;
@@ -73,8 +73,8 @@ class StudyConfigCache {
 
         this.substitutions = { substitutions: {} };
 
-        for (const output in this._json['queries']) {
-            const query = this._json['queries'][output];
+        for (const output in this.json['queries']) {
+            const query = this.json['queries'][output];
             const items = {};
             for (const idx in query['substitutions']) {
                 const subst = query['substitutions'][idx];
@@ -88,8 +88,8 @@ class StudyConfigCache {
             }
         }
 
-        for (const idx in this._json['substitutions']) {
-            const subst = this._json['substitutions'][idx];
+        for (const idx in this.json['substitutions']) {
+            const subst = this.json['substitutions'][idx];
             this.substitutions.substitutions[subst['target']] = { subst: subst, output: undefined };
         }
 
@@ -178,8 +178,8 @@ class StudyConfigCache {
         const uriStr = uri.toString();
 
         const targets = [];
-        for (const output in this._json['queries']) {
-            if (uriStr.endsWith(this._json['queries'][output]['query'])) {
+        for (const output in this.json['queries']) {
+            if (uriStr.endsWith(this.json['queries'][output]['query'])) {
                 targets.push(output);
             }
         }
@@ -188,6 +188,8 @@ class StudyConfigCache {
 
     private async updateJSON() {
         try {
+            this._raw = '';
+            this._json = {};
             await getFileContents(this._file).then(
                 (val) => {
                     this._raw = val;

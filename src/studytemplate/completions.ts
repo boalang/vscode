@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
-import { removeDuplicates } from '../utils';
+import { getWorkspaceRoot, removeDuplicates } from '../utils';
 import { cache } from './jsoncache';
 import { getDatasets } from '../boa';
 import * as consts from '../consts';
@@ -82,14 +82,21 @@ export class TemplateCompletionItemProvider implements vscode.CompletionItemProv
  * Provides intellisense completions for dataset names in the study-config.json file.
  */
  export class StudyConfigCompletionItemProvider implements vscode.CompletionItemProvider {
-    public provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): vscode.ProviderResult<vscode.CompletionItem[]> {
+    public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.CompletionItem[]> {
         if (position.character >= 0) {
             const prefix = document.getText(new vscode.Range(new vscode.Position(0, 0), position));
+            let hasSpace = document.getText(new vscode.Range(position.translate(0, -1), position)).trim().length == 0;
 
             // scope completions to just the "dataset" key
             if (prefix.match(/"dataset"\s*:\s*$/)) {
                 const items = cache.getDatasets().map(ds => new vscode.CompletionItem(ds, vscode.CompletionItemKind.Constant));
-                items.forEach((item) => item.insertText = '"' + (item.label as string).replace(consts.adminPrefix, '') + '"');
+                items.forEach((item) => item.insertText = ensureSpace('"' + (item.label as string).replace(consts.adminPrefix, '') + '"', hasSpace));
+                return items;
+            } else if (prefix.match(/"file"\s*:\s*$/)) {
+                // scope completions to just the "file" key
+                const files = await getAllFiles(getWorkspaceRoot() + '/' + consts.snippetPath);
+                const items = files.map(f => new vscode.CompletionItem(f, vscode.CompletionItemKind.File));
+                items.forEach((item) => item.insertText = ensureSpace('"' + item.label + '"', hasSpace));
                 return items;
             } else {
                 // scope completions to just the "datasets" key
@@ -100,7 +107,7 @@ export class TemplateCompletionItemProvider implements vscode.CompletionItemProv
                     if (matches && matches.index + matches[0].length == bracePos + 1) {
                         return getDatasets().then((datasets) => {
                             const items = datasets.map((ds) => new vscode.CompletionItem(ds, vscode.CompletionItemKind.Constant));
-                            items.forEach((item) => item.insertText = '"' + (item.label as string).replace(consts.adminPrefix, '') + '"');
+                            items.forEach((item) => item.insertText = ensureSpace('"' + (item.label as string).replace(consts.adminPrefix, '') + '"', hasSpace));
                             return Promise.resolve(items);
                         });
                     }
@@ -110,4 +117,18 @@ export class TemplateCompletionItemProvider implements vscode.CompletionItemProv
 
         return [];
     }
+}
+
+function ensureSpace(text: string, hasSpace: boolean) {
+    return hasSpace ? text : ' ' + text;
+}
+
+async function getAllFiles(path: string) {
+    const items = await vscode.workspace.fs.readDirectory(vscode.Uri.file(path));
+    const subdirs = items.filter(item => item[1] == vscode.FileType.Directory).map(dir => dir[0]);
+    let files = items.filter(item => item[1] == vscode.FileType.File && item[0].endsWith('.boa')).map(item => item[0]);
+    for (const dir of subdirs) {
+        files = files.concat((await getAllFiles(path + '/' + dir)).map(f => dir + '/' + f));
+    }
+    return files;
 }

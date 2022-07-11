@@ -114,6 +114,8 @@ export class TemplateCompletionItemProvider implements vscode.CompletionItemProv
                 }
 
                 if (braceCount < 0) {
+                    const filename = parts[i].slice(1, parts[i].length - 1);
+
                     if (parts[i] == '"gendupes"') {
                         // scope completions to just the "gendupes" key
                         if (prefix.match(/"output"\s*:\s*$/)) {
@@ -138,8 +140,9 @@ export class TemplateCompletionItemProvider implements vscode.CompletionItemProv
                         });
                     } else if (parts[i] == '"queries"') {
                         // scope completions to just the "queries" key
+                        const existingQueries = cache.getQueries();
                         const files = await getAllFiles(getWorkspaceRoot() + '/' + consts.outputPath, '.txt');
-                        const items = files.map(f => new vscode.CompletionItem(f, vscode.CompletionItemKind.File));
+                        const items = files.filter(f => existingQueries.indexOf(f) == -1).map(f => new vscode.CompletionItem(f, vscode.CompletionItemKind.File));
                         items.forEach((item) => item.insertText = ensureSpace('"' + item.label + '": {\n\t\n}', hasSpace));
                         return items;
                     } else if (parts[i] == '"csv"') {
@@ -159,12 +162,13 @@ export class TemplateCompletionItemProvider implements vscode.CompletionItemProv
                             if (parts[i] == ']') braceCount++;
                             else if (parts[i] == '[') braceCount--;
                         }
-        
+
                         if (braceCount < 0) {
                             if (parts[i] == '"input"') {
                                 // scope completions to just the "input" key
+                                const existingInputs = cache.getAnalysisInputs(filename);
                                 const files = await getAllFiles(getWorkspaceRoot() + '/' + consts.csvPath, '.csv');
-                                const items = files.map(f => new vscode.CompletionItem(f, vscode.CompletionItemKind.File));
+                                const items = files.filter(f => existingInputs.indexOf(f) == -1).map(f => new vscode.CompletionItem(f, vscode.CompletionItemKind.File));
                                 items.forEach((item) => item.insertText = ensureSpace('"' + item.label + '"', hasSpace));
                                 return items;
                             }

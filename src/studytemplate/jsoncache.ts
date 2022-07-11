@@ -177,6 +177,11 @@ class StudyConfigCache {
         );
     }
 
+    getQueries() {
+        if (!this.json.hasOwnProperty('queries')) return [];
+        return Object.keys(this.json['queries']);
+    }
+
     getQueryTargets(uri) {
         const uriStr = uri.toString();
 
@@ -187,6 +192,13 @@ class StudyConfigCache {
             }
         }
         return targets;
+    }
+
+    getAnalysisInputs(filename) {
+        if (!this.json.hasOwnProperty('analyses')) return [];
+        if (!this.json['analyses'].hasOwnProperty(filename)) return [];
+        if (!this.json['analyses'][filename].hasOwnProperty('input')) return [];
+        return this.json['analyses'][filename].input;
     }
 
     private async updateJSON() {

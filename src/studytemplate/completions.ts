@@ -29,7 +29,7 @@ export class TemplateCompletionItemProvider implements vscode.CompletionItemProv
         const word = document.getText(document.getWordRangeAtPosition(position.translate(0, -1))).trim();
         if (Object.keys(builtinEnums).indexOf(word) != -1)
             return items;
-        
+
         const substitutions = cache.getSubstitutions();
         let keys = Object.keys(substitutions.substitutions);
         const hovers = new Map<string,string[]>();

@@ -53,14 +53,6 @@ export class BuiltInsCompletionItemProvider implements vscode.CompletionItemProv
             items.push(item);
         }
 
-        for (const typeName of Object.keys(builtinTypes)) {
-            if (token.isCancellationRequested) return items;
-            const item = new vscode.CompletionItem(typeName, vscode.CompletionItemKind.Function);
-            item.detail = `(type) ${typeName}`;
-            item.documentation = new vscode.MarkdownString(builtinTypes[typeName].doc);
-            items.push(item);
-        }
-
         for (const enumName of Object.keys(builtinEnums)) {
             if (token.isCancellationRequested) return items;
             const item = new vscode.CompletionItem(enumName, vscode.CompletionItemKind.Function);
@@ -80,13 +72,75 @@ export class EnumValuesCompletionItemProvider implements vscode.CompletionItemPr
         const word = document.getText(document.getWordRangeAtPosition(position.translate(0, -1))).trim();
 
         if (Object.keys(builtinEnums).indexOf(word) != -1) {
-            builtinEnums[word].attrs.forEach(attr => {
-                const item = new vscode.CompletionItem(attr.name, vscode.CompletionItemKind.Function);
-                item.detail = `(enum) ${word}.${attr.name}`;
-                item.documentation = new vscode.MarkdownString(attr.doc);
+            Object.keys(builtinEnums[word].attrs).forEach(attr => {
+                const item = new vscode.CompletionItem(attr, vscode.CompletionItemKind.Function);
+                item.detail = `(enum) ${word}.${attr}`;
+                item.documentation = new vscode.MarkdownString(builtinEnums[word].attrs[attr]);
                 items.push(item);
             });
         }
+
+        return items;
+    }
+}
+
+export class DSLTypesCompletionItemProvider implements vscode.CompletionItemProvider {
+    public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.CompletionItem[]> {
+        const items = [];
+
+        const startText = document.getText(new vscode.Range(new vscode.Position(0, 0), position));
+        const startWords = startText.split(/\s+/).filter(s => s.length > 0).slice(-4);
+
+        let visitIdx = startWords.length - 1;
+        while (visitIdx >= 0) {
+            if (startWords[visitIdx] == 'after' || startWords[visitIdx] == 'before') {
+                break;
+            }
+            visitIdx--;
+        }
+
+        let colonIdx = startWords.length - 1;
+        while (colonIdx > visitIdx) {
+            if (startWords[colonIdx].endsWith(':')) {
+                break;
+            }
+            colonIdx--;
+        }
+
+        if (startWords[startWords.length - 1].startsWith(':')) {
+            startWords.push(startWords[startWords.length - 1].slice(1));
+            startWords[startWords.length - 2] = ':';
+        }
+
+        let hasPartialType = false;
+        if (colonIdx == -1) {
+            hasPartialType = visitIdx < startWords.length - 1;
+        } else {
+            hasPartialType = colonIdx < startWords.length - 1;
+        }
+
+        let hasSpace = document.getText(new vscode.Range(position.translate(0, -1), position)).trim().length == 0;
+        if (!hasSpace && hasPartialType) {
+            const spacePos = position.translate(0, 0 - startWords[startWords.length - 1].length);
+            hasSpace = document.getText(new vscode.Range(spacePos.translate(0, -1), spacePos)).trim().length == 0;
+        }
+
+        let trailingArrow = false;
+        if (visitIdx > -1) {
+            const trailText = document.getText(new vscode.Range(position, position.translate(0, 10))).split(/\s+/).filter(s => s.length > 0);
+            trailingArrow = trailText[0] == '->';
+        }
+
+        Object.keys(builtinTypes).filter(t => !hasPartialType || t.startsWith(startWords[startWords.length - 1])).forEach(t => {
+            const item = new vscode.CompletionItem(t, vscode.CompletionItemKind.Function);
+            item.detail = `(type) ${t}`;
+            item.insertText = hasSpace ? t : ' ' + t;
+            if (visitIdx > -1 && !trailingArrow) {
+                item.insertText += ' -> ';
+            }
+            item.documentation = new vscode.MarkdownString(builtinTypes[t].doc);
+            items.push(item);
+        });
 
         return items;
     }

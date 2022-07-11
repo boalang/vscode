@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.1.8] - 2022-07-10
+ - support for built-in functions, including: code completions, signature helpers, and function doc hovers
+ - add ability to stop running jobs
+
 ## [0.1.7] - 2022-07-06
  - better handling of changing usernames/passwords
  - provides diagnostics for study-config.json

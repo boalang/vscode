@@ -104,26 +104,26 @@ function makeJsonDiagnostic(badStr: string, jsonKey: string, code, err) {
 }
 
 class DatasetActionProvider implements vscode.CodeActionProvider {
-	async provideCodeActions(document: vscode.TextDocument, range: vscode.Range | vscode.Selection, context: vscode.CodeActionContext, token: vscode.CancellationToken): Promise<vscode.CodeAction[]> {
+    async provideCodeActions(document: vscode.TextDocument, range: vscode.Range | vscode.Selection, context: vscode.CodeActionContext, token: vscode.CancellationToken): Promise<vscode.CodeAction[]> {
         const datasets = await getDatasets(false);
         if (datasets === null || datasets.length == 0) {
             return [];
         }
         return context.diagnostics
-			.filter(diagnostic => diagnostic.code === CODE_INVALID_DS)
-			.map(diagnostic => datasets.map(ds => createCodeAction(diagnostic, ds.replace(adminPrefix, ''))))
+            .filter(diagnostic => diagnostic.code === CODE_INVALID_DS)
+            .map(diagnostic => datasets.map(ds => createCodeAction(diagnostic, ds.replace(adminPrefix, ''))))
             .flat();
-	}
+    }
 }
 
 class StudyDatasetActionProvider implements vscode.CodeActionProvider {
-	provideCodeActions(document: vscode.TextDocument, range: vscode.Range | vscode.Selection, context: vscode.CodeActionContext, token: vscode.CancellationToken): vscode.CodeAction[] {
-		const datasetNames = cache.getDatasets();
+    provideCodeActions(document: vscode.TextDocument, range: vscode.Range | vscode.Selection, context: vscode.CodeActionContext, token: vscode.CancellationToken): vscode.CodeAction[] {
+        const datasetNames = cache.getDatasets();
         return context.diagnostics
-			.filter(diagnostic => diagnostic.code === CODE_UNKNOWN_STUDY_DS)
-			.map(diagnostic => datasetNames.map(ds => createCodeAction(diagnostic, ds)))
+            .filter(diagnostic => diagnostic.code === CODE_UNKNOWN_STUDY_DS)
+            .map(diagnostic => datasetNames.map(ds => createCodeAction(diagnostic, ds)))
             .flat();
-	}
+    }
 }
 
 function createCodeAction(diagnostic: vscode.Diagnostic, ds: string): vscode.CodeAction {

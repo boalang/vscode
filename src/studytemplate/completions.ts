@@ -98,6 +98,12 @@ export class TemplateCompletionItemProvider implements vscode.CompletionItemProv
                 const items = files.map(f => new vscode.CompletionItem(f, vscode.CompletionItemKind.File));
                 items.forEach((item) => item.insertText = ensureSpace('"' + item.label + '"', hasSpace));
                 return items;
+            } else if (prefix.match(/"query"\s*:\s*$/)) {
+                // scope completions to just the "query" key
+                const files = await getAllFiles(getWorkspaceRoot() + '/' + consts.scriptPath);
+                const items = files.map(f => new vscode.CompletionItem(f, vscode.CompletionItemKind.File));
+                items.forEach((item) => item.insertText = ensureSpace('"' + item.label + '"', hasSpace));
+                return items;
             } else {
                 // scope completions to just the "datasets" key
                 const bracePos = prefix.lastIndexOf('{');

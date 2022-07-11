@@ -59,6 +59,9 @@ class StudyConfigCache {
     private datasets: string[] = null;
     getDatasets() {
         if (this.datasets === null) {
+            if (!this.json.hasOwnProperty('datasets')) {
+                return [];
+            }
             this.datasets = Object.keys(this.json['datasets']);
         }
 

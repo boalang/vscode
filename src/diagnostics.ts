@@ -38,14 +38,14 @@ export async function enableDiagnostics(context: vscode.ExtensionContext) {
         // add diagnostics for open editors
         e.map(editor => {
             const uri = editor.document.uri;
-            if (uri.scheme == 'boalang' && !diagsCache.has(uri)) {
+            if (uri.scheme == 'boalang' && !isNaN(+uri.authority) && !diagsCache.has(uri)) {
                 runBoaCommands(async (client) => {
                     const job = await client.getJob(uri.authority);
                     await job.wait();
                     if (job.compilerStatus == CompilerStatus.ERROR) {
-                        reportErrors(uri, await job.compilerErrors);
+                        reportWebErrors(uri, await job.compilerErrors);
                     } else if (job.executionStatus == ExecutionStatus.ERROR) {
-                        reportErrors(uri, ['There was a runtime error.']);
+                        reportWebErrors(uri, ['There was a runtime error.']);
                     } else {
                         diagsCache.set(uri, undefined);
                     }
@@ -59,7 +59,7 @@ export async function enableDiagnostics(context: vscode.ExtensionContext) {
     });
 }
 
-export function reportErrors(uri: vscode.Uri, errors: [string]) {
+function reportWebErrors(uri: vscode.Uri, errors: [string]) {
     let diagnostics = errors.map((err) => errorToDiagnostic(err));
 
     if (diagnostics.length > 0) {

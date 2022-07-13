@@ -38,7 +38,7 @@ export async function enableDiagnostics(context: vscode.ExtensionContext) {
         // add diagnostics for open editors
         e.map(editor => {
             const uri = editor.document.uri;
-            if (uri.scheme == 'boalang' && !diagsCache.has(uri)) {
+            if (uri.scheme == 'boalang' && !isNaN(+uri.authority) && !diagsCache.has(uri)) {
                 runBoaCommands(async (client) => {
                     const job = await client.getJob(uri.authority);
                     await job.wait();

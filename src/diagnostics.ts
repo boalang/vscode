@@ -43,9 +43,9 @@ export async function enableDiagnostics(context: vscode.ExtensionContext) {
                     const job = await client.getJob(uri.authority);
                     await job.wait();
                     if (job.compilerStatus == CompilerStatus.ERROR) {
-                        reportErrors(uri, await job.compilerErrors);
+                        reportWebErrors(uri, await job.compilerErrors);
                     } else if (job.executionStatus == ExecutionStatus.ERROR) {
-                        reportErrors(uri, ['There was a runtime error.']);
+                        reportWebErrors(uri, ['There was a runtime error.']);
                     } else {
                         diagsCache.set(uri, undefined);
                     }
@@ -59,7 +59,7 @@ export async function enableDiagnostics(context: vscode.ExtensionContext) {
     });
 }
 
-export function reportErrors(uri: vscode.Uri, errors: [string]) {
+function reportWebErrors(uri: vscode.Uri, errors: [string]) {
     let diagnostics = errors.map((err) => errorToDiagnostic(err));
 
     if (diagnostics.length > 0) {

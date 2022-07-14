@@ -1,5 +1,13 @@
 # Change Log
 
+## [0.1.9] - 2022-07-14
+ - switched to using ASTs to process queries
+ - added syntax error marking as you type
+ - added ability to rename identifiers
+ - added ability to view symbols in the file
+ - added ability to look up references/definition of an identifier
+ - word highlighting now uses references, when available
+
 ## [0.1.8] - 2022-07-10
  - support for built-in functions, including: code completions, signature helpers, and function doc hovers
  - add ability to stop running jobs

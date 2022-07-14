@@ -25,6 +25,11 @@ import JobCache from './jobcache';
 import { AttributeCompletionItemProvider, BuiltInsCompletionItemProvider, DSLTypesCompletionItemProvider, EnumValuesCompletionItemProvider } from './completions';
 import BoaSignatureHelpProvider from './signatures';
 import FunctionsHoverProvider from './hoverproviders';
+import BoaDefinitionProvider from './definitions';
+import BoaReferenceProvider from './references';
+import BoaDocumentHighlightProvider from './highlights';
+import { BoaDocumentSymbolProvider, BoaWorkspaceSymbolProvider } from './symbols';
+import BoaRenameProvider from './renames';
 
 export var outputChannel: vscode.OutputChannel;
 
@@ -67,8 +72,17 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.languages.registerCompletionItemProvider('boalang', new DSLTypesCompletionItemProvider(), ':'));
     context.subscriptions.push(vscode.languages.registerCompletionItemProvider('boalang', new AttributeCompletionItemProvider(), '.'));
 
+    context.subscriptions.push(vscode.languages.registerDefinitionProvider('boalang', new BoaDefinitionProvider()));
+    context.subscriptions.push(vscode.languages.registerReferenceProvider('boalang', new BoaReferenceProvider()));
+    context.subscriptions.push(vscode.languages.registerDocumentHighlightProvider('boalang', new BoaDocumentHighlightProvider()));
+    context.subscriptions.push(vscode.languages.registerDocumentSymbolProvider('boalang', new BoaDocumentSymbolProvider()));
+
+    context.subscriptions.push(vscode.languages.registerWorkspaceSymbolProvider(new BoaWorkspaceSymbolProvider()));
+
     context.subscriptions.push(vscode.languages.registerHoverProvider('boalang', new FunctionsHoverProvider()));
     context.subscriptions.push(vscode.languages.registerSignatureHelpProvider('boalang', new BoaSignatureHelpProvider(), '(', ','));
+
+    context.subscriptions.push(vscode.languages.registerRenameProvider('boalang', new BoaRenameProvider()));
 
     activateStudyTemplateSupport(context);
 

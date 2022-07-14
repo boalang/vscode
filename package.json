@@ -589,8 +589,9 @@
         ]
     },
     "scripts": {
-        "vscode:prepublish": "npm run package",
+        "vscode:prepublish": "npm run antlr4ts && npm run package",
         "vscode:uninstall": "node ./out/uninstall.js",
+        "antlr4ts": "antlr4ts -visitor src/antlr/boa.g4",
         "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./",
         "webpack": "webpack --mode development",
@@ -598,11 +599,13 @@
         "package": "webpack --mode production --devtool hidden-source-map"
     },
     "dependencies": {
-        "@boalang/boa-api": "^0.1.9"
+        "@boalang/boa-api": "^0.1.9",
+        "antlr4ts": "^0.5.0-alpha.4"
     },
     "devDependencies": {
         "@types/node": "^8.10.25",
         "@types/vscode": "^1.66.2",
+        "antlr4ts-cli": "^0.5.0-alpha.4",
         "ts-loader": "^9.3.1",
         "tslint": "^5.16.0",
         "typescript": "^3.4.5",

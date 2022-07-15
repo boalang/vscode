@@ -33,6 +33,7 @@
         "workspaceContains:**/*.boa",
         "workspaceContains:**/study-config.json",
         "onView:boalang.jobList",
+        "onCommand:boalang.refactor.extractfunction",
         "onCommand:boalang.runQuery",
         "onCommand:boalang.setFavorite",
         "onCommand:boalang.setEndpoint",
@@ -299,6 +300,10 @@
         ],
         "menus": {
             "commandPalette": [
+                {
+                    "command": "boalang.refactor.extractfunction",
+                    "when": "false"
+                },
                 {
                     "command": "boalang.runQuery",
                     "when": "editorLangId == 'boalang'"

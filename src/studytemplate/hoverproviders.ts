@@ -19,7 +19,7 @@ import { cache } from './jsoncache';
 
 export default class SubstitutionHoverProvider implements vscode.HoverProvider {
     async provideHover(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.Hover> {
-        const templateRange = document.getWordRangeAtPosition(position, /{@[^>]+@}/);
+        const templateRange = document.getWordRangeAtPosition(position, /{@[-a-zA-Z0-9_.:]+@}/);
         if (!templateRange) {
             return undefined;
         }

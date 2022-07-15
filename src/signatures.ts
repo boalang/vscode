@@ -14,12 +14,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
+import { AbstractParseTreeVisitor } from 'antlr4ts/tree/AbstractParseTreeVisitor';
+import { RuleNode } from 'antlr4ts/tree/RuleNode';
 import * as vscode from 'vscode';
+import { FactorContext, ProgramContext } from './antlr/boaParser';
+import { boaVisitor } from './antlr/boaVisitor';
+import { parseBoaCode } from './ast/parser';
 import { builtinFunctions } from './types';
 
 export default class BoaSignatureHelpProvider implements vscode.SignatureHelpProvider {
     public provideSignatureHelp(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.SignatureHelp> {
-        const { funcName, paramNum } = findFunctionCall(document, position);
+        const tree = parseBoaCode(document.getText());
+
+        const { funcName, paramNum } = findFunctionCall(tree, document.offsetAt(position));
+
         if (funcName === undefined || paramNum === undefined)
             return undefined;
         if (!(funcName in builtinFunctions))
@@ -41,57 +49,60 @@ export default class BoaSignatureHelpProvider implements vscode.SignatureHelpPro
     }
 }
 
-function findFunctionCall(document, position) {
-    const text = document.getText(new vscode.Range(new vscode.Position(0, 0), position));
-    const offset = document.offsetAt(position);
+function findFunctionCall(tree: ProgramContext, position: number) {
+    const visitor = new FunctionCallFinder(position);
+    const id = visitor.visit(tree);
 
-    let openParenPos = 0;
+    const funcName = id?.operand()?.identifier()?.text
+
     let paramNum = 0;
-    for (let i = offset; i >= 0; i--) {
-        switch (text.charAt(i)) {
-            case ')':
-                openParenPos++;
-                break;
-            case '(':
-                openParenPos--;
-                break;
-            case '{':
-                if (openParenPos == 0)
-                    return { funcName: null, paramNum: null };
-                break;
-            case ',':
-                if (openParenPos == 0)
-                    paramNum++;
-                break;
-        }
-        if (openParenPos == -1) {
-            openParenPos = i;
-            break;
+    let calls = id?.call();
+    if (calls?.length > 0) {
+        const exps = calls[0].expressionList();
+        if (exps) {
+            for (const comma of exps.COMMA()) {
+                if (position <= comma.symbol.startIndex) {
+                    break;
+                }
+                paramNum++;
+            }
         }
     }
-
-    let closeParenPos = 0;
-    for (let i = offset; i < text.length; i++) {
-        switch (text.charAt(i)) {
-            case '(':
-                closeParenPos++;
-                break;
-            case ')':
-                closeParenPos--;
-                break;
-            case ';':
-            case '}':
-                if (closeParenPos == 0)
-                    return { };
-                break;
-        }
-        if (closeParenPos == -1) {
-            closeParenPos = i;
-            break;
-        }
-    }
-
-    const funcName = document.getText(document.getWordRangeAtPosition(document.positionAt(openParenPos - 1)));
 
     return { funcName, paramNum };
+}
+
+class FunctionCallFinder extends AbstractParseTreeVisitor<FactorContext> implements boaVisitor<FactorContext> {
+    public constructor(private position: number) {
+        super();
+    }
+
+    protected defaultResult() {
+        return undefined;
+    }
+
+    protected aggregateResult(aggregate: FactorContext, nextResult: FactorContext) {
+        return nextResult;
+    }
+
+    protected shouldVisitNextChild(node: RuleNode, currentResult: FactorContext) {
+        return currentResult === undefined;
+    }
+
+    public visitFactor(ctx: FactorContext) {
+        const ret = this.visitChildren(ctx);
+        if (ret !== undefined)
+            return ret;
+
+        if (ctx.selector().length == 0 && ctx.index().length == 0 && ctx.call().length == 1) {
+            const call = ctx.call()[0];
+            if (call.start.startIndex < this.position && this.position <= call.stop.stopIndex) {
+                if ((ctx.operand().text != 'visit' && ctx.operand().text != 'traverse') || call.start.startIndex >= this.position - 35) {
+                    return ctx;
+                }
+            }
+        }
+
+        return ret;
+    }
 }

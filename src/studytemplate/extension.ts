@@ -165,8 +165,6 @@ function removePreviewCache(uri: vscode.Uri) {
     const uriStr = uri.toString();
 
     for (const [key, value] of Object.entries(previewMap)) {
-        console.log(uriStr);
-        console.log(value[0]);
         const idx = value.indexOf(uriStr);
         if (idx != -1) {
             value.splice(idx, 1);

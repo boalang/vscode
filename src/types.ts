@@ -553,6 +553,17 @@ export const builtinFunctions: { [name: string]: IFunction } = {
         ret: { type: '', doc: '' },
         doc: 'Visits the tree rooted at `n` with the visitor `v`. If no visitor is given, the current visitor is used.',
     },
+    traverse: {
+        args: [
+            { name: 'g: graph', doc: 'a graph to traverse' },
+            { name: 'dir: TraversalDirection', doc: 'the traversal direction' },
+            { name: 'k: TraversalKind', doc: 'the traversal kind' },
+            { name: 't: traversal', doc: 'the `traversal` function' },
+            { name: 'fp: fixp?', doc: 'a `fixp` function to compute if at a fixed point' },
+        ],
+        ret: { type: '', doc: '' },
+        doc: 'Traverses the graph rooted at `g` with the traversal `t`. It computes dataflow in the direction `dir` by traversing the nodes using the `k` traversal strategy. If a `fp` is given, it uses that function to compute if at a fixed point.',
+    },
     pop: {
         args: [
             { name: 's: stack of val_type', doc: 'the stack to pop' },

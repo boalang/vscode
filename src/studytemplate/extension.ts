@@ -29,6 +29,7 @@ import enableDiagnostics from './diagnostics';
 import { reportDocumentErrors } from '../diagnostics';
 import { BoaTemplateRefactoringProvider, extractSnippet } from './refactor';
 import TemplateTagRenameProvider from './renames';
+import TemplateTagHighlightProvider from './highlights';
 
 export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     const jobsSelector: vscode.DocumentSelector = {
@@ -66,6 +67,8 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.languages.registerCompletionItemProvider('boalang', new TemplateCompletionItemProvider(), '@'));
 
     context.subscriptions.push(vscode.languages.registerCodeLensProvider(studyConfigSelector, new StudyConfigCodelensProvider()));
+
+    context.subscriptions.push(vscode.languages.registerDocumentHighlightProvider('boalang', new TemplateTagHighlightProvider()));
 
     context.subscriptions.push(vscode.languages.registerHoverProvider('boalang', new SubstitutionHoverProvider()));
 

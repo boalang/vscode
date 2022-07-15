@@ -27,15 +27,17 @@ export default class BoaRenameProvider implements vscode.RenameProvider {
             visitor.visit(tree);
 
             const range = document.getWordRangeAtPosition(position);
-            let pos = document.offsetAt(range.start);
+            if (range) {
+                let pos = document.offsetAt(range.start);
 
-            // if asking at a use site, look up the def
-            if (pos in visitor.usedefs) {
-                pos = visitor.usedefs[pos];
-            }
-
-            if (pos in visitor.defs) {
-                return Promise.resolve(document.getWordRangeAtPosition(position));
+                // if asking at a use site, look up the def
+                if (pos in visitor.usedefs) {
+                    pos = visitor.usedefs[pos];
+                }
+    
+                if (pos in visitor.defs) {
+                    return Promise.resolve(document.getWordRangeAtPosition(position));
+                }
             }
         }
 

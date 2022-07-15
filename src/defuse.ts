@@ -58,14 +58,17 @@ export default class DefsUsesVisitor extends AbstractParseTreeVisitor<void> impl
     }
 
     private addDef(ctx: ast.IdentifierContext) {
-        const idx = ctx.start.startIndex;
-
-        this._defs[idx] = ctx;
-        this.addUse(ctx, idx);
+        this._defs[ctx.start.startIndex] = ctx;
+        this.addUse(ctx, ctx);
         this.scopes[this.scopes.length - 1][ctx.text] = ctx;
     }
 
-    private addUse(ctx: ast.IdentifierContext, defIdx: number) {
+    private addUse(ctx: ast.IdentifierContext, defCtx: ast.IdentifierContext) {
+        if (defCtx === undefined) {
+            return;
+        }
+
+        const defIdx = defCtx.start.startIndex;
         if (!(defIdx in this._uses)) {
             this._uses[defIdx] = [];
         }
@@ -191,10 +194,7 @@ export default class DefsUsesVisitor extends AbstractParseTreeVisitor<void> impl
 
     // symbol uses
     public visitIdentifier(ctx: ast.IdentifierContext) {
-        const defCtx = this.getDef(ctx);
-        if (defCtx !== undefined) {
-            this.addUse(ctx, defCtx.start.startIndex);
-        }
+        this.addUse(ctx, this.getDef(ctx));
 
         return this.visitChildren(ctx);
     }

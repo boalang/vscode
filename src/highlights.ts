@@ -44,11 +44,11 @@ export default class BoaDocumentHighlightProvider implements vscode.DocumentHigh
                 // if there is no proper def/use found, highlight current word everywhere
                 const wordpos = document.getWordRangeAtPosition(position);
                 items.push(new vscode.DocumentHighlight(wordpos));
-    
+
                 if (wordpos) {
                     const text = document.getText();
                     const word = document.getText(wordpos);
-    
+
                     const matches = text.matchAll(new RegExp('\\b' + word + '\\b', 'g'));
                     for (const m of matches) {
                         const start = document.positionAt(m.index);

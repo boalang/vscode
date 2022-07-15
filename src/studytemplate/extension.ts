@@ -129,6 +129,7 @@ export async function showPreview(uri: vscode.Uri) {
     if (targetUri !== null) {
         if (!(uriStr in previewMap)) {
             previewMap[uriStr] = [targetUri];
+            vscode.workspace.onDidCloseTextDocument(e => delete previewMap[e.uri.toString()]);
             vscode.workspace.onDidChangeTextDocument(e => {
                 if (e.document.uri.toString() == uriStr) {
                     for (const t of previewMap[uriStr]) {

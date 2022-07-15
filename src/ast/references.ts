@@ -22,7 +22,7 @@ import { getRange } from './symbols';
 export default class BoaReferenceProvider implements vscode.ReferenceProvider {
     public provideReferences(document: vscode.TextDocument, position: vscode.Position, options: { includeDeclaration: boolean }, token: vscode.CancellationToken): Thenable<vscode.Location[]> {
         const items = [];
- 
+
         if (position.character >= 0) {
             const tree = parseBoaCode(document.getText());
             const visitor = new DefsUsesVisitor();

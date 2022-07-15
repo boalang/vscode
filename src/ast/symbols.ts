@@ -17,11 +17,11 @@
 import * as vscode from 'vscode';
 import { ParserRuleContext } from 'antlr4ts';
 import { AbstractParseTreeVisitor } from 'antlr4ts/tree/AbstractParseTreeVisitor';
-import * as ast from './antlr/boaParser';
-import { boaVisitor } from './antlr/boaVisitor';
+import * as ast from '../antlr/boaParser';
+import { boaVisitor } from '../antlr/boaVisitor';
 import { parseBoaCode } from './parser';
-import { getFileContents, getWorkspaceRoot } from './utils';
-import * as consts from './consts';
+import { getFileContents, getWorkspaceRoot } from '../utils';
+import * as consts from '../consts';
 
 export class BoaDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
     public provideDocumentSymbols(document: vscode.TextDocument, token: vscode.CancellationToken): Thenable<vscode.SymbolInformation[]> {

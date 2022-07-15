@@ -25,11 +25,11 @@ import JobCache from './jobcache';
 import { AttributeCompletionItemProvider, BuiltInsCompletionItemProvider, DSLTypesCompletionItemProvider, EnumValuesCompletionItemProvider } from './completions';
 import BoaSignatureHelpProvider from './signatures';
 import FunctionsHoverProvider from './hoverproviders';
-import BoaDefinitionProvider from './definitions';
-import BoaReferenceProvider from './references';
+import BoaDefinitionProvider from './ast/definitions';
+import BoaReferenceProvider from './ast/references';
 import BoaDocumentHighlightProvider from './highlights';
-import { BoaDocumentSymbolProvider, BoaWorkspaceSymbolProvider } from './symbols';
-import BoaRenameProvider from './renames';
+import { BoaDocumentSymbolProvider, BoaWorkspaceSymbolProvider } from './ast/symbols';
+import BoaRenameProvider from './ast/renames';
 
 export var outputChannel: vscode.OutputChannel;
 

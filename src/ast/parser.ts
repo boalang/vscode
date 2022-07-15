@@ -17,16 +17,19 @@
 import * as vscode from 'vscode';
 import { ANTLRErrorListener, CharStreams, CommonTokenStream, RecognitionException, Recognizer, Token } from 'antlr4ts';
 import { PredictionMode } from 'antlr4ts/atn/PredictionMode';
-import { boaLexer } from './antlr/BoaLexer';
-import { boaParser, StartContext } from './antlr/boaParser';
-import { reportDocumentErrors } from './diagnostics';
+import { boaLexer } from '../antlr/BoaLexer';
+import { boaParser, StartContext } from '../antlr/boaParser';
+import { reportDocumentErrors } from '../diagnostics';
 
 class ErrorListener implements ANTLRErrorListener<Token> {
     uri: vscode.Uri = undefined;
     errors: vscode.Diagnostic[] = [];
 
-    constructor(uri: vscode.Uri) {
-        this.uri = uri;
+    constructor(uri: vscode.Uri|string) {
+        if (typeof(uri) === 'string')
+            this.uri = vscode.Uri.parse(uri);
+        else if (uri instanceof vscode.Uri)
+            this.uri = uri;
     }
 
     syntaxError(recognizer: Recognizer<Token, any>,
@@ -48,7 +51,7 @@ class ErrorListener implements ANTLRErrorListener<Token> {
     }
 }
 
-function _internalParse(txt: string, uri: vscode.Uri) {
+function _internalParse(txt: string, uri: vscode.Uri|string) {
     const lexer = new boaLexer(CharStreams.fromString(txt));
     const tokenStream = new CommonTokenStream(lexer);
 
@@ -74,16 +77,22 @@ function _internalParse(txt: string, uri: vscode.Uri) {
     return { tree, errors: listener.errors };
 }
 
-export function errorCheckBoaCode(txt: string, uri: vscode.Uri) {
-    const { tree, errors } = _internalParse(txt, uri);
-    return [...errors];
-}
-
-export function parseBoaCode(txt: string, uri: vscode.Uri = undefined) {
+export function parseBoaCode(txt: string, uri: vscode.Uri|string = undefined) {
     const { tree, errors } = _internalParse(txt, uri);
 
     if (uri) {
-        reportDocumentErrors(vscode.workspace.textDocuments.filter(d => d.uri.toString() == uri.toString()).pop(), errors);
+        uri = uri.toString();
+        let found = false;
+        for (const tabGroup of vscode.window.tabGroups.all) {
+            for (const tab of tabGroup.tabs) {
+                const input = tab.input as vscode.TabInputText;
+                if (input.uri.toString() == uri) {
+                    reportDocumentErrors(vscode.workspace.textDocuments.filter(d => d.uri.toString() == uri).pop()?.uri, errors);
+                    break;
+                }
+            }
+            if (found) break;
+        }
     }
 
     return tree.program();

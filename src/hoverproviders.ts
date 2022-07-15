@@ -19,12 +19,19 @@ import { builtinFunctions } from './types';
 
 export default class FunctionsHoverProvider implements vscode.HoverProvider {
     async provideHover(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.Hover> {
-        const funcRange = document.getWordRangeAtPosition(position, /[a-zA-Z0-9]+(?=\s*\()/);
+        const funcRange = document.getWordRangeAtPosition(position, /[a-zA-Z0-9_]+(?=\s*\()/);
 
         if (funcRange && document.getText(new vscode.Range(position, position.translate(0, 1))) != '(') {
             const funcName = document.getText(funcRange);
             if (funcName in builtinFunctions) {
-                return new vscode.Hover(new vscode.MarkdownString(`\`\`\`boalang\n${getFuncSignature(funcName)}\n\`\`\`\n\n----\n\n${getFuncDoc(funcName)}`));
+                return new vscode.Hover(new vscode.MarkdownString(
+`\`\`\`boalang
+${getFuncSignature(funcName)}
+\`\`\`
+
+----
+
+${getFuncDoc(funcName)}`));
             }
         }
 

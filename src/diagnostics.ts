@@ -17,7 +17,7 @@
 import * as vscode from 'vscode';
 import { runBoaCommands } from './boa';
 import { CompilerStatus, ExecutionStatus } from '@boalang/boa-api';
-import { errorCheckBoaCode } from './ast/parser';
+import { parseBoaCode } from './ast/parser';
 
 let diagnosticCollection: vscode.DiagnosticCollection;
 const diagsCache = new Map<vscode.Uri, vscode.Diagnostic[]>();
@@ -74,7 +74,7 @@ function reportWebErrors(uri: vscode.Uri, errors: string[]) {
 
 export function reportPreviewErrors(document: vscode.TextDocument) {
     if (document) {
-        reportDocumentErrors(document, errorCheckBoaCode(document.getText(), document.uri));
+        parseBoaCode(document.getText(), document.uri);
     }
 }
 

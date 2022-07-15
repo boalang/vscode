@@ -74,11 +74,6 @@ function _internalParse(txt: string, uri: vscode.Uri) {
     return { tree, errors: listener.errors };
 }
 
-export function errorCheckBoaCode(txt: string, uri: vscode.Uri) {
-    const { tree, errors } = _internalParse(txt, uri);
-    return [...errors];
-}
-
 export function parseBoaCode(txt: string, uri: vscode.Uri = undefined) {
     const { tree, errors } = _internalParse(txt, uri);
 

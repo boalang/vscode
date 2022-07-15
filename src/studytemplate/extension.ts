@@ -108,7 +108,7 @@ async function runMakeCommand(target, shouldRefresh = true) {
 }
 
 const previewMap: { [key: string]: [string] } = {};
-export async function showPreview(uri) {
+export async function showPreview(uri: vscode.Uri) {
     let targetUri = null;
     const uriStr = uri.toString();
     const uriPath = uri.path.substring(getWorkspaceRoot().length);

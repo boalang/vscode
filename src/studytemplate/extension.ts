@@ -28,6 +28,7 @@ import { boaDocumentProvider } from '../contentprovider';
 import enableDiagnostics from './diagnostics';
 import { reportDocumentErrors } from '../diagnostics';
 import { BoaTemplateRefactoringProvider, extractSnippet } from './refactor';
+import TemplateTagRenameProvider from './renames';
 
 export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     const jobsSelector: vscode.DocumentSelector = {
@@ -71,6 +72,9 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.languages.registerCodeActionsProvider('boalang', new BoaTemplateRefactoringProvider(), {
         providedCodeActionKinds: [vscode.CodeActionKind.RefactorExtract]
     }));
+
+    context.subscriptions.push(vscode.languages.registerRenameProvider('boalang', new TemplateTagRenameProvider()));
+    context.subscriptions.push(vscode.languages.registerRenameProvider(studyConfigSelector, new TemplateTagRenameProvider()));
 
     enableDiagnostics(context, studyConfigSelector);
 

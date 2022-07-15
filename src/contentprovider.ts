@@ -15,8 +15,8 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
+import { parseBoaCode } from './ast/parser';
 import { runBoaCommands } from './boa';
-import { reportPreviewErrors } from './diagnostics';
 import JobCache from './jobcache';
 import { getQuery } from './studytemplate/extension';
 
@@ -29,7 +29,7 @@ export const boaDocumentProvider = new class implements vscode.TextDocumentConte
         switch (uri.fragment) {
             case 'preview':
                 data += await getQuery(vscode.Uri.parse(uri.query), uri.authority);
-                reportPreviewErrors(vscode.workspace.textDocuments.filter(d => d.uri.toString() == uri.toString()).pop());
+                parseBoaCode(data, uri);
                 break;
 
             case 'details':

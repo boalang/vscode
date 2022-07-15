@@ -521,17 +521,17 @@ export const builtinEnums: { [name: string]: IEnum } = {
     },
 };
 
-interface IFunctionArg {
+export interface IFunctionArg {
     name: string,
     doc: string,
 }
 
-interface IReturnType {
+export interface IReturnType {
     type: string,
     doc: string,
 }
 
-interface IFunction {
+export interface IFunction {
     args: IFunctionArg[],
     ret: IReturnType,
     doc: string,

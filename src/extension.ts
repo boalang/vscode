@@ -23,7 +23,7 @@ import { boaDocumentProvider } from './contentprovider';
 import { enableDiagnostics } from './diagnostics';
 import JobCache from './jobcache';
 import { AttributeCompletionItemProvider, BuiltInsCompletionItemProvider, DSLTypesCompletionItemProvider, EnumValuesCompletionItemProvider } from './completions';
-import BoaSignatureHelpProvider from './signatures';
+import BoaSignatureHelpProvider from './ast/signatures';
 import FunctionsHoverProvider from './hoverproviders';
 import BoaDefinitionProvider from './ast/definitions';
 import BoaReferenceProvider from './ast/references';

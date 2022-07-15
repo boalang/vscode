@@ -27,6 +27,7 @@ import { cache } from './jsoncache';
 import { boaDocumentProvider } from '../contentprovider';
 import enableDiagnostics from './diagnostics';
 import { reportDocumentErrors } from '../diagnostics';
+import { BoaTemplateRefactoringProvider, extractSnippet } from './refactor';
 
 export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     const jobsSelector: vscode.DocumentSelector = {
@@ -40,6 +41,7 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
         pattern: '**/study-config.json',
     };
 
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.refactor.template.extract', extractSnippet));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.preview', showPreview));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.downloadOutput', filename => runMakeCommand(`${consts.outputPath}/${filename}`)));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.generateCSV', filename => runMakeCommand(`${consts.csvPath}/${filename}`)));
@@ -65,6 +67,10 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.languages.registerCodeLensProvider(studyConfigSelector, new StudyConfigCodelensProvider()));
 
     context.subscriptions.push(vscode.languages.registerHoverProvider('boalang', new SubstitutionHoverProvider()));
+
+    context.subscriptions.push(vscode.languages.registerCodeActionsProvider('boalang', new BoaTemplateRefactoringProvider(), {
+        providedCodeActionKinds: [vscode.CodeActionKind.RefactorExtract]
+    }));
 
     enableDiagnostics(context, studyConfigSelector);
 

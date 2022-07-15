@@ -34,6 +34,7 @@
         "workspaceContains:**/study-config.json",
         "onView:boalang.jobList",
         "onCommand:boalang.refactor.extractfunction",
+        "onCommand:boalang.refactor.template.extract",
         "onCommand:boalang.runQuery",
         "onCommand:boalang.setFavorite",
         "onCommand:boalang.setEndpoint",
@@ -68,6 +69,11 @@
             {
                 "command": "boalang.refactor.extractfunction",
                 "title": "Extract Method",
+                "category": "Boa"
+            },
+            {
+                "command": "boalang.refactor.template.extract",
+                "title": "Extract Template Snippet",
                 "category": "Boa"
             },
             {
@@ -302,6 +308,10 @@
             "commandPalette": [
                 {
                     "command": "boalang.refactor.extractfunction",
+                    "when": "false"
+                },
+                {
+                    "command": "boalang.refactor.template.extract",
                     "when": "false"
                 },
                 {

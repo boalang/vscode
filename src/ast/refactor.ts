@@ -82,7 +82,6 @@ export async function extractMethod(document: vscode.TextDocument, range: vscode
 
     vscode.window.activeTextEditor.selection = new vscode.Selection(new vscode.Position(range.start.line + lines, range.start.character), new vscode.Position(range.start.line + lines, range.start.character + 8));
     await vscode.commands.executeCommand('editor.action.rename', [
-        document.uri,
-        range
+        document.uri
     ]);
 }

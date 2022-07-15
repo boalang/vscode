@@ -17,7 +17,7 @@
 import * as vscode from 'vscode';
 import { runBoaCommands } from './boa';
 import { CompilerStatus, ExecutionStatus } from '@boalang/boa-api';
-import { errorCheckBoaCode } from './parser';
+import { errorCheckBoaCode } from './ast/parser';
 
 let diagnosticCollection: vscode.DiagnosticCollection;
 const diagsCache = new Map<vscode.Uri, vscode.Diagnostic[]>();

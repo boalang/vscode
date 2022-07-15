@@ -16,8 +16,8 @@
 //
 import { RuleNode } from 'antlr4ts/tree/RuleNode';
 import { AbstractParseTreeVisitor } from 'antlr4ts/tree/AbstractParseTreeVisitor';
-import * as ast from './antlr/boaParser';
-import { boaVisitor } from './antlr/boaVisitor';
+import * as ast from '../antlr/boaParser';
+import { boaVisitor } from '../antlr/boaVisitor';
 
 export default class DefsUsesVisitor extends AbstractParseTreeVisitor<void> implements boaVisitor<void> {
     private scopes: { [name: string]: ast.IdentifierContext }[] = [ {} ];

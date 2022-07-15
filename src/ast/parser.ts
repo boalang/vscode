@@ -17,9 +17,9 @@
 import * as vscode from 'vscode';
 import { ANTLRErrorListener, CharStreams, CommonTokenStream, RecognitionException, Recognizer, Token } from 'antlr4ts';
 import { PredictionMode } from 'antlr4ts/atn/PredictionMode';
-import { boaLexer } from './antlr/BoaLexer';
-import { boaParser, StartContext } from './antlr/boaParser';
-import { reportDocumentErrors } from './diagnostics';
+import { boaLexer } from '../antlr/BoaLexer';
+import { boaParser, StartContext } from '../antlr/boaParser';
+import { reportDocumentErrors } from '../diagnostics';
 
 class ErrorListener implements ANTLRErrorListener<Token> {
     uri: vscode.Uri = undefined;

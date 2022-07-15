@@ -15,9 +15,9 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
-import DefsUsesVisitor from './defuse';
-import { parseBoaCode } from './parser';
-import { getRange } from './symbols';
+import DefsUsesVisitor from './ast/defuse';
+import { parseBoaCode } from './ast/parser';
+import { getRange } from './ast/symbols';
 
 export default class BoaDocumentHighlightProvider implements vscode.DocumentHighlightProvider {
     public async provideDocumentHighlights(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.DocumentHighlight[]> {

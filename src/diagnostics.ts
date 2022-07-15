@@ -17,9 +17,10 @@
 import * as vscode from 'vscode';
 import { runBoaCommands } from './boa';
 import { CompilerStatus, ExecutionStatus } from '@boalang/boa-api';
+import { errorCheckBoaCode } from './parser';
 
 let diagnosticCollection: vscode.DiagnosticCollection;
-const diagsCache = new Map();
+const diagsCache = new Map<vscode.Uri, vscode.Diagnostic[]>();
 
 export async function enableDiagnostics(context: vscode.ExtensionContext) {
     diagnosticCollection = vscode.languages.createDiagnosticCollection('boalang');
@@ -52,6 +53,8 @@ export async function enableDiagnostics(context: vscode.ExtensionContext) {
                 }).then((val) => {
                     diagnosticCollection.set(uri, diagsCache.get(uri));
                 });
+            } else if (uri.scheme == 'boalang' && isNaN(+uri.authority) && !diagsCache.has(uri)) {
+                reportPreviewErrors(editor.document);
             } else {
                 diagnosticCollection.set(uri, diagsCache.get(uri));
             }
@@ -59,8 +62,8 @@ export async function enableDiagnostics(context: vscode.ExtensionContext) {
     });
 }
 
-function reportWebErrors(uri: vscode.Uri, errors: [string]) {
-    let diagnostics = errors.map((err) => errorToDiagnostic(err));
+function reportWebErrors(uri: vscode.Uri, errors: string[]) {
+    let diagnostics = errors.map((err) => webErrorToDiagnostic(err));
 
     if (diagnostics.length > 0) {
         diagsCache.set(uri, diagnostics);
@@ -69,11 +72,29 @@ function reportWebErrors(uri: vscode.Uri, errors: [string]) {
     }
 }
 
+export function reportPreviewErrors(document: vscode.TextDocument) {
+    if (document) {
+        reportDocumentErrors(document, errorCheckBoaCode(document.getText(), document.uri));
+    }
+}
+
+export function reportDocumentErrors(document: vscode.TextDocument, diagnostics) {
+    if (document) {
+        if (diagnostics.length > 0) {
+            diagsCache.set(document.uri, diagnostics);
+        } else {
+            diagsCache.set(document.uri, undefined);
+        }
+
+        diagnosticCollection.set(document.uri, diagsCache.get(document.uri));
+    }
+}
+
 const lexRegex = /Lexical error at line (\d+), columns? (\d+)(?:-(\d+))?\.\s*(.*)\s*/;
 const parseRegex = /Encountered .* at line (\d+), columns? (\d+)(?:-(\d+))?\.\s*(.*)\s*/;
 const typeRegex = /Error at lines (\d+)-(\d+), columns (\d+)-(\d+):\s*(.*)\s*/;
 
-function errorToDiagnostic(error: string): vscode.Diagnostic {
+function webErrorToDiagnostic(error: string): vscode.Diagnostic {
     let errStr = error;
     let start = new vscode.Position(0, 0);
     let end = new vscode.Position(0, 0);

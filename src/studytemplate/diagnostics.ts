@@ -18,12 +18,9 @@ import * as vscode from 'vscode';
 import { getDatasets, onDatasetsChange } from '../boa';
 import { adminPrefix, analysesPath, scriptPath } from '../consts';
 import { getWorkspaceRoot } from '../utils';
+import { DatasetActionProvider, StudyDatasetActionProvider } from './codeactions';
 import { cache } from './jsoncache';
-
-const CODE_INVALID_DS = 'invalid-dataset';
-const CODE_UNKNOWN_STUDY_DS = 'unknown-study-dataset';
-const CODE_BAD_QUERY = 'bad-query-filename';
-const CODE_BAD_ANALYSIS = 'bad-analysis-filename';
+import * as consts from './consts';
 
 let diagnosticCollection: vscode.DiagnosticCollection;
 
@@ -52,7 +49,7 @@ async function checkStudyConfig() {
         for (const dsName in cache.json['datasets']) {
             const ds = cache.json['datasets'][dsName];
             if (datasets.indexOf(ds) == -1 && datasets.indexOf(adminPrefix + ds) == -1) {
-                diags.push(makeJsonDiagnostic(ds, dsName, CODE_INVALID_DS, `${ds} is not a valid Boa dataset.`));
+                diags.push(makeJsonDiagnostic(ds, dsName, consts.CODE_INVALID_DS, `${ds} is not a valid Boa dataset.`));
             }
         }
     }
@@ -62,7 +59,7 @@ async function checkStudyConfig() {
     for (const outputPath in cache.json['queries']) {
         const ds = cache.json['queries'][outputPath]['dataset'];
         if (datasetNames.indexOf(ds) == -1) {
-            diags.push(makeJsonDiagnostic(ds, outputPath, CODE_UNKNOWN_STUDY_DS, `${ds} is not a valid study dataset. Current study datasets are: ${datasetNames.join(', ')}`));
+            diags.push(makeJsonDiagnostic(ds, outputPath, consts.CODE_UNKNOWN_STUDY_DS, `${ds} is not a valid study dataset. Current study datasets are: ${datasetNames.join(', ')}`));
         }
     }
 
@@ -71,7 +68,7 @@ async function checkStudyConfig() {
         try {
             await vscode.workspace.fs.stat(vscode.Uri.file(getWorkspaceRoot() + '/' + scriptPath + '/' + q));
         } catch {
-            diags.push(makeJsonDiagnostic(q, outputPath, CODE_BAD_QUERY, `The Boa query ${q}' does not exist in the "${scriptPath}/" folder.`));
+            diags.push(makeJsonDiagnostic(q, outputPath, consts.CODE_BAD_QUERY, `The Boa query ${q}' does not exist in the "${scriptPath}/" folder.`));
         }
     }
 
@@ -79,7 +76,7 @@ async function checkStudyConfig() {
         try {
             await vscode.workspace.fs.stat(vscode.Uri.file(getWorkspaceRoot() + '/' + analysesPath + '/' + analysis));
         } catch {
-            diags.push(makeJsonDiagnostic(analysis, analysis, CODE_BAD_ANALYSIS, `The analysis script ${analysis}' does not exist in the "${analysesPath}/" folder.`));
+            diags.push(makeJsonDiagnostic(analysis, analysis, consts.CODE_BAD_ANALYSIS, `The analysis script ${analysis}' does not exist in the "${analysesPath}/" folder.`));
         }
     }
 
@@ -101,35 +98,4 @@ function makeJsonDiagnostic(badStr: string, jsonKey: string, code, err) {
     diag.code = code;
     diag.source = 'boa';
     return diag;
-}
-
-class DatasetActionProvider implements vscode.CodeActionProvider {
-    async provideCodeActions(document: vscode.TextDocument, range: vscode.Range | vscode.Selection, context: vscode.CodeActionContext, token: vscode.CancellationToken): Promise<vscode.CodeAction[]> {
-        const datasets = await getDatasets(false);
-        if (datasets === null || datasets.length == 0) {
-            return [];
-        }
-        return context.diagnostics
-            .filter(diagnostic => diagnostic.code === CODE_INVALID_DS)
-            .map(diagnostic => datasets.map(ds => createCodeAction(diagnostic, ds.replace(adminPrefix, ''))))
-            .flat();
-    }
-}
-
-class StudyDatasetActionProvider implements vscode.CodeActionProvider {
-    provideCodeActions(document: vscode.TextDocument, range: vscode.Range | vscode.Selection, context: vscode.CodeActionContext, token: vscode.CancellationToken): vscode.CodeAction[] {
-        const datasetNames = cache.getDatasets();
-        return context.diagnostics
-            .filter(diagnostic => diagnostic.code === CODE_UNKNOWN_STUDY_DS)
-            .map(diagnostic => datasetNames.map(ds => createCodeAction(diagnostic, ds)))
-            .flat();
-    }
-}
-
-function createCodeAction(diagnostic: vscode.Diagnostic, ds: string): vscode.CodeAction {
-    const action = new vscode.CodeAction('replace with: ' + ds, vscode.CodeActionKind.QuickFix);
-    action.diagnostics = [diagnostic];
-    action.edit = new vscode.WorkspaceEdit();
-    action.edit.replace(cache.uri, diagnostic.range, ds);
-    return action;
 }

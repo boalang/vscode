@@ -30,6 +30,7 @@ import BoaReferenceProvider from './ast/references';
 import BoaDocumentHighlightProvider from './highlights';
 import { BoaDocumentSymbolProvider, BoaWorkspaceSymbolProvider } from './ast/symbols';
 import BoaRenameProvider from './ast/renames';
+import { BoaRefactoringProvider, extractMethod } from './ast/refactor';
 
 export var outputChannel: vscode.OutputChannel;
 
@@ -67,6 +68,8 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('boalang.job.resubmit', resubmitJob));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.job.stop', stopJob));
 
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.refactor.extractfunction', extractMethod));
+
     context.subscriptions.push(vscode.languages.registerCompletionItemProvider('boalang', new BuiltInsCompletionItemProvider()));
     context.subscriptions.push(vscode.languages.registerCompletionItemProvider('boalang', new EnumValuesCompletionItemProvider(), '.'));
     context.subscriptions.push(vscode.languages.registerCompletionItemProvider('boalang', new DSLTypesCompletionItemProvider(), ':'));
@@ -83,6 +86,10 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.languages.registerSignatureHelpProvider('boalang', new BoaSignatureHelpProvider(), '(', ','));
 
     context.subscriptions.push(vscode.languages.registerRenameProvider('boalang', new BoaRenameProvider()));
+
+    context.subscriptions.push(vscode.languages.registerCodeActionsProvider('boalang', new BoaRefactoringProvider(), {
+        providedCodeActionKinds: [vscode.CodeActionKind.RefactorExtract]
+    }));
 
     activateStudyTemplateSupport(context);
 

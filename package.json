@@ -65,6 +65,11 @@
     "contributes": {
         "commands": [
             {
+                "command": "boalang.refactor.extractfunction",
+                "title": "Extract Method",
+                "category": "Boa"
+            },
+            {
                 "command": "boalang.runQuery",
                 "title": "Run Boa Query",
                 "icon": "$(play)",

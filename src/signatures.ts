@@ -19,27 +19,29 @@ import { builtinFunctions } from './types';
 
 export default class BoaSignatureHelpProvider implements vscode.SignatureHelpProvider {
     public provideSignatureHelp(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.SignatureHelp> {
-        const { funcName, paramNum } = findFunction(document, position);
-        if (funcName === null || paramNum === null)
+        const { funcName, paramNum } = findFunctionCall(document, position);
+        if (funcName === undefined || paramNum === undefined)
             return undefined;
         if (!(funcName in builtinFunctions))
             return undefined;
 
         const func = builtinFunctions[funcName];
 
-        const help = new vscode.SignatureHelp();
         const args = func.args.map(arg => arg.name).join(', ');
         const sig = new vscode.SignatureInformation(`${funcName}(${args})${func.ret.type}`, new vscode.MarkdownString(func.doc));
         sig.parameters = func.args
             .map(arg => new vscode.ParameterInformation(arg.name, arg.doc.length > 0 ? new vscode.MarkdownString(`**${arg.name}** - ${arg.doc}`) : ''));
+
+        const help = new vscode.SignatureHelp();
         help.signatures = [sig];
         help.activeSignature = 0;
         help.activeParameter = paramNum;
+
         return Promise.resolve(help);
     }
 }
 
-function findFunction(document, position) {
+function findFunctionCall(document, position) {
     const text = document.getText(new vscode.Range(new vscode.Position(0, 0), position));
     const offset = document.offsetAt(position);
 
@@ -80,7 +82,7 @@ function findFunction(document, position) {
             case ';':
             case '}':
                 if (closeParenPos == 0)
-                    return { funcName: null, paramNum: null };
+                    return { };
                 break;
         }
         if (closeParenPos == -1) {

@@ -26,6 +26,7 @@ import { showUri } from '../boa';
 import { cache } from './jsoncache';
 import { boaDocumentProvider } from '../contentprovider';
 import enableDiagnostics from './diagnostics';
+import { reportDocumentErrors } from '../diagnostics';
 
 export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     const jobsSelector: vscode.DocumentSelector = {
@@ -79,9 +80,29 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
             uriStr => previewMap[uriStr].forEach(
                 t => boaDocumentProvider.onDidChangeEmitter.fire(vscode.Uri.parse(t))));
     });
+
+    // live updating of previews
+    vscode.workspace.onDidChangeTextDocument(e => {
+        const uri = e.document.uri.toString();
+        if (uri in previewMap) {
+            for (const t of previewMap[uri]) {
+                boaDocumentProvider.onDidChangeEmitter.fire(vscode.Uri.parse(t));
+            }
+        }
+    })
+
+    // cleanup preview cache
+    vscode.workspace.onDidCloseTextDocument(e => {
+        removePreviewCache(e.uri);
+    });
+    vscode.window.tabGroups.onDidChangeTabs(e => {
+        for (const tab of e.closed) {
+            removePreviewCache((tab.input as vscode.TabInputText).uri);
+        }
+    });
 }
 
-async function runMakeCommand(target, shouldRefresh = true) {
+async function runMakeCommand(target: string, shouldRefresh = true) {
     const taskArgs: vscode.ShellQuotedString[] = [];
     if (target) {
         taskArgs.push({
@@ -107,46 +128,57 @@ async function runMakeCommand(target, shouldRefresh = true) {
     }
 }
 
-const previewMap: { [key: string]: [string] } = {};
+const previewMap: { [key: string]: string[] } = {};
 export async function showPreview(uri: vscode.Uri) {
-    let targetUri = null;
+    let targetUriStr = null;
     const uriStr = uri.toString();
     const uriPath = uri.path.substring(getWorkspaceRoot().length);
 
     const items = cache.getQueryTargets(uri);
     if (items.length == 0) {
-        targetUri = `boalang:///preview/from${uriPath}?${uriStr}#preview`;
+        targetUriStr = `boalang:///preview/from${uriPath}?${encodeURIComponent(uriStr)}#preview`;
     } else {
         const target = await vscode.window.showQuickPick(items, {
             title: 'Select the query to preview',
             ignoreFocusOut: false
         });
         if (target) {
-            targetUri = `boalang://${encodeURIComponent(target)}/preview/${target}/from${uriPath}?${uriStr}#preview`;
+            targetUriStr = `boalang://${encodeURIComponent(target)}/preview/${target}/from${uriPath}?${encodeURIComponent(uriStr)}#preview`;
         }
     }
 
-    if (targetUri !== null) {
+    if (targetUriStr !== null) {
         if (!(uriStr in previewMap)) {
-            previewMap[uriStr] = [targetUri];
-            vscode.workspace.onDidCloseTextDocument(e => delete previewMap[e.uri.toString()]);
-            vscode.workspace.onDidChangeTextDocument(e => {
-                if (e.document.uri.toString() == uriStr) {
-                    for (const t of previewMap[uriStr]) {
-                        boaDocumentProvider.onDidChangeEmitter.fire(vscode.Uri.parse(t));
-                    }
-                }
-            })
+            previewMap[uriStr] = [targetUriStr];
         } else {
-            if (previewMap[uriStr].indexOf(targetUri) == -1) {
-                previewMap[uriStr].push(targetUri);
+            if (previewMap[uriStr].indexOf(targetUriStr) == -1) {
+                previewMap[uriStr].push(targetUriStr);
             }
         }
-        showUri(vscode.Uri.parse(targetUri));
+        const targetUri = vscode.Uri.parse(targetUriStr);
+        boaDocumentProvider.onDidChangeEmitter.fire(targetUri);
+        showUri(targetUri);
     }
 }
 
-export async function getQuery(uri: vscode.Uri, authority) {
+function removePreviewCache(uri: vscode.Uri) {
+    const uriStr = uri.toString();
+
+    for (const [key, value] of Object.entries(previewMap)) {
+        console.log(uriStr);
+        console.log(value[0]);
+        const idx = value.indexOf(uriStr);
+        if (idx != -1) {
+            value.splice(idx, 1);
+        }
+        if (value.length == 0) {
+            delete previewMap[key];
+        }
+    }
+    reportDocumentErrors(uri, []);
+}
+
+export async function getQuery(uri: vscode.Uri, authority: string) {
     let query = '';
     if (uri.scheme == 'untitled' || uri.scheme == 'boalang') {
         query = vscode.window.activeTextEditor.document.getText();

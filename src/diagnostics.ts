@@ -78,15 +78,15 @@ export function reportPreviewErrors(document: vscode.TextDocument) {
     }
 }
 
-export function reportDocumentErrors(document: vscode.TextDocument, diagnostics) {
-    if (document) {
+export function reportDocumentErrors(uri: vscode.Uri, diagnostics: vscode.Diagnostic[]) {
+    if (uri) {
         if (diagnostics.length > 0) {
-            diagsCache.set(document.uri, diagnostics);
+            diagsCache.set(uri, diagnostics);
         } else {
-            diagsCache.set(document.uri, undefined);
+            diagsCache.set(uri, undefined);
         }
 
-        diagnosticCollection.set(document.uri, diagsCache.get(document.uri));
+        diagnosticCollection.set(uri, diagsCache.get(uri));
     }
 }
 

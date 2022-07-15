@@ -1,5 +1,15 @@
 # Change Log
 
+## [0.2.0] - 2022-07-15
+ - extension is no longer considered a preview
+ - better support for method signature helpers, including user-defined functions
+ - ability to rename template tags
+ - added a rudimentary extract refactoring to make code snippet files
+ - very rudimentary extract method support
+ - added documentation for the traverse() function
+ - template live previews now have errors synchronized to the preview
+ - better handling of some syntax error messages
+
 ## [0.1.9] - 2022-07-14
  - switched to using ASTs to process queries
  - added syntax error marking as you type

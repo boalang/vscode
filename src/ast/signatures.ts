@@ -17,10 +17,10 @@
 import * as vscode from 'vscode';
 import { AbstractParseTreeVisitor } from 'antlr4ts/tree/AbstractParseTreeVisitor';
 import { RuleNode } from 'antlr4ts/tree/RuleNode';
-import * as ast from './antlr/boaParser';
-import { boaVisitor } from './antlr/boaVisitor';
-import { parseBoaCode } from './ast/parser';
-import { builtinFunctions, IFunction } from './types';
+import * as ast from '../antlr/boaParser';
+import { boaVisitor } from '../antlr/boaVisitor';
+import { parseBoaCode } from './parser';
+import { builtinFunctions, IFunction } from '../types';
 
 export default class BoaSignatureHelpProvider implements vscode.SignatureHelpProvider {
     public provideSignatureHelp(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.SignatureHelp> {

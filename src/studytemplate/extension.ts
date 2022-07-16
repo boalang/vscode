@@ -28,6 +28,9 @@ import { boaDocumentProvider } from '../contentprovider';
 import enableDiagnostics from './diagnostics';
 import { reportDocumentErrors } from '../diagnostics';
 import { BoaTemplateRefactoringProvider, extractSnippet } from './refactor';
+import TemplateTagRenameProvider from './renames';
+import TemplateTagHighlightProvider from './highlights';
+import { TemplateTagSymbolProvider } from './symbols';
 
 export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     const jobsSelector: vscode.DocumentSelector = {
@@ -57,6 +60,7 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.cleanOutput', filename => runMakeCommand(`clean-${consts.outputPath}/${filename}`, false)));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.make', _ => runMakeCommand(undefined)));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.zip', _ => runMakeCommand('zip', false)));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.template.addtag', tag => cache.addTemplateTag(tag)));
 
     context.subscriptions.push(vscode.languages.registerDocumentLinkProvider(jobsSelector, new JobsJSONLinkProvider()));
     context.subscriptions.push(vscode.languages.registerDocumentLinkProvider(studyConfigSelector, new StudyConfigJSONLinkProvider()));
@@ -66,11 +70,17 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
 
     context.subscriptions.push(vscode.languages.registerCodeLensProvider(studyConfigSelector, new StudyConfigCodelensProvider()));
 
+    context.subscriptions.push(vscode.languages.registerDocumentSymbolProvider('boalang', new TemplateTagSymbolProvider()));
+    context.subscriptions.push(vscode.languages.registerDocumentHighlightProvider('boalang', new TemplateTagHighlightProvider()));
+
     context.subscriptions.push(vscode.languages.registerHoverProvider('boalang', new SubstitutionHoverProvider()));
 
     context.subscriptions.push(vscode.languages.registerCodeActionsProvider('boalang', new BoaTemplateRefactoringProvider(), {
         providedCodeActionKinds: [vscode.CodeActionKind.RefactorExtract]
     }));
+
+    context.subscriptions.push(vscode.languages.registerRenameProvider('boalang', new TemplateTagRenameProvider()));
+    context.subscriptions.push(vscode.languages.registerRenameProvider(studyConfigSelector, new TemplateTagRenameProvider()));
 
     enableDiagnostics(context, studyConfigSelector);
 

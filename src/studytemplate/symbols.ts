@@ -14,10 +14,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
+import * as vscode from 'vscode';
+import { updateTemplateTagDiagnostics } from './diagnostics';
 
-// diagnostics/code actions
-export const CODE_INVALID_DS = 'invalid-dataset';
-export const CODE_UNKNOWN_STUDY_DS = 'unknown-study-dataset';
-export const CODE_BAD_QUERY_FN = 'bad-query-filename';
-export const CODE_BAD_ANALYSIS_FN = 'bad-analysis-filename';
-export const CODE_UNKNOWN_TEMPLATE_TAG = 'unknown-template-tag';
+export class TemplateTagSymbolProvider implements vscode.DocumentSymbolProvider {
+    public async provideDocumentSymbols(document: vscode.TextDocument, token: vscode.CancellationToken): Promise<vscode.SymbolInformation[]> {
+        updateTemplateTagDiagnostics(document);
+        return undefined;
+   }
+}

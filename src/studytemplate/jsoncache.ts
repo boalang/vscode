@@ -14,6 +14,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
+import { TextEncoder } from 'util';
 import * as vscode from 'vscode';
 import { snippetPath, studyConfigFile } from '../consts';
 import { getFileContents, getWorkspaceRoot } from '../utils';
@@ -99,7 +100,7 @@ class StudyConfigCache {
         return this.substitutions;
     }
 
-    async resolveSubstitutions(filename) {
+    async resolveSubstitutions(filename: string) {
         const subDefinitions = this.getSubstitutions();
         const subs = {};
         for (const s of Object.keys(subDefinitions['substitutions'])) {
@@ -135,7 +136,7 @@ class StudyConfigCache {
         return query;
     }
 
-    private async getSubst(replacement, limit) {
+    private async getSubst(replacement, limit: number) {
         let content = '';
         if (replacement.hasOwnProperty('file')) {
             const path = getWorkspaceRoot() + '/' + snippetPath + '/' + replacement['file'];
@@ -182,7 +183,7 @@ class StudyConfigCache {
         return Object.keys(this.json['queries']);
     }
 
-    getQueryTargets(uri) {
+    getQueryTargets(uri: vscode.Uri) {
         const uriStr = uri.toString();
 
         const targets = [];
@@ -194,7 +195,7 @@ class StudyConfigCache {
         return targets;
     }
 
-    getAnalysisInputs(filename) {
+    getAnalysisInputs(filename: string) {
         if (!this.json.hasOwnProperty('analyses')) return [];
         if (!this.json['analyses'].hasOwnProperty(filename)) return [];
         if (!this.json['analyses'][filename].hasOwnProperty('input')) return [];
@@ -220,6 +221,36 @@ class StudyConfigCache {
         this.datasets = null;
 
         this.onDidChangeEmitter.fire(this);
+    }
+
+    async addTemplateTag(tag: string) {
+        if (!tag) {
+            tag = await vscode.window.showInputBox({
+                placeHolder: '{@tag@}',
+                title: 'New Template Tag',
+                prompt: 'Enter the new, global template tag to add',
+            });
+            if (!tag) {
+                return;
+            }
+        }
+
+        // normalize the tag
+        tag = tag.trim();
+        if (!tag.startsWith('{@')) tag = '{@' + tag;
+        if (!tag.endsWith('@}')) tag = tag + '@}';
+
+        // add it globally
+        if (!('substitutions' in this._json)) {
+            this._json['substitutions'] = [];
+        }
+        this._json['substitutions'].push({
+            target: tag,
+            replacement: '',
+        });
+
+        const json = JSON.stringify(this._json, null, 4) + '\n';
+        await vscode.workspace.fs.writeFile(this.uri, new TextEncoder().encode(json));
     }
 }
 

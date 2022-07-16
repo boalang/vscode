@@ -17,6 +17,7 @@
 import * as vscode from 'vscode';
 import { getDatasets } from '../boa';
 import { adminPrefix } from '../consts';
+import { removeDuplicates } from '../utils';
 import * as consts from './consts';
 import { cache } from './jsoncache';
 
@@ -28,7 +29,7 @@ export class DatasetActionProvider implements vscode.CodeActionProvider {
         }
         return context.diagnostics
             .filter(diagnostic => diagnostic.code === consts.CODE_INVALID_DS)
-            .map(diagnostic => datasets.map(ds => createCodeAction(diagnostic, ds.replace(adminPrefix, ''))))
+            .map(diagnostic => datasets.map(ds => createReplaceCodeAction(diagnostic, cache.uri, ds.replace(adminPrefix, ''))))
             .flat();
     }
 }
@@ -38,15 +39,50 @@ export class StudyDatasetActionProvider implements vscode.CodeActionProvider {
         const datasetNames = cache.getDatasets();
         return context.diagnostics
             .filter(diagnostic => diagnostic.code === consts.CODE_UNKNOWN_STUDY_DS)
-            .map(diagnostic => datasetNames.map(ds => createCodeAction(diagnostic, ds)))
+            .map(diagnostic => datasetNames.map(ds => createReplaceCodeAction(diagnostic, cache.uri, ds)))
             .flat();
     }
 }
 
-function createCodeAction(diagnostic: vscode.Diagnostic, ds: string): vscode.CodeAction {
-    const action = new vscode.CodeAction('replace with: ' + ds, vscode.CodeActionKind.QuickFix);
+function createReplaceCodeAction(diagnostic: vscode.Diagnostic, uri: vscode.Uri, replacement: string): vscode.CodeAction {
+    const action = new vscode.CodeAction('replace with: ' + replacement, vscode.CodeActionKind.QuickFix);
     action.diagnostics = [diagnostic];
     action.edit = new vscode.WorkspaceEdit();
-    action.edit.replace(cache.uri, diagnostic.range, ds);
+    action.edit.replace(uri, diagnostic.range, replacement);
+    return action;
+}
+
+export class TemplateTagActionProvider implements vscode.CodeActionProvider {
+    async provideCodeActions(document: vscode.TextDocument, range: vscode.Range | vscode.Selection, context: vscode.CodeActionContext, token: vscode.CancellationToken): Promise<vscode.CodeAction[]> {
+        const items = []
+
+        const substitutions = cache.getSubstitutions();
+        let alltags = Object.keys(substitutions.substitutions);
+    
+        for (const filename in substitutions) {
+            if (filename != 'substitutions' && document.fileName.endsWith(filename)) {
+                for (const items of substitutions[filename]) {
+                    alltags = alltags.concat(Object.keys(items));
+                }
+            }
+        }
+        alltags = removeDuplicates(alltags);
+        alltags.sort();
+    
+        return context.diagnostics
+            .filter(diagnostic => diagnostic.code === consts.CODE_UNKNOWN_TEMPLATE_TAG)
+            .map(diagnostic => alltags.map(tag => createReplaceCodeAction(diagnostic, document.uri, tag)).concat(createMakeTagCodeAction(diagnostic, document.uri, document.getText(diagnostic.range))))
+            .flat();
+    }
+}
+
+function createMakeTagCodeAction(diagnostic: vscode.Diagnostic, uri: vscode.Uri, tag: string): vscode.CodeAction {
+    const action = new vscode.CodeAction('create tag in study config', vscode.CodeActionKind.QuickFix);
+    action.diagnostics = [diagnostic];
+    action.command = {
+        command: 'boalang.template.addtag',
+        title: action.title,
+        arguments: [tag],
+    }
     return action;
 }

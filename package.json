@@ -62,7 +62,8 @@
         "onCommand:boalang.template.cleanData",
         "onCommand:boalang.template.cleanOutput",
         "onCommand:boalang.template.make",
-        "onCommand:boalang.template.zip"
+        "onCommand:boalang.template.zip",
+        "onCommand:boalang.template.addtag"
     ],
     "contributes": {
         "commands": [
@@ -245,6 +246,11 @@
                 "command": "boalang.template.zip",
                 "title": "Build Replication Package",
                 "icon": "$(archive)",
+                "category": "Boa"
+            },
+            {
+                "command": "boalang.template.addtag",
+                "title": "Add Global Template Tag",
                 "category": "Boa"
             }
         ],

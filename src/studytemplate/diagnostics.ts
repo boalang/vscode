@@ -49,7 +49,7 @@ async function checkStudyConfig() {
         for (const dsName in cache.json['datasets']) {
             const ds = cache.json['datasets'][dsName];
             if (datasets.indexOf(ds) == -1 && datasets.indexOf(adminPrefix + ds) == -1) {
-                diags.push(makeJsonDiagnostic(ds, dsName, consts.CODE_INVALID_DS, `${ds} is not a valid Boa dataset.`));
+                diags.push(makeJsonDiagnostic(ds, dsName, consts.CODE_INVALID_DS, `"${ds}" is not a valid Boa dataset.`));
             }
         }
     }
@@ -59,7 +59,7 @@ async function checkStudyConfig() {
     for (const outputPath in cache.json['queries']) {
         const ds = cache.json['queries'][outputPath]['dataset'];
         if (datasetNames.indexOf(ds) == -1) {
-            diags.push(makeJsonDiagnostic(ds, outputPath, consts.CODE_UNKNOWN_STUDY_DS, `${ds} is not a valid study dataset. Current study datasets are: ${datasetNames.join(', ')}`));
+            diags.push(makeJsonDiagnostic(ds, outputPath, consts.CODE_UNKNOWN_STUDY_DS, `"${ds}" is not a valid study dataset. Current study datasets are: ${datasetNames.join(', ')}`));
         }
     }
 
@@ -68,7 +68,7 @@ async function checkStudyConfig() {
         try {
             await vscode.workspace.fs.stat(vscode.Uri.file(getWorkspaceRoot() + '/' + scriptPath + '/' + q));
         } catch {
-            diags.push(makeJsonDiagnostic(q, outputPath, consts.CODE_BAD_QUERY, `The Boa query ${q}' does not exist in the "${scriptPath}/" folder.`));
+            diags.push(makeJsonDiagnostic(q, outputPath, consts.CODE_BAD_QUERY, `The Boa query "${q}" does not exist in the "${scriptPath}/" folder.`));
         }
     }
 
@@ -76,7 +76,7 @@ async function checkStudyConfig() {
         try {
             await vscode.workspace.fs.stat(vscode.Uri.file(getWorkspaceRoot() + '/' + analysesPath + '/' + analysis));
         } catch {
-            diags.push(makeJsonDiagnostic(analysis, analysis, consts.CODE_BAD_ANALYSIS, `The analysis script ${analysis}' does not exist in the "${analysesPath}/" folder.`));
+            diags.push(makeJsonDiagnostic(analysis, analysis, consts.CODE_BAD_ANALYSIS, `The analysis script "${analysis}" does not exist in the "${analysesPath}/" folder.`));
         }
     }
 

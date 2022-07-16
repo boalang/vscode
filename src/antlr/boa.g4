@@ -642,5 +642,5 @@ LINE_COMMENT
 
 // templates are treated as whitespace for parsing in vscode helpers
 TemplateIdentifier
-	: TEMPLATEL [-a-zA-Z0-9_.:]+ TEMPLATER -> skip
+	: TEMPLATEL ([-a-zA-Z0-9_.:]+ | .+?) TEMPLATER? -> skip
 	;

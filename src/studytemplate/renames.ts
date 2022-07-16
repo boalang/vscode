@@ -86,14 +86,33 @@ async function getRenameFileList(path: string) {
 }
 
 async function getRenameEdits(path: string, edit: vscode.WorkspaceEdit, tag: string, newName: string) {
-    const text = await getFileContents(path);
+    let text = null;
+    let uri = null;
+
+    // if the editor is unsaved, get from the document
+    vscode.window.tabGroups.all.forEach(grp => {
+        grp.tabs.filter(tab => tab.isDirty).forEach(tab => {
+            const input = tab.input as vscode.TabInputText;
+            if (input?.uri.fsPath == path) {
+                uri = input.uri;
+                text = vscode.workspace.textDocuments.find((doc) => doc.uri.toString() == uri.toString()).getText();
+            }
+        });
+    });
+
+    // otherwise read from disk
+    if (text === null) {
+        uri = vscode.Uri.file(path);
+        text = await getFileContents(path);
+    }
+
     const matches = text.matchAll(new RegExp(tag, 'g'));
 
     if (matches) {
         for (const m of matches) {
             const start = positionAt(text, m.index + 2);
             const end = positionAt(text, m.index + tag.length - 2);
-            edit.replace(vscode.Uri.file(path), new vscode.Range(start, end), newName);
+            edit.replace(uri, new vscode.Range(start, end), newName);
         }
     }
 }

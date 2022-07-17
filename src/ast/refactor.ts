@@ -78,26 +78,35 @@ export async function extractMethod(document: vscode.TextDocument, range: vscode
     }
 
     // TODO handle finding all variable uses and live vars
-    // TODO add params to new function
     // TODO handle return value(s)
     // FIXME handle indentation/newlines
-    const newFunc = `${funcName} := function() {\n${document.getText(range)}\n};\n\n`;
+    let funcBody = document.getText(range).trim();
+    // TODO add params to new function
+    const newFunc = `${funcName} := function() {\n${funcBody}\n};\n\n`;
     const lines = newFunc.split('\n').length - 1;
 
-    // FIXME handle indentation/newlines
-    const indent = 0;
-    let funcCall = '';
-    for (let i = 0; i < indent; i++) funcCall += '\t';
+    // handle indenting the call
+    const firstLine = document.getText(range).split('\n')[0];
+    const indent = firstLine.match(/^(\s*)/)[1];
+
+    let funcCall = indent;
     // TODO pass in used vars as args
     // TODO handle returned values, if any
-    funcCall += `${funcName}();\n`;
+    funcCall += `${funcName}();`;
+
+    // handle newline right after the call
+    if (document.getText(range).endsWith('\n')) {
+        funcCall += '\n';
+    }
 
     const edit = new vscode.WorkspaceEdit();
     edit.replace(document.uri, range, funcCall);
     edit.insert(document.uri, insertPosition, newFunc);
     await vscode.workspace.applyEdit(edit);
 
-    vscode.window.activeTextEditor.selection = new vscode.Selection(new vscode.Position(range.start.line + lines, range.start.character), new vscode.Position(range.start.line + lines, range.start.character + 8));
+    vscode.window.activeTextEditor.selection = new vscode.Selection(
+        new vscode.Position(range.start.line + lines, range.start.character + indent.length),
+        new vscode.Position(range.start.line + lines, range.start.character + indent.length + funcName.length));
     await vscode.commands.executeCommand('editor.action.rename', [
         document.uri
     ]);

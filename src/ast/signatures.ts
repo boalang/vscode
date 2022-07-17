@@ -161,6 +161,9 @@ class UDFFinder extends DefsUsesVisitor {
                 for (let i = 0; i < n; i++) {
                     node.getChild(i).accept(this);
                 }
+                if ((node.ruleContext as ParserRuleContext).stop.stopIndex > this.position) {
+                    this._found = true;
+                }
             } else {
                 this._found = true;
             }

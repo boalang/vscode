@@ -16,6 +16,7 @@
 //
 import * as vscode from 'vscode';
 import { parseBoaCode } from './parser';
+import { SymbolsVisitor } from './symbols';
 
 export class BoaRefactoringProvider implements vscode.CodeActionProvider {
     async provideCodeActions(document: vscode.TextDocument, range: vscode.Range | vscode.Selection, context: vscode.CodeActionContext, token: vscode.CancellationToken): Promise<vscode.CodeAction[]> {
@@ -57,9 +58,25 @@ function canExtractFunction(document: vscode.TextDocument, range: vscode.Range) 
 }
 
 export async function extractMethod(document: vscode.TextDocument, range: vscode.Range) {
-    const tree = parseBoaCode(document.getText());
+    // TODO compute where to put new function
+    const insertPosition = new vscode.Position(0, 0);
 
-    const funcName = 'new_func'; // FIXME ensure unique name
+    // ensure unique name for new function
+    const tree = parseBoaCode(document.getText());
+    const visitor = new SymbolsVisitor(document.uri);
+    const syms = visitor.visit(tree).filter(s => s.kind == vscode.SymbolKind.Function);
+    const existingFuncs = syms.map(s => s.name);
+
+    let funcName = 'new_func';
+    let exists = 1;
+    while (exists !== 0) {
+        if (existingFuncs.indexOf(funcName) === -1) {
+            exists = 0;
+        } else {
+            funcName = 'new_func' + exists++;
+        }
+    }
+
     // TODO handle finding all variable uses and live vars
     // TODO add params to new function
     // TODO handle return value(s)
@@ -77,7 +94,7 @@ export async function extractMethod(document: vscode.TextDocument, range: vscode
 
     const edit = new vscode.WorkspaceEdit();
     edit.replace(document.uri, range, funcCall);
-    edit.insert(document.uri, new vscode.Position(0, 0), newFunc);
+    edit.insert(document.uri, insertPosition, newFunc);
     await vscode.workspace.applyEdit(edit);
 
     vscode.window.activeTextEditor.selection = new vscode.Selection(new vscode.Position(range.start.line + lines, range.start.character), new vscode.Position(range.start.line + lines, range.start.character + 8));

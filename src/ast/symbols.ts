@@ -72,7 +72,7 @@ export function getRange(rule: ParserRuleContext) {
     );
 }
 
-class SymbolsVisitor extends AbstractParseTreeVisitor<vscode.SymbolInformation[]> implements boaVisitor<vscode.SymbolInformation[]> {
+export class SymbolsVisitor extends AbstractParseTreeVisitor<vscode.SymbolInformation[]> implements boaVisitor<vscode.SymbolInformation[]> {
     constructor(private uri: vscode.Uri) {
         super();
     }

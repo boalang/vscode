@@ -16,11 +16,14 @@
 //
 import * as vscode from 'vscode';
 import { AbstractParseTreeVisitor } from 'antlr4ts/tree/AbstractParseTreeVisitor';
+import { ParseTree } from 'antlr4ts/tree/ParseTree';
 import { RuleNode } from 'antlr4ts/tree/RuleNode';
 import * as ast from '../antlr/boaParser';
 import { boaVisitor } from '../antlr/boaVisitor';
 import { parseBoaCode } from './parser';
 import { builtinFunctions, IFunction } from '../types';
+import { ParserRuleContext } from 'antlr4ts';
+import DefsUsesVisitor from './defuse';
 
 export default class BoaSignatureHelpProvider implements vscode.SignatureHelpProvider {
     public provideSignatureHelp(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.SignatureHelp> {
@@ -33,7 +36,9 @@ export default class BoaSignatureHelpProvider implements vscode.SignatureHelpPro
 
         let func = builtinFunctions[funcName];
         if (func === undefined) {
-            func = new UDFFinder().visit(tree)[funcName];
+            const visitor = new UDFFinder(document.offsetAt(position));
+            visitor.visit(tree);
+            func = visitor.funcs[funcName];
         }
 
         if (func === undefined)
@@ -112,25 +117,66 @@ class FunctionCallFinder extends AbstractParseTreeVisitor<ast.FactorContext> imp
 }
 
 type funcDict = { [name: string]: IFunction };
+class UDFFinder extends DefsUsesVisitor {
+    private _funcStack: funcDict[] = [{}];
+    private _found = false;
+    private position: number;
 
-class UDFFinder extends AbstractParseTreeVisitor<funcDict> implements boaVisitor<funcDict> {
+    constructor(position: number) {
+        super();
+        this.position = position;
+    }
+
+    get funcs() {
+        let funcs = {...this._funcStack[0]};
+        for (let i = 1; i < this._funcStack.length; i++) {
+            Object.keys(this._funcStack[i]).forEach(k => funcs[k] = this._funcStack[i][k]);
+        }
+        return funcs;
+    }
+
+    visit(tree: ParseTree) {
+        tree.accept(this);
+    }
+
     protected defaultResult() {
         return {};
     }
 
-    protected aggregateResult(aggregate: funcDict, nextResult: funcDict) {
-        return {...aggregate, ...nextResult};
+    protected enterScope() {
+        this._funcStack.push({});
+        super.enterScope();
+    }
+    protected exitScope() {
+        if (!this._found) {
+            this._funcStack.pop();
+        }
+        super.exitScope();
+    }
+
+    visitChildren(node: RuleNode) {
+        if (!this._found) {
+            if ((node.ruleContext as ParserRuleContext).start.startIndex <= this.position) {
+                const n = node.childCount;
+                for (let i = 0; i < n; i++) {
+                    node.getChild(i).accept(this);
+                }
+                if ((node.ruleContext as ParserRuleContext).stop.stopIndex > this.position) {
+                    this._found = true;
+                }
+            } else {
+                this._found = true;
+            }
+        }
     }
 
     visitForVariableDeclaration(ctx: ast.ForVariableDeclarationContext) {
-        const items = {};
-
         const funcExp = ctx.expression()?.conjunction(0).comparison(0).simpleExpression(0).term(0).factor(0).operand().functionExpression();
         if (funcExp) {
             const id = ctx.identifier().text;
             const type = funcExp.functionType();
             const numArgs = type.identifier().length;
-            const ret = type.type(numArgs);
+            const ret = type.type().length > numArgs ? type.type(numArgs) : undefined;
 
             const func: IFunction = {
                 args: [],
@@ -143,9 +189,8 @@ class UDFFinder extends AbstractParseTreeVisitor<funcDict> implements boaVisitor
             if (ret) {
                 func.ret.type = ': ' + ret.text;
             }
-            items[id] = func;
+            this._funcStack[this._funcStack.length - 1][id] = func;
         }
-
-        return {...items, ...this.visitChildren(ctx)};
+        this.visitChildren(ctx);
     }
 }

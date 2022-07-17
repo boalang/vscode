@@ -34,7 +34,7 @@ export default class BoaRenameProvider implements vscode.RenameProvider {
                 if (pos in visitor.usedefs) {
                     pos = visitor.usedefs[pos];
                 }
-    
+
                 if (pos in visitor.defs) {
                     return Promise.resolve(document.getWordRangeAtPosition(position));
                 }

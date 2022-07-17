@@ -58,7 +58,7 @@ export class TemplateTagActionProvider implements vscode.CodeActionProvider {
 
         const substitutions = cache.getSubstitutions();
         let alltags = Object.keys(substitutions.substitutions);
-    
+
         for (const filename in substitutions) {
             if (filename != 'substitutions' && document.fileName.endsWith(filename)) {
                 for (const items of substitutions[filename]) {
@@ -68,7 +68,7 @@ export class TemplateTagActionProvider implements vscode.CodeActionProvider {
         }
         alltags = removeDuplicates(alltags);
         alltags.sort();
-    
+
         return context.diagnostics
             .filter(diagnostic => diagnostic.code === consts.CODE_UNKNOWN_TEMPLATE_TAG)
             .map(diagnostic => alltags.map(tag => createReplaceCodeAction(diagnostic, document.uri, tag)).concat(createMakeTagCodeAction(diagnostic, document.uri, document.getText(diagnostic.range))))

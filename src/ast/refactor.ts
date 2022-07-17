@@ -16,6 +16,7 @@
 //
 import * as vscode from 'vscode';
 import { parseBoaCode } from './parser';
+import { SymbolsVisitor } from './symbols';
 
 export class BoaRefactoringProvider implements vscode.CodeActionProvider {
     async provideCodeActions(document: vscode.TextDocument, range: vscode.Range | vscode.Selection, context: vscode.CodeActionContext, token: vscode.CancellationToken): Promise<vscode.CodeAction[]> {
@@ -52,35 +53,75 @@ export class BoaRefactoringProvider implements vscode.CodeActionProvider {
 function canExtractFunction(document: vscode.TextDocument, range: vscode.Range) {
     if (range.start == range.end)                   return false;
     if (document.getText(range).trim().length == 0) return false;
-    // TOOD determine if selection is something we can extract
+    // TODO determine if selection is something we can extract
     return true;
 }
 
 export async function extractMethod(document: vscode.TextDocument, range: vscode.Range) {
-    const tree = parseBoaCode(document.getText());
+    // TODO compute where to put new function?
+    const insertPosition = new vscode.Position(0, 0);
 
-    const funcName = 'new_func'; // FIXME ensure unique name
-    // TODO handle finding all variable uses and live vars
-    // TODO add params to new function
-    // TODO handle return value(s)
-    // FIXME handle indentation/newlines
-    const newFunc = `${funcName} := function() {\n${document.getText(range)}\n};\n\n`;
-    const lines = newFunc.split('\n').length - 1;
+    // ensure unique name for new function
+    const text = document.getText();
+    const tree = parseBoaCode(text);
+    // TODO handle finding all variable uses (args/params) and live vars (returned)
+    const visitor = new SymbolsVisitor(document.uri);
+    const syms = visitor.visit(tree).filter(s => s.kind == vscode.SymbolKind.Function);
+    const existingFuncs = syms.map(s => s.name);
 
-    // FIXME handle indentation/newlines
-    const indent = 0;
-    let funcCall = '';
-    for (let i = 0; i < indent; i++) funcCall += '\t';
-    // TODO pass in used vars as args
-    // TODO handle returned values, if any
-    funcCall += `${funcName}();\n`;
+    let funcName = 'new_func';
+    let exists = 1;
+    while (exists !== 0) {
+        if (existingFuncs.indexOf(funcName) === -1) {
+            exists = 0;
+        } else {
+            funcName = 'new_func' + exists++;
+        }
+    }
+
+    const selectedText = document.getText(range);
+
+    // handle indentation/newlines inside the function body
+    const originalIndent = text.split('\n')[range.start.line].match(/^(\s*)/)[1];
+    let funcBody = originalIndent + selectedText.trim();
+    funcBody = funcBody.replace(new RegExp('^' + originalIndent, 'mg'), '\t');
+
+    // TODO add param(s) to new function, if any
+    const params = '';
+
+    // TODO handle return type, if any
+    const ret = '';
+
+    let newFunc = `${funcName} := function(${params})${ret} {\n`;
+    newFunc += funcBody;
+    // TODO handle returning value(s), if any
+    newFunc += '\n};\n\n';
+    const addedLines = newFunc.split('\n').length - 1;
+
+    // handle indenting the call
+    const firstLine = selectedText.split('\n')[0];
+    const indent = firstLine.match(/^(\s*)/)[1];
+
+    let funcCall = indent;
+    // TODO pass in used var(s) as args, if any
+    const args = '';
+    // TODO handle returned value(s), if any
+    const returned = '';
+    funcCall += `${returned}${funcName}(${args});`;
+
+    // handle newline right after the call
+    if (selectedText.endsWith('\n')) {
+        funcCall += '\n';
+    }
 
     const edit = new vscode.WorkspaceEdit();
     edit.replace(document.uri, range, funcCall);
-    edit.insert(document.uri, new vscode.Position(0, 0), newFunc);
+    edit.insert(document.uri, insertPosition, newFunc);
     await vscode.workspace.applyEdit(edit);
 
-    vscode.window.activeTextEditor.selection = new vscode.Selection(new vscode.Position(range.start.line + lines, range.start.character), new vscode.Position(range.start.line + lines, range.start.character + 8));
+    vscode.window.activeTextEditor.selection = new vscode.Selection(
+        new vscode.Position(range.start.line + addedLines, range.start.character + indent.length + returned.length),
+        new vscode.Position(range.start.line + addedLines, range.start.character + indent.length + funcName.length));
     await vscode.commands.executeCommand('editor.action.rename', [
         document.uri
     ]);

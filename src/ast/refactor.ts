@@ -77,16 +77,18 @@ export async function extractMethod(document: vscode.TextDocument, range: vscode
         }
     }
 
+    const originalText = document.getText(range);
+
     // TODO handle finding all variable uses and live vars
     // TODO handle return value(s)
     // FIXME handle indentation/newlines
-    let funcBody = document.getText(range).trim();
+    let funcBody = originalText.trim();
     // TODO add params to new function
     const newFunc = `${funcName} := function() {\n${funcBody}\n};\n\n`;
     const lines = newFunc.split('\n').length - 1;
 
     // handle indenting the call
-    const firstLine = document.getText(range).split('\n')[0];
+    const firstLine = originalText.split('\n')[0];
     const indent = firstLine.match(/^(\s*)/)[1];
 
     let funcCall = indent;
@@ -95,7 +97,7 @@ export async function extractMethod(document: vscode.TextDocument, range: vscode
     funcCall += `${funcName}();`;
 
     // handle newline right after the call
-    if (document.getText(range).endsWith('\n')) {
+    if (originalText.endsWith('\n')) {
         funcCall += '\n';
     }
 

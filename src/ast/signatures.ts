@@ -173,7 +173,7 @@ class UDFFinder extends DefsUsesVisitor {
             const id = ctx.identifier().text;
             const type = funcExp.functionType();
             const numArgs = type.identifier().length;
-            const ret = type.type(numArgs);
+            const ret = type.type().length > numArgs ? type.type(numArgs) : undefined;
 
             const func: IFunction = {
                 args: [],

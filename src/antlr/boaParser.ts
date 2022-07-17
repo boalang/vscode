@@ -25,7 +25,6 @@ import { VocabularyImpl } from "antlr4ts/VocabularyImpl";
 
 import * as Utils from "antlr4ts/misc/Utils";
 
-import { boaListener } from "./boaListener";
 import { boaVisitor } from "./boaVisitor";
 
 
@@ -4672,18 +4671,6 @@ export class StartContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_start; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterStart) {
-			listener.enterStart(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitStart) {
-			listener.exitStart(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitStart) {
 			return visitor.visitStart(this);
@@ -4710,18 +4697,6 @@ export class ProgramContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_program; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterProgram) {
-			listener.enterProgram(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitProgram) {
-			listener.exitProgram(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitProgram) {
 			return visitor.visitProgram(this);
@@ -4744,18 +4719,6 @@ export class ProgramStatementContext extends ParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_programStatement; }
-	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterProgramStatement) {
-			listener.enterProgramStatement(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitProgramStatement) {
-			listener.exitProgramStatement(this);
-		}
-	}
 	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitProgramStatement) {
@@ -4783,18 +4746,6 @@ export class DeclarationContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_declaration; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterDeclaration) {
-			listener.enterDeclaration(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitDeclaration) {
-			listener.exitDeclaration(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitDeclaration) {
 			return visitor.visitDeclaration(this);
@@ -4820,18 +4771,6 @@ export class TypeDeclarationContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_typeDeclaration; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterTypeDeclaration) {
-			listener.enterTypeDeclaration(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitTypeDeclaration) {
-			listener.exitTypeDeclaration(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitTypeDeclaration) {
 			return visitor.visitTypeDeclaration(this);
@@ -4853,18 +4792,6 @@ export class StaticVariableDeclarationContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_staticVariableDeclaration; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterStaticVariableDeclaration) {
-			listener.enterStaticVariableDeclaration(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitStaticVariableDeclaration) {
-			listener.exitStaticVariableDeclaration(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitStaticVariableDeclaration) {
 			return visitor.visitStaticVariableDeclaration(this);
@@ -4884,18 +4811,6 @@ export class VariableDeclarationContext extends ParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_variableDeclaration; }
-	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterVariableDeclaration) {
-			listener.enterVariableDeclaration(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitVariableDeclaration) {
-			listener.exitVariableDeclaration(this);
-		}
-	}
 	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitVariableDeclaration) {
@@ -4955,18 +4870,6 @@ export class TypeContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_type; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterType) {
-			listener.enterType(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitType) {
-			listener.exitType(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitType) {
 			return visitor.visitType(this);
@@ -4990,18 +4893,6 @@ export class ComponentContext extends ParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_component; }
-	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterComponent) {
-			listener.enterComponent(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitComponent) {
-			listener.exitComponent(this);
-		}
-	}
 	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitComponent) {
@@ -5027,18 +4918,6 @@ export class EnumBodyDeclarationContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_enumBodyDeclaration; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterEnumBodyDeclaration) {
-			listener.enterEnumBodyDeclaration(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitEnumBodyDeclaration) {
-			listener.exitEnumBodyDeclaration(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitEnumBodyDeclaration) {
 			return visitor.visitEnumBodyDeclaration(this);
@@ -5060,18 +4939,6 @@ export class ArrayTypeContext extends ParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_arrayType; }
-	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterArrayType) {
-			listener.enterArrayType(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitArrayType) {
-			listener.exitArrayType(this);
-		}
-	}
 	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitArrayType) {
@@ -5109,18 +4976,6 @@ export class TupleTypeContext extends ParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_tupleType; }
-	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterTupleType) {
-			listener.enterTupleType(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitTupleType) {
-			listener.exitTupleType(this);
-		}
-	}
 	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitTupleType) {
@@ -5160,18 +5015,6 @@ export class EnumTypeContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_enumType; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterEnumType) {
-			listener.enterEnumType(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitEnumType) {
-			listener.exitEnumType(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitEnumType) {
 			return visitor.visitEnumType(this);
@@ -5197,18 +5040,6 @@ export class MemberContext extends ParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_member; }
-	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterMember) {
-			listener.enterMember(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitMember) {
-			listener.exitMember(this);
-		}
-	}
 	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitMember) {
@@ -5240,18 +5071,6 @@ export class MapTypeContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_mapType; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterMapType) {
-			listener.enterMapType(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitMapType) {
-			listener.exitMapType(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitMapType) {
 			return visitor.visitMapType(this);
@@ -5273,18 +5092,6 @@ export class StackTypeContext extends ParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_stackType; }
-	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterStackType) {
-			listener.enterStackType(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitStackType) {
-			listener.exitStackType(this);
-		}
-	}
 	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitStackType) {
@@ -5308,18 +5115,6 @@ export class QueueTypeContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_queueType; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterQueueType) {
-			listener.enterQueueType(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitQueueType) {
-			listener.exitQueueType(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitQueueType) {
 			return visitor.visitQueueType(this);
@@ -5341,18 +5136,6 @@ export class SetTypeContext extends ParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_setType; }
-	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterSetType) {
-			listener.enterSetType(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitSetType) {
-			listener.exitSetType(this);
-		}
-	}
 	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitSetType) {
@@ -5433,18 +5216,6 @@ export class OutputTypeContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_outputType; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterOutputType) {
-			listener.enterOutputType(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitOutputType) {
-			listener.exitOutputType(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitOutputType) {
 			return visitor.visitOutputType(this);
@@ -5501,18 +5272,6 @@ export class FunctionTypeContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_functionType; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterFunctionType) {
-			listener.enterFunctionType(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitFunctionType) {
-			listener.exitFunctionType(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitFunctionType) {
 			return visitor.visitFunctionType(this);
@@ -5530,18 +5289,6 @@ export class FixpTypeContext extends ParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_fixpType; }
-	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterFixpType) {
-			listener.enterFixpType(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitFixpType) {
-			listener.exitFixpType(this);
-		}
-	}
 	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitFixpType) {
@@ -5561,18 +5308,6 @@ export class VisitorTypeContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_visitorType; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterVisitorType) {
-			listener.enterVisitorType(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitVisitorType) {
-			listener.exitVisitorType(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitVisitorType) {
 			return visitor.visitVisitorType(this);
@@ -5590,18 +5325,6 @@ export class TraversalTypeContext extends ParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_traversalType; }
-	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterTraversalType) {
-			listener.enterTraversalType(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitTraversalType) {
-			listener.exitTraversalType(this);
-		}
-	}
 	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitTraversalType) {
@@ -5671,18 +5394,6 @@ export class StatementContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_statement; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterStatement) {
-			listener.enterStatement(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitStatement) {
-			listener.exitStatement(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitStatement) {
 			return visitor.visitStatement(this);
@@ -5700,18 +5411,6 @@ export class EmptyStatementContext extends ParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_emptyStatement; }
-	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterEmptyStatement) {
-			listener.enterEmptyStatement(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitEmptyStatement) {
-			listener.exitEmptyStatement(this);
-		}
-	}
 	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitEmptyStatement) {
@@ -5747,18 +5446,6 @@ export class AssignmentStatementContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_assignmentStatement; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterAssignmentStatement) {
-			listener.enterAssignmentStatement(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitAssignmentStatement) {
-			listener.exitAssignmentStatement(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitAssignmentStatement) {
 			return visitor.visitAssignmentStatement(this);
@@ -5787,18 +5474,6 @@ export class BlockContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_block; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterBlock) {
-			listener.enterBlock(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitBlock) {
-			listener.exitBlock(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitBlock) {
 			return visitor.visitBlock(this);
@@ -5817,18 +5492,6 @@ export class BreakStatementContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_breakStatement; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterBreakStatement) {
-			listener.enterBreakStatement(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitBreakStatement) {
-			listener.exitBreakStatement(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitBreakStatement) {
 			return visitor.visitBreakStatement(this);
@@ -5846,18 +5509,6 @@ export class ContinueStatementContext extends ParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_continueStatement; }
-	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterContinueStatement) {
-			listener.enterContinueStatement(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitContinueStatement) {
-			listener.exitContinueStatement(this);
-		}
-	}
 	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitContinueStatement) {
@@ -5885,18 +5536,6 @@ export class DoStatementContext extends ParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_doStatement; }
-	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterDoStatement) {
-			listener.enterDoStatement(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitDoStatement) {
-			listener.exitDoStatement(this);
-		}
-	}
 	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitDoStatement) {
@@ -5947,18 +5586,6 @@ export class EmitStatementContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_emitStatement; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterEmitStatement) {
-			listener.enterEmitStatement(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitEmitStatement) {
-			listener.exitEmitStatement(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitEmitStatement) {
 			return visitor.visitEmitStatement(this);
@@ -6003,18 +5630,6 @@ export class ForStatementContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_forStatement; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterForStatement) {
-			listener.enterForStatement(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitForStatement) {
-			listener.exitForStatement(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitForStatement) {
 			return visitor.visitForStatement(this);
@@ -6037,18 +5652,6 @@ export class ForExpressionContext extends ParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_forExpression; }
-	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterForExpression) {
-			listener.enterForExpression(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitForExpression) {
-			listener.exitForExpression(this);
-		}
-	}
 	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitForExpression) {
@@ -6081,18 +5684,6 @@ export class ForVariableDeclarationContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_forVariableDeclaration; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterForVariableDeclaration) {
-			listener.enterForVariableDeclaration(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitForVariableDeclaration) {
-			listener.exitForVariableDeclaration(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitForVariableDeclaration) {
 			return visitor.visitForVariableDeclaration(this);
@@ -6124,18 +5715,6 @@ export class PostfixStatementContext extends ForExpressionStatementContext {
 		this.copyFrom(ctx);
 	}
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterPostfixStatement) {
-			listener.enterPostfixStatement(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitPostfixStatement) {
-			listener.exitPostfixStatement(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitPostfixStatement) {
 			return visitor.visitPostfixStatement(this);
@@ -6151,18 +5730,6 @@ export class ExprStatementContext extends ForExpressionStatementContext {
 	constructor(ctx: ForExpressionStatementContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterExprStatement) {
-			listener.enterExprStatement(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitExprStatement) {
-			listener.exitExprStatement(this);
-		}
 	}
 	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
@@ -6184,18 +5751,6 @@ export class ExpressionStatementContext extends ParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_expressionStatement; }
-	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterExpressionStatement) {
-			listener.enterExpressionStatement(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitExpressionStatement) {
-			listener.exitExpressionStatement(this);
-		}
-	}
 	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitExpressionStatement) {
@@ -6230,18 +5785,6 @@ export class IfStatementContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_ifStatement; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterIfStatement) {
-			listener.enterIfStatement(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitIfStatement) {
-			listener.exitIfStatement(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitIfStatement) {
 			return visitor.visitIfStatement(this);
@@ -6262,18 +5805,6 @@ export class ReturnStatementContext extends ParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_returnStatement; }
-	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterReturnStatement) {
-			listener.enterReturnStatement(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitReturnStatement) {
-			listener.exitReturnStatement(this);
-		}
-	}
 	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitReturnStatement) {
@@ -6320,18 +5851,6 @@ export class SwitchStatementContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_switchStatement; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterSwitchStatement) {
-			listener.enterSwitchStatement(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitSwitchStatement) {
-			listener.exitSwitchStatement(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitSwitchStatement) {
 			return visitor.visitSwitchStatement(this);
@@ -6362,18 +5881,6 @@ export class SwitchCaseContext extends ParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_switchCase; }
-	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterSwitchCase) {
-			listener.enterSwitchCase(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitSwitchCase) {
-			listener.exitSwitchCase(this);
-		}
-	}
 	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitSwitchCase) {
@@ -6409,18 +5916,6 @@ export class ForeachStatementContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_foreachStatement; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterForeachStatement) {
-			listener.enterForeachStatement(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitForeachStatement) {
-			listener.exitForeachStatement(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitForeachStatement) {
 			return visitor.visitForeachStatement(this);
@@ -6454,18 +5949,6 @@ export class ExistsStatementContext extends ParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_existsStatement; }
-	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterExistsStatement) {
-			listener.enterExistsStatement(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitExistsStatement) {
-			listener.exitExistsStatement(this);
-		}
-	}
 	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitExistsStatement) {
@@ -6501,18 +5984,6 @@ export class IfallStatementContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_ifallStatement; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterIfallStatement) {
-			listener.enterIfallStatement(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitIfallStatement) {
-			listener.exitIfallStatement(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitIfallStatement) {
 			return visitor.visitIfallStatement(this);
@@ -6538,18 +6009,6 @@ export class WhileStatementContext extends ParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_whileStatement; }
-	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterWhileStatement) {
-			listener.enterWhileStatement(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitWhileStatement) {
-			listener.exitWhileStatement(this);
-		}
-	}
 	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitWhileStatement) {
@@ -6594,18 +6053,6 @@ export class VisitStatementContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_visitStatement; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterVisitStatement) {
-			listener.enterVisitStatement(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitVisitStatement) {
-			listener.exitVisitStatement(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitVisitStatement) {
 			return visitor.visitVisitStatement(this);
@@ -6648,18 +6095,6 @@ export class TraverseStatementContext extends ParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_traverseStatement; }
-	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterTraverseStatement) {
-			listener.enterTraverseStatement(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitTraverseStatement) {
-			listener.exitTraverseStatement(this);
-		}
-	}
 	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitTraverseStatement) {
@@ -6705,18 +6140,6 @@ export class FixpStatementContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_fixpStatement; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterFixpStatement) {
-			listener.enterFixpStatement(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitFixpStatement) {
-			listener.exitFixpStatement(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitFixpStatement) {
 			return visitor.visitFixpStatement(this);
@@ -6734,18 +6157,6 @@ export class StopStatementContext extends ParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_stopStatement; }
-	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterStopStatement) {
-			listener.enterStopStatement(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitStopStatement) {
-			listener.exitStopStatement(this);
-		}
-	}
 	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitStopStatement) {
@@ -6791,18 +6202,6 @@ export class ExpressionContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_expression; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterExpression) {
-			listener.enterExpression(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitExpression) {
-			listener.exitExpression(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitExpression) {
 			return visitor.visitExpression(this);
@@ -6837,18 +6236,6 @@ export class ExpressionListContext extends ParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_expressionList; }
-	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterExpressionList) {
-			listener.enterExpressionList(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitExpressionList) {
-			listener.exitExpressionList(this);
-		}
-	}
 	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitExpressionList) {
@@ -6894,18 +6281,6 @@ export class ConjunctionContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_conjunction; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterConjunction) {
-			listener.enterConjunction(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitConjunction) {
-			listener.exitConjunction(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitConjunction) {
 			return visitor.visitConjunction(this);
@@ -6937,18 +6312,6 @@ export class ComparisonContext extends ParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_comparison; }
-	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterComparison) {
-			listener.enterComparison(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitComparison) {
-			listener.exitComparison(this);
-		}
-	}
 	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitComparison) {
@@ -7011,18 +6374,6 @@ export class SimpleExpressionContext extends ParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_simpleExpression; }
-	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterSimpleExpression) {
-			listener.enterSimpleExpression(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitSimpleExpression) {
-			listener.exitSimpleExpression(this);
-		}
-	}
 	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitSimpleExpression) {
@@ -7104,18 +6455,6 @@ export class TermContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_term; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterTerm) {
-			listener.enterTerm(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitTerm) {
-			listener.exitTerm(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitTerm) {
 			return visitor.visitTerm(this);
@@ -7163,18 +6502,6 @@ export class FactorContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_factor; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterFactor) {
-			listener.enterFactor(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitFactor) {
-			listener.exitFactor(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitFactor) {
 			return visitor.visitFactor(this);
@@ -7195,18 +6522,6 @@ export class SelectorContext extends ParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_selector; }
-	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterSelector) {
-			listener.enterSelector(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitSelector) {
-			listener.exitSelector(this);
-		}
-	}
 	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitSelector) {
@@ -7237,18 +6552,6 @@ export class IndexContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_index; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterIndex) {
-			listener.enterIndex(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitIndex) {
-			listener.exitIndex(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitIndex) {
 			return visitor.visitIndex(this);
@@ -7270,18 +6573,6 @@ export class CallContext extends ParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_call; }
-	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterCall) {
-			listener.enterCall(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitCall) {
-			listener.exitCall(this);
-		}
-	}
 	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitCall) {
@@ -7340,18 +6631,6 @@ export class OperandContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_operand; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterOperand) {
-			listener.enterOperand(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitOperand) {
-			listener.exitOperand(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitOperand) {
 			return visitor.visitOperand(this);
@@ -7377,18 +6656,6 @@ export class UnaryFactorContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_unaryFactor; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterUnaryFactor) {
-			listener.enterUnaryFactor(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitUnaryFactor) {
-			listener.exitUnaryFactor(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitUnaryFactor) {
 			return visitor.visitUnaryFactor(this);
@@ -7410,18 +6677,6 @@ export class ParenExpressionContext extends ParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_parenExpression; }
-	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterParenExpression) {
-			listener.enterParenExpression(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitParenExpression) {
-			listener.exitParenExpression(this);
-		}
-	}
 	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitParenExpression) {
@@ -7449,18 +6704,6 @@ export class FunctionExpressionContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_functionExpression; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterFunctionExpression) {
-			listener.enterFunctionExpression(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitFunctionExpression) {
-			listener.exitFunctionExpression(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitFunctionExpression) {
 			return visitor.visitFunctionExpression(this);
@@ -7486,18 +6729,6 @@ export class FixpExpressionContext extends ParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_fixpExpression; }
-	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterFixpExpression) {
-			listener.enterFixpExpression(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitFixpExpression) {
-			listener.exitFixpExpression(this);
-		}
-	}
 	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitFixpExpression) {
@@ -7539,18 +6770,6 @@ export class VisitorExpressionContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_visitorExpression; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterVisitorExpression) {
-			listener.enterVisitorExpression(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitVisitorExpression) {
-			listener.exitVisitorExpression(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitVisitorExpression) {
 			return visitor.visitVisitorExpression(this);
@@ -7576,18 +6795,6 @@ export class TraversalExpressionContext extends ParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_traversalExpression; }
-	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterTraversalExpression) {
-			listener.enterTraversalExpression(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitTraversalExpression) {
-			listener.exitTraversalExpression(this);
-		}
-	}
 	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitTraversalExpression) {
@@ -7630,18 +6837,6 @@ export class CompositeContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_composite; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterComposite) {
-			listener.enterComposite(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitComposite) {
-			listener.exitComposite(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitComposite) {
 			return visitor.visitComposite(this);
@@ -7668,18 +6863,6 @@ export class PairContext extends ParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_pair; }
-	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterPair) {
-			listener.enterPair(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitPair) {
-			listener.exitPair(this);
-		}
-	}
 	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitPair) {
@@ -7733,18 +6916,6 @@ export class IdentifierContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_identifier; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterIdentifier) {
-			listener.enterIdentifier(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitIdentifier) {
-			listener.exitIdentifier(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitIdentifier) {
 			return visitor.visitIdentifier(this);
@@ -7762,18 +6933,6 @@ export class IntegerLiteralContext extends ParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_integerLiteral; }
-	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterIntegerLiteral) {
-			listener.enterIntegerLiteral(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitIntegerLiteral) {
-			listener.exitIntegerLiteral(this);
-		}
-	}
 	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitIntegerLiteral) {
@@ -7793,18 +6952,6 @@ export class FloatingPointLiteralContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_floatingPointLiteral; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterFloatingPointLiteral) {
-			listener.enterFloatingPointLiteral(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitFloatingPointLiteral) {
-			listener.exitFloatingPointLiteral(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitFloatingPointLiteral) {
 			return visitor.visitFloatingPointLiteral(this);
@@ -7822,18 +6969,6 @@ export class CharacterLiteralContext extends ParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_characterLiteral; }
-	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterCharacterLiteral) {
-			listener.enterCharacterLiteral(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitCharacterLiteral) {
-			listener.exitCharacterLiteral(this);
-		}
-	}
 	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitCharacterLiteral) {
@@ -7855,18 +6990,6 @@ export class StringLiteralContext extends ParserRuleContext {
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_stringLiteral; }
 	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterStringLiteral) {
-			listener.enterStringLiteral(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitStringLiteral) {
-			listener.exitStringLiteral(this);
-		}
-	}
-	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitStringLiteral) {
 			return visitor.visitStringLiteral(this);
@@ -7884,18 +7007,6 @@ export class TimeLiteralContext extends ParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number { return boaParser.RULE_timeLiteral; }
-	// @Override
-	public enterRule(listener: boaListener): void {
-		if (listener.enterTimeLiteral) {
-			listener.enterTimeLiteral(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: boaListener): void {
-		if (listener.exitTimeLiteral) {
-			listener.exitTimeLiteral(this);
-		}
-	}
 	// @Override
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitTimeLiteral) {

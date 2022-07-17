@@ -617,7 +617,7 @@
     "scripts": {
         "vscode:prepublish": "npm run antlr4ts && npm run package",
         "vscode:uninstall": "node ./out/uninstall.js",
-        "antlr4ts": "antlr4ts -visitor src/antlr/boa.g4",
+        "antlr4ts": "antlr4ts -no-listener -visitor src/antlr/boa.g4",
         "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./",
         "webpack": "webpack --mode development",

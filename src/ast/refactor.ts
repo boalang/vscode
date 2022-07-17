@@ -53,7 +53,7 @@ export class BoaRefactoringProvider implements vscode.CodeActionProvider {
 function canExtractFunction(document: vscode.TextDocument, range: vscode.Range) {
     if (range.start == range.end)                   return false;
     if (document.getText(range).trim().length == 0) return false;
-    // TOOD determine if selection is something we can extract
+    // TODO determine if selection is something we can extract
     return true;
 }
 

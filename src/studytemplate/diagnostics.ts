@@ -119,7 +119,7 @@ export async function updateTemplateTagDiagnostics(document: vscode.TextDocument
     if (matches) {
         const substitutions = cache.getSubstitutions();
         let alltags = Object.keys(substitutions.substitutions);
-    
+
         for (const filename in substitutions) {
             if (filename != 'substitutions' && document.fileName.endsWith(filename)) {
                 for (const items of substitutions[filename]) {

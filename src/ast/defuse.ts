@@ -70,7 +70,7 @@ export default class DefsUsesVisitor extends AbstractParseTreeVisitor<void> impl
                 this._uses[defIdx] = [];
             }
             this._uses[defIdx].push(ctx);
-    
+
             this.usedefs[ctx.start.startIndex] = defIdx;
         }
     }

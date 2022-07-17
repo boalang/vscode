@@ -58,11 +58,13 @@ function canExtractFunction(document: vscode.TextDocument, range: vscode.Range) 
 }
 
 export async function extractMethod(document: vscode.TextDocument, range: vscode.Range) {
-    // TODO compute where to put new function
+    // TODO compute where to put new function?
     const insertPosition = new vscode.Position(0, 0);
 
     // ensure unique name for new function
-    const tree = parseBoaCode(document.getText());
+    const text = document.getText();
+    const tree = parseBoaCode(text);
+    // TODO handle finding all variable uses (args/params) and live vars (returned)
     const visitor = new SymbolsVisitor(document.uri);
     const syms = visitor.visit(tree).filter(s => s.kind == vscode.SymbolKind.Function);
     const existingFuncs = syms.map(s => s.name);
@@ -77,27 +79,38 @@ export async function extractMethod(document: vscode.TextDocument, range: vscode
         }
     }
 
-    const originalText = document.getText(range);
+    const selectedText = document.getText(range);
 
-    // TODO handle finding all variable uses and live vars
-    // TODO handle return value(s)
-    // FIXME handle indentation/newlines
-    let funcBody = originalText.trim();
-    // TODO add params to new function
-    const newFunc = `${funcName} := function() {\n${funcBody}\n};\n\n`;
-    const lines = newFunc.split('\n').length - 1;
+    // handle indentation/newlines inside the function body
+    const originalIndent = text.split('\n')[range.start.line].match(/^(\s*)/)[1];
+    let funcBody = originalIndent + selectedText.trim();
+    funcBody = funcBody.replace(new RegExp('^' + originalIndent, 'mg'), '\t');
+
+    // TODO add param(s) to new function, if any
+    const params = '';
+
+    // TODO handle return type, if any
+    const ret = '';
+
+    let newFunc = `${funcName} := function(${params})${ret} {\n`;
+    newFunc += funcBody;
+    // TODO handle returning value(s), if any
+    newFunc += '\n};\n\n';
+    const addedLines = newFunc.split('\n').length - 1;
 
     // handle indenting the call
-    const firstLine = originalText.split('\n')[0];
+    const firstLine = selectedText.split('\n')[0];
     const indent = firstLine.match(/^(\s*)/)[1];
 
     let funcCall = indent;
-    // TODO pass in used vars as args
-    // TODO handle returned values, if any
-    funcCall += `${funcName}();`;
+    // TODO pass in used var(s) as args, if any
+    const args = '';
+    // TODO handle returned value(s), if any
+    const returned = '';
+    funcCall += `${returned}${funcName}(${args});`;
 
     // handle newline right after the call
-    if (originalText.endsWith('\n')) {
+    if (selectedText.endsWith('\n')) {
         funcCall += '\n';
     }
 
@@ -107,8 +120,8 @@ export async function extractMethod(document: vscode.TextDocument, range: vscode
     await vscode.workspace.applyEdit(edit);
 
     vscode.window.activeTextEditor.selection = new vscode.Selection(
-        new vscode.Position(range.start.line + lines, range.start.character + indent.length),
-        new vscode.Position(range.start.line + lines, range.start.character + indent.length + funcName.length));
+        new vscode.Position(range.start.line + addedLines, range.start.character + indent.length + returned.length),
+        new vscode.Position(range.start.line + addedLines, range.start.character + indent.length + funcName.length));
     await vscode.commands.executeCommand('editor.action.rename', [
         document.uri
     ]);

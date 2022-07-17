@@ -128,9 +128,9 @@ class UDFFinder extends DefsUsesVisitor {
     }
 
     get funcs() {
-        let funcs = {};
-        for (let i = 0; i < this._funcStack.length; i++) {
-            funcs = {...funcs, ...this._funcStack[i]}
+        let funcs = {...this._funcStack[0]};
+        for (let i = 1; i < this._funcStack.length; i++) {
+            Object.keys(this._funcStack[i]).forEach(k => funcs[k] = this._funcStack[i][k]);
         }
         return funcs;
     }

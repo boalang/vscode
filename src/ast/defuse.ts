@@ -20,7 +20,7 @@ import * as ast from '../antlr/boaParser';
 import { boaVisitor } from '../antlr/boaVisitor';
 
 export default class DefsUsesVisitor extends AbstractParseTreeVisitor<void> implements boaVisitor<void> {
-    private scopes: { [name: string]: ast.IdentifierContext }[] = [ {} ];
+    private scopes: { [name: string]: ast.IdentifierContext }[] = [{}];
 
     private _defs: { [defIdx: number]: ast.IdentifierContext } = {};
     private _uses: { [defIdx: number]: ast.IdentifierContext[] } = {};
@@ -64,17 +64,15 @@ export default class DefsUsesVisitor extends AbstractParseTreeVisitor<void> impl
     }
 
     private addUse(ctx: ast.IdentifierContext, defCtx: ast.IdentifierContext) {
-        if (defCtx === undefined) {
-            return;
+        if (defCtx !== undefined) {
+            const defIdx = defCtx.start.startIndex;
+            if (!(defIdx in this._uses)) {
+                this._uses[defIdx] = [];
+            }
+            this._uses[defIdx].push(ctx);
+    
+            this.usedefs[ctx.start.startIndex] = defIdx;
         }
-
-        const defIdx = defCtx.start.startIndex;
-        if (!(defIdx in this._uses)) {
-            this._uses[defIdx] = [];
-        }
-        this._uses[defIdx].push(ctx);
-
-        this.usedefs[ctx.start.startIndex] = defIdx;
     }
 
     public visitChildren(node: RuleNode) {
@@ -82,64 +80,64 @@ export default class DefsUsesVisitor extends AbstractParseTreeVisitor<void> impl
         for (let i = 0; i < n; i++) {
             node.getChild(i).accept(this);
         }
-        return this.defaultResult();
     }
 
-    private visitScoped(ctx) {
+    protected visitScoped(ctx) {
+        this.enterScope();
+        this.visitChildren(ctx);
+        this.exitScope();
+    }
+
+    protected enterScope() {
         this.scopes.push({});
-        const ret = this.visitChildren(ctx);
+    }
+
+    protected exitScope() {
         this.scopes.pop();
-        return ret;
     }
 
     // handle scoping
     public visitDoStatement(ctx: ast.DoStatementContext) {
-        return this.visitScoped(ctx);
+        this.visitScoped(ctx);
     }
     public visitForStatement(ctx: ast.ForStatementContext) {
-        return this.visitScoped(ctx);
+        this.visitScoped(ctx);
     }
     public visitSwitchCaseStatement(ctx: ast.SwitchCaseContext) {
-        return this.visitScoped(ctx);
+        this.visitScoped(ctx);
     }
     public visitWhileStatement(ctx: ast.WhileStatementContext) {
-        return this.visitScoped(ctx);
+        this.visitScoped(ctx);
     }
 
     // symbol definitions that also scope
     public visitExistsStatement(ctx: ast.ExistsStatementContext) {
-        this.scopes.push({});
+        this.enterScope();
 
         this.addDef(ctx.identifier());
 
         const ret = this.visitChildren(ctx);
-        this.scopes.pop();
-
-        return ret;
+        this.exitScope();
     }
     public visitFixpStatement(ctx: ast.FixpStatementContext) {
-        this.scopes.push({});
+        this.enterScope();
 
         this.addDef(ctx.identifier(0));
         this.addDef(ctx.identifier(1));
 
         const ret = this.visitChildren(ctx);
-        this.scopes.pop();
-
-        return ret;
+        this.exitScope();
     }
     public visitForeachStatement(ctx: ast.ForeachStatementContext) {
-        this.scopes.push({});
+        this.enterScope();
 
         this.addDef(ctx.identifier());
 
         const ret = this.visitChildren(ctx);
-        this.scopes.pop();
-
-        return ret;
+        this.exitScope();
     }
     public visitFunctionExpression(ctx: ast.FunctionExpressionContext) {
-        this.scopes.push({});
+        this.enterScope();
 
         const type = ctx.functionType();
         for (const id of type.identifier()) {
@@ -147,32 +145,26 @@ export default class DefsUsesVisitor extends AbstractParseTreeVisitor<void> impl
         }
 
         const ret = this.visitChildren(ctx);
-        this.scopes.pop();
-
-        return ret;
+        this.exitScope();
     }
     public visitIfallStatement(ctx: ast.IfallStatementContext) {
-        this.scopes.push({});
+        this.enterScope();
 
         this.addDef(ctx.identifier());
 
         const ret = this.visitChildren(ctx);
-        this.scopes.pop();
-
-        return ret;
+        this.exitScope();
     }
     public visitTraverseStatement(ctx: ast.TraverseStatementContext) {
-        this.scopes.push({});
+        this.enterScope();
 
         this.addDef(ctx.identifier(0));
 
         const ret = this.visitChildren(ctx);
-        this.scopes.pop();
-
-        return ret;
+        this.exitScope();
     }
     public visitVisitStatement(ctx: ast.VisitStatementContext) {
-        this.scopes.push({});
+        this.enterScope();
 
         const ids = ctx.identifier();
         if (ids && ids.length == 2) {
@@ -180,22 +172,20 @@ export default class DefsUsesVisitor extends AbstractParseTreeVisitor<void> impl
         }
 
         const ret = this.visitChildren(ctx);
-
-        this.scopes.pop();
-        return ret;
+        this.exitScope();
     }
 
     // symbol definitions
     public visitForVariableDeclaration(ctx: ast.ForVariableDeclarationContext) {
         this.addDef(ctx.identifier());
 
-        return this.visitChildren(ctx);
+        this.visitChildren(ctx);
     }
 
     // symbol uses
     public visitIdentifier(ctx: ast.IdentifierContext) {
         this.addUse(ctx, this.getDef(ctx));
 
-        return this.visitChildren(ctx);
+        this.visitChildren(ctx);
     }
 }

@@ -16,7 +16,7 @@
 //
 import * as vscode from 'vscode';
 import { parseBoaCode } from './parser';
-import DefsUsesVisitor from './defuse';
+import { DefsUsesVisitor } from './defuse';
 import { getRange } from './symbols';
 
 export default class BoaDefinitionProvider implements vscode.DefinitionProvider {

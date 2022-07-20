@@ -23,7 +23,7 @@ import { boaVisitor } from '../antlr/boaVisitor';
 import { parseBoaCode } from './parser';
 import { builtinFunctions, IFunction } from '../types';
 import { ParserRuleContext } from 'antlr4ts';
-import DefsUsesVisitor from './defuse';
+import { DefsUsesVisitor } from './defuse';
 
 export default class BoaSignatureHelpProvider implements vscode.SignatureHelpProvider {
     public provideSignatureHelp(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.SignatureHelp> {

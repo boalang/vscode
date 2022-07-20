@@ -2,20 +2,22 @@
 // for the documentation about the tasks.json format
 {
     "version": "2.0.0",
-    "tasks": [
-        {
-            "type": "typescript",
-            "tsconfig": "tsconfig.json",
-            "problemMatcher": [
-                "$tsc-watch"
-            ],
-            "option": "watch",
+	"echoCommand": true,
+	"tasks": [
+		{
+            "type": "process",
+            "command": "npm",
+			"args": [
+                "run",
+                "webpack-dev"
+			],
+			"label": "webpack dev",
             "isBackground": true,
             "presentation": {
-                "echo": true,
+                "echo": false,
                 "reveal": "silent",
                 "focus": false,
-                "panel": "shared"
+                "panel": "dedicated"
             },
             "runOptions": {
                 "runOn": "folderOpen"
@@ -23,17 +25,39 @@
             "group": {
                 "kind": "build",
                 "isDefault": true
+            }
+		},
+		{
+            "type": "process",
+            "command": "npm",
+			"args": [
+                "run",
+                "package"
+			],
+            "presentation": {
+                "echo": false,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
             },
-            "label": "tsc: watch - tsconfig.json"
-        },
-        {
-            "type": "typescript",
-            "tsconfig": "tsconfig.json",
-            "problemMatcher": [
-                "$tsc"
-            ],
-            "group": "build",
-            "label": "tsc: build - tsconfig.json"
-        }
-    ]
+			"label": "package",
+            "group": "build"
+		},
+		{
+            "type": "process",
+            "command": "npm",
+			"args": [
+                "run",
+                "antlr4ts"
+			],
+            "presentation": {
+                "echo": false,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+			"label": "antlr4ts",
+            "group": "build"
+		}
+	]
 }

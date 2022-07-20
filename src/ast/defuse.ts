@@ -20,7 +20,7 @@ import * as ast from '../antlr/boaParser';
 import { boaVisitor } from '../antlr/boaVisitor';
 
 export class ScopedVisitor<T> extends AbstractParseTreeVisitor<void> implements boaVisitor<void> {
-    protected scopes: T[] = [{} as T];
+    protected scopes: T[] = [];
 
     protected defaultResult() {
         return undefined;
@@ -42,6 +42,11 @@ export class ScopedVisitor<T> extends AbstractParseTreeVisitor<void> implements 
     }
 
     // handle scoping
+    public visitProgram(ctx: ast.ProgramContext) {
+        this.enterScope();
+        this.visitScopedProgram(ctx);
+        this.exitScope();
+    }
     public visitDoStatement(ctx: ast.DoStatementContext) {
         this.enterScope();
         this.visitScopedDoStatement(ctx);
@@ -98,6 +103,9 @@ export class ScopedVisitor<T> extends AbstractParseTreeVisitor<void> implements 
         this.exitScope();
     }
 
+    public visitScopedProgram(ctx: ast.ProgramContext) {
+        this.visitChildren(ctx);
+    }
     public visitScopedDoStatement(ctx: ast.DoStatementContext) {
         this.visitChildren(ctx);
     }
@@ -137,10 +145,6 @@ export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ast.Identif
     private _defs: { [defIdx: number]: ast.IdentifierContext } = {};
     private _uses: { [defIdx: number]: ast.IdentifierContext[] } = {};
     private _usedefs: { [defIdx: number]: number } = {};
-
-    protected defaultResult() {
-        return undefined;
-    }
 
     public get defs() {
         return this._defs;
@@ -227,14 +231,12 @@ export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ast.Identif
     // symbol definitions
     public visitForVariableDeclaration(ctx: ast.ForVariableDeclarationContext) {
         this.addDef(ctx.identifier());
-
         this.visitChildren(ctx);
     }
 
     // symbol uses
     public visitIdentifier(ctx: ast.IdentifierContext) {
         this.addUse(ctx, this.getDef(ctx));
-
         this.visitChildren(ctx);
     }
 }

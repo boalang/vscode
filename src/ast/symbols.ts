@@ -64,7 +64,7 @@ export function getLoc(rule: ParserRuleContext, uri: vscode.Uri) {
 
 export function getRange(rule: ParserRuleContext) {
     const stop = rule.start == rule.stop ?
-        rule.start.charPositionInLine +rule.text.length :
+        rule.start.charPositionInLine + rule.text.length :
         rule.stop.charPositionInLine;
     return new vscode.Range(
         new vscode.Position(rule.start.line - 1, rule.start.charPositionInLine),

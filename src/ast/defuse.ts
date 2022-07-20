@@ -19,9 +19,121 @@ import { AbstractParseTreeVisitor } from 'antlr4ts/tree/AbstractParseTreeVisitor
 import * as ast from '../antlr/boaParser';
 import { boaVisitor } from '../antlr/boaVisitor';
 
-export default class DefsUsesVisitor extends AbstractParseTreeVisitor<void> implements boaVisitor<void> {
-    private scopes: { [name: string]: ast.IdentifierContext }[] = [{}];
+export class ScopedVisitor<T> extends AbstractParseTreeVisitor<void> implements boaVisitor<void> {
+    protected scopes: T[] = [{} as T];
 
+    protected defaultResult() {
+        return undefined;
+    }
+
+    public visitChildren(node: RuleNode) {
+        let n = node.childCount;
+        for (let i = 0; i < n; i++) {
+            node.getChild(i).accept(this);
+        }
+    }
+
+    protected enterScope() {
+        this.scopes.push({} as T);
+    }
+
+    protected exitScope() {
+        this.scopes.pop();
+    }
+
+    // handle scoping
+    public visitDoStatement(ctx: ast.DoStatementContext) {
+        this.enterScope();
+        this.visitScopedDoStatement(ctx);
+        this.exitScope();
+    }
+    public visitForStatement(ctx: ast.ForStatementContext) {
+        this.enterScope();
+        this.visitScopedForStatement(ctx);
+        this.exitScope();
+    }
+    public visitSwitchCaseStatement(ctx: ast.SwitchCaseContext) {
+        this.enterScope();
+        this.visitScopedSwitchCaseStatement(ctx);
+        this.exitScope();
+    }
+    public visitWhileStatement(ctx: ast.WhileStatementContext) {
+        this.enterScope();
+        this.visitScopedWhileStatement(ctx);
+        this.exitScope();
+    }
+    public visitExistsStatement(ctx: ast.ExistsStatementContext) {
+        this.enterScope();
+        this.visitScopedExistsStatement(ctx);
+        this.exitScope();
+    }
+    public visitFixpStatement(ctx: ast.FixpStatementContext) {
+        this.enterScope();
+        this.visitScopedFixpStatement(ctx);
+        this.exitScope();
+    }
+    public visitForeachStatement(ctx: ast.ForeachStatementContext) {
+        this.enterScope();
+        this.visitScopedForeachStatement(ctx);
+        this.exitScope();
+    }
+    public visitFunctionExpression(ctx: ast.FunctionExpressionContext) {
+        this.enterScope();
+        this.visitScopedFunctionExpression(ctx);
+        this.exitScope();
+    }
+    public visitIfallStatement(ctx: ast.IfallStatementContext) {
+        this.enterScope();
+        this.visitScopedIfallStatement(ctx);
+        this.exitScope();
+    }
+    public visitTraverseStatement(ctx: ast.TraverseStatementContext) {
+        this.enterScope();
+        this.visitScopedTraverseStatement(ctx);
+        this.exitScope();
+    }
+    public visitVisitStatement(ctx: ast.VisitStatementContext) {
+        this.enterScope();
+        this.visitScopedVisitStatement(ctx);
+        this.exitScope();
+    }
+
+    public visitScopedDoStatement(ctx: ast.DoStatementContext) {
+        this.visitChildren(ctx);
+    }
+    public visitScopedForStatement(ctx: ast.ForStatementContext) {
+        this.visitChildren(ctx);
+    }
+    public visitScopedSwitchCaseStatement(ctx: ast.SwitchCaseContext) {
+        this.visitChildren(ctx);
+    }
+    public visitScopedWhileStatement(ctx: ast.WhileStatementContext) {
+        this.visitChildren(ctx);
+    }
+    public visitScopedExistsStatement(ctx: ast.ExistsStatementContext) {
+        this.visitChildren(ctx);
+    }
+    public visitScopedFixpStatement(ctx: ast.FixpStatementContext) {
+        this.visitChildren(ctx);
+    }
+    public visitScopedForeachStatement(ctx: ast.ForeachStatementContext) {
+        this.visitChildren(ctx);
+    }
+    public visitScopedFunctionExpression(ctx: ast.FunctionExpressionContext) {
+        this.visitChildren(ctx);
+    }
+    public visitScopedIfallStatement(ctx: ast.IfallStatementContext) {
+        this.visitChildren(ctx);
+    }
+    public visitScopedTraverseStatement(ctx: ast.TraverseStatementContext) {
+        this.visitChildren(ctx);
+    }
+    public visitScopedVisitStatement(ctx: ast.VisitStatementContext) {
+        this.visitChildren(ctx);
+    }
+}
+
+export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ast.IdentifierContext }> {
     private _defs: { [defIdx: number]: ast.IdentifierContext } = {};
     private _uses: { [defIdx: number]: ast.IdentifierContext[] } = {};
     private _usedefs: { [defIdx: number]: number } = {};
@@ -75,104 +187,41 @@ export default class DefsUsesVisitor extends AbstractParseTreeVisitor<void> impl
         }
     }
 
-    public visitChildren(node: RuleNode) {
-        let n = node.childCount;
-        for (let i = 0; i < n; i++) {
-            node.getChild(i).accept(this);
-        }
-    }
-
-    protected visitScoped(ctx) {
-        this.enterScope();
-        this.visitChildren(ctx);
-        this.exitScope();
-    }
-
-    protected enterScope() {
-        this.scopes.push({});
-    }
-
-    protected exitScope() {
-        this.scopes.pop();
-    }
-
-    // handle scoping
-    public visitDoStatement(ctx: ast.DoStatementContext) {
-        this.visitScoped(ctx);
-    }
-    public visitForStatement(ctx: ast.ForStatementContext) {
-        this.visitScoped(ctx);
-    }
-    public visitSwitchCaseStatement(ctx: ast.SwitchCaseContext) {
-        this.visitScoped(ctx);
-    }
-    public visitWhileStatement(ctx: ast.WhileStatementContext) {
-        this.visitScoped(ctx);
-    }
-
     // symbol definitions that also scope
-    public visitExistsStatement(ctx: ast.ExistsStatementContext) {
-        this.enterScope();
-
+    public visitScopedExistsStatement(ctx: ast.ExistsStatementContext) {
         this.addDef(ctx.identifier());
-
-        const ret = this.visitChildren(ctx);
-        this.exitScope();
+        super.visitScopedExistsStatement(ctx);
     }
-    public visitFixpStatement(ctx: ast.FixpStatementContext) {
-        this.enterScope();
-
+    public visitScopedFixpStatement(ctx: ast.FixpStatementContext) {
         this.addDef(ctx.identifier(0));
         this.addDef(ctx.identifier(1));
-
-        const ret = this.visitChildren(ctx);
-        this.exitScope();
+        super.visitScopedFixpStatement(ctx);
     }
-    public visitForeachStatement(ctx: ast.ForeachStatementContext) {
-        this.enterScope();
-
+    public visitScopedForeachStatement(ctx: ast.ForeachStatementContext) {
         this.addDef(ctx.identifier());
-
-        const ret = this.visitChildren(ctx);
-        this.exitScope();
+        super.visitScopedForeachStatement(ctx);
     }
-    public visitFunctionExpression(ctx: ast.FunctionExpressionContext) {
-        this.enterScope();
-
+    public visitScopedFunctionExpression(ctx: ast.FunctionExpressionContext) {
         const type = ctx.functionType();
         for (const id of type.identifier()) {
             this.addDef(id);
         }
-
-        const ret = this.visitChildren(ctx);
-        this.exitScope();
+        super.visitScopedFunctionExpression(ctx);
     }
-    public visitIfallStatement(ctx: ast.IfallStatementContext) {
-        this.enterScope();
-
+    public visitScopedIfallStatement(ctx: ast.IfallStatementContext) {
         this.addDef(ctx.identifier());
-
-        const ret = this.visitChildren(ctx);
-        this.exitScope();
+        super.visitScopedIfallStatement(ctx);
     }
-    public visitTraverseStatement(ctx: ast.TraverseStatementContext) {
-        this.enterScope();
-
+    public visitScopedTraverseStatement(ctx: ast.TraverseStatementContext) {
         this.addDef(ctx.identifier(0));
-
-        const ret = this.visitChildren(ctx);
-        this.exitScope();
+        super.visitScopedTraverseStatement(ctx);
     }
-    public visitVisitStatement(ctx: ast.VisitStatementContext) {
-        this.enterScope();
-
+    public visitScopedVisitStatement(ctx: ast.VisitStatementContext) {
         const ids = ctx.identifier();
         if (ids && ids.length == 2) {
             this.addDef(ids[0]);
         }
-
-        const ret = this.visitChildren(ctx);
-        this.exitScope();
+        super.visitScopedVisitStatement(ctx);
     }
 
     // symbol definitions

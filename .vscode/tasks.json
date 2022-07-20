@@ -3,10 +3,10 @@
 {
     "version": "2.0.0",
 	"echoCommand": true,
+    "type": "shell",
+    "command": "npm",
 	"tasks": [
 		{
-            "type": "process",
-            "command": "npm",
 			"args": [
                 "run",
                 "webpack-dev"
@@ -28,8 +28,6 @@
             }
 		},
 		{
-            "type": "process",
-            "command": "npm",
 			"args": [
                 "run",
                 "package"
@@ -44,8 +42,6 @@
             "group": "build"
 		},
 		{
-            "type": "process",
-            "command": "npm",
 			"args": [
                 "run",
                 "antlr4ts"

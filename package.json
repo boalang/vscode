@@ -619,7 +619,7 @@
         "vscode:uninstall": "node ./out/uninstall.js",
         "antlr4ts": "antlr4ts -no-listener -visitor src/antlr/boa.g4",
         "webpack": "webpack --progress --mode development",
-        "webpack-dev": "webpack --progress --mode development --watch --stats-error-details",
+        "webpack-dev": "webpack --mode development --watch --stats-error-details",
         "package": "webpack --progress --mode production --devtool hidden-source-map"
     },
     "dependencies": {

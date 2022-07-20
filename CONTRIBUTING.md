@@ -11,7 +11,7 @@ The build system is configured to run a watcher.  If the watcher is not
 running, open the command palette and run `Tasks: Run Build Task`.
 
 That should start the watcher task.  You can verify the task is running by
-looking in your terminal list.  There should be a `watch - tsconfig.json` task
+looking in your terminal list.  There should be a `webpack dev` task
 in your list of open terminals.
 
 Every time you save one of the `.ts` source files, the watcher should detect

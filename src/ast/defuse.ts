@@ -72,9 +72,9 @@ export class ScopedVisitor<T> extends AbstractParseTreeVisitor<void> implements 
         this.visitScopedExistsStatement(ctx);
         this.exitScope();
     }
-    public visitFixpStatement(ctx: ast.FixpStatementContext) {
+    public visitFixpExpression(ctx: ast.FixpExpressionContext) {
         this.enterScope();
-        this.visitScopedFixpStatement(ctx);
+        this.visitScopedFixpExpression(ctx);
         this.exitScope();
     }
     public visitForeachStatement(ctx: ast.ForeachStatementContext) {
@@ -92,9 +92,9 @@ export class ScopedVisitor<T> extends AbstractParseTreeVisitor<void> implements 
         this.visitScopedIfallStatement(ctx);
         this.exitScope();
     }
-    public visitTraverseStatement(ctx: ast.TraverseStatementContext) {
+    public visitTraversalExpression(ctx: ast.TraversalExpressionContext) {
         this.enterScope();
-        this.visitScopedTraverseStatement(ctx);
+        this.visitScopedTraversalExpression(ctx);
         this.exitScope();
     }
     public visitVisitStatement(ctx: ast.VisitStatementContext) {
@@ -121,7 +121,7 @@ export class ScopedVisitor<T> extends AbstractParseTreeVisitor<void> implements 
     public visitScopedExistsStatement(ctx: ast.ExistsStatementContext) {
         this.visitChildren(ctx);
     }
-    public visitScopedFixpStatement(ctx: ast.FixpStatementContext) {
+    public visitScopedFixpExpression(ctx: ast.FixpExpressionContext) {
         this.visitChildren(ctx);
     }
     public visitScopedForeachStatement(ctx: ast.ForeachStatementContext) {
@@ -133,7 +133,7 @@ export class ScopedVisitor<T> extends AbstractParseTreeVisitor<void> implements 
     public visitScopedIfallStatement(ctx: ast.IfallStatementContext) {
         this.visitChildren(ctx);
     }
-    public visitScopedTraverseStatement(ctx: ast.TraverseStatementContext) {
+    public visitScopedTraversalExpression(ctx: ast.TraversalExpressionContext) {
         this.visitChildren(ctx);
     }
     public visitScopedVisitStatement(ctx: ast.VisitStatementContext) {
@@ -158,7 +158,7 @@ export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ast.Identif
         return this._usedefs;
     }
 
-    private getDef(ctx: ast.IdentifierContext, depth: number = 0): ast.IdentifierContext {
+    protected getDef(ctx: ast.IdentifierContext, depth: number = 0): ast.IdentifierContext {
         const id = ctx.text;
 
         if (this.scopes.length - depth == 0) {
@@ -196,10 +196,10 @@ export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ast.Identif
         this.addDef(ctx.identifier());
         super.visitScopedExistsStatement(ctx);
     }
-    public visitScopedFixpStatement(ctx: ast.FixpStatementContext) {
-        this.addDef(ctx.identifier(0));
-        this.addDef(ctx.identifier(1));
-        super.visitScopedFixpStatement(ctx);
+    public visitScopedFixpExpression(ctx: ast.FixpExpressionContext) {
+        this.addDef(ctx.fixpStatement().identifier(0));
+        this.addDef(ctx.fixpStatement().identifier(1));
+        super.visitScopedFixpExpression(ctx);
     }
     public visitScopedForeachStatement(ctx: ast.ForeachStatementContext) {
         this.addDef(ctx.identifier());
@@ -216,9 +216,9 @@ export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ast.Identif
         this.addDef(ctx.identifier());
         super.visitScopedIfallStatement(ctx);
     }
-    public visitScopedTraverseStatement(ctx: ast.TraverseStatementContext) {
-        this.addDef(ctx.identifier(0));
-        super.visitScopedTraverseStatement(ctx);
+    public visitScopedTraversalExpression(ctx: ast.TraversalExpressionContext) {
+        this.addDef(ctx.traverseStatement().identifier(0));
+        super.visitScopedTraversalExpression(ctx);
     }
     public visitScopedVisitStatement(ctx: ast.VisitStatementContext) {
         const ids = ctx.identifier();

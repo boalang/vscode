@@ -461,8 +461,8 @@
             ],
             "explorer/context": [
                 {
-                    "when": "resourceLangId == boalang",
-                    "command": "boalang.runQuery"
+                    "command": "boalang.runQuery",
+                    "when": "resourceLangId == boalang"
                 }
             ],
             "editor/title": [

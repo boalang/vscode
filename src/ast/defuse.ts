@@ -175,7 +175,6 @@ export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ast.Identif
 
     private addDef(ctx: ast.IdentifierContext) {
         this._defs[ctx.start.startIndex] = ctx;
-        this.addUse(ctx, ctx);
         this.scopes[this.scopes.length - 1][ctx.text] = ctx;
     }
 
@@ -185,7 +184,9 @@ export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ast.Identif
             if (!(defIdx in this._uses)) {
                 this._uses[defIdx] = [];
             }
-            this._uses[defIdx].push(ctx);
+            if (this._uses[defIdx].indexOf(ctx) == -1) {
+                this._uses[defIdx].push(ctx);
+            }
 
             this.usedefs[ctx.start.startIndex] = defIdx;
         }
@@ -197,21 +198,24 @@ export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ast.Identif
         this.addDef(ctx.fixpStatement().identifier(1));
         super.visitScopedFixpExpression(ctx);
     }
+
     public visitScopedFunctionExpression(ctx: ast.FunctionExpressionContext) {
         const type = ctx.functionType();
-        for (const id of type.identifier()) {
-            this.addDef(id);
+        for (const v of type.varDecl()) {
+            this.addDef(v.identifier());
         }
         super.visitScopedFunctionExpression(ctx);
     }
+
     public visitScopedTraversalExpression(ctx: ast.TraversalExpressionContext) {
         this.addDef(ctx.traverseStatement().identifier(0));
         super.visitScopedTraversalExpression(ctx);
     }
+
     public visitScopedVisitStatement(ctx: ast.VisitStatementContext) {
-        const ids = ctx.identifier();
-        if (ids && ids.length == 2) {
-            this.addDef(ids[0]);
+        const v = ctx.varDecl();
+        if (v !== undefined) {
+            this.addDef(v.identifier());
         }
         super.visitScopedVisitStatement(ctx);
     }

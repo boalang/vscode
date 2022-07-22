@@ -191,14 +191,15 @@ export class boaParser extends Parser {
 	public static readonly RULE_fixpExpression = 62;
 	public static readonly RULE_visitorExpression = 63;
 	public static readonly RULE_traversalExpression = 64;
-	public static readonly RULE_composite = 65;
-	public static readonly RULE_pair = 66;
-	public static readonly RULE_identifier = 67;
-	public static readonly RULE_integerLiteral = 68;
-	public static readonly RULE_floatingPointLiteral = 69;
-	public static readonly RULE_characterLiteral = 70;
-	public static readonly RULE_stringLiteral = 71;
-	public static readonly RULE_timeLiteral = 72;
+	public static readonly RULE_varDecl = 65;
+	public static readonly RULE_composite = 66;
+	public static readonly RULE_pair = 67;
+	public static readonly RULE_identifier = 68;
+	public static readonly RULE_integerLiteral = 69;
+	public static readonly RULE_floatingPointLiteral = 70;
+	public static readonly RULE_characterLiteral = 71;
+	public static readonly RULE_stringLiteral = 72;
+	public static readonly RULE_timeLiteral = 73;
 	// tslint:disable:no-trailing-whitespace
 	public static readonly ruleNames: string[] = [
 		"start", "program", "programStatement", "declaration", "typeDeclaration", 
@@ -214,9 +215,9 @@ export class boaParser extends Parser {
 		"fixpStatement", "stopStatement", "expression", "expressionList", "conjunction", 
 		"comparison", "simpleExpression", "term", "factor", "selector", "index", 
 		"call", "operand", "unaryFactor", "parenExpression", "functionExpression", 
-		"fixpExpression", "visitorExpression", "traversalExpression", "composite", 
-		"pair", "identifier", "integerLiteral", "floatingPointLiteral", "characterLiteral", 
-		"stringLiteral", "timeLiteral",
+		"fixpExpression", "visitorExpression", "traversalExpression", "varDecl", 
+		"composite", "pair", "identifier", "integerLiteral", "floatingPointLiteral", 
+		"characterLiteral", "stringLiteral", "timeLiteral",
 	];
 
 	private static readonly _LITERAL_NAMES: Array<string | undefined> = [
@@ -290,9 +291,9 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 146;
+			this.state = 148;
 			this.program();
-			this.state = 147;
+			this.state = 149;
 			this.match(boaParser.EOF);
 			}
 		}
@@ -318,17 +319,17 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 150;
+			this.state = 152;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			do {
 				{
 				{
-				this.state = 149;
+				this.state = 151;
 				this.programStatement();
 				}
 				}
-				this.state = 152;
+				this.state = 154;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 			} while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << boaParser.OF) | (1 << boaParser.IF) | (1 << boaParser.DO) | (1 << boaParser.MAP) | (1 << boaParser.STACK) | (1 << boaParser.QUEUE) | (1 << boaParser.SET) | (1 << boaParser.FOR) | (1 << boaParser.FOREACH) | (1 << boaParser.IFALL) | (1 << boaParser.EXISTS) | (1 << boaParser.NOT) | (1 << boaParser.TYPE) | (1 << boaParser.ELSE) | (1 << boaParser.CASE) | (1 << boaParser.OUTPUT) | (1 << boaParser.FORMAT) | (1 << boaParser.WHILE) | (1 << boaParser.BREAK) | (1 << boaParser.ARRAY) | (1 << boaParser.STATIC) | (1 << boaParser.SWITCH) | (1 << boaParser.RETURN) | (1 << boaParser.WEIGHT) | (1 << boaParser.DEFAULT) | (1 << boaParser.CONTINUE) | (1 << boaParser.FUNCTION) | (1 << boaParser.FIXP) | (1 << boaParser.VISITOR) | (1 << boaParser.TRAVERSAL) | (1 << boaParser.BEFORE))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (boaParser.AFTER - 32)) | (1 << (boaParser.STOP - 32)) | (1 << (boaParser.SEMICOLON - 32)) | (1 << (boaParser.LBRACE - 32)) | (1 << (boaParser.LPAREN - 32)) | (1 << (boaParser.PLUS - 32)) | (1 << (boaParser.MINUS - 32)))) !== 0) || ((((_la - 68)) & ~0x1F) === 0 && ((1 << (_la - 68)) & ((1 << (boaParser.NEG - 68)) | (1 << (boaParser.INV - 68)) | (1 << (boaParser.DOLLAR - 68)) | (1 << (boaParser.IntegerLiteral - 68)) | (1 << (boaParser.FloatingPointLiteral - 68)) | (1 << (boaParser.CharacterLiteral - 68)) | (1 << (boaParser.RegexLiteral - 68)) | (1 << (boaParser.MultilineStringLiteral - 68)) | (1 << (boaParser.StringLiteral - 68)) | (1 << (boaParser.TimeLiteral - 68)) | (1 << (boaParser.Identifier - 68)))) !== 0));
@@ -353,13 +354,13 @@ export class boaParser extends Parser {
 		let _localctx: ProgramStatementContext = new ProgramStatementContext(this._ctx, this.state);
 		this.enterRule(_localctx, 4, boaParser.RULE_programStatement);
 		try {
-			this.state = 156;
+			this.state = 158;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 1, this._ctx) ) {
 			case 1:
 				this.enterOuterAlt(_localctx, 1);
 				{
-				this.state = 154;
+				this.state = 156;
 				this.declaration();
 				}
 				break;
@@ -367,7 +368,7 @@ export class boaParser extends Parser {
 			case 2:
 				this.enterOuterAlt(_localctx, 2);
 				{
-				this.state = 155;
+				this.state = 157;
 				this.statement();
 				}
 				break;
@@ -392,13 +393,13 @@ export class boaParser extends Parser {
 		let _localctx: DeclarationContext = new DeclarationContext(this._ctx, this.state);
 		this.enterRule(_localctx, 6, boaParser.RULE_declaration);
 		try {
-			this.state = 161;
+			this.state = 163;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 2, this._ctx) ) {
 			case 1:
 				this.enterOuterAlt(_localctx, 1);
 				{
-				this.state = 158;
+				this.state = 160;
 				this.typeDeclaration();
 				}
 				break;
@@ -406,7 +407,7 @@ export class boaParser extends Parser {
 			case 2:
 				this.enterOuterAlt(_localctx, 2);
 				{
-				this.state = 159;
+				this.state = 161;
 				this.staticVariableDeclaration();
 				}
 				break;
@@ -414,7 +415,7 @@ export class boaParser extends Parser {
 			case 3:
 				this.enterOuterAlt(_localctx, 3);
 				{
-				this.state = 160;
+				this.state = 162;
 				this.variableDeclaration();
 				}
 				break;
@@ -441,13 +442,13 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 163;
-			this.match(boaParser.TYPE);
-			this.state = 164;
-			this.identifier();
 			this.state = 165;
-			this.match(boaParser.EQUALS);
+			this.match(boaParser.TYPE);
 			this.state = 166;
+			this.identifier();
+			this.state = 167;
+			this.match(boaParser.EQUALS);
+			this.state = 168;
 			this.type();
 			 this.isSemicolon(); 
 			}
@@ -473,9 +474,9 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 169;
+			this.state = 171;
 			this.match(boaParser.STATIC);
-			this.state = 170;
+			this.state = 172;
 			this.variableDeclaration();
 			}
 		}
@@ -500,7 +501,7 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 172;
+			this.state = 174;
 			this.forVariableDeclaration();
 			 this.isSemicolon(); 
 			}
@@ -524,13 +525,13 @@ export class boaParser extends Parser {
 		let _localctx: TypeContext = new TypeContext(this._ctx, this.state);
 		this.enterRule(_localctx, 14, boaParser.RULE_type);
 		try {
-			this.state = 188;
+			this.state = 190;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 3, this._ctx) ) {
 			case 1:
 				this.enterOuterAlt(_localctx, 1);
 				{
-				this.state = 175;
+				this.state = 177;
 				this.arrayType();
 				}
 				break;
@@ -538,7 +539,7 @@ export class boaParser extends Parser {
 			case 2:
 				this.enterOuterAlt(_localctx, 2);
 				{
-				this.state = 176;
+				this.state = 178;
 				this.mapType();
 				}
 				break;
@@ -546,7 +547,7 @@ export class boaParser extends Parser {
 			case 3:
 				this.enterOuterAlt(_localctx, 3);
 				{
-				this.state = 177;
+				this.state = 179;
 				this.tupleType();
 				}
 				break;
@@ -554,7 +555,7 @@ export class boaParser extends Parser {
 			case 4:
 				this.enterOuterAlt(_localctx, 4);
 				{
-				this.state = 178;
+				this.state = 180;
 				this.outputType();
 				}
 				break;
@@ -562,7 +563,7 @@ export class boaParser extends Parser {
 			case 5:
 				this.enterOuterAlt(_localctx, 5);
 				{
-				this.state = 179;
+				this.state = 181;
 				this.functionType();
 				}
 				break;
@@ -570,15 +571,15 @@ export class boaParser extends Parser {
 			case 6:
 				this.enterOuterAlt(_localctx, 6);
 				{
-				this.state = 180;
-				_localctx._fixp = this.fixpType();
+				this.state = 182;
+				this.fixpType();
 				}
 				break;
 
 			case 7:
 				this.enterOuterAlt(_localctx, 7);
 				{
-				this.state = 181;
+				this.state = 183;
 				this.visitorType();
 				}
 				break;
@@ -586,15 +587,15 @@ export class boaParser extends Parser {
 			case 8:
 				this.enterOuterAlt(_localctx, 8);
 				{
-				this.state = 182;
-				_localctx._tr = this.traversalType();
+				this.state = 184;
+				this.traversalType();
 				}
 				break;
 
 			case 9:
 				this.enterOuterAlt(_localctx, 9);
 				{
-				this.state = 183;
+				this.state = 185;
 				this.stackType();
 				}
 				break;
@@ -602,7 +603,7 @@ export class boaParser extends Parser {
 			case 10:
 				this.enterOuterAlt(_localctx, 10);
 				{
-				this.state = 184;
+				this.state = 186;
 				this.queueType();
 				}
 				break;
@@ -610,7 +611,7 @@ export class boaParser extends Parser {
 			case 11:
 				this.enterOuterAlt(_localctx, 11);
 				{
-				this.state = 185;
+				this.state = 187;
 				this.setType();
 				}
 				break;
@@ -618,7 +619,7 @@ export class boaParser extends Parser {
 			case 12:
 				this.enterOuterAlt(_localctx, 12);
 				{
-				this.state = 186;
+				this.state = 188;
 				this.enumType();
 				}
 				break;
@@ -626,7 +627,7 @@ export class boaParser extends Parser {
 			case 13:
 				this.enterOuterAlt(_localctx, 13);
 				{
-				this.state = 187;
+				this.state = 189;
 				this.identifier();
 				}
 				break;
@@ -653,19 +654,19 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 193;
+			this.state = 195;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 4, this._ctx) ) {
 			case 1:
 				{
-				this.state = 190;
+				this.state = 192;
 				this.identifier();
-				this.state = 191;
+				this.state = 193;
 				this.match(boaParser.COLON);
 				}
 				break;
 			}
-			this.state = 195;
+			this.state = 197;
 			this.type();
 			}
 		}
@@ -690,11 +691,11 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 197;
-			this.identifier();
-			this.state = 198;
-			this.match(boaParser.EQUALS);
 			this.state = 199;
+			this.identifier();
+			this.state = 200;
+			this.match(boaParser.EQUALS);
+			this.state = 201;
 			this.expression();
 			}
 		}
@@ -719,11 +720,11 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 201;
-			this.match(boaParser.ARRAY);
-			this.state = 202;
-			this.match(boaParser.OF);
 			this.state = 203;
+			this.match(boaParser.ARRAY);
+			this.state = 204;
+			this.match(boaParser.OF);
+			this.state = 205;
 			this.component();
 			}
 		}
@@ -750,39 +751,39 @@ export class boaParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 205;
+			this.state = 207;
 			this.match(boaParser.LBRACE);
-			this.state = 217;
+			this.state = 219;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << boaParser.OF) | (1 << boaParser.IF) | (1 << boaParser.DO) | (1 << boaParser.MAP) | (1 << boaParser.STACK) | (1 << boaParser.QUEUE) | (1 << boaParser.SET) | (1 << boaParser.FOR) | (1 << boaParser.FOREACH) | (1 << boaParser.IFALL) | (1 << boaParser.EXISTS) | (1 << boaParser.NOT) | (1 << boaParser.TYPE) | (1 << boaParser.ELSE) | (1 << boaParser.CASE) | (1 << boaParser.OUTPUT) | (1 << boaParser.FORMAT) | (1 << boaParser.WHILE) | (1 << boaParser.BREAK) | (1 << boaParser.ARRAY) | (1 << boaParser.STATIC) | (1 << boaParser.SWITCH) | (1 << boaParser.RETURN) | (1 << boaParser.WEIGHT) | (1 << boaParser.DEFAULT) | (1 << boaParser.CONTINUE) | (1 << boaParser.FUNCTION) | (1 << boaParser.FIXP) | (1 << boaParser.VISITOR) | (1 << boaParser.TRAVERSAL) | (1 << boaParser.BEFORE))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (boaParser.AFTER - 32)) | (1 << (boaParser.STOP - 32)) | (1 << (boaParser.ENUM - 32)) | (1 << (boaParser.LBRACE - 32)))) !== 0) || _la === boaParser.Identifier) {
 				{
-				this.state = 206;
+				this.state = 208;
 				this.member();
-				this.state = 211;
+				this.state = 213;
 				this._errHandler.sync(this);
 				_alt = this.interpreter.adaptivePredict(this._input, 5, this._ctx);
 				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
 					if (_alt === 1) {
 						{
 						{
-						this.state = 207;
+						this.state = 209;
 						this.match(boaParser.COMMA);
-						this.state = 208;
+						this.state = 210;
 						this.member();
 						}
 						}
 					}
-					this.state = 213;
+					this.state = 215;
 					this._errHandler.sync(this);
 					_alt = this.interpreter.adaptivePredict(this._input, 5, this._ctx);
 				}
-				this.state = 215;
+				this.state = 217;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (_la === boaParser.COMMA) {
 					{
-					this.state = 214;
+					this.state = 216;
 					this.match(boaParser.COMMA);
 					}
 				}
@@ -790,7 +791,7 @@ export class boaParser extends Parser {
 				}
 			}
 
-			this.state = 219;
+			this.state = 221;
 			this.match(boaParser.RBRACE);
 			}
 		}
@@ -817,41 +818,41 @@ export class boaParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 221;
+			this.state = 223;
 			this.match(boaParser.ENUM);
-			this.state = 222;
+			this.state = 224;
 			this.match(boaParser.LBRACE);
-			this.state = 234;
+			this.state = 236;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << boaParser.OF) | (1 << boaParser.IF) | (1 << boaParser.DO) | (1 << boaParser.MAP) | (1 << boaParser.STACK) | (1 << boaParser.QUEUE) | (1 << boaParser.SET) | (1 << boaParser.FOR) | (1 << boaParser.FOREACH) | (1 << boaParser.IFALL) | (1 << boaParser.EXISTS) | (1 << boaParser.NOT) | (1 << boaParser.TYPE) | (1 << boaParser.ELSE) | (1 << boaParser.CASE) | (1 << boaParser.OUTPUT) | (1 << boaParser.FORMAT) | (1 << boaParser.WHILE) | (1 << boaParser.BREAK) | (1 << boaParser.ARRAY) | (1 << boaParser.STATIC) | (1 << boaParser.SWITCH) | (1 << boaParser.RETURN) | (1 << boaParser.WEIGHT) | (1 << boaParser.DEFAULT) | (1 << boaParser.CONTINUE) | (1 << boaParser.FUNCTION) | (1 << boaParser.FIXP) | (1 << boaParser.VISITOR) | (1 << boaParser.TRAVERSAL) | (1 << boaParser.BEFORE))) !== 0) || _la === boaParser.AFTER || _la === boaParser.STOP || _la === boaParser.Identifier) {
 				{
-				this.state = 223;
+				this.state = 225;
 				this.enumBodyDeclaration();
-				this.state = 228;
+				this.state = 230;
 				this._errHandler.sync(this);
 				_alt = this.interpreter.adaptivePredict(this._input, 8, this._ctx);
 				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
 					if (_alt === 1) {
 						{
 						{
-						this.state = 224;
+						this.state = 226;
 						this.match(boaParser.COMMA);
-						this.state = 225;
+						this.state = 227;
 						this.enumBodyDeclaration();
 						}
 						}
 					}
-					this.state = 230;
+					this.state = 232;
 					this._errHandler.sync(this);
 					_alt = this.interpreter.adaptivePredict(this._input, 8, this._ctx);
 				}
-				this.state = 232;
+				this.state = 234;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (_la === boaParser.COMMA) {
 					{
-					this.state = 231;
+					this.state = 233;
 					this.match(boaParser.COMMA);
 					}
 				}
@@ -859,7 +860,7 @@ export class boaParser extends Parser {
 				}
 			}
 
-			this.state = 236;
+			this.state = 238;
 			this.match(boaParser.RBRACE);
 			}
 		}
@@ -882,13 +883,13 @@ export class boaParser extends Parser {
 		let _localctx: MemberContext = new MemberContext(this._ctx, this.state);
 		this.enterRule(_localctx, 26, boaParser.RULE_member);
 		try {
-			this.state = 241;
+			this.state = 243;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 11, this._ctx) ) {
 			case 1:
 				this.enterOuterAlt(_localctx, 1);
 				{
-				this.state = 238;
+				this.state = 240;
 				this.typeDeclaration();
 				}
 				break;
@@ -896,7 +897,7 @@ export class boaParser extends Parser {
 			case 2:
 				this.enterOuterAlt(_localctx, 2);
 				{
-				this.state = 239;
+				this.state = 241;
 				this.staticVariableDeclaration();
 				}
 				break;
@@ -904,7 +905,7 @@ export class boaParser extends Parser {
 			case 3:
 				this.enterOuterAlt(_localctx, 3);
 				{
-				this.state = 240;
+				this.state = 242;
 				this.component();
 				}
 				break;
@@ -931,17 +932,17 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 243;
-			this.match(boaParser.MAP);
-			this.state = 244;
-			this.match(boaParser.LBRACKET);
 			this.state = 245;
-			this.component();
+			this.match(boaParser.MAP);
 			this.state = 246;
-			this.match(boaParser.RBRACKET);
+			this.match(boaParser.LBRACKET);
 			this.state = 247;
-			this.match(boaParser.OF);
+			this.component();
 			this.state = 248;
+			this.match(boaParser.RBRACKET);
+			this.state = 249;
+			this.match(boaParser.OF);
+			this.state = 250;
 			this.component();
 			}
 		}
@@ -966,11 +967,11 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 250;
-			this.match(boaParser.STACK);
-			this.state = 251;
-			this.match(boaParser.OF);
 			this.state = 252;
+			this.match(boaParser.STACK);
+			this.state = 253;
+			this.match(boaParser.OF);
+			this.state = 254;
 			this.component();
 			}
 		}
@@ -995,11 +996,11 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 254;
-			this.match(boaParser.QUEUE);
-			this.state = 255;
-			this.match(boaParser.OF);
 			this.state = 256;
+			this.match(boaParser.QUEUE);
+			this.state = 257;
+			this.match(boaParser.OF);
+			this.state = 258;
 			this.component();
 			}
 		}
@@ -1024,11 +1025,11 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 258;
-			this.match(boaParser.SET);
-			this.state = 259;
-			this.match(boaParser.OF);
 			this.state = 260;
+			this.match(boaParser.SET);
+			this.state = 261;
+			this.match(boaParser.OF);
+			this.state = 262;
 			this.component();
 			}
 		}
@@ -1054,85 +1055,85 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 262;
+			this.state = 264;
 			this.match(boaParser.OUTPUT);
-			this.state = 265;
+			this.state = 267;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 12, this._ctx) ) {
 			case 1:
 				{
-				this.state = 263;
+				this.state = 265;
 				this.match(boaParser.SET);
 				}
 				break;
 
 			case 2:
 				{
-				this.state = 264;
+				this.state = 266;
 				this.identifier();
 				}
 				break;
 			}
-			this.state = 271;
+			this.state = 273;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			if (_la === boaParser.LPAREN) {
 				{
-				this.state = 267;
-				this.match(boaParser.LPAREN);
-				this.state = 268;
-				this.expressionList();
 				this.state = 269;
+				this.match(boaParser.LPAREN);
+				this.state = 270;
+				this.expressionList();
+				this.state = 271;
 				this.match(boaParser.RPAREN);
 				}
 			}
 
-			this.state = 279;
+			this.state = 281;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			while (_la === boaParser.LBRACKET) {
 				{
 				{
-				this.state = 273;
-				this.match(boaParser.LBRACKET);
-				this.state = 274;
-				this.component();
 				this.state = 275;
+				this.match(boaParser.LBRACKET);
+				this.state = 276;
+				this.component();
+				this.state = 277;
 				this.match(boaParser.RBRACKET);
 				}
 				}
-				this.state = 281;
+				this.state = 283;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 			}
-			this.state = 282;
+			this.state = 284;
 			this.match(boaParser.OF);
-			this.state = 283;
+			this.state = 285;
 			this.component();
-			this.state = 286;
+			this.state = 288;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 15, this._ctx) ) {
 			case 1:
 				{
-				this.state = 284;
+				this.state = 286;
 				this.match(boaParser.WEIGHT);
-				this.state = 285;
+				this.state = 287;
 				this.component();
 				}
 				break;
 			}
-			this.state = 293;
+			this.state = 295;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 16, this._ctx) ) {
 			case 1:
 				{
-				this.state = 288;
-				this.match(boaParser.FORMAT);
-				this.state = 289;
-				this.match(boaParser.LPAREN);
 				this.state = 290;
-				this.expressionList();
+				this.match(boaParser.FORMAT);
 				this.state = 291;
+				this.match(boaParser.LPAREN);
+				this.state = 292;
+				this.expressionList();
+				this.state = 293;
 				this.match(boaParser.RPAREN);
 				}
 				break;
@@ -1159,28 +1160,24 @@ export class boaParser extends Parser {
 		this.enterRule(_localctx, 38, boaParser.RULE_functionType);
 		let _la: number;
 		try {
-			this.state = 349;
+			this.state = 340;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 25, this._ctx) ) {
 			case 1:
 				this.enterOuterAlt(_localctx, 1);
 				{
-				this.state = 295;
+				this.state = 297;
 				this.match(boaParser.FUNCTION);
-				this.state = 296;
+				this.state = 298;
 				this.match(boaParser.LPAREN);
-				this.state = 310;
+				this.state = 307;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << boaParser.OF) | (1 << boaParser.IF) | (1 << boaParser.DO) | (1 << boaParser.MAP) | (1 << boaParser.STACK) | (1 << boaParser.QUEUE) | (1 << boaParser.SET) | (1 << boaParser.FOR) | (1 << boaParser.FOREACH) | (1 << boaParser.IFALL) | (1 << boaParser.EXISTS) | (1 << boaParser.NOT) | (1 << boaParser.TYPE) | (1 << boaParser.ELSE) | (1 << boaParser.CASE) | (1 << boaParser.OUTPUT) | (1 << boaParser.FORMAT) | (1 << boaParser.WHILE) | (1 << boaParser.BREAK) | (1 << boaParser.ARRAY) | (1 << boaParser.STATIC) | (1 << boaParser.SWITCH) | (1 << boaParser.RETURN) | (1 << boaParser.WEIGHT) | (1 << boaParser.DEFAULT) | (1 << boaParser.CONTINUE) | (1 << boaParser.FUNCTION) | (1 << boaParser.FIXP) | (1 << boaParser.VISITOR) | (1 << boaParser.TRAVERSAL) | (1 << boaParser.BEFORE))) !== 0) || _la === boaParser.AFTER || _la === boaParser.STOP || _la === boaParser.Identifier) {
 					{
-					this.state = 297;
-					this.identifier();
-					this.state = 298;
-					this.match(boaParser.COLON);
 					this.state = 299;
-					this.type();
-					this.state = 307;
+					this.varDecl();
+					this.state = 304;
 					this._errHandler.sync(this);
 					_la = this._input.LA(1);
 					while (_la === boaParser.COMMA) {
@@ -1189,30 +1186,26 @@ export class boaParser extends Parser {
 						this.state = 300;
 						this.match(boaParser.COMMA);
 						this.state = 301;
-						this.identifier();
-						this.state = 302;
-						this.match(boaParser.COLON);
-						this.state = 303;
-						this.type();
+						this.varDecl();
 						}
 						}
-						this.state = 309;
+						this.state = 306;
 						this._errHandler.sync(this);
 						_la = this._input.LA(1);
 					}
 					}
 				}
 
-				this.state = 312;
+				this.state = 309;
 				this.match(boaParser.RPAREN);
-				this.state = 315;
+				this.state = 312;
 				this._errHandler.sync(this);
 				switch ( this.interpreter.adaptivePredict(this._input, 19, this._ctx) ) {
 				case 1:
 					{
-					this.state = 313;
+					this.state = 310;
 					this.match(boaParser.COLON);
-					this.state = 314;
+					this.state = 311;
 					this.type();
 					}
 					break;
@@ -1223,86 +1216,78 @@ export class boaParser extends Parser {
 			case 2:
 				this.enterOuterAlt(_localctx, 2);
 				{
-				this.state = 317;
+				this.state = 314;
 				this.match(boaParser.FUNCTION);
-				this.state = 318;
+				this.state = 315;
 				this.match(boaParser.LPAREN);
-				this.state = 342;
+				this.state = 333;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << boaParser.OF) | (1 << boaParser.IF) | (1 << boaParser.DO) | (1 << boaParser.MAP) | (1 << boaParser.STACK) | (1 << boaParser.QUEUE) | (1 << boaParser.SET) | (1 << boaParser.FOR) | (1 << boaParser.FOREACH) | (1 << boaParser.IFALL) | (1 << boaParser.EXISTS) | (1 << boaParser.NOT) | (1 << boaParser.TYPE) | (1 << boaParser.ELSE) | (1 << boaParser.CASE) | (1 << boaParser.OUTPUT) | (1 << boaParser.FORMAT) | (1 << boaParser.WHILE) | (1 << boaParser.BREAK) | (1 << boaParser.ARRAY) | (1 << boaParser.STATIC) | (1 << boaParser.SWITCH) | (1 << boaParser.RETURN) | (1 << boaParser.WEIGHT) | (1 << boaParser.DEFAULT) | (1 << boaParser.CONTINUE) | (1 << boaParser.FUNCTION) | (1 << boaParser.FIXP) | (1 << boaParser.VISITOR) | (1 << boaParser.TRAVERSAL) | (1 << boaParser.BEFORE))) !== 0) || _la === boaParser.AFTER || _la === boaParser.STOP || _la === boaParser.Identifier) {
 					{
-					this.state = 326;
+					this.state = 320;
 					this._errHandler.sync(this);
 					switch ( this.interpreter.adaptivePredict(this._input, 20, this._ctx) ) {
 					case 1:
 						{
-						this.state = 319;
-						this.identifier();
-						this.state = 320;
-						this.match(boaParser.COLON);
-						this.state = 321;
-						this.type();
+						this.state = 316;
+						this.varDecl();
 						}
 						break;
 
 					case 2:
 						{
-						this.state = 323;
+						this.state = 317;
 						this.identifier();
 						 this.notifyErrorListeners("function arguments require an identifier and type"); 
 						}
 						break;
 					}
-					this.state = 339;
+					this.state = 330;
 					this._errHandler.sync(this);
 					_la = this._input.LA(1);
 					while (_la === boaParser.COMMA) {
 						{
-						this.state = 337;
+						this.state = 328;
 						this._errHandler.sync(this);
 						switch ( this.interpreter.adaptivePredict(this._input, 21, this._ctx) ) {
 						case 1:
 							{
-							this.state = 328;
+							this.state = 322;
 							this.match(boaParser.COMMA);
-							this.state = 329;
-							this.identifier();
-							this.state = 330;
-							this.match(boaParser.COLON);
-							this.state = 331;
-							this.type();
+							this.state = 323;
+							this.varDecl();
 							}
 							break;
 
 						case 2:
 							{
-							this.state = 333;
+							this.state = 324;
 							this.match(boaParser.COMMA);
-							this.state = 334;
+							this.state = 325;
 							this.identifier();
 							 this.notifyErrorListeners("function arguments require an identifier and type"); 
 							}
 							break;
 						}
 						}
-						this.state = 341;
+						this.state = 332;
 						this._errHandler.sync(this);
 						_la = this._input.LA(1);
 					}
 					}
 				}
 
-				this.state = 344;
+				this.state = 335;
 				this.match(boaParser.RPAREN);
-				this.state = 347;
+				this.state = 338;
 				this._errHandler.sync(this);
 				switch ( this.interpreter.adaptivePredict(this._input, 24, this._ctx) ) {
 				case 1:
 					{
-					this.state = 345;
+					this.state = 336;
 					this.match(boaParser.COLON);
-					this.state = 346;
+					this.state = 337;
 					this.type();
 					}
 					break;
@@ -1332,7 +1317,7 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 351;
+			this.state = 342;
 			this.match(boaParser.FIXP);
 			}
 		}
@@ -1357,7 +1342,7 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 353;
+			this.state = 344;
 			this.match(boaParser.VISITOR);
 			}
 		}
@@ -1382,7 +1367,7 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 355;
+			this.state = 346;
 			this.match(boaParser.TRAVERSAL);
 			}
 		}
@@ -1405,13 +1390,13 @@ export class boaParser extends Parser {
 		let _localctx: StatementContext = new StatementContext(this._ctx, this.state);
 		this.enterRule(_localctx, 46, boaParser.RULE_statement);
 		try {
-			this.state = 374;
+			this.state = 365;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 26, this._ctx) ) {
 			case 1:
 				this.enterOuterAlt(_localctx, 1);
 				{
-				this.state = 357;
+				this.state = 348;
 				this.block();
 				}
 				break;
@@ -1419,7 +1404,7 @@ export class boaParser extends Parser {
 			case 2:
 				this.enterOuterAlt(_localctx, 2);
 				{
-				this.state = 358;
+				this.state = 349;
 				this.assignmentStatement();
 				}
 				break;
@@ -1427,7 +1412,7 @@ export class boaParser extends Parser {
 			case 3:
 				this.enterOuterAlt(_localctx, 3);
 				{
-				this.state = 359;
+				this.state = 350;
 				this.breakStatement();
 				}
 				break;
@@ -1435,7 +1420,7 @@ export class boaParser extends Parser {
 			case 4:
 				this.enterOuterAlt(_localctx, 4);
 				{
-				this.state = 360;
+				this.state = 351;
 				this.continueStatement();
 				}
 				break;
@@ -1443,7 +1428,7 @@ export class boaParser extends Parser {
 			case 5:
 				this.enterOuterAlt(_localctx, 5);
 				{
-				this.state = 361;
+				this.state = 352;
 				this.stopStatement();
 				}
 				break;
@@ -1451,7 +1436,7 @@ export class boaParser extends Parser {
 			case 6:
 				this.enterOuterAlt(_localctx, 6);
 				{
-				this.state = 362;
+				this.state = 353;
 				this.doStatement();
 				}
 				break;
@@ -1459,7 +1444,7 @@ export class boaParser extends Parser {
 			case 7:
 				this.enterOuterAlt(_localctx, 7);
 				{
-				this.state = 363;
+				this.state = 354;
 				this.forStatement();
 				}
 				break;
@@ -1467,7 +1452,7 @@ export class boaParser extends Parser {
 			case 8:
 				this.enterOuterAlt(_localctx, 8);
 				{
-				this.state = 364;
+				this.state = 355;
 				this.ifStatement();
 				}
 				break;
@@ -1475,7 +1460,7 @@ export class boaParser extends Parser {
 			case 9:
 				this.enterOuterAlt(_localctx, 9);
 				{
-				this.state = 365;
+				this.state = 356;
 				this.returnStatement();
 				}
 				break;
@@ -1483,7 +1468,7 @@ export class boaParser extends Parser {
 			case 10:
 				this.enterOuterAlt(_localctx, 10);
 				{
-				this.state = 366;
+				this.state = 357;
 				this.switchStatement();
 				}
 				break;
@@ -1491,7 +1476,7 @@ export class boaParser extends Parser {
 			case 11:
 				this.enterOuterAlt(_localctx, 11);
 				{
-				this.state = 367;
+				this.state = 358;
 				this.foreachStatement();
 				}
 				break;
@@ -1499,7 +1484,7 @@ export class boaParser extends Parser {
 			case 12:
 				this.enterOuterAlt(_localctx, 12);
 				{
-				this.state = 368;
+				this.state = 359;
 				this.existsStatement();
 				}
 				break;
@@ -1507,7 +1492,7 @@ export class boaParser extends Parser {
 			case 13:
 				this.enterOuterAlt(_localctx, 13);
 				{
-				this.state = 369;
+				this.state = 360;
 				this.ifallStatement();
 				}
 				break;
@@ -1515,7 +1500,7 @@ export class boaParser extends Parser {
 			case 14:
 				this.enterOuterAlt(_localctx, 14);
 				{
-				this.state = 370;
+				this.state = 361;
 				this.whileStatement();
 				}
 				break;
@@ -1523,7 +1508,7 @@ export class boaParser extends Parser {
 			case 15:
 				this.enterOuterAlt(_localctx, 15);
 				{
-				this.state = 371;
+				this.state = 362;
 				this.emptyStatement();
 				}
 				break;
@@ -1531,7 +1516,7 @@ export class boaParser extends Parser {
 			case 16:
 				this.enterOuterAlt(_localctx, 16);
 				{
-				this.state = 372;
+				this.state = 363;
 				this.emitStatement();
 				}
 				break;
@@ -1539,7 +1524,7 @@ export class boaParser extends Parser {
 			case 17:
 				this.enterOuterAlt(_localctx, 17);
 				{
-				this.state = 373;
+				this.state = 364;
 				this.expressionStatement();
 				}
 				break;
@@ -1566,7 +1551,7 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 376;
+			this.state = 367;
 			this.match(boaParser.SEMICOLON);
 			}
 		}
@@ -1592,9 +1577,9 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 378;
+			this.state = 369;
 			this.factor();
-			this.state = 379;
+			this.state = 370;
 			_la = this._input.LA(1);
 			if (!(((((_la - 70)) & ~0x1F) === 0 && ((1 << (_la - 70)) & ((1 << (boaParser.PLUSEQ - 70)) | (1 << (boaParser.MINUSEQ - 70)) | (1 << (boaParser.STAREQ - 70)) | (1 << (boaParser.DIVEQ - 70)) | (1 << (boaParser.ONEOREQ - 70)) | (1 << (boaParser.XOREQ - 70)) | (1 << (boaParser.MODEQ - 70)) | (1 << (boaParser.ONEANDEQ - 70)) | (1 << (boaParser.RSHIFTEQ - 70)) | (1 << (boaParser.LSHIFTEQ - 70)) | (1 << (boaParser.EQUALS - 70)))) !== 0))) {
 			this._errHandler.recoverInline(this);
@@ -1606,7 +1591,7 @@ export class boaParser extends Parser {
 				this._errHandler.reportMatch(this);
 				this.consume();
 			}
-			this.state = 380;
+			this.state = 371;
 			this.expression();
 			 this.isSemicolon(); 
 			}
@@ -1633,23 +1618,23 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 383;
+			this.state = 374;
 			this.match(boaParser.LBRACE);
-			this.state = 387;
+			this.state = 378;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << boaParser.OF) | (1 << boaParser.IF) | (1 << boaParser.DO) | (1 << boaParser.MAP) | (1 << boaParser.STACK) | (1 << boaParser.QUEUE) | (1 << boaParser.SET) | (1 << boaParser.FOR) | (1 << boaParser.FOREACH) | (1 << boaParser.IFALL) | (1 << boaParser.EXISTS) | (1 << boaParser.NOT) | (1 << boaParser.TYPE) | (1 << boaParser.ELSE) | (1 << boaParser.CASE) | (1 << boaParser.OUTPUT) | (1 << boaParser.FORMAT) | (1 << boaParser.WHILE) | (1 << boaParser.BREAK) | (1 << boaParser.ARRAY) | (1 << boaParser.STATIC) | (1 << boaParser.SWITCH) | (1 << boaParser.RETURN) | (1 << boaParser.WEIGHT) | (1 << boaParser.DEFAULT) | (1 << boaParser.CONTINUE) | (1 << boaParser.FUNCTION) | (1 << boaParser.FIXP) | (1 << boaParser.VISITOR) | (1 << boaParser.TRAVERSAL) | (1 << boaParser.BEFORE))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (boaParser.AFTER - 32)) | (1 << (boaParser.STOP - 32)) | (1 << (boaParser.SEMICOLON - 32)) | (1 << (boaParser.LBRACE - 32)) | (1 << (boaParser.LPAREN - 32)) | (1 << (boaParser.PLUS - 32)) | (1 << (boaParser.MINUS - 32)))) !== 0) || ((((_la - 68)) & ~0x1F) === 0 && ((1 << (_la - 68)) & ((1 << (boaParser.NEG - 68)) | (1 << (boaParser.INV - 68)) | (1 << (boaParser.DOLLAR - 68)) | (1 << (boaParser.IntegerLiteral - 68)) | (1 << (boaParser.FloatingPointLiteral - 68)) | (1 << (boaParser.CharacterLiteral - 68)) | (1 << (boaParser.RegexLiteral - 68)) | (1 << (boaParser.MultilineStringLiteral - 68)) | (1 << (boaParser.StringLiteral - 68)) | (1 << (boaParser.TimeLiteral - 68)) | (1 << (boaParser.Identifier - 68)))) !== 0)) {
 				{
 				{
-				this.state = 384;
+				this.state = 375;
 				this.programStatement();
 				}
 				}
-				this.state = 389;
+				this.state = 380;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 			}
-			this.state = 390;
+			this.state = 381;
 			this.match(boaParser.RBRACE);
 			}
 		}
@@ -1674,7 +1659,7 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 392;
+			this.state = 383;
 			this.match(boaParser.BREAK);
 			 this.isSemicolon(); 
 			}
@@ -1700,7 +1685,7 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 395;
+			this.state = 386;
 			this.match(boaParser.CONTINUE);
 			 this.isSemicolon(); 
 			}
@@ -1726,17 +1711,17 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 398;
+			this.state = 389;
 			this.match(boaParser.DO);
-			this.state = 399;
+			this.state = 390;
 			this.statement();
-			this.state = 400;
+			this.state = 391;
 			this.match(boaParser.WHILE);
-			this.state = 401;
+			this.state = 392;
 			this.match(boaParser.LPAREN);
-			this.state = 402;
+			this.state = 393;
 			this.expression();
-			this.state = 403;
+			this.state = 394;
 			this.match(boaParser.RPAREN);
 			 this.isSemicolon(); 
 			}
@@ -1761,38 +1746,38 @@ export class boaParser extends Parser {
 		this.enterRule(_localctx, 60, boaParser.RULE_emitStatement);
 		let _la: number;
 		try {
-			this.state = 440;
+			this.state = 431;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 31, this._ctx) ) {
 			case 1:
 				this.enterOuterAlt(_localctx, 1);
 				{
-				this.state = 406;
+				this.state = 397;
 				this.identifier();
-				this.state = 413;
+				this.state = 404;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				while (_la === boaParser.LBRACKET) {
 					{
 					{
-					this.state = 407;
+					this.state = 398;
 					this.match(boaParser.LBRACKET);
-					this.state = 408;
+					this.state = 399;
 					this.expression();
-					this.state = 409;
+					this.state = 400;
 					this.match(boaParser.RBRACKET);
 					}
 					}
-					this.state = 415;
+					this.state = 406;
 					this._errHandler.sync(this);
 					_la = this._input.LA(1);
 				}
-				this.state = 416;
+				this.state = 407;
 				this.match(boaParser.EMIT);
 				 this.notifyErrorListeners("error: expected 'expression' before keyword 'weight'"); 
-				this.state = 418;
+				this.state = 409;
 				this.match(boaParser.WEIGHT);
-				this.state = 419;
+				this.state = 410;
 				this.expression();
 				 this.isSemicolon(); 
 				}
@@ -1801,38 +1786,38 @@ export class boaParser extends Parser {
 			case 2:
 				this.enterOuterAlt(_localctx, 2);
 				{
-				this.state = 422;
+				this.state = 413;
 				this.identifier();
-				this.state = 429;
+				this.state = 420;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				while (_la === boaParser.LBRACKET) {
 					{
 					{
-					this.state = 423;
+					this.state = 414;
 					this.match(boaParser.LBRACKET);
-					this.state = 424;
+					this.state = 415;
 					this.expression();
-					this.state = 425;
+					this.state = 416;
 					this.match(boaParser.RBRACKET);
 					}
 					}
-					this.state = 431;
+					this.state = 422;
 					this._errHandler.sync(this);
 					_la = this._input.LA(1);
 				}
-				this.state = 432;
+				this.state = 423;
 				this.match(boaParser.EMIT);
-				this.state = 433;
+				this.state = 424;
 				this.expression();
-				this.state = 436;
+				this.state = 427;
 				this._errHandler.sync(this);
 				switch ( this.interpreter.adaptivePredict(this._input, 30, this._ctx) ) {
 				case 1:
 					{
-					this.state = 434;
+					this.state = 425;
 					this.match(boaParser.WEIGHT);
-					this.state = 435;
+					this.state = 426;
 					this.expression();
 					}
 					break;
@@ -1864,47 +1849,47 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 442;
+			this.state = 433;
 			this.match(boaParser.FOR);
-			this.state = 443;
+			this.state = 434;
 			this.match(boaParser.LPAREN);
-			this.state = 445;
+			this.state = 436;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << boaParser.OF) | (1 << boaParser.IF) | (1 << boaParser.DO) | (1 << boaParser.MAP) | (1 << boaParser.STACK) | (1 << boaParser.QUEUE) | (1 << boaParser.SET) | (1 << boaParser.FOR) | (1 << boaParser.FOREACH) | (1 << boaParser.IFALL) | (1 << boaParser.EXISTS) | (1 << boaParser.NOT) | (1 << boaParser.TYPE) | (1 << boaParser.ELSE) | (1 << boaParser.CASE) | (1 << boaParser.OUTPUT) | (1 << boaParser.FORMAT) | (1 << boaParser.WHILE) | (1 << boaParser.BREAK) | (1 << boaParser.ARRAY) | (1 << boaParser.STATIC) | (1 << boaParser.SWITCH) | (1 << boaParser.RETURN) | (1 << boaParser.WEIGHT) | (1 << boaParser.DEFAULT) | (1 << boaParser.CONTINUE) | (1 << boaParser.FUNCTION) | (1 << boaParser.FIXP) | (1 << boaParser.VISITOR) | (1 << boaParser.TRAVERSAL) | (1 << boaParser.BEFORE))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (boaParser.AFTER - 32)) | (1 << (boaParser.STOP - 32)) | (1 << (boaParser.LBRACE - 32)) | (1 << (boaParser.LPAREN - 32)) | (1 << (boaParser.PLUS - 32)) | (1 << (boaParser.MINUS - 32)))) !== 0) || ((((_la - 68)) & ~0x1F) === 0 && ((1 << (_la - 68)) & ((1 << (boaParser.NEG - 68)) | (1 << (boaParser.INV - 68)) | (1 << (boaParser.DOLLAR - 68)) | (1 << (boaParser.IntegerLiteral - 68)) | (1 << (boaParser.FloatingPointLiteral - 68)) | (1 << (boaParser.CharacterLiteral - 68)) | (1 << (boaParser.RegexLiteral - 68)) | (1 << (boaParser.MultilineStringLiteral - 68)) | (1 << (boaParser.StringLiteral - 68)) | (1 << (boaParser.TimeLiteral - 68)) | (1 << (boaParser.Identifier - 68)))) !== 0)) {
 				{
-				this.state = 444;
+				this.state = 435;
 				this.forExpression();
 				}
 			}
 
-			this.state = 447;
+			this.state = 438;
 			this.match(boaParser.SEMICOLON);
-			this.state = 449;
+			this.state = 440;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << boaParser.OF) | (1 << boaParser.IF) | (1 << boaParser.DO) | (1 << boaParser.MAP) | (1 << boaParser.STACK) | (1 << boaParser.QUEUE) | (1 << boaParser.SET) | (1 << boaParser.FOR) | (1 << boaParser.FOREACH) | (1 << boaParser.IFALL) | (1 << boaParser.EXISTS) | (1 << boaParser.NOT) | (1 << boaParser.TYPE) | (1 << boaParser.ELSE) | (1 << boaParser.CASE) | (1 << boaParser.OUTPUT) | (1 << boaParser.FORMAT) | (1 << boaParser.WHILE) | (1 << boaParser.BREAK) | (1 << boaParser.ARRAY) | (1 << boaParser.STATIC) | (1 << boaParser.SWITCH) | (1 << boaParser.RETURN) | (1 << boaParser.WEIGHT) | (1 << boaParser.DEFAULT) | (1 << boaParser.CONTINUE) | (1 << boaParser.FUNCTION) | (1 << boaParser.FIXP) | (1 << boaParser.VISITOR) | (1 << boaParser.TRAVERSAL) | (1 << boaParser.BEFORE))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (boaParser.AFTER - 32)) | (1 << (boaParser.STOP - 32)) | (1 << (boaParser.LBRACE - 32)) | (1 << (boaParser.LPAREN - 32)) | (1 << (boaParser.PLUS - 32)) | (1 << (boaParser.MINUS - 32)))) !== 0) || ((((_la - 68)) & ~0x1F) === 0 && ((1 << (_la - 68)) & ((1 << (boaParser.NEG - 68)) | (1 << (boaParser.INV - 68)) | (1 << (boaParser.DOLLAR - 68)) | (1 << (boaParser.IntegerLiteral - 68)) | (1 << (boaParser.FloatingPointLiteral - 68)) | (1 << (boaParser.CharacterLiteral - 68)) | (1 << (boaParser.RegexLiteral - 68)) | (1 << (boaParser.MultilineStringLiteral - 68)) | (1 << (boaParser.StringLiteral - 68)) | (1 << (boaParser.TimeLiteral - 68)) | (1 << (boaParser.Identifier - 68)))) !== 0)) {
 				{
-				this.state = 448;
+				this.state = 439;
 				this.expression();
 				}
 			}
 
-			this.state = 451;
+			this.state = 442;
 			this.match(boaParser.SEMICOLON);
-			this.state = 453;
+			this.state = 444;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << boaParser.OF) | (1 << boaParser.IF) | (1 << boaParser.DO) | (1 << boaParser.MAP) | (1 << boaParser.STACK) | (1 << boaParser.QUEUE) | (1 << boaParser.SET) | (1 << boaParser.FOR) | (1 << boaParser.FOREACH) | (1 << boaParser.IFALL) | (1 << boaParser.EXISTS) | (1 << boaParser.NOT) | (1 << boaParser.TYPE) | (1 << boaParser.ELSE) | (1 << boaParser.CASE) | (1 << boaParser.OUTPUT) | (1 << boaParser.FORMAT) | (1 << boaParser.WHILE) | (1 << boaParser.BREAK) | (1 << boaParser.ARRAY) | (1 << boaParser.STATIC) | (1 << boaParser.SWITCH) | (1 << boaParser.RETURN) | (1 << boaParser.WEIGHT) | (1 << boaParser.DEFAULT) | (1 << boaParser.CONTINUE) | (1 << boaParser.FUNCTION) | (1 << boaParser.FIXP) | (1 << boaParser.VISITOR) | (1 << boaParser.TRAVERSAL) | (1 << boaParser.BEFORE))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (boaParser.AFTER - 32)) | (1 << (boaParser.STOP - 32)) | (1 << (boaParser.LBRACE - 32)) | (1 << (boaParser.LPAREN - 32)) | (1 << (boaParser.PLUS - 32)) | (1 << (boaParser.MINUS - 32)))) !== 0) || ((((_la - 68)) & ~0x1F) === 0 && ((1 << (_la - 68)) & ((1 << (boaParser.NEG - 68)) | (1 << (boaParser.INV - 68)) | (1 << (boaParser.DOLLAR - 68)) | (1 << (boaParser.IntegerLiteral - 68)) | (1 << (boaParser.FloatingPointLiteral - 68)) | (1 << (boaParser.CharacterLiteral - 68)) | (1 << (boaParser.RegexLiteral - 68)) | (1 << (boaParser.MultilineStringLiteral - 68)) | (1 << (boaParser.StringLiteral - 68)) | (1 << (boaParser.TimeLiteral - 68)) | (1 << (boaParser.Identifier - 68)))) !== 0)) {
 				{
-				this.state = 452;
+				this.state = 443;
 				this.forExpression();
 				}
 			}
 
-			this.state = 455;
+			this.state = 446;
 			this.match(boaParser.RPAREN);
-			this.state = 456;
+			this.state = 447;
 			this.programStatement();
 			}
 		}
@@ -1927,13 +1912,13 @@ export class boaParser extends Parser {
 		let _localctx: ForExpressionContext = new ForExpressionContext(this._ctx, this.state);
 		this.enterRule(_localctx, 64, boaParser.RULE_forExpression);
 		try {
-			this.state = 460;
+			this.state = 451;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 35, this._ctx) ) {
 			case 1:
 				this.enterOuterAlt(_localctx, 1);
 				{
-				this.state = 458;
+				this.state = 449;
 				this.forVariableDeclaration();
 				}
 				break;
@@ -1941,7 +1926,7 @@ export class boaParser extends Parser {
 			case 2:
 				this.enterOuterAlt(_localctx, 2);
 				{
-				this.state = 459;
+				this.state = 450;
 				this.forExpressionStatement();
 				}
 				break;
@@ -1968,41 +1953,41 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 462;
+			this.state = 453;
 			this.identifier();
-			this.state = 463;
+			this.state = 454;
 			this.match(boaParser.COLON);
-			this.state = 465;
+			this.state = 456;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 36, this._ctx) ) {
 			case 1:
 				{
-				this.state = 464;
+				this.state = 455;
 				this.type();
 				}
 				break;
 			}
-			this.state = 473;
+			this.state = 464;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 38, this._ctx) ) {
 			case 1:
 				{
-				this.state = 467;
+				this.state = 458;
 				this.match(boaParser.EQUALS);
-				this.state = 471;
+				this.state = 462;
 				this._errHandler.sync(this);
 				switch ( this.interpreter.adaptivePredict(this._input, 37, this._ctx) ) {
 				case 1:
 					{
 					 this.notifyErrorListeners("error: output variable declarations should not include '='"); 
-					this.state = 469;
+					this.state = 460;
 					this.outputType();
 					}
 					break;
 
 				case 2:
 					{
-					this.state = 470;
+					this.state = 461;
 					this.expression();
 					}
 					break;
@@ -2032,16 +2017,16 @@ export class boaParser extends Parser {
 		this.enterRule(_localctx, 68, boaParser.RULE_forExpressionStatement);
 		let _la: number;
 		try {
-			this.state = 479;
+			this.state = 470;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 39, this._ctx) ) {
 			case 1:
 				_localctx = new PostfixStatementContext(_localctx);
 				this.enterOuterAlt(_localctx, 1);
 				{
-				this.state = 475;
+				this.state = 466;
 				this.expression();
-				this.state = 476;
+				this.state = 467;
 				_la = this._input.LA(1);
 				if (!(_la === boaParser.INCR || _la === boaParser.DECR)) {
 				this._errHandler.recoverInline(this);
@@ -2060,7 +2045,7 @@ export class boaParser extends Parser {
 				_localctx = new ExprStatementContext(_localctx);
 				this.enterOuterAlt(_localctx, 2);
 				{
-				this.state = 478;
+				this.state = 469;
 				this.expression();
 				}
 				break;
@@ -2087,7 +2072,7 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 481;
+			this.state = 472;
 			this.forExpressionStatement();
 			 this.isSemicolon(); 
 			}
@@ -2113,24 +2098,24 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 484;
+			this.state = 475;
 			this.match(boaParser.IF);
-			this.state = 485;
+			this.state = 476;
 			this.match(boaParser.LPAREN);
-			this.state = 486;
+			this.state = 477;
 			this.expression();
-			this.state = 487;
+			this.state = 478;
 			this.match(boaParser.RPAREN);
-			this.state = 488;
+			this.state = 479;
 			this.programStatement();
-			this.state = 491;
+			this.state = 482;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 40, this._ctx) ) {
 			case 1:
 				{
-				this.state = 489;
+				this.state = 480;
 				this.match(boaParser.ELSE);
-				this.state = 490;
+				this.state = 481;
 				this.programStatement();
 				}
 				break;
@@ -2158,14 +2143,14 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 493;
+			this.state = 484;
 			this.match(boaParser.RETURN);
-			this.state = 495;
+			this.state = 486;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 41, this._ctx) ) {
 			case 1:
 				{
-				this.state = 494;
+				this.state = 485;
 				this.expression();
 				}
 				break;
@@ -2195,49 +2180,49 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 499;
+			this.state = 490;
 			this.match(boaParser.SWITCH);
-			this.state = 500;
+			this.state = 491;
 			this.match(boaParser.LPAREN);
-			this.state = 501;
+			this.state = 492;
 			this.expression();
-			this.state = 502;
+			this.state = 493;
 			this.match(boaParser.RPAREN);
-			this.state = 503;
+			this.state = 494;
 			this.match(boaParser.LBRACE);
-			this.state = 507;
+			this.state = 498;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			while (_la === boaParser.CASE) {
 				{
 				{
-				this.state = 504;
+				this.state = 495;
 				this.switchCase();
 				}
 				}
-				this.state = 509;
+				this.state = 500;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 			}
-			this.state = 510;
+			this.state = 501;
 			this.match(boaParser.DEFAULT);
-			this.state = 511;
+			this.state = 502;
 			this.match(boaParser.COLON);
-			this.state = 513;
+			this.state = 504;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			do {
 				{
 				{
-				this.state = 512;
+				this.state = 503;
 				this.statement();
 				}
 				}
-				this.state = 515;
+				this.state = 506;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 			} while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << boaParser.OF) | (1 << boaParser.IF) | (1 << boaParser.DO) | (1 << boaParser.MAP) | (1 << boaParser.STACK) | (1 << boaParser.QUEUE) | (1 << boaParser.SET) | (1 << boaParser.FOR) | (1 << boaParser.FOREACH) | (1 << boaParser.IFALL) | (1 << boaParser.EXISTS) | (1 << boaParser.NOT) | (1 << boaParser.TYPE) | (1 << boaParser.ELSE) | (1 << boaParser.CASE) | (1 << boaParser.OUTPUT) | (1 << boaParser.FORMAT) | (1 << boaParser.WHILE) | (1 << boaParser.BREAK) | (1 << boaParser.ARRAY) | (1 << boaParser.STATIC) | (1 << boaParser.SWITCH) | (1 << boaParser.RETURN) | (1 << boaParser.WEIGHT) | (1 << boaParser.DEFAULT) | (1 << boaParser.CONTINUE) | (1 << boaParser.FUNCTION) | (1 << boaParser.FIXP) | (1 << boaParser.VISITOR) | (1 << boaParser.TRAVERSAL) | (1 << boaParser.BEFORE))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (boaParser.AFTER - 32)) | (1 << (boaParser.STOP - 32)) | (1 << (boaParser.SEMICOLON - 32)) | (1 << (boaParser.LBRACE - 32)) | (1 << (boaParser.LPAREN - 32)) | (1 << (boaParser.PLUS - 32)) | (1 << (boaParser.MINUS - 32)))) !== 0) || ((((_la - 68)) & ~0x1F) === 0 && ((1 << (_la - 68)) & ((1 << (boaParser.NEG - 68)) | (1 << (boaParser.INV - 68)) | (1 << (boaParser.DOLLAR - 68)) | (1 << (boaParser.IntegerLiteral - 68)) | (1 << (boaParser.FloatingPointLiteral - 68)) | (1 << (boaParser.CharacterLiteral - 68)) | (1 << (boaParser.RegexLiteral - 68)) | (1 << (boaParser.MultilineStringLiteral - 68)) | (1 << (boaParser.StringLiteral - 68)) | (1 << (boaParser.TimeLiteral - 68)) | (1 << (boaParser.Identifier - 68)))) !== 0));
-			this.state = 517;
+			this.state = 508;
 			this.match(boaParser.RBRACE);
 			}
 		}
@@ -2263,13 +2248,13 @@ export class boaParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 519;
+			this.state = 510;
 			this.match(boaParser.CASE);
-			this.state = 520;
+			this.state = 511;
 			this.expressionList();
-			this.state = 521;
+			this.state = 512;
 			this.match(boaParser.COLON);
-			this.state = 523;
+			this.state = 514;
 			this._errHandler.sync(this);
 			_alt = 1;
 			do {
@@ -2277,7 +2262,7 @@ export class boaParser extends Parser {
 				case 1:
 					{
 					{
-					this.state = 522;
+					this.state = 513;
 					this.statement();
 					}
 					}
@@ -2285,7 +2270,7 @@ export class boaParser extends Parser {
 				default:
 					throw new NoViableAltException(this);
 				}
-				this.state = 525;
+				this.state = 516;
 				this._errHandler.sync(this);
 				_alt = this.interpreter.adaptivePredict(this._input, 44, this._ctx);
 			} while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER);
@@ -2312,23 +2297,19 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 527;
+			this.state = 518;
 			this.match(boaParser.FOREACH);
-			this.state = 528;
+			this.state = 519;
 			this.match(boaParser.LPAREN);
-			this.state = 529;
-			this.identifier();
-			this.state = 530;
-			this.match(boaParser.COLON);
-			this.state = 531;
-			this.type();
-			this.state = 532;
+			this.state = 520;
+			this.varDecl();
+			this.state = 521;
 			this.match(boaParser.SEMICOLON);
-			this.state = 533;
+			this.state = 522;
 			this.expression();
-			this.state = 534;
+			this.state = 523;
 			this.match(boaParser.RPAREN);
-			this.state = 535;
+			this.state = 524;
 			this.programStatement();
 			}
 		}
@@ -2353,23 +2334,19 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 537;
+			this.state = 526;
 			this.match(boaParser.EXISTS);
-			this.state = 538;
+			this.state = 527;
 			this.match(boaParser.LPAREN);
-			this.state = 539;
-			this.identifier();
-			this.state = 540;
-			this.match(boaParser.COLON);
-			this.state = 541;
-			this.type();
-			this.state = 542;
+			this.state = 528;
+			this.varDecl();
+			this.state = 529;
 			this.match(boaParser.SEMICOLON);
-			this.state = 543;
+			this.state = 530;
 			this.expression();
-			this.state = 544;
+			this.state = 531;
 			this.match(boaParser.RPAREN);
-			this.state = 545;
+			this.state = 532;
 			this.programStatement();
 			}
 		}
@@ -2394,23 +2371,19 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 547;
+			this.state = 534;
 			this.match(boaParser.IFALL);
-			this.state = 548;
+			this.state = 535;
 			this.match(boaParser.LPAREN);
-			this.state = 549;
-			this.identifier();
-			this.state = 550;
-			this.match(boaParser.COLON);
-			this.state = 551;
-			this.type();
-			this.state = 552;
+			this.state = 536;
+			this.varDecl();
+			this.state = 537;
 			this.match(boaParser.SEMICOLON);
-			this.state = 553;
+			this.state = 538;
 			this.expression();
-			this.state = 554;
+			this.state = 539;
 			this.match(boaParser.RPAREN);
-			this.state = 555;
+			this.state = 540;
 			this.programStatement();
 			}
 		}
@@ -2435,15 +2408,15 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 557;
+			this.state = 542;
 			this.match(boaParser.WHILE);
-			this.state = 558;
+			this.state = 543;
 			this.match(boaParser.LPAREN);
-			this.state = 559;
+			this.state = 544;
 			this.expression();
-			this.state = 560;
+			this.state = 545;
 			this.match(boaParser.RPAREN);
-			this.state = 561;
+			this.state = 546;
 			this.programStatement();
 			}
 		}
@@ -2469,19 +2442,19 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 566;
+			this.state = 551;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 45, this._ctx) ) {
 			case 1:
 				{
-				this.state = 563;
+				this.state = 548;
 				this.match(boaParser.BEFORE);
 				}
 				break;
 
 			case 2:
 				{
-				this.state = 564;
+				this.state = 549;
 				this.match(boaParser.AFTER);
 				}
 				break;
@@ -2492,53 +2465,49 @@ export class boaParser extends Parser {
 				}
 				break;
 			}
-			this.state = 581;
+			this.state = 563;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 47, this._ctx) ) {
 			case 1:
 				{
-				this.state = 568;
+				this.state = 553;
 				this.match(boaParser.WILDCARD);
 				}
 				break;
 
 			case 2:
 				{
-				this.state = 569;
-				this.identifier();
-				this.state = 570;
-				this.match(boaParser.COLON);
-				this.state = 571;
-				this.identifier();
+				this.state = 554;
+				this.varDecl();
 				}
 				break;
 
 			case 3:
 				{
-				this.state = 573;
+				this.state = 555;
 				this.identifier();
-				this.state = 578;
+				this.state = 560;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				while (_la === boaParser.COMMA) {
 					{
 					{
-					this.state = 574;
+					this.state = 556;
 					this.match(boaParser.COMMA);
-					this.state = 575;
+					this.state = 557;
 					this.identifier();
 					}
 					}
-					this.state = 580;
+					this.state = 562;
 					this._errHandler.sync(this);
 					_la = this._input.LA(1);
 				}
 				}
 				break;
 			}
-			this.state = 583;
+			this.state = 565;
 			this.match(boaParser.RIGHT_ARROW);
-			this.state = 584;
+			this.state = 566;
 			this.programStatement();
 			}
 		}
@@ -2565,30 +2534,30 @@ export class boaParser extends Parser {
 			this.enterOuterAlt(_localctx, 1);
 			{
 			{
-			this.state = 586;
+			this.state = 568;
 			this.match(boaParser.LPAREN);
-			this.state = 587;
+			this.state = 569;
 			this.identifier();
-			this.state = 588;
+			this.state = 570;
 			this.match(boaParser.COLON);
-			this.state = 589;
+			this.state = 571;
 			this.identifier();
-			this.state = 590;
+			this.state = 572;
 			this.match(boaParser.RPAREN);
-			this.state = 593;
+			this.state = 575;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			if (_la === boaParser.COLON) {
 				{
-				this.state = 591;
+				this.state = 573;
 				this.match(boaParser.COLON);
-				this.state = 592;
+				this.state = 574;
 				this.type();
 				}
 			}
 
 			{
-			this.state = 595;
+			this.state = 577;
 			this.programStatement();
 			}
 			}
@@ -2616,28 +2585,28 @@ export class boaParser extends Parser {
 			this.enterOuterAlt(_localctx, 1);
 			{
 			{
-			this.state = 597;
+			this.state = 579;
 			this.match(boaParser.LPAREN);
-			this.state = 598;
+			this.state = 580;
 			this.identifier();
-			this.state = 599;
+			this.state = 581;
 			this.match(boaParser.COMMA);
-			this.state = 600;
+			this.state = 582;
 			this.identifier();
-			this.state = 601;
+			this.state = 583;
 			this.match(boaParser.COLON);
-			this.state = 602;
+			this.state = 584;
 			this.identifier();
-			this.state = 603;
+			this.state = 585;
 			this.match(boaParser.RPAREN);
 			{
-			this.state = 604;
+			this.state = 586;
 			this.match(boaParser.COLON);
-			this.state = 605;
+			this.state = 587;
 			this.type();
 			}
 			{
-			this.state = 607;
+			this.state = 589;
 			this.programStatement();
 			}
 			}
@@ -2664,7 +2633,7 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 609;
+			this.state = 591;
 			this.match(boaParser.STOP);
 			 this.isSemicolon(); 
 			}
@@ -2692,16 +2661,16 @@ export class boaParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 612;
+			this.state = 594;
 			this.conjunction();
-			this.state = 617;
+			this.state = 599;
 			this._errHandler.sync(this);
 			_alt = this.interpreter.adaptivePredict(this._input, 49, this._ctx);
 			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
 				if (_alt === 1) {
 					{
 					{
-					this.state = 613;
+					this.state = 595;
 					_la = this._input.LA(1);
 					if (!(_la === boaParser.OR || _la === boaParser.TWOOR)) {
 					this._errHandler.recoverInline(this);
@@ -2713,12 +2682,12 @@ export class boaParser extends Parser {
 						this._errHandler.reportMatch(this);
 						this.consume();
 					}
-					this.state = 614;
+					this.state = 596;
 					this.conjunction();
 					}
 					}
 				}
-				this.state = 619;
+				this.state = 601;
 				this._errHandler.sync(this);
 				_alt = this.interpreter.adaptivePredict(this._input, 49, this._ctx);
 			}
@@ -2744,29 +2713,29 @@ export class boaParser extends Parser {
 		this.enterRule(_localctx, 98, boaParser.RULE_expressionList);
 		try {
 			let _alt: number;
-			this.state = 641;
+			this.state = 623;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 54, this._ctx) ) {
 			case 1:
 				this.enterOuterAlt(_localctx, 1);
 				{
-				this.state = 620;
+				this.state = 602;
 				this.expression();
-				this.state = 625;
+				this.state = 607;
 				this._errHandler.sync(this);
 				_alt = this.interpreter.adaptivePredict(this._input, 50, this._ctx);
 				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
 					if (_alt === 1) {
 						{
 						{
-						this.state = 621;
+						this.state = 603;
 						this.match(boaParser.COMMA);
-						this.state = 622;
+						this.state = 604;
 						this.expression();
 						}
 						}
 					}
-					this.state = 627;
+					this.state = 609;
 					this._errHandler.sync(this);
 					_alt = this.interpreter.adaptivePredict(this._input, 50, this._ctx);
 				}
@@ -2776,15 +2745,15 @@ export class boaParser extends Parser {
 			case 2:
 				this.enterOuterAlt(_localctx, 2);
 				{
-				this.state = 628;
+				this.state = 610;
 				this.expression();
-				this.state = 638;
+				this.state = 620;
 				this._errHandler.sync(this);
 				_alt = this.interpreter.adaptivePredict(this._input, 53, this._ctx);
 				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
 					if (_alt === 1) {
 						{
-						this.state = 636;
+						this.state = 618;
 						this._errHandler.sync(this);
 						switch (this._input.LA(1)) {
 						case boaParser.OF:
@@ -2837,20 +2806,20 @@ export class boaParser extends Parser {
 						case boaParser.Identifier:
 							{
 							 this.notifyErrorListeners("error: ',' expected"); 
-							this.state = 630;
+							this.state = 612;
 							this.expression();
 							}
 							break;
 						case boaParser.COMMA:
 							{
-							this.state = 631;
+							this.state = 613;
 							this.match(boaParser.COMMA);
-							this.state = 634;
+							this.state = 616;
 							this._errHandler.sync(this);
 							switch ( this.interpreter.adaptivePredict(this._input, 51, this._ctx) ) {
 							case 1:
 								{
-								this.state = 632;
+								this.state = 614;
 								this.expression();
 								}
 								break;
@@ -2868,7 +2837,7 @@ export class boaParser extends Parser {
 						}
 						}
 					}
-					this.state = 640;
+					this.state = 622;
 					this._errHandler.sync(this);
 					_alt = this.interpreter.adaptivePredict(this._input, 53, this._ctx);
 				}
@@ -2899,16 +2868,16 @@ export class boaParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 643;
+			this.state = 625;
 			this.comparison();
-			this.state = 648;
+			this.state = 630;
 			this._errHandler.sync(this);
 			_alt = this.interpreter.adaptivePredict(this._input, 55, this._ctx);
 			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
 				if (_alt === 1) {
 					{
 					{
-					this.state = 644;
+					this.state = 626;
 					_la = this._input.LA(1);
 					if (!(_la === boaParser.AND || _la === boaParser.TWOAND)) {
 					this._errHandler.recoverInline(this);
@@ -2920,12 +2889,12 @@ export class boaParser extends Parser {
 						this._errHandler.reportMatch(this);
 						this.consume();
 					}
-					this.state = 645;
+					this.state = 627;
 					this.comparison();
 					}
 					}
 				}
-				this.state = 650;
+				this.state = 632;
 				this._errHandler.sync(this);
 				_alt = this.interpreter.adaptivePredict(this._input, 55, this._ctx);
 			}
@@ -2953,14 +2922,14 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 651;
+			this.state = 633;
 			this.simpleExpression();
-			this.state = 654;
+			this.state = 636;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 56, this._ctx) ) {
 			case 1:
 				{
-				this.state = 652;
+				this.state = 634;
 				_la = this._input.LA(1);
 				if (!(((((_la - 55)) & ~0x1F) === 0 && ((1 << (_la - 55)) & ((1 << (boaParser.EQEQ - 55)) | (1 << (boaParser.NEQ - 55)) | (1 << (boaParser.LT - 55)) | (1 << (boaParser.LTEQ - 55)) | (1 << (boaParser.GT - 55)) | (1 << (boaParser.GTEQ - 55)))) !== 0))) {
 				this._errHandler.recoverInline(this);
@@ -2972,7 +2941,7 @@ export class boaParser extends Parser {
 					this._errHandler.reportMatch(this);
 					this.consume();
 				}
-				this.state = 653;
+				this.state = 635;
 				this.simpleExpression();
 				}
 				break;
@@ -3002,16 +2971,16 @@ export class boaParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 656;
+			this.state = 638;
 			this.term();
-			this.state = 661;
+			this.state = 643;
 			this._errHandler.sync(this);
 			_alt = this.interpreter.adaptivePredict(this._input, 57, this._ctx);
 			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
 				if (_alt === 1) {
 					{
 					{
-					this.state = 657;
+					this.state = 639;
 					_la = this._input.LA(1);
 					if (!(((((_la - 48)) & ~0x1F) === 0 && ((1 << (_la - 48)) & ((1 << (boaParser.ONEOR - 48)) | (1 << (boaParser.PLUS - 48)) | (1 << (boaParser.MINUS - 48)) | (1 << (boaParser.XOR - 48)))) !== 0))) {
 					this._errHandler.recoverInline(this);
@@ -3023,12 +2992,12 @@ export class boaParser extends Parser {
 						this._errHandler.reportMatch(this);
 						this.consume();
 					}
-					this.state = 658;
+					this.state = 640;
 					this.term();
 					}
 					}
 				}
-				this.state = 663;
+				this.state = 645;
 				this._errHandler.sync(this);
 				_alt = this.interpreter.adaptivePredict(this._input, 57, this._ctx);
 			}
@@ -3057,16 +3026,16 @@ export class boaParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 664;
+			this.state = 646;
 			this.factor();
-			this.state = 669;
+			this.state = 651;
 			this._errHandler.sync(this);
 			_alt = this.interpreter.adaptivePredict(this._input, 58, this._ctx);
 			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
 				if (_alt === 1) {
 					{
 					{
-					this.state = 665;
+					this.state = 647;
 					_la = this._input.LA(1);
 					if (!(((((_la - 51)) & ~0x1F) === 0 && ((1 << (_la - 51)) & ((1 << (boaParser.ONEAND - 51)) | (1 << (boaParser.STAR - 51)) | (1 << (boaParser.DIV - 51)) | (1 << (boaParser.MOD - 51)) | (1 << (boaParser.RSHIFT - 51)))) !== 0) || _la === boaParser.EMIT)) {
 					this._errHandler.recoverInline(this);
@@ -3078,12 +3047,12 @@ export class boaParser extends Parser {
 						this._errHandler.reportMatch(this);
 						this.consume();
 					}
-					this.state = 666;
+					this.state = 648;
 					this.factor();
 					}
 					}
 				}
-				this.state = 671;
+				this.state = 653;
 				this._errHandler.sync(this);
 				_alt = this.interpreter.adaptivePredict(this._input, 58, this._ctx);
 			}
@@ -3111,32 +3080,32 @@ export class boaParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 672;
+			this.state = 654;
 			this.operand();
-			this.state = 678;
+			this.state = 660;
 			this._errHandler.sync(this);
 			_alt = this.interpreter.adaptivePredict(this._input, 60, this._ctx);
 			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
 				if (_alt === 1) {
 					{
-					this.state = 676;
+					this.state = 658;
 					this._errHandler.sync(this);
 					switch (this._input.LA(1)) {
 					case boaParser.DOT:
 						{
-						this.state = 673;
+						this.state = 655;
 						this.selector();
 						}
 						break;
 					case boaParser.LBRACKET:
 						{
-						this.state = 674;
+						this.state = 656;
 						this.index();
 						}
 						break;
 					case boaParser.LPAREN:
 						{
-						this.state = 675;
+						this.state = 657;
 						this.call();
 						}
 						break;
@@ -3145,7 +3114,7 @@ export class boaParser extends Parser {
 					}
 					}
 				}
-				this.state = 680;
+				this.state = 662;
 				this._errHandler.sync(this);
 				_alt = this.interpreter.adaptivePredict(this._input, 60, this._ctx);
 			}
@@ -3172,9 +3141,9 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 681;
+			this.state = 663;
 			this.match(boaParser.DOT);
-			this.state = 682;
+			this.state = 664;
 			this.identifier();
 			}
 		}
@@ -3200,23 +3169,23 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 684;
+			this.state = 666;
 			this.match(boaParser.LBRACKET);
-			this.state = 685;
+			this.state = 667;
 			this.expression();
-			this.state = 688;
+			this.state = 670;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			if (_la === boaParser.COLON) {
 				{
-				this.state = 686;
+				this.state = 668;
 				this.match(boaParser.COLON);
-				this.state = 687;
+				this.state = 669;
 				this.expression();
 				}
 			}
 
-			this.state = 690;
+			this.state = 672;
 			this.match(boaParser.RBRACKET);
 			}
 		}
@@ -3242,19 +3211,19 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 692;
+			this.state = 674;
 			this.match(boaParser.LPAREN);
-			this.state = 694;
+			this.state = 676;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << boaParser.OF) | (1 << boaParser.IF) | (1 << boaParser.DO) | (1 << boaParser.MAP) | (1 << boaParser.STACK) | (1 << boaParser.QUEUE) | (1 << boaParser.SET) | (1 << boaParser.FOR) | (1 << boaParser.FOREACH) | (1 << boaParser.IFALL) | (1 << boaParser.EXISTS) | (1 << boaParser.NOT) | (1 << boaParser.TYPE) | (1 << boaParser.ELSE) | (1 << boaParser.CASE) | (1 << boaParser.OUTPUT) | (1 << boaParser.FORMAT) | (1 << boaParser.WHILE) | (1 << boaParser.BREAK) | (1 << boaParser.ARRAY) | (1 << boaParser.STATIC) | (1 << boaParser.SWITCH) | (1 << boaParser.RETURN) | (1 << boaParser.WEIGHT) | (1 << boaParser.DEFAULT) | (1 << boaParser.CONTINUE) | (1 << boaParser.FUNCTION) | (1 << boaParser.FIXP) | (1 << boaParser.VISITOR) | (1 << boaParser.TRAVERSAL) | (1 << boaParser.BEFORE))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (boaParser.AFTER - 32)) | (1 << (boaParser.STOP - 32)) | (1 << (boaParser.LBRACE - 32)) | (1 << (boaParser.LPAREN - 32)) | (1 << (boaParser.PLUS - 32)) | (1 << (boaParser.MINUS - 32)))) !== 0) || ((((_la - 68)) & ~0x1F) === 0 && ((1 << (_la - 68)) & ((1 << (boaParser.NEG - 68)) | (1 << (boaParser.INV - 68)) | (1 << (boaParser.DOLLAR - 68)) | (1 << (boaParser.IntegerLiteral - 68)) | (1 << (boaParser.FloatingPointLiteral - 68)) | (1 << (boaParser.CharacterLiteral - 68)) | (1 << (boaParser.RegexLiteral - 68)) | (1 << (boaParser.MultilineStringLiteral - 68)) | (1 << (boaParser.StringLiteral - 68)) | (1 << (boaParser.TimeLiteral - 68)) | (1 << (boaParser.Identifier - 68)))) !== 0)) {
 				{
-				this.state = 693;
+				this.state = 675;
 				this.expressionList();
 				}
 			}
 
-			this.state = 696;
+			this.state = 678;
 			this.match(boaParser.RPAREN);
 			}
 		}
@@ -3277,13 +3246,13 @@ export class boaParser extends Parser {
 		let _localctx: OperandContext = new OperandContext(this._ctx, this.state);
 		this.enterRule(_localctx, 116, boaParser.RULE_operand);
 		try {
-			this.state = 712;
+			this.state = 694;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 63, this._ctx) ) {
 			case 1:
 				this.enterOuterAlt(_localctx, 1);
 				{
-				this.state = 698;
+				this.state = 680;
 				this.stringLiteral();
 				}
 				break;
@@ -3291,7 +3260,7 @@ export class boaParser extends Parser {
 			case 2:
 				this.enterOuterAlt(_localctx, 2);
 				{
-				this.state = 699;
+				this.state = 681;
 				this.characterLiteral();
 				}
 				break;
@@ -3299,7 +3268,7 @@ export class boaParser extends Parser {
 			case 3:
 				this.enterOuterAlt(_localctx, 3);
 				{
-				this.state = 700;
+				this.state = 682;
 				this.timeLiteral();
 				}
 				break;
@@ -3307,7 +3276,7 @@ export class boaParser extends Parser {
 			case 4:
 				this.enterOuterAlt(_localctx, 4);
 				{
-				this.state = 701;
+				this.state = 683;
 				this.integerLiteral();
 				}
 				break;
@@ -3315,7 +3284,7 @@ export class boaParser extends Parser {
 			case 5:
 				this.enterOuterAlt(_localctx, 5);
 				{
-				this.state = 702;
+				this.state = 684;
 				this.floatingPointLiteral();
 				}
 				break;
@@ -3323,7 +3292,7 @@ export class boaParser extends Parser {
 			case 6:
 				this.enterOuterAlt(_localctx, 6);
 				{
-				this.state = 703;
+				this.state = 685;
 				this.composite();
 				}
 				break;
@@ -3331,7 +3300,7 @@ export class boaParser extends Parser {
 			case 7:
 				this.enterOuterAlt(_localctx, 7);
 				{
-				this.state = 704;
+				this.state = 686;
 				this.functionExpression();
 				}
 				break;
@@ -3339,7 +3308,7 @@ export class boaParser extends Parser {
 			case 8:
 				this.enterOuterAlt(_localctx, 8);
 				{
-				this.state = 705;
+				this.state = 687;
 				this.fixpExpression();
 				}
 				break;
@@ -3347,7 +3316,7 @@ export class boaParser extends Parser {
 			case 9:
 				this.enterOuterAlt(_localctx, 9);
 				{
-				this.state = 706;
+				this.state = 688;
 				this.visitorExpression();
 				}
 				break;
@@ -3355,7 +3324,7 @@ export class boaParser extends Parser {
 			case 10:
 				this.enterOuterAlt(_localctx, 10);
 				{
-				this.state = 707;
+				this.state = 689;
 				this.traversalExpression();
 				}
 				break;
@@ -3363,7 +3332,7 @@ export class boaParser extends Parser {
 			case 11:
 				this.enterOuterAlt(_localctx, 11);
 				{
-				this.state = 708;
+				this.state = 690;
 				this.unaryFactor();
 				}
 				break;
@@ -3371,7 +3340,7 @@ export class boaParser extends Parser {
 			case 12:
 				this.enterOuterAlt(_localctx, 12);
 				{
-				this.state = 709;
+				this.state = 691;
 				this.match(boaParser.DOLLAR);
 				}
 				break;
@@ -3379,7 +3348,7 @@ export class boaParser extends Parser {
 			case 13:
 				this.enterOuterAlt(_localctx, 13);
 				{
-				this.state = 710;
+				this.state = 692;
 				this.parenExpression();
 				}
 				break;
@@ -3387,7 +3356,7 @@ export class boaParser extends Parser {
 			case 14:
 				this.enterOuterAlt(_localctx, 14);
 				{
-				this.state = 711;
+				this.state = 693;
 				this.identifier();
 				}
 				break;
@@ -3415,7 +3384,7 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 714;
+			this.state = 696;
 			_la = this._input.LA(1);
 			if (!(_la === boaParser.NOT || ((((_la - 61)) & ~0x1F) === 0 && ((1 << (_la - 61)) & ((1 << (boaParser.PLUS - 61)) | (1 << (boaParser.MINUS - 61)) | (1 << (boaParser.NEG - 61)) | (1 << (boaParser.INV - 61)))) !== 0))) {
 			this._errHandler.recoverInline(this);
@@ -3427,7 +3396,7 @@ export class boaParser extends Parser {
 				this._errHandler.reportMatch(this);
 				this.consume();
 			}
-			this.state = 715;
+			this.state = 697;
 			this.factor();
 			}
 		}
@@ -3452,11 +3421,11 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 717;
+			this.state = 699;
 			this.match(boaParser.LPAREN);
-			this.state = 718;
+			this.state = 700;
 			this.expression();
-			this.state = 719;
+			this.state = 701;
 			this.match(boaParser.RPAREN);
 			}
 		}
@@ -3479,15 +3448,15 @@ export class boaParser extends Parser {
 		let _localctx: FunctionExpressionContext = new FunctionExpressionContext(this._ctx, this.state);
 		this.enterRule(_localctx, 122, boaParser.RULE_functionExpression);
 		try {
-			this.state = 727;
+			this.state = 709;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 64, this._ctx) ) {
 			case 1:
 				this.enterOuterAlt(_localctx, 1);
 				{
-				this.state = 721;
+				this.state = 703;
 				this.functionType();
-				this.state = 722;
+				this.state = 704;
 				this.block();
 				}
 				break;
@@ -3495,9 +3464,9 @@ export class boaParser extends Parser {
 			case 2:
 				this.enterOuterAlt(_localctx, 2);
 				{
-				this.state = 724;
+				this.state = 706;
 				this.identifier();
-				this.state = 725;
+				this.state = 707;
 				this.block();
 				}
 				break;
@@ -3524,14 +3493,14 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 729;
+			this.state = 711;
 			this.fixpType();
-			this.state = 733;
+			this.state = 715;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 65, this._ctx) ) {
 			case 1:
 				{
-				this.state = 730;
+				this.state = 712;
 				this.fixpStatement();
 				}
 				break;
@@ -3539,7 +3508,7 @@ export class boaParser extends Parser {
 			case 2:
 				{
 				 this.notifyErrorListeners("error: only fixpoint statement allowed inside fixpoint expression"); 
-				this.state = 732;
+				this.state = 714;
 				this.programStatement();
 				}
 				break;
@@ -3568,21 +3537,21 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 735;
+			this.state = 717;
 			this.visitorType();
-			this.state = 736;
+			this.state = 718;
 			this.match(boaParser.LBRACE);
-			this.state = 740;
+			this.state = 722;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			do {
 				{
-				this.state = 740;
+				this.state = 722;
 				this._errHandler.sync(this);
 				switch ( this.interpreter.adaptivePredict(this._input, 66, this._ctx) ) {
 				case 1:
 					{
-					this.state = 737;
+					this.state = 719;
 					this.visitStatement();
 					}
 					break;
@@ -3590,17 +3559,17 @@ export class boaParser extends Parser {
 				case 2:
 					{
 					 this.notifyErrorListeners("error: only 'before' and 'after' visit statements allowed inside visitor bodies"); 
-					this.state = 739;
+					this.state = 721;
 					this.programStatement();
 					}
 					break;
 				}
 				}
-				this.state = 742;
+				this.state = 724;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 			} while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << boaParser.OF) | (1 << boaParser.IF) | (1 << boaParser.DO) | (1 << boaParser.MAP) | (1 << boaParser.STACK) | (1 << boaParser.QUEUE) | (1 << boaParser.SET) | (1 << boaParser.FOR) | (1 << boaParser.FOREACH) | (1 << boaParser.IFALL) | (1 << boaParser.EXISTS) | (1 << boaParser.NOT) | (1 << boaParser.TYPE) | (1 << boaParser.ELSE) | (1 << boaParser.CASE) | (1 << boaParser.OUTPUT) | (1 << boaParser.FORMAT) | (1 << boaParser.WHILE) | (1 << boaParser.BREAK) | (1 << boaParser.ARRAY) | (1 << boaParser.STATIC) | (1 << boaParser.SWITCH) | (1 << boaParser.RETURN) | (1 << boaParser.WEIGHT) | (1 << boaParser.DEFAULT) | (1 << boaParser.CONTINUE) | (1 << boaParser.FUNCTION) | (1 << boaParser.FIXP) | (1 << boaParser.VISITOR) | (1 << boaParser.TRAVERSAL) | (1 << boaParser.BEFORE))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (boaParser.AFTER - 32)) | (1 << (boaParser.STOP - 32)) | (1 << (boaParser.SEMICOLON - 32)) | (1 << (boaParser.LBRACE - 32)) | (1 << (boaParser.LPAREN - 32)) | (1 << (boaParser.PLUS - 32)) | (1 << (boaParser.MINUS - 32)))) !== 0) || ((((_la - 68)) & ~0x1F) === 0 && ((1 << (_la - 68)) & ((1 << (boaParser.NEG - 68)) | (1 << (boaParser.INV - 68)) | (1 << (boaParser.WILDCARD - 68)) | (1 << (boaParser.DOLLAR - 68)) | (1 << (boaParser.IntegerLiteral - 68)) | (1 << (boaParser.FloatingPointLiteral - 68)) | (1 << (boaParser.CharacterLiteral - 68)) | (1 << (boaParser.RegexLiteral - 68)) | (1 << (boaParser.MultilineStringLiteral - 68)) | (1 << (boaParser.StringLiteral - 68)) | (1 << (boaParser.TimeLiteral - 68)) | (1 << (boaParser.Identifier - 68)))) !== 0));
-			this.state = 744;
+			this.state = 726;
 			this.match(boaParser.RBRACE);
 			}
 		}
@@ -3625,14 +3594,14 @@ export class boaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 746;
+			this.state = 728;
 			this.traversalType();
-			this.state = 750;
+			this.state = 732;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 68, this._ctx) ) {
 			case 1:
 				{
-				this.state = 747;
+				this.state = 729;
 				this.traverseStatement();
 				}
 				break;
@@ -3640,7 +3609,7 @@ export class boaParser extends Parser {
 			case 2:
 				{
 				 this.notifyErrorListeners("error: only traverse statements allowed inside traversal bodies"); 
-				this.state = 749;
+				this.state = 731;
 				this.programStatement();
 				}
 				break;
@@ -3662,29 +3631,58 @@ export class boaParser extends Parser {
 		return _localctx;
 	}
 	// @RuleVersion(0)
+	public varDecl(): VarDeclContext {
+		let _localctx: VarDeclContext = new VarDeclContext(this._ctx, this.state);
+		this.enterRule(_localctx, 130, boaParser.RULE_varDecl);
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			this.state = 734;
+			this.identifier();
+			this.state = 735;
+			this.match(boaParser.COLON);
+			this.state = 736;
+			this.type();
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
 	public composite(): CompositeContext {
 		let _localctx: CompositeContext = new CompositeContext(this._ctx, this.state);
-		this.enterRule(_localctx, 130, boaParser.RULE_composite);
+		this.enterRule(_localctx, 132, boaParser.RULE_composite);
 		let _la: number;
 		try {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 752;
+			this.state = 738;
 			this.match(boaParser.LBRACE);
-			this.state = 769;
+			this.state = 755;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 72, this._ctx) ) {
 			case 1:
 				{
-				this.state = 753;
+				this.state = 739;
 				this.expressionList();
-				this.state = 755;
+				this.state = 741;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (_la === boaParser.COMMA) {
 					{
-					this.state = 754;
+					this.state = 740;
 					this.match(boaParser.COMMA);
 					}
 				}
@@ -3694,32 +3692,32 @@ export class boaParser extends Parser {
 
 			case 2:
 				{
-				this.state = 757;
+				this.state = 743;
 				this.pair();
-				this.state = 762;
+				this.state = 748;
 				this._errHandler.sync(this);
 				_alt = this.interpreter.adaptivePredict(this._input, 70, this._ctx);
 				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
 					if (_alt === 1) {
 						{
 						{
-						this.state = 758;
+						this.state = 744;
 						this.match(boaParser.COMMA);
-						this.state = 759;
+						this.state = 745;
 						this.pair();
 						}
 						}
 					}
-					this.state = 764;
+					this.state = 750;
 					this._errHandler.sync(this);
 					_alt = this.interpreter.adaptivePredict(this._input, 70, this._ctx);
 				}
-				this.state = 766;
+				this.state = 752;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (_la === boaParser.COMMA) {
 					{
-					this.state = 765;
+					this.state = 751;
 					this.match(boaParser.COMMA);
 					}
 				}
@@ -3729,12 +3727,12 @@ export class boaParser extends Parser {
 
 			case 3:
 				{
-				this.state = 768;
+				this.state = 754;
 				this.match(boaParser.COLON);
 				}
 				break;
 			}
-			this.state = 771;
+			this.state = 757;
 			this.match(boaParser.RBRACE);
 			}
 		}
@@ -3755,15 +3753,15 @@ export class boaParser extends Parser {
 	// @RuleVersion(0)
 	public pair(): PairContext {
 		let _localctx: PairContext = new PairContext(this._ctx, this.state);
-		this.enterRule(_localctx, 132, boaParser.RULE_pair);
+		this.enterRule(_localctx, 134, boaParser.RULE_pair);
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 773;
+			this.state = 759;
 			this.expression();
-			this.state = 774;
+			this.state = 760;
 			this.match(boaParser.COLON);
-			this.state = 775;
+			this.state = 761;
 			this.expression();
 			}
 		}
@@ -3784,29 +3782,29 @@ export class boaParser extends Parser {
 	// @RuleVersion(0)
 	public identifier(): IdentifierContext {
 		let _localctx: IdentifierContext = new IdentifierContext(this._ctx, this.state);
-		this.enterRule(_localctx, 134, boaParser.RULE_identifier);
+		this.enterRule(_localctx, 136, boaParser.RULE_identifier);
 		try {
-			this.state = 843;
+			this.state = 829;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 			case boaParser.Identifier:
 				this.enterOuterAlt(_localctx, 1);
 				{
-				this.state = 777;
+				this.state = 763;
 				this.match(boaParser.Identifier);
 				}
 				break;
 			case boaParser.FORMAT:
 				this.enterOuterAlt(_localctx, 2);
 				{
-				this.state = 778;
+				this.state = 764;
 				this.match(boaParser.FORMAT);
 				}
 				break;
 			case boaParser.OF:
 				this.enterOuterAlt(_localctx, 3);
 				{
-				this.state = 779;
+				this.state = 765;
 				_localctx._lit = this.match(boaParser.OF);
 				 this.notifyErrorListeners("keyword '" + (_localctx._lit != null ? _localctx._lit.text : undefined) + "' can not be used as an identifier"); 
 				}
@@ -3814,7 +3812,7 @@ export class boaParser extends Parser {
 			case boaParser.IF:
 				this.enterOuterAlt(_localctx, 4);
 				{
-				this.state = 781;
+				this.state = 767;
 				_localctx._lit = this.match(boaParser.IF);
 				 this.notifyErrorListeners("keyword '" + (_localctx._lit != null ? _localctx._lit.text : undefined) + "' can not be used as an identifier"); 
 				}
@@ -3822,7 +3820,7 @@ export class boaParser extends Parser {
 			case boaParser.DO:
 				this.enterOuterAlt(_localctx, 5);
 				{
-				this.state = 783;
+				this.state = 769;
 				_localctx._lit = this.match(boaParser.DO);
 				 this.notifyErrorListeners("keyword '" + (_localctx._lit != null ? _localctx._lit.text : undefined) + "' can not be used as an identifier"); 
 				}
@@ -3830,7 +3828,7 @@ export class boaParser extends Parser {
 			case boaParser.MAP:
 				this.enterOuterAlt(_localctx, 6);
 				{
-				this.state = 785;
+				this.state = 771;
 				_localctx._lit = this.match(boaParser.MAP);
 				 this.notifyErrorListeners("keyword '" + (_localctx._lit != null ? _localctx._lit.text : undefined) + "' can not be used as an identifier"); 
 				}
@@ -3838,7 +3836,7 @@ export class boaParser extends Parser {
 			case boaParser.STACK:
 				this.enterOuterAlt(_localctx, 7);
 				{
-				this.state = 787;
+				this.state = 773;
 				_localctx._lit = this.match(boaParser.STACK);
 				 this.notifyErrorListeners("keyword '" + (_localctx._lit != null ? _localctx._lit.text : undefined) + "' can not be used as an identifier"); 
 				}
@@ -3846,7 +3844,7 @@ export class boaParser extends Parser {
 			case boaParser.QUEUE:
 				this.enterOuterAlt(_localctx, 8);
 				{
-				this.state = 789;
+				this.state = 775;
 				_localctx._lit = this.match(boaParser.QUEUE);
 				 this.notifyErrorListeners("keyword '" + (_localctx._lit != null ? _localctx._lit.text : undefined) + "' can not be used as an identifier"); 
 				}
@@ -3854,7 +3852,7 @@ export class boaParser extends Parser {
 			case boaParser.SET:
 				this.enterOuterAlt(_localctx, 9);
 				{
-				this.state = 791;
+				this.state = 777;
 				_localctx._lit = this.match(boaParser.SET);
 				 this.notifyErrorListeners("keyword '" + (_localctx._lit != null ? _localctx._lit.text : undefined) + "' can not be used as an identifier"); 
 				}
@@ -3862,7 +3860,7 @@ export class boaParser extends Parser {
 			case boaParser.FOR:
 				this.enterOuterAlt(_localctx, 10);
 				{
-				this.state = 793;
+				this.state = 779;
 				_localctx._lit = this.match(boaParser.FOR);
 				 this.notifyErrorListeners("keyword '" + (_localctx._lit != null ? _localctx._lit.text : undefined) + "' can not be used as an identifier"); 
 				}
@@ -3870,7 +3868,7 @@ export class boaParser extends Parser {
 			case boaParser.FOREACH:
 				this.enterOuterAlt(_localctx, 11);
 				{
-				this.state = 795;
+				this.state = 781;
 				_localctx._lit = this.match(boaParser.FOREACH);
 				 this.notifyErrorListeners("keyword '" + (_localctx._lit != null ? _localctx._lit.text : undefined) + "' can not be used as an identifier"); 
 				}
@@ -3878,7 +3876,7 @@ export class boaParser extends Parser {
 			case boaParser.IFALL:
 				this.enterOuterAlt(_localctx, 12);
 				{
-				this.state = 797;
+				this.state = 783;
 				_localctx._lit = this.match(boaParser.IFALL);
 				 this.notifyErrorListeners("keyword '" + (_localctx._lit != null ? _localctx._lit.text : undefined) + "' can not be used as an identifier"); 
 				}
@@ -3886,7 +3884,7 @@ export class boaParser extends Parser {
 			case boaParser.EXISTS:
 				this.enterOuterAlt(_localctx, 13);
 				{
-				this.state = 799;
+				this.state = 785;
 				_localctx._lit = this.match(boaParser.EXISTS);
 				 this.notifyErrorListeners("keyword '" + (_localctx._lit != null ? _localctx._lit.text : undefined) + "' can not be used as an identifier"); 
 				}
@@ -3894,7 +3892,7 @@ export class boaParser extends Parser {
 			case boaParser.NOT:
 				this.enterOuterAlt(_localctx, 14);
 				{
-				this.state = 801;
+				this.state = 787;
 				_localctx._lit = this.match(boaParser.NOT);
 				 this.notifyErrorListeners("keyword '" + (_localctx._lit != null ? _localctx._lit.text : undefined) + "' can not be used as an identifier"); 
 				}
@@ -3902,7 +3900,7 @@ export class boaParser extends Parser {
 			case boaParser.TYPE:
 				this.enterOuterAlt(_localctx, 15);
 				{
-				this.state = 803;
+				this.state = 789;
 				_localctx._lit = this.match(boaParser.TYPE);
 				 this.notifyErrorListeners("keyword '" + (_localctx._lit != null ? _localctx._lit.text : undefined) + "' can not be used as an identifier"); 
 				}
@@ -3910,7 +3908,7 @@ export class boaParser extends Parser {
 			case boaParser.ELSE:
 				this.enterOuterAlt(_localctx, 16);
 				{
-				this.state = 805;
+				this.state = 791;
 				_localctx._lit = this.match(boaParser.ELSE);
 				 this.notifyErrorListeners("keyword '" + (_localctx._lit != null ? _localctx._lit.text : undefined) + "' can not be used as an identifier"); 
 				}
@@ -3918,7 +3916,7 @@ export class boaParser extends Parser {
 			case boaParser.CASE:
 				this.enterOuterAlt(_localctx, 17);
 				{
-				this.state = 807;
+				this.state = 793;
 				_localctx._lit = this.match(boaParser.CASE);
 				 this.notifyErrorListeners("keyword '" + (_localctx._lit != null ? _localctx._lit.text : undefined) + "' can not be used as an identifier"); 
 				}
@@ -3926,7 +3924,7 @@ export class boaParser extends Parser {
 			case boaParser.OUTPUT:
 				this.enterOuterAlt(_localctx, 18);
 				{
-				this.state = 809;
+				this.state = 795;
 				_localctx._lit = this.match(boaParser.OUTPUT);
 				 this.notifyErrorListeners("keyword '" + (_localctx._lit != null ? _localctx._lit.text : undefined) + "' can not be used as an identifier"); 
 				}
@@ -3934,7 +3932,7 @@ export class boaParser extends Parser {
 			case boaParser.WHILE:
 				this.enterOuterAlt(_localctx, 19);
 				{
-				this.state = 811;
+				this.state = 797;
 				_localctx._lit = this.match(boaParser.WHILE);
 				 this.notifyErrorListeners("keyword '" + (_localctx._lit != null ? _localctx._lit.text : undefined) + "' can not be used as an identifier"); 
 				}
@@ -3942,7 +3940,7 @@ export class boaParser extends Parser {
 			case boaParser.BREAK:
 				this.enterOuterAlt(_localctx, 20);
 				{
-				this.state = 813;
+				this.state = 799;
 				_localctx._lit = this.match(boaParser.BREAK);
 				 this.notifyErrorListeners("keyword '" + (_localctx._lit != null ? _localctx._lit.text : undefined) + "' can not be used as an identifier"); 
 				}
@@ -3950,7 +3948,7 @@ export class boaParser extends Parser {
 			case boaParser.ARRAY:
 				this.enterOuterAlt(_localctx, 21);
 				{
-				this.state = 815;
+				this.state = 801;
 				_localctx._lit = this.match(boaParser.ARRAY);
 				 this.notifyErrorListeners("keyword '" + (_localctx._lit != null ? _localctx._lit.text : undefined) + "' can not be used as an identifier"); 
 				}
@@ -3958,7 +3956,7 @@ export class boaParser extends Parser {
 			case boaParser.STATIC:
 				this.enterOuterAlt(_localctx, 22);
 				{
-				this.state = 817;
+				this.state = 803;
 				_localctx._lit = this.match(boaParser.STATIC);
 				 this.notifyErrorListeners("keyword '" + (_localctx._lit != null ? _localctx._lit.text : undefined) + "' can not be used as an identifier"); 
 				}
@@ -3966,7 +3964,7 @@ export class boaParser extends Parser {
 			case boaParser.SWITCH:
 				this.enterOuterAlt(_localctx, 23);
 				{
-				this.state = 819;
+				this.state = 805;
 				_localctx._lit = this.match(boaParser.SWITCH);
 				 this.notifyErrorListeners("keyword '" + (_localctx._lit != null ? _localctx._lit.text : undefined) + "' can not be used as an identifier"); 
 				}
@@ -3974,7 +3972,7 @@ export class boaParser extends Parser {
 			case boaParser.RETURN:
 				this.enterOuterAlt(_localctx, 24);
 				{
-				this.state = 821;
+				this.state = 807;
 				_localctx._lit = this.match(boaParser.RETURN);
 				 this.notifyErrorListeners("keyword '" + (_localctx._lit != null ? _localctx._lit.text : undefined) + "' can not be used as an identifier"); 
 				}
@@ -3982,7 +3980,7 @@ export class boaParser extends Parser {
 			case boaParser.WEIGHT:
 				this.enterOuterAlt(_localctx, 25);
 				{
-				this.state = 823;
+				this.state = 809;
 				_localctx._lit = this.match(boaParser.WEIGHT);
 				 this.notifyErrorListeners("keyword '" + (_localctx._lit != null ? _localctx._lit.text : undefined) + "' can not be used as an identifier"); 
 				}
@@ -3990,7 +3988,7 @@ export class boaParser extends Parser {
 			case boaParser.DEFAULT:
 				this.enterOuterAlt(_localctx, 26);
 				{
-				this.state = 825;
+				this.state = 811;
 				_localctx._lit = this.match(boaParser.DEFAULT);
 				 this.notifyErrorListeners("keyword '" + (_localctx._lit != null ? _localctx._lit.text : undefined) + "' can not be used as an identifier"); 
 				}
@@ -3998,7 +3996,7 @@ export class boaParser extends Parser {
 			case boaParser.CONTINUE:
 				this.enterOuterAlt(_localctx, 27);
 				{
-				this.state = 827;
+				this.state = 813;
 				_localctx._lit = this.match(boaParser.CONTINUE);
 				 this.notifyErrorListeners("keyword '" + (_localctx._lit != null ? _localctx._lit.text : undefined) + "' can not be used as an identifier"); 
 				}
@@ -4006,7 +4004,7 @@ export class boaParser extends Parser {
 			case boaParser.FUNCTION:
 				this.enterOuterAlt(_localctx, 28);
 				{
-				this.state = 829;
+				this.state = 815;
 				_localctx._lit = this.match(boaParser.FUNCTION);
 				 this.notifyErrorListeners("keyword '" + (_localctx._lit != null ? _localctx._lit.text : undefined) + "' can not be used as an identifier"); 
 				}
@@ -4014,7 +4012,7 @@ export class boaParser extends Parser {
 			case boaParser.FIXP:
 				this.enterOuterAlt(_localctx, 29);
 				{
-				this.state = 831;
+				this.state = 817;
 				_localctx._lit = this.match(boaParser.FIXP);
 				 this.notifyErrorListeners("keyword '" + (_localctx._lit != null ? _localctx._lit.text : undefined) + "' can not be used as an identifier"); 
 				}
@@ -4022,7 +4020,7 @@ export class boaParser extends Parser {
 			case boaParser.VISITOR:
 				this.enterOuterAlt(_localctx, 30);
 				{
-				this.state = 833;
+				this.state = 819;
 				_localctx._lit = this.match(boaParser.VISITOR);
 				 this.notifyErrorListeners("keyword '" + (_localctx._lit != null ? _localctx._lit.text : undefined) + "' can not be used as an identifier"); 
 				}
@@ -4030,7 +4028,7 @@ export class boaParser extends Parser {
 			case boaParser.TRAVERSAL:
 				this.enterOuterAlt(_localctx, 31);
 				{
-				this.state = 835;
+				this.state = 821;
 				_localctx._lit = this.match(boaParser.TRAVERSAL);
 				 this.notifyErrorListeners("keyword '" + (_localctx._lit != null ? _localctx._lit.text : undefined) + "' can not be used as an identifier"); 
 				}
@@ -4038,7 +4036,7 @@ export class boaParser extends Parser {
 			case boaParser.BEFORE:
 				this.enterOuterAlt(_localctx, 32);
 				{
-				this.state = 837;
+				this.state = 823;
 				_localctx._lit = this.match(boaParser.BEFORE);
 				 this.notifyErrorListeners("keyword '" + (_localctx._lit != null ? _localctx._lit.text : undefined) + "' can not be used as an identifier"); 
 				}
@@ -4046,7 +4044,7 @@ export class boaParser extends Parser {
 			case boaParser.AFTER:
 				this.enterOuterAlt(_localctx, 33);
 				{
-				this.state = 839;
+				this.state = 825;
 				_localctx._lit = this.match(boaParser.AFTER);
 				 this.notifyErrorListeners("keyword '" + (_localctx._lit != null ? _localctx._lit.text : undefined) + "' can not be used as an identifier"); 
 				}
@@ -4054,7 +4052,7 @@ export class boaParser extends Parser {
 			case boaParser.STOP:
 				this.enterOuterAlt(_localctx, 34);
 				{
-				this.state = 841;
+				this.state = 827;
 				_localctx._lit = this.match(boaParser.STOP);
 				 this.notifyErrorListeners("keyword '" + (_localctx._lit != null ? _localctx._lit.text : undefined) + "' can not be used as an identifier"); 
 				}
@@ -4080,11 +4078,11 @@ export class boaParser extends Parser {
 	// @RuleVersion(0)
 	public integerLiteral(): IntegerLiteralContext {
 		let _localctx: IntegerLiteralContext = new IntegerLiteralContext(this._ctx, this.state);
-		this.enterRule(_localctx, 136, boaParser.RULE_integerLiteral);
+		this.enterRule(_localctx, 138, boaParser.RULE_integerLiteral);
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 845;
+			this.state = 831;
 			this.match(boaParser.IntegerLiteral);
 			}
 		}
@@ -4105,11 +4103,11 @@ export class boaParser extends Parser {
 	// @RuleVersion(0)
 	public floatingPointLiteral(): FloatingPointLiteralContext {
 		let _localctx: FloatingPointLiteralContext = new FloatingPointLiteralContext(this._ctx, this.state);
-		this.enterRule(_localctx, 138, boaParser.RULE_floatingPointLiteral);
+		this.enterRule(_localctx, 140, boaParser.RULE_floatingPointLiteral);
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 847;
+			this.state = 833;
 			this.match(boaParser.FloatingPointLiteral);
 			}
 		}
@@ -4130,11 +4128,11 @@ export class boaParser extends Parser {
 	// @RuleVersion(0)
 	public characterLiteral(): CharacterLiteralContext {
 		let _localctx: CharacterLiteralContext = new CharacterLiteralContext(this._ctx, this.state);
-		this.enterRule(_localctx, 140, boaParser.RULE_characterLiteral);
+		this.enterRule(_localctx, 142, boaParser.RULE_characterLiteral);
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 849;
+			this.state = 835;
 			this.match(boaParser.CharacterLiteral);
 			}
 		}
@@ -4155,12 +4153,12 @@ export class boaParser extends Parser {
 	// @RuleVersion(0)
 	public stringLiteral(): StringLiteralContext {
 		let _localctx: StringLiteralContext = new StringLiteralContext(this._ctx, this.state);
-		this.enterRule(_localctx, 142, boaParser.RULE_stringLiteral);
+		this.enterRule(_localctx, 144, boaParser.RULE_stringLiteral);
 		let _la: number;
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 851;
+			this.state = 837;
 			_la = this._input.LA(1);
 			if (!(((((_la - 90)) & ~0x1F) === 0 && ((1 << (_la - 90)) & ((1 << (boaParser.RegexLiteral - 90)) | (1 << (boaParser.MultilineStringLiteral - 90)) | (1 << (boaParser.StringLiteral - 90)))) !== 0))) {
 			this._errHandler.recoverInline(this);
@@ -4191,11 +4189,11 @@ export class boaParser extends Parser {
 	// @RuleVersion(0)
 	public timeLiteral(): TimeLiteralContext {
 		let _localctx: TimeLiteralContext = new TimeLiteralContext(this._ctx, this.state);
-		this.enterRule(_localctx, 144, boaParser.RULE_timeLiteral);
+		this.enterRule(_localctx, 146, boaParser.RULE_timeLiteral);
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 853;
+			this.state = 839;
 			this.match(boaParser.TimeLiteral);
 			}
 		}
@@ -4216,7 +4214,7 @@ export class boaParser extends Parser {
 
 	private static readonly _serializedATNSegments: number = 2;
 	private static readonly _serializedATNSegment0: string =
-		"\x03\uC91D\uCABA\u058D\uAFBA\u4F53\u0607\uEA8B\uC241\x03c\u035A\x04\x02" +
+		"\x03\uC91D\uCABA\u058D\uAFBA\u4F53\u0607\uEA8B\uC241\x03c\u034C\x04\x02" +
 		"\t\x02\x04\x03\t\x03\x04\x04\t\x04\x04\x05\t\x05\x04\x06\t\x06\x04\x07" +
 		"\t\x07\x04\b\t\b\x04\t\t\t\x04\n\t\n\x04\v\t\v\x04\f\t\f\x04\r\t\r\x04" +
 		"\x0E\t\x0E\x04\x0F\t\x0F\x04\x10\t\x10\x04\x11\t\x11\x04\x12\t\x12\x04" +
@@ -4227,421 +4225,415 @@ export class boaParser extends Parser {
 		"\x04,\t,\x04-\t-\x04.\t.\x04/\t/\x040\t0\x041\t1\x042\t2\x043\t3\x044" +
 		"\t4\x045\t5\x046\t6\x047\t7\x048\t8\x049\t9\x04:\t:\x04;\t;\x04<\t<\x04" +
 		"=\t=\x04>\t>\x04?\t?\x04@\t@\x04A\tA\x04B\tB\x04C\tC\x04D\tD\x04E\tE\x04" +
-		"F\tF\x04G\tG\x04H\tH\x04I\tI\x04J\tJ\x03\x02\x03\x02\x03\x02\x03\x03\x06" +
-		"\x03\x99\n\x03\r\x03\x0E\x03\x9A\x03\x04\x03\x04\x05\x04\x9F\n\x04\x03" +
-		"\x05\x03\x05\x03\x05\x05\x05\xA4\n\x05\x03\x06\x03\x06\x03\x06\x03\x06" +
-		"\x03\x06\x03\x06\x03\x07\x03\x07\x03\x07\x03\b\x03\b\x03\b\x03\t\x03\t" +
-		"\x03\t\x03\t\x03\t\x03\t\x03\t\x03\t\x03\t\x03\t\x03\t\x03\t\x03\t\x05" +
-		"\t\xBF\n\t\x03\n\x03\n\x03\n\x05\n\xC4\n\n\x03\n\x03\n\x03\v\x03\v\x03" +
-		"\v\x03\v\x03\f\x03\f\x03\f\x03\f\x03\r\x03\r\x03\r\x03\r\x07\r\xD4\n\r" +
-		"\f\r\x0E\r\xD7\v\r\x03\r\x05\r\xDA\n\r\x05\r\xDC\n\r\x03\r\x03\r\x03\x0E" +
-		"\x03\x0E\x03\x0E\x03\x0E\x03\x0E\x07\x0E\xE5\n\x0E\f\x0E\x0E\x0E\xE8\v" +
-		"\x0E\x03\x0E\x05\x0E\xEB\n\x0E\x05\x0E\xED\n\x0E\x03\x0E\x03\x0E\x03\x0F" +
-		"\x03\x0F\x03\x0F\x05\x0F\xF4\n\x0F\x03\x10\x03\x10\x03\x10\x03\x10\x03" +
-		"\x10\x03\x10\x03\x10\x03\x11\x03\x11\x03\x11\x03\x11\x03\x12\x03\x12\x03" +
-		"\x12\x03\x12\x03\x13\x03\x13\x03\x13\x03\x13\x03\x14\x03\x14\x03\x14\x05" +
-		"\x14\u010C\n\x14\x03\x14\x03\x14\x03\x14\x03\x14\x05\x14\u0112\n\x14\x03" +
-		"\x14\x03\x14\x03\x14\x03\x14\x07\x14\u0118\n\x14\f\x14\x0E\x14\u011B\v" +
-		"\x14\x03\x14\x03\x14\x03\x14\x03\x14\x05\x14\u0121\n\x14\x03\x14\x03\x14" +
-		"\x03\x14\x03\x14\x03\x14\x05\x14\u0128\n\x14\x03\x15\x03\x15\x03\x15\x03" +
-		"\x15\x03\x15\x03\x15\x03\x15\x03\x15\x03\x15\x03\x15\x07\x15\u0134\n\x15" +
-		"\f\x15\x0E\x15\u0137\v\x15\x05\x15\u0139\n\x15\x03\x15\x03\x15\x03\x15" +
-		"\x05\x15\u013E\n\x15\x03\x15\x03\x15\x03\x15\x03\x15\x03\x15\x03\x15\x03" +
-		"\x15\x03\x15\x03\x15\x05\x15\u0149\n\x15\x03\x15\x03\x15\x03\x15\x03\x15" +
-		"\x03\x15\x03\x15\x03\x15\x03\x15\x03\x15\x07\x15\u0154\n\x15\f\x15\x0E" +
-		"\x15\u0157\v\x15\x05\x15\u0159\n\x15\x03\x15\x03\x15\x03\x15\x05\x15\u015E" +
-		"\n\x15\x05\x15\u0160\n\x15\x03\x16\x03\x16\x03\x17\x03\x17\x03\x18\x03" +
-		"\x18\x03\x19\x03\x19\x03\x19\x03\x19\x03\x19\x03\x19\x03\x19\x03\x19\x03" +
-		"\x19\x03\x19\x03\x19\x03\x19\x03\x19\x03\x19\x03\x19\x03\x19\x03\x19\x05" +
-		"\x19\u0179\n\x19\x03\x1A\x03\x1A\x03\x1B\x03\x1B\x03\x1B\x03\x1B\x03\x1B" +
-		"\x03\x1C\x03\x1C\x07\x1C\u0184\n\x1C\f\x1C\x0E\x1C\u0187\v\x1C\x03\x1C" +
-		"\x03\x1C\x03\x1D\x03\x1D\x03\x1D\x03\x1E\x03\x1E\x03\x1E\x03\x1F\x03\x1F" +
-		"\x03\x1F\x03\x1F\x03\x1F\x03\x1F\x03\x1F\x03\x1F\x03 \x03 \x03 \x03 \x03" +
-		" \x07 \u019E\n \f \x0E \u01A1\v \x03 \x03 \x03 \x03 \x03 \x03 \x03 \x03" +
-		" \x03 \x03 \x03 \x07 \u01AE\n \f \x0E \u01B1\v \x03 \x03 \x03 \x03 \x05" +
-		" \u01B7\n \x03 \x03 \x05 \u01BB\n \x03!\x03!\x03!\x05!\u01C0\n!\x03!\x03" +
-		"!\x05!\u01C4\n!\x03!\x03!\x05!\u01C8\n!\x03!\x03!\x03!\x03\"\x03\"\x05" +
-		"\"\u01CF\n\"\x03#\x03#\x03#\x05#\u01D4\n#\x03#\x03#\x03#\x03#\x05#\u01DA" +
-		"\n#\x05#\u01DC\n#\x03$\x03$\x03$\x03$\x05$\u01E2\n$\x03%\x03%\x03%\x03" +
-		"&\x03&\x03&\x03&\x03&\x03&\x03&\x05&\u01EE\n&\x03\'\x03\'\x05\'\u01F2" +
-		"\n\'\x03\'\x03\'\x03(\x03(\x03(\x03(\x03(\x03(\x07(\u01FC\n(\f(\x0E(\u01FF" +
-		"\v(\x03(\x03(\x03(\x06(\u0204\n(\r(\x0E(\u0205\x03(\x03(\x03)\x03)\x03" +
-		")\x03)\x06)\u020E\n)\r)\x0E)\u020F\x03*\x03*\x03*\x03*\x03*\x03*\x03*" +
-		"\x03*\x03*\x03*\x03+\x03+\x03+\x03+\x03+\x03+\x03+\x03+\x03+\x03+\x03" +
-		",\x03,\x03,\x03,\x03,\x03,\x03,\x03,\x03,\x03,\x03-\x03-\x03-\x03-\x03" +
-		"-\x03-\x03.\x03.\x03.\x05.\u0239\n.\x03.\x03.\x03.\x03.\x03.\x03.\x03" +
-		".\x03.\x07.\u0243\n.\f.\x0E.\u0246\v.\x05.\u0248\n.\x03.\x03.\x03.\x03" +
-		"/\x03/\x03/\x03/\x03/\x03/\x03/\x05/\u0254\n/\x03/\x03/\x030\x030\x03" +
-		"0\x030\x030\x030\x030\x030\x030\x030\x030\x030\x031\x031\x031\x032\x03" +
-		"2\x032\x072\u026A\n2\f2\x0E2\u026D\v2\x033\x033\x033\x073\u0272\n3\f3" +
-		"\x0E3\u0275\v3\x033\x033\x033\x033\x033\x033\x053\u027D\n3\x073\u027F" +
-		"\n3\f3\x0E3\u0282\v3\x053\u0284\n3\x034\x034\x034\x074\u0289\n4\f4\x0E" +
-		"4\u028C\v4\x035\x035\x035\x055\u0291\n5\x036\x036\x036\x076\u0296\n6\f" +
-		"6\x0E6\u0299\v6\x037\x037\x037\x077\u029E\n7\f7\x0E7\u02A1\v7\x038\x03" +
-		"8\x038\x038\x078\u02A7\n8\f8\x0E8\u02AA\v8\x039\x039\x039\x03:\x03:\x03" +
-		":\x03:\x05:\u02B3\n:\x03:\x03:\x03;\x03;\x05;\u02B9\n;\x03;\x03;\x03<" +
-		"\x03<\x03<\x03<\x03<\x03<\x03<\x03<\x03<\x03<\x03<\x03<\x03<\x03<\x05" +
-		"<\u02CB\n<\x03=\x03=\x03=\x03>\x03>\x03>\x03>\x03?\x03?\x03?\x03?\x03" +
-		"?\x03?\x05?\u02DA\n?\x03@\x03@\x03@\x03@\x05@\u02E0\n@\x03A\x03A\x03A" +
-		"\x03A\x03A\x06A\u02E7\nA\rA\x0EA\u02E8\x03A\x03A\x03B\x03B\x03B\x03B\x05" +
-		"B\u02F1\nB\x03C\x03C\x03C\x05C\u02F6\nC\x03C\x03C\x03C\x07C\u02FB\nC\f" +
-		"C\x0EC\u02FE\vC\x03C\x05C\u0301\nC\x03C\x05C\u0304\nC\x03C\x03C\x03D\x03" +
-		"D\x03D\x03D\x03E\x03E\x03E\x03E\x03E\x03E\x03E\x03E\x03E\x03E\x03E\x03" +
-		"E\x03E\x03E\x03E\x03E\x03E\x03E\x03E\x03E\x03E\x03E\x03E\x03E\x03E\x03" +
-		"E\x03E\x03E\x03E\x03E\x03E\x03E\x03E\x03E\x03E\x03E\x03E\x03E\x03E\x03" +
-		"E\x03E\x03E\x03E\x03E\x03E\x03E\x03E\x03E\x03E\x03E\x03E\x03E\x03E\x03" +
-		"E\x03E\x03E\x03E\x03E\x03E\x03E\x03E\x03E\x03E\x03E\x03E\x03E\x05E\u034E" +
-		"\nE\x03F\x03F\x03G\x03G\x03H\x03H\x03I\x03I\x03J\x03J\x03J\x02\x02\x02" +
-		"K\x02\x02\x04\x02\x06\x02\b\x02\n\x02\f\x02\x0E\x02\x10\x02\x12\x02\x14" +
-		"\x02\x16\x02\x18\x02\x1A\x02\x1C\x02\x1E\x02 \x02\"\x02$\x02&\x02(\x02" +
-		"*\x02,\x02.\x020\x022\x024\x026\x028\x02:\x02<\x02>\x02@\x02B\x02D\x02" +
-		"F\x02H\x02J\x02L\x02N\x02P\x02R\x02T\x02V\x02X\x02Z\x02\\\x02^\x02`\x02" +
-		"b\x02d\x02f\x02h\x02j\x02l\x02n\x02p\x02r\x02t\x02v\x02x\x02z\x02|\x02" +
-		"~\x02\x80\x02\x82\x02\x84\x02\x86\x02\x88\x02\x8A\x02\x8C\x02\x8E\x02" +
-		"\x90\x02\x92\x02\x02\v\x04\x02HQUU\x03\x0278\x04\x021133\x04\x024466\x03" +
-		"\x029>\x04\x0222?A\x05\x0255BEVV\x05\x02\x0E\x0E?@FG\x03\x02\\^\x02\u03A7" +
-		"\x02\x94\x03\x02\x02\x02\x04\x98\x03\x02\x02\x02\x06\x9E\x03\x02\x02\x02" +
-		"\b\xA3\x03\x02\x02\x02\n\xA5\x03\x02\x02\x02\f\xAB\x03\x02\x02\x02\x0E" +
-		"\xAE\x03\x02\x02\x02\x10\xBE\x03\x02\x02\x02\x12\xC3\x03\x02\x02\x02\x14" +
-		"\xC7\x03\x02\x02\x02\x16\xCB\x03\x02\x02\x02\x18\xCF\x03\x02\x02\x02\x1A" +
-		"\xDF\x03\x02\x02\x02\x1C\xF3\x03\x02\x02\x02\x1E\xF5\x03\x02\x02\x02 " +
-		"\xFC\x03\x02\x02\x02\"\u0100\x03\x02\x02\x02$\u0104\x03\x02\x02\x02&\u0108" +
-		"\x03\x02\x02\x02(\u015F\x03\x02\x02\x02*\u0161\x03\x02\x02\x02,\u0163" +
-		"\x03\x02\x02\x02.\u0165\x03\x02\x02\x020\u0178\x03\x02\x02\x022\u017A" +
-		"\x03\x02\x02\x024\u017C\x03\x02\x02\x026\u0181\x03\x02\x02\x028\u018A" +
-		"\x03\x02\x02\x02:\u018D\x03\x02\x02\x02<\u0190\x03\x02\x02\x02>\u01BA" +
-		"\x03\x02\x02\x02@\u01BC\x03\x02\x02\x02B\u01CE\x03\x02\x02\x02D\u01D0" +
-		"\x03\x02\x02\x02F\u01E1\x03\x02\x02\x02H\u01E3\x03\x02\x02\x02J\u01E6" +
-		"\x03\x02\x02\x02L\u01EF\x03\x02\x02\x02N\u01F5\x03\x02\x02\x02P\u0209" +
-		"\x03\x02\x02\x02R\u0211\x03\x02\x02\x02T\u021B\x03\x02\x02\x02V\u0225" +
-		"\x03\x02\x02\x02X\u022F\x03\x02\x02\x02Z\u0238\x03\x02\x02\x02\\\u024C" +
-		"\x03\x02\x02\x02^\u0257\x03\x02\x02\x02`\u0263\x03\x02\x02\x02b\u0266" +
-		"\x03\x02\x02\x02d\u0283\x03\x02\x02\x02f\u0285\x03\x02\x02\x02h\u028D" +
-		"\x03\x02\x02\x02j\u0292\x03\x02\x02\x02l\u029A\x03\x02\x02\x02n\u02A2" +
-		"\x03\x02\x02\x02p\u02AB\x03\x02\x02\x02r\u02AE\x03\x02\x02\x02t\u02B6" +
-		"\x03\x02\x02\x02v\u02CA\x03\x02\x02\x02x\u02CC\x03\x02\x02\x02z\u02CF" +
-		"\x03\x02\x02\x02|\u02D9\x03\x02\x02\x02~\u02DB\x03\x02\x02\x02\x80\u02E1" +
-		"\x03\x02\x02\x02\x82\u02EC\x03\x02\x02\x02\x84\u02F2\x03\x02\x02\x02\x86" +
-		"\u0307\x03\x02\x02\x02\x88\u034D\x03\x02\x02\x02\x8A\u034F\x03\x02\x02" +
-		"\x02\x8C\u0351\x03\x02\x02\x02\x8E\u0353\x03\x02\x02\x02\x90\u0355\x03" +
-		"\x02\x02\x02\x92\u0357\x03\x02\x02\x02\x94\x95\x05\x04\x03\x02\x95\x96" +
-		"\x07\x02\x02\x03\x96\x03\x03\x02\x02\x02\x97\x99\x05\x06\x04\x02\x98\x97" +
-		"\x03\x02\x02\x02\x99\x9A\x03\x02\x02\x02\x9A\x98\x03\x02\x02\x02\x9A\x9B" +
-		"\x03\x02\x02\x02\x9B\x05\x03\x02\x02\x02\x9C\x9F\x05\b\x05\x02\x9D\x9F" +
-		"\x050\x19\x02\x9E\x9C\x03\x02\x02\x02\x9E\x9D\x03\x02\x02\x02\x9F\x07" +
-		"\x03\x02\x02\x02\xA0\xA4\x05\n\x06\x02\xA1\xA4\x05\f\x07\x02\xA2\xA4\x05" +
-		"\x0E\b\x02\xA3\xA0\x03\x02\x02\x02\xA3\xA1\x03\x02\x02\x02\xA3\xA2\x03" +
-		"\x02\x02\x02\xA4\t\x03\x02\x02\x02\xA5\xA6\x07\x0F\x02\x02\xA6\xA7\x05" +
-		"\x88E\x02\xA7\xA8\x07U\x02\x02\xA8\xA9\x05\x10\t\x02\xA9\xAA\b\x06\x01" +
-		"\x02\xAA\v\x03\x02\x02\x02\xAB\xAC\x07\x17\x02\x02\xAC\xAD\x05\x0E\b\x02" +
-		"\xAD\r\x03\x02\x02\x02\xAE\xAF\x05D#\x02\xAF\xB0\b\b\x01\x02\xB0\x0F\x03" +
-		"\x02\x02\x02\xB1\xBF\x05\x16\f\x02\xB2\xBF\x05\x1E\x10\x02\xB3\xBF\x05" +
-		"\x18\r\x02\xB4\xBF\x05&\x14\x02\xB5\xBF\x05(\x15\x02\xB6\xBF\x05*\x16" +
-		"\x02\xB7\xBF\x05,\x17\x02\xB8\xBF\x05.\x18\x02\xB9\xBF\x05 \x11\x02\xBA" +
-		"\xBF\x05\"\x12\x02\xBB\xBF\x05$\x13\x02\xBC\xBF\x05\x1A\x0E\x02\xBD\xBF" +
-		"\x05\x88E\x02\xBE\xB1\x03\x02\x02\x02\xBE\xB2\x03\x02\x02\x02\xBE\xB3" +
-		"\x03\x02\x02\x02\xBE\xB4\x03\x02\x02\x02\xBE\xB5\x03\x02\x02\x02\xBE\xB6" +
-		"\x03\x02\x02\x02\xBE\xB7\x03\x02\x02\x02\xBE\xB8\x03\x02\x02\x02\xBE\xB9" +
-		"\x03\x02\x02\x02\xBE\xBA\x03\x02\x02\x02\xBE\xBB\x03\x02\x02\x02\xBE\xBC" +
-		"\x03\x02\x02\x02\xBE\xBD\x03\x02\x02\x02\xBF\x11\x03\x02\x02\x02\xC0\xC1" +
-		"\x05\x88E\x02\xC1\xC2\x07&\x02\x02\xC2\xC4\x03\x02\x02\x02\xC3\xC0\x03" +
-		"\x02\x02\x02\xC3\xC4\x03\x02\x02\x02\xC4\xC5\x03\x02\x02\x02\xC5\xC6\x05" +
-		"\x10\t\x02\xC6\x13\x03\x02\x02\x02\xC7\xC8\x05\x88E\x02\xC8\xC9\x07U\x02" +
-		"\x02\xC9\xCA\x05b2\x02\xCA\x15\x03\x02\x02\x02\xCB\xCC\x07\x16\x02\x02" +
-		"\xCC\xCD\x07\x03\x02\x02\xCD\xCE\x05\x12\n\x02\xCE\x17\x03\x02\x02\x02" +
-		"\xCF\xDB\x07)\x02\x02\xD0\xD5\x05\x1C\x0F\x02\xD1\xD2\x07\'\x02\x02\xD2" +
-		"\xD4\x05\x1C\x0F\x02\xD3\xD1\x03\x02\x02\x02\xD4\xD7\x03\x02\x02\x02\xD5" +
-		"\xD3\x03\x02\x02\x02\xD5\xD6\x03\x02\x02\x02\xD6\xD9\x03\x02\x02\x02\xD7" +
-		"\xD5\x03\x02\x02\x02\xD8\xDA\x07\'\x02\x02\xD9\xD8\x03\x02\x02\x02\xD9" +
-		"\xDA\x03\x02\x02\x02\xDA\xDC\x03\x02\x02\x02\xDB\xD0\x03\x02\x02\x02\xDB" +
-		"\xDC\x03\x02\x02\x02\xDC\xDD\x03\x02\x02\x02\xDD\xDE\x07*\x02\x02\xDE" +
-		"\x19\x03\x02\x02\x02\xDF\xE0\x07$\x02\x02\xE0\xEC\x07)\x02\x02\xE1\xE6" +
-		"\x05\x14\v\x02\xE2\xE3\x07\'\x02\x02\xE3\xE5\x05\x14\v\x02\xE4\xE2\x03" +
-		"\x02\x02\x02\xE5\xE8\x03\x02\x02\x02\xE6\xE4\x03\x02\x02\x02\xE6\xE7\x03" +
-		"\x02\x02\x02\xE7\xEA\x03\x02\x02\x02\xE8\xE6\x03\x02\x02\x02\xE9\xEB\x07" +
-		"\'\x02\x02\xEA\xE9\x03\x02\x02\x02\xEA\xEB\x03\x02\x02\x02\xEB\xED\x03" +
-		"\x02\x02\x02\xEC\xE1\x03\x02\x02\x02\xEC\xED\x03\x02\x02\x02\xED\xEE\x03" +
-		"\x02\x02\x02\xEE\xEF\x07*\x02\x02\xEF\x1B\x03\x02\x02\x02\xF0\xF4\x05" +
-		"\n\x06\x02\xF1\xF4\x05\f\x07\x02\xF2\xF4\x05\x12\n\x02\xF3\xF0\x03\x02" +
-		"\x02\x02\xF3\xF1\x03\x02\x02\x02\xF3\xF2\x03\x02\x02\x02\xF4\x1D\x03\x02" +
-		"\x02\x02\xF5\xF6\x07\x06\x02\x02\xF6\xF7\x07-\x02\x02\xF7\xF8\x05\x12" +
-		"\n\x02\xF8\xF9\x07.\x02\x02\xF9\xFA\x07\x03\x02\x02\xFA\xFB\x05\x12\n" +
-		"\x02\xFB\x1F\x03\x02\x02\x02\xFC\xFD\x07\x07\x02\x02\xFD\xFE\x07\x03\x02" +
-		"\x02\xFE\xFF\x05\x12\n\x02\xFF!\x03\x02\x02\x02\u0100\u0101\x07\b\x02" +
-		"\x02\u0101\u0102\x07\x03\x02\x02\u0102\u0103\x05\x12\n\x02\u0103#\x03" +
-		"\x02\x02\x02\u0104\u0105\x07\t\x02\x02\u0105\u0106\x07\x03\x02\x02\u0106" +
-		"\u0107\x05\x12\n\x02\u0107%\x03\x02\x02\x02\u0108\u010B\x07\x12\x02\x02" +
-		"\u0109\u010C\x07\t\x02\x02\u010A\u010C\x05\x88E\x02\u010B\u0109\x03\x02" +
-		"\x02\x02\u010B\u010A\x03\x02\x02\x02\u010C\u0111\x03\x02\x02\x02\u010D" +
-		"\u010E\x07+\x02\x02\u010E\u010F\x05d3\x02\u010F\u0110\x07,\x02\x02\u0110" +
-		"\u0112\x03\x02\x02\x02\u0111\u010D\x03\x02\x02\x02\u0111\u0112\x03\x02" +
-		"\x02\x02\u0112\u0119\x03\x02\x02\x02\u0113\u0114\x07-\x02\x02\u0114\u0115" +
-		"\x05\x12\n\x02\u0115\u0116\x07.\x02\x02\u0116\u0118\x03\x02\x02\x02\u0117" +
-		"\u0113\x03\x02\x02\x02\u0118\u011B\x03\x02\x02\x02\u0119\u0117\x03\x02" +
-		"\x02\x02\u0119\u011A\x03\x02\x02\x02\u011A\u011C\x03\x02\x02\x02\u011B" +
-		"\u0119\x03\x02\x02\x02\u011C\u011D\x07\x03\x02\x02\u011D\u0120\x05\x12" +
-		"\n\x02\u011E\u011F\x07\x1A\x02\x02\u011F\u0121\x05\x12\n\x02\u0120\u011E" +
-		"\x03\x02\x02\x02\u0120\u0121\x03\x02\x02\x02\u0121\u0127\x03\x02\x02\x02" +
-		"\u0122\u0123\x07\x13\x02\x02\u0123\u0124\x07+\x02\x02\u0124\u0125\x05" +
-		"d3\x02\u0125\u0126\x07,\x02\x02\u0126\u0128\x03\x02\x02\x02\u0127\u0122" +
-		"\x03\x02\x02\x02\u0127\u0128\x03\x02\x02\x02\u0128\'\x03\x02\x02\x02\u0129" +
-		"\u012A\x07\x1D\x02\x02\u012A\u0138\x07+\x02\x02\u012B\u012C\x05\x88E\x02" +
-		"\u012C\u012D\x07&\x02\x02\u012D\u0135\x05\x10\t\x02\u012E\u012F\x07\'" +
-		"\x02\x02\u012F\u0130\x05\x88E\x02\u0130\u0131\x07&\x02\x02\u0131\u0132" +
-		"\x05\x10\t\x02\u0132\u0134\x03\x02\x02\x02\u0133\u012E\x03\x02\x02\x02" +
-		"\u0134\u0137\x03\x02\x02\x02\u0135\u0133\x03\x02\x02\x02\u0135\u0136\x03" +
-		"\x02\x02\x02\u0136\u0139\x03\x02\x02\x02\u0137\u0135\x03\x02\x02\x02\u0138" +
-		"\u012B\x03\x02\x02\x02\u0138\u0139\x03\x02\x02\x02\u0139\u013A\x03\x02" +
-		"\x02\x02\u013A\u013D\x07,\x02\x02\u013B\u013C\x07&\x02\x02\u013C\u013E" +
-		"\x05\x10\t\x02\u013D\u013B\x03\x02\x02\x02\u013D\u013E\x03\x02\x02\x02" +
-		"\u013E\u0160\x03\x02\x02\x02\u013F\u0140\x07\x1D\x02\x02\u0140\u0158\x07" +
-		"+\x02\x02\u0141\u0142\x05\x88E\x02\u0142\u0143\x07&\x02\x02\u0143\u0144" +
-		"\x05\x10\t\x02\u0144\u0149\x03\x02\x02\x02\u0145\u0146\x05\x88E\x02\u0146" +
-		"\u0147\b\x15\x01\x02\u0147\u0149\x03\x02\x02\x02\u0148\u0141\x03\x02\x02" +
-		"\x02\u0148\u0145\x03\x02\x02\x02\u0149\u0155\x03\x02\x02\x02\u014A\u014B" +
-		"\x07\'\x02\x02\u014B\u014C\x05\x88E\x02\u014C\u014D\x07&\x02\x02\u014D" +
-		"\u014E\x05\x10\t\x02\u014E\u0154\x03\x02\x02\x02\u014F\u0150\x07\'\x02" +
-		"\x02\u0150\u0151\x05\x88E\x02\u0151\u0152\b\x15\x01\x02\u0152\u0154\x03" +
-		"\x02\x02\x02\u0153\u014A\x03\x02\x02\x02\u0153\u014F\x03\x02\x02\x02\u0154" +
-		"\u0157\x03\x02\x02\x02\u0155\u0153\x03\x02\x02\x02\u0155\u0156\x03\x02" +
-		"\x02\x02\u0156\u0159\x03\x02\x02\x02\u0157\u0155\x03\x02\x02\x02\u0158" +
-		"\u0148\x03\x02\x02\x02\u0158\u0159\x03\x02\x02\x02\u0159\u015A\x03\x02" +
-		"\x02\x02\u015A\u015D\x07,\x02\x02\u015B\u015C\x07&\x02\x02\u015C\u015E" +
-		"\x05\x10\t\x02\u015D\u015B\x03\x02\x02\x02\u015D\u015E\x03\x02\x02\x02" +
-		"\u015E\u0160\x03\x02\x02\x02\u015F\u0129\x03\x02\x02\x02\u015F\u013F\x03" +
-		"\x02\x02\x02\u0160)\x03\x02\x02\x02\u0161\u0162\x07\x1E\x02\x02\u0162" +
-		"+\x03\x02\x02\x02\u0163\u0164\x07\x1F\x02\x02\u0164-\x03\x02\x02\x02\u0165" +
-		"\u0166\x07 \x02\x02\u0166/\x03\x02\x02\x02\u0167\u0179\x056\x1C\x02\u0168" +
-		"\u0179\x054\x1B\x02\u0169\u0179\x058\x1D\x02\u016A\u0179\x05:\x1E\x02" +
-		"\u016B\u0179\x05`1\x02\u016C\u0179\x05<\x1F\x02\u016D\u0179\x05@!\x02" +
-		"\u016E\u0179\x05J&\x02\u016F\u0179\x05L\'\x02\u0170\u0179\x05N(\x02\u0171" +
-		"\u0179\x05R*\x02\u0172\u0179\x05T+\x02\u0173\u0179\x05V,\x02\u0174\u0179" +
-		"\x05X-\x02\u0175\u0179\x052\x1A\x02\u0176\u0179\x05> \x02\u0177\u0179" +
-		"\x05H%\x02\u0178\u0167\x03\x02\x02\x02\u0178\u0168\x03\x02\x02\x02\u0178" +
-		"\u0169\x03\x02\x02\x02\u0178\u016A\x03\x02\x02\x02\u0178\u016B\x03\x02" +
-		"\x02\x02\u0178\u016C\x03\x02\x02\x02\u0178\u016D\x03\x02\x02\x02\u0178" +
-		"\u016E\x03\x02\x02\x02\u0178\u016F\x03\x02\x02\x02\u0178\u0170\x03\x02" +
-		"\x02\x02\u0178\u0171\x03\x02\x02\x02\u0178\u0172\x03\x02\x02\x02\u0178" +
-		"\u0173\x03\x02\x02\x02\u0178\u0174\x03\x02\x02\x02\u0178\u0175\x03\x02" +
-		"\x02\x02\u0178\u0176\x03\x02\x02\x02\u0178\u0177\x03\x02\x02\x02\u0179" +
-		"1\x03\x02\x02\x02\u017A\u017B\x07%\x02\x02\u017B3\x03\x02\x02\x02\u017C" +
-		"\u017D\x05n8\x02\u017D\u017E\t\x02\x02\x02\u017E\u017F\x05b2\x02\u017F" +
-		"\u0180\b\x1B\x01\x02\u01805\x03\x02\x02\x02\u0181\u0185\x07)\x02\x02\u0182" +
-		"\u0184\x05\x06\x04\x02\u0183\u0182\x03\x02\x02\x02\u0184\u0187\x03\x02" +
-		"\x02\x02\u0185\u0183\x03\x02\x02\x02\u0185\u0186\x03\x02\x02\x02\u0186" +
-		"\u0188\x03\x02\x02\x02\u0187\u0185\x03\x02\x02\x02\u0188\u0189\x07*\x02" +
-		"\x02\u01897\x03\x02\x02\x02\u018A\u018B\x07\x15\x02\x02\u018B\u018C\b" +
-		"\x1D\x01\x02\u018C9\x03\x02\x02\x02\u018D\u018E\x07\x1C\x02\x02\u018E" +
-		"\u018F\b\x1E\x01\x02\u018F;\x03\x02\x02\x02\u0190\u0191\x07\x05\x02\x02" +
-		"\u0191\u0192\x050\x19\x02\u0192\u0193\x07\x14\x02\x02\u0193\u0194\x07" +
-		"+\x02\x02\u0194\u0195\x05b2\x02\u0195\u0196\x07,\x02\x02\u0196\u0197\b" +
-		"\x1F\x01\x02\u0197=\x03\x02\x02\x02\u0198\u019F\x05\x88E\x02\u0199\u019A" +
-		"\x07-\x02\x02\u019A\u019B\x05b2\x02\u019B\u019C\x07.\x02\x02\u019C\u019E" +
-		"\x03\x02\x02\x02\u019D\u0199\x03\x02\x02\x02\u019E\u01A1\x03\x02\x02\x02" +
-		"\u019F\u019D\x03\x02\x02\x02\u019F\u01A0\x03\x02\x02\x02\u01A0\u01A2\x03" +
-		"\x02\x02\x02\u01A1\u019F\x03\x02\x02\x02\u01A2\u01A3\x07V\x02\x02\u01A3" +
-		"\u01A4\b \x01\x02\u01A4\u01A5\x07\x1A\x02\x02\u01A5\u01A6\x05b2\x02\u01A6" +
-		"\u01A7\b \x01\x02\u01A7\u01BB\x03\x02\x02\x02\u01A8\u01AF\x05\x88E\x02" +
-		"\u01A9\u01AA\x07-\x02\x02\u01AA\u01AB\x05b2\x02\u01AB\u01AC\x07.\x02\x02" +
-		"\u01AC\u01AE\x03\x02\x02\x02\u01AD\u01A9\x03\x02\x02\x02\u01AE\u01B1\x03" +
-		"\x02\x02\x02\u01AF\u01AD\x03\x02\x02\x02\u01AF\u01B0\x03\x02\x02\x02\u01B0" +
-		"\u01B2\x03\x02\x02\x02\u01B1\u01AF\x03\x02\x02\x02\u01B2\u01B3\x07V\x02" +
-		"\x02\u01B3\u01B6\x05b2\x02\u01B4\u01B5\x07\x1A\x02\x02\u01B5\u01B7\x05" +
-		"b2\x02\u01B6\u01B4\x03\x02\x02\x02\u01B6\u01B7\x03\x02\x02\x02\u01B7\u01B8" +
-		"\x03\x02\x02\x02\u01B8\u01B9\b \x01\x02\u01B9\u01BB\x03\x02\x02\x02\u01BA" +
-		"\u0198\x03\x02\x02\x02\u01BA\u01A8\x03\x02\x02\x02\u01BB?\x03\x02\x02" +
-		"\x02\u01BC\u01BD\x07\n\x02\x02\u01BD\u01BF\x07+\x02\x02\u01BE\u01C0\x05" +
-		"B\"\x02\u01BF\u01BE\x03\x02\x02\x02\u01BF\u01C0\x03\x02\x02\x02\u01C0" +
-		"\u01C1\x03\x02\x02\x02\u01C1\u01C3\x07%\x02\x02\u01C2\u01C4\x05b2\x02" +
-		"\u01C3\u01C2\x03\x02\x02\x02\u01C3\u01C4\x03\x02\x02\x02\u01C4\u01C5\x03" +
-		"\x02\x02\x02\u01C5\u01C7\x07%\x02\x02\u01C6\u01C8\x05B\"\x02\u01C7\u01C6" +
-		"\x03\x02\x02\x02\u01C7\u01C8\x03\x02\x02\x02\u01C8\u01C9\x03\x02\x02\x02" +
-		"\u01C9\u01CA\x07,\x02\x02\u01CA\u01CB\x05\x06\x04\x02\u01CBA\x03\x02\x02" +
-		"\x02\u01CC\u01CF\x05D#\x02\u01CD\u01CF\x05F$\x02\u01CE\u01CC\x03\x02\x02" +
-		"\x02\u01CE\u01CD\x03\x02\x02\x02\u01CFC\x03\x02\x02\x02\u01D0\u01D1\x05" +
-		"\x88E\x02\u01D1\u01D3\x07&\x02\x02\u01D2\u01D4\x05\x10\t\x02\u01D3\u01D2" +
-		"\x03\x02\x02\x02\u01D3\u01D4\x03\x02\x02\x02\u01D4\u01DB\x03\x02\x02\x02" +
-		"\u01D5\u01D9\x07U\x02\x02\u01D6\u01D7\b#\x01\x02\u01D7\u01DA\x05&\x14" +
-		"\x02\u01D8\u01DA\x05b2\x02\u01D9\u01D6\x03\x02\x02\x02\u01D9\u01D8\x03" +
-		"\x02\x02\x02\u01DA\u01DC\x03\x02\x02\x02\u01DB\u01D5\x03\x02\x02\x02\u01DB" +
-		"\u01DC\x03\x02\x02\x02\u01DCE\x03\x02\x02\x02\u01DD\u01DE\x05b2\x02\u01DE" +
-		"\u01DF\t\x03\x02\x02\u01DF\u01E2\x03\x02\x02\x02\u01E0\u01E2\x05b2\x02" +
-		"\u01E1\u01DD\x03\x02\x02\x02\u01E1\u01E0\x03\x02\x02\x02\u01E2G\x03\x02" +
-		"\x02\x02\u01E3\u01E4\x05F$\x02\u01E4\u01E5\b%\x01\x02\u01E5I\x03\x02\x02" +
-		"\x02\u01E6\u01E7\x07\x04\x02\x02\u01E7\u01E8\x07+\x02\x02\u01E8\u01E9" +
-		"\x05b2\x02\u01E9\u01EA\x07,\x02\x02\u01EA\u01ED\x05\x06\x04\x02\u01EB" +
-		"\u01EC\x07\x10\x02\x02\u01EC\u01EE\x05\x06\x04\x02\u01ED\u01EB\x03\x02" +
-		"\x02\x02\u01ED\u01EE\x03\x02\x02\x02\u01EEK\x03\x02\x02\x02\u01EF\u01F1" +
-		"\x07\x19\x02\x02\u01F0\u01F2\x05b2\x02\u01F1\u01F0\x03\x02\x02\x02\u01F1" +
-		"\u01F2\x03\x02\x02\x02\u01F2\u01F3\x03\x02\x02\x02\u01F3\u01F4\b\'\x01" +
-		"\x02\u01F4M\x03\x02\x02\x02\u01F5\u01F6";
+		"F\tF\x04G\tG\x04H\tH\x04I\tI\x04J\tJ\x04K\tK\x03\x02\x03\x02\x03\x02\x03" +
+		"\x03\x06\x03\x9B\n\x03\r\x03\x0E\x03\x9C\x03\x04\x03\x04\x05\x04\xA1\n" +
+		"\x04\x03\x05\x03\x05\x03\x05\x05\x05\xA6\n\x05\x03\x06\x03\x06\x03\x06" +
+		"\x03\x06\x03\x06\x03\x06\x03\x07\x03\x07\x03\x07\x03\b\x03\b\x03\b\x03" +
+		"\t\x03\t\x03\t\x03\t\x03\t\x03\t\x03\t\x03\t\x03\t\x03\t\x03\t\x03\t\x03" +
+		"\t\x05\t\xC1\n\t\x03\n\x03\n\x03\n\x05\n\xC6\n\n\x03\n\x03\n\x03\v\x03" +
+		"\v\x03\v\x03\v\x03\f\x03\f\x03\f\x03\f\x03\r\x03\r\x03\r\x03\r\x07\r\xD6" +
+		"\n\r\f\r\x0E\r\xD9\v\r\x03\r\x05\r\xDC\n\r\x05\r\xDE\n\r\x03\r\x03\r\x03" +
+		"\x0E\x03\x0E\x03\x0E\x03\x0E\x03\x0E\x07\x0E\xE7\n\x0E\f\x0E\x0E\x0E\xEA" +
+		"\v\x0E\x03\x0E\x05\x0E\xED\n\x0E\x05\x0E\xEF\n\x0E\x03\x0E\x03\x0E\x03" +
+		"\x0F\x03\x0F\x03\x0F\x05\x0F\xF6\n\x0F\x03\x10\x03\x10\x03\x10\x03\x10" +
+		"\x03\x10\x03\x10\x03\x10\x03\x11\x03\x11\x03\x11\x03\x11\x03\x12\x03\x12" +
+		"\x03\x12\x03\x12\x03\x13\x03\x13\x03\x13\x03\x13\x03\x14\x03\x14\x03\x14" +
+		"\x05\x14\u010E\n\x14\x03\x14\x03\x14\x03\x14\x03\x14\x05\x14\u0114\n\x14" +
+		"\x03\x14\x03\x14\x03\x14\x03\x14\x07\x14\u011A\n\x14\f\x14\x0E\x14\u011D" +
+		"\v\x14\x03\x14\x03\x14\x03\x14\x03\x14\x05\x14\u0123\n\x14\x03\x14\x03" +
+		"\x14\x03\x14\x03\x14\x03\x14\x05\x14\u012A\n\x14\x03\x15\x03\x15\x03\x15" +
+		"\x03\x15\x03\x15\x07\x15\u0131\n\x15\f\x15\x0E\x15\u0134\v\x15\x05\x15" +
+		"\u0136\n\x15\x03\x15\x03\x15\x03\x15\x05\x15\u013B\n\x15\x03\x15\x03\x15" +
+		"\x03\x15\x03\x15\x03\x15\x03\x15\x05\x15\u0143\n\x15\x03\x15\x03\x15\x03" +
+		"\x15\x03\x15\x03\x15\x03\x15\x07\x15\u014B\n\x15\f\x15\x0E\x15\u014E\v" +
+		"\x15\x05\x15\u0150\n\x15\x03\x15\x03\x15\x03\x15\x05\x15\u0155\n\x15\x05" +
+		"\x15\u0157\n\x15\x03\x16\x03\x16\x03\x17\x03\x17\x03\x18\x03\x18\x03\x19" +
+		"\x03\x19\x03\x19\x03\x19\x03\x19\x03\x19\x03\x19\x03\x19\x03\x19\x03\x19" +
+		"\x03\x19\x03\x19\x03\x19\x03\x19\x03\x19\x03\x19\x03\x19\x05\x19\u0170" +
+		"\n\x19\x03\x1A\x03\x1A\x03\x1B\x03\x1B\x03\x1B\x03\x1B\x03\x1B\x03\x1C" +
+		"\x03\x1C\x07\x1C\u017B\n\x1C\f\x1C\x0E\x1C\u017E\v\x1C\x03\x1C\x03\x1C" +
+		"\x03\x1D\x03\x1D\x03\x1D\x03\x1E\x03\x1E\x03\x1E\x03\x1F\x03\x1F\x03\x1F" +
+		"\x03\x1F\x03\x1F\x03\x1F\x03\x1F\x03\x1F\x03 \x03 \x03 \x03 \x03 \x07" +
+		" \u0195\n \f \x0E \u0198\v \x03 \x03 \x03 \x03 \x03 \x03 \x03 \x03 \x03" +
+		" \x03 \x03 \x07 \u01A5\n \f \x0E \u01A8\v \x03 \x03 \x03 \x03 \x05 \u01AE" +
+		"\n \x03 \x03 \x05 \u01B2\n \x03!\x03!\x03!\x05!\u01B7\n!\x03!\x03!\x05" +
+		"!\u01BB\n!\x03!\x03!\x05!\u01BF\n!\x03!\x03!\x03!\x03\"\x03\"\x05\"\u01C6" +
+		"\n\"\x03#\x03#\x03#\x05#\u01CB\n#\x03#\x03#\x03#\x03#\x05#\u01D1\n#\x05" +
+		"#\u01D3\n#\x03$\x03$\x03$\x03$\x05$\u01D9\n$\x03%\x03%\x03%\x03&\x03&" +
+		"\x03&\x03&\x03&\x03&\x03&\x05&\u01E5\n&\x03\'\x03\'\x05\'\u01E9\n\'\x03" +
+		"\'\x03\'\x03(\x03(\x03(\x03(\x03(\x03(\x07(\u01F3\n(\f(\x0E(\u01F6\v(" +
+		"\x03(\x03(\x03(\x06(\u01FB\n(\r(\x0E(\u01FC\x03(\x03(\x03)\x03)\x03)\x03" +
+		")\x06)\u0205\n)\r)\x0E)\u0206\x03*\x03*\x03*\x03*\x03*\x03*\x03*\x03*" +
+		"\x03+\x03+\x03+\x03+\x03+\x03+\x03+\x03+\x03,\x03,\x03,\x03,\x03,\x03" +
+		",\x03,\x03,\x03-\x03-\x03-\x03-\x03-\x03-\x03.\x03.\x03.\x05.\u022A\n" +
+		".\x03.\x03.\x03.\x03.\x03.\x07.\u0231\n.\f.\x0E.\u0234\v.\x05.\u0236\n" +
+		".\x03.\x03.\x03.\x03/\x03/\x03/\x03/\x03/\x03/\x03/\x05/\u0242\n/\x03" +
+		"/\x03/\x030\x030\x030\x030\x030\x030\x030\x030\x030\x030\x030\x030\x03" +
+		"1\x031\x031\x032\x032\x032\x072\u0258\n2\f2\x0E2\u025B\v2\x033\x033\x03" +
+		"3\x073\u0260\n3\f3\x0E3\u0263\v3\x033\x033\x033\x033\x033\x033\x053\u026B" +
+		"\n3\x073\u026D\n3\f3\x0E3\u0270\v3\x053\u0272\n3\x034\x034\x034\x074\u0277" +
+		"\n4\f4\x0E4\u027A\v4\x035\x035\x035\x055\u027F\n5\x036\x036\x036\x076" +
+		"\u0284\n6\f6\x0E6\u0287\v6\x037\x037\x037\x077\u028C\n7\f7\x0E7\u028F" +
+		"\v7\x038\x038\x038\x038\x078\u0295\n8\f8\x0E8\u0298\v8\x039\x039\x039" +
+		"\x03:\x03:\x03:\x03:\x05:\u02A1\n:\x03:\x03:\x03;\x03;\x05;\u02A7\n;\x03" +
+		";\x03;\x03<\x03<\x03<\x03<\x03<\x03<\x03<\x03<\x03<\x03<\x03<\x03<\x03" +
+		"<\x03<\x05<\u02B9\n<\x03=\x03=\x03=\x03>\x03>\x03>\x03>\x03?\x03?\x03" +
+		"?\x03?\x03?\x03?\x05?\u02C8\n?\x03@\x03@\x03@\x03@\x05@\u02CE\n@\x03A" +
+		"\x03A\x03A\x03A\x03A\x06A\u02D5\nA\rA\x0EA\u02D6\x03A\x03A\x03B\x03B\x03" +
+		"B\x03B\x05B\u02DF\nB\x03C\x03C\x03C\x03C\x03D\x03D\x03D\x05D\u02E8\nD" +
+		"\x03D\x03D\x03D\x07D\u02ED\nD\fD\x0ED\u02F0\vD\x03D\x05D\u02F3\nD\x03" +
+		"D\x05D\u02F6\nD\x03D\x03D\x03E\x03E\x03E\x03E\x03F\x03F\x03F\x03F\x03" +
+		"F\x03F\x03F\x03F\x03F\x03F\x03F\x03F\x03F\x03F\x03F\x03F\x03F\x03F\x03" +
+		"F\x03F\x03F\x03F\x03F\x03F\x03F\x03F\x03F\x03F\x03F\x03F\x03F\x03F\x03" +
+		"F\x03F\x03F\x03F\x03F\x03F\x03F\x03F\x03F\x03F\x03F\x03F\x03F\x03F\x03" +
+		"F\x03F\x03F\x03F\x03F\x03F\x03F\x03F\x03F\x03F\x03F\x03F\x03F\x03F\x03" +
+		"F\x03F\x03F\x03F\x03F\x03F\x05F\u0340\nF\x03G\x03G\x03H\x03H\x03I\x03" +
+		"I\x03J\x03J\x03K\x03K\x03K\x02\x02\x02L\x02\x02\x04\x02\x06\x02\b\x02" +
+		"\n\x02\f\x02\x0E\x02\x10\x02\x12\x02\x14\x02\x16\x02\x18\x02\x1A\x02\x1C" +
+		"\x02\x1E\x02 \x02\"\x02$\x02&\x02(\x02*\x02,\x02.\x020\x022\x024\x026" +
+		"\x028\x02:\x02<\x02>\x02@\x02B\x02D\x02F\x02H\x02J\x02L\x02N\x02P\x02" +
+		"R\x02T\x02V\x02X\x02Z\x02\\\x02^\x02`\x02b\x02d\x02f\x02h\x02j\x02l\x02" +
+		"n\x02p\x02r\x02t\x02v\x02x\x02z\x02|\x02~\x02\x80\x02\x82\x02\x84\x02" +
+		"\x86\x02\x88\x02\x8A\x02\x8C\x02\x8E\x02\x90\x02\x92\x02\x94\x02\x02\v" +
+		"\x04\x02HQUU\x03\x0278\x04\x021133\x04\x024466\x03\x029>\x04\x0222?A\x05" +
+		"\x0255BEVV\x05\x02\x0E\x0E?@FG\x03\x02\\^\x02\u0398\x02\x96\x03\x02\x02" +
+		"\x02\x04\x9A\x03\x02\x02\x02\x06\xA0\x03\x02\x02\x02\b\xA5\x03\x02\x02" +
+		"\x02\n\xA7\x03\x02\x02\x02\f\xAD\x03\x02\x02\x02\x0E\xB0\x03\x02\x02\x02" +
+		"\x10\xC0\x03\x02\x02\x02\x12\xC5\x03\x02\x02\x02\x14\xC9\x03\x02\x02\x02" +
+		"\x16\xCD\x03\x02\x02\x02\x18\xD1\x03\x02\x02\x02\x1A\xE1\x03\x02\x02\x02" +
+		"\x1C\xF5\x03\x02\x02\x02\x1E\xF7\x03\x02\x02\x02 \xFE\x03\x02\x02\x02" +
+		"\"\u0102\x03\x02\x02\x02$\u0106\x03\x02\x02\x02&\u010A\x03\x02\x02\x02" +
+		"(\u0156\x03\x02\x02\x02*\u0158\x03\x02\x02\x02,\u015A\x03\x02\x02\x02" +
+		".\u015C\x03\x02\x02\x020\u016F\x03\x02\x02\x022\u0171\x03\x02\x02\x02" +
+		"4\u0173\x03\x02\x02\x026\u0178\x03\x02\x02\x028\u0181\x03\x02\x02\x02" +
+		":\u0184\x03\x02\x02\x02<\u0187\x03\x02\x02\x02>\u01B1\x03\x02\x02\x02" +
+		"@\u01B3\x03\x02\x02\x02B\u01C5\x03\x02\x02\x02D\u01C7\x03\x02\x02\x02" +
+		"F\u01D8\x03\x02\x02\x02H\u01DA\x03\x02\x02\x02J\u01DD\x03\x02\x02\x02" +
+		"L\u01E6\x03\x02\x02\x02N\u01EC\x03\x02\x02\x02P\u0200\x03\x02\x02\x02" +
+		"R\u0208\x03\x02\x02\x02T\u0210\x03\x02\x02\x02V\u0218\x03\x02\x02\x02" +
+		"X\u0220\x03\x02\x02\x02Z\u0229\x03\x02\x02\x02\\\u023A\x03\x02\x02\x02" +
+		"^\u0245\x03\x02\x02\x02`\u0251\x03\x02\x02\x02b\u0254\x03\x02\x02\x02" +
+		"d\u0271\x03\x02\x02\x02f\u0273\x03\x02\x02\x02h\u027B\x03\x02\x02\x02" +
+		"j\u0280\x03\x02\x02\x02l\u0288\x03\x02\x02\x02n\u0290\x03\x02\x02\x02" +
+		"p\u0299\x03\x02\x02\x02r\u029C\x03\x02\x02\x02t\u02A4\x03\x02\x02\x02" +
+		"v\u02B8\x03\x02\x02\x02x\u02BA\x03\x02\x02\x02z\u02BD\x03\x02\x02\x02" +
+		"|\u02C7\x03\x02\x02\x02~\u02C9\x03\x02\x02\x02\x80\u02CF\x03\x02\x02\x02" +
+		"\x82\u02DA\x03\x02\x02\x02\x84\u02E0\x03\x02\x02\x02\x86\u02E4\x03\x02" +
+		"\x02\x02\x88\u02F9\x03\x02\x02\x02\x8A\u033F\x03\x02\x02\x02\x8C\u0341" +
+		"\x03\x02\x02\x02\x8E\u0343\x03\x02\x02\x02\x90\u0345\x03\x02\x02\x02\x92" +
+		"\u0347\x03\x02\x02\x02\x94\u0349\x03\x02\x02\x02\x96\x97\x05\x04\x03\x02" +
+		"\x97\x98\x07\x02\x02\x03\x98\x03\x03\x02\x02\x02\x99\x9B\x05\x06\x04\x02" +
+		"\x9A\x99\x03\x02\x02\x02\x9B\x9C\x03\x02\x02\x02\x9C\x9A\x03\x02\x02\x02" +
+		"\x9C\x9D\x03\x02\x02\x02\x9D\x05\x03\x02\x02\x02\x9E\xA1\x05\b\x05\x02" +
+		"\x9F\xA1\x050\x19\x02\xA0\x9E\x03\x02\x02\x02\xA0\x9F\x03\x02\x02\x02" +
+		"\xA1\x07\x03\x02\x02\x02\xA2\xA6\x05\n\x06\x02\xA3\xA6\x05\f\x07\x02\xA4" +
+		"\xA6\x05\x0E\b\x02\xA5\xA2\x03\x02\x02\x02\xA5\xA3\x03\x02\x02\x02\xA5" +
+		"\xA4\x03\x02\x02\x02\xA6\t\x03\x02\x02\x02\xA7\xA8\x07\x0F\x02\x02\xA8" +
+		"\xA9\x05\x8AF\x02\xA9\xAA\x07U\x02\x02\xAA\xAB\x05\x10\t\x02\xAB\xAC\b" +
+		"\x06\x01\x02\xAC\v\x03\x02\x02\x02\xAD\xAE\x07\x17\x02\x02\xAE\xAF\x05" +
+		"\x0E\b\x02\xAF\r\x03\x02\x02\x02\xB0\xB1\x05D#\x02\xB1\xB2\b\b\x01\x02" +
+		"\xB2\x0F\x03\x02\x02\x02\xB3\xC1\x05\x16\f\x02\xB4\xC1\x05\x1E\x10\x02" +
+		"\xB5\xC1\x05\x18\r\x02\xB6\xC1\x05&\x14\x02\xB7\xC1\x05(\x15\x02\xB8\xC1" +
+		"\x05*\x16\x02\xB9\xC1\x05,\x17\x02\xBA\xC1\x05.\x18\x02\xBB\xC1\x05 \x11" +
+		"\x02\xBC\xC1\x05\"\x12\x02\xBD\xC1\x05$\x13\x02\xBE\xC1\x05\x1A\x0E\x02" +
+		"\xBF\xC1\x05\x8AF\x02\xC0\xB3\x03\x02\x02\x02\xC0\xB4\x03\x02\x02\x02" +
+		"\xC0\xB5\x03\x02\x02\x02\xC0\xB6\x03\x02\x02\x02\xC0\xB7\x03\x02\x02\x02" +
+		"\xC0\xB8\x03\x02\x02\x02\xC0\xB9\x03\x02\x02\x02\xC0\xBA\x03\x02\x02\x02" +
+		"\xC0\xBB\x03\x02\x02\x02\xC0\xBC\x03\x02\x02\x02\xC0\xBD\x03\x02\x02\x02" +
+		"\xC0\xBE\x03\x02\x02\x02\xC0\xBF\x03\x02\x02\x02\xC1\x11\x03\x02\x02\x02" +
+		"\xC2\xC3\x05\x8AF\x02\xC3\xC4\x07&\x02\x02\xC4\xC6\x03\x02\x02\x02\xC5" +
+		"\xC2\x03\x02\x02\x02\xC5\xC6\x03\x02\x02\x02\xC6\xC7\x03\x02\x02\x02\xC7" +
+		"\xC8\x05\x10\t\x02\xC8\x13\x03\x02\x02\x02\xC9\xCA\x05\x8AF\x02\xCA\xCB" +
+		"\x07U\x02\x02\xCB\xCC\x05b2\x02\xCC\x15\x03\x02\x02\x02\xCD\xCE\x07\x16" +
+		"\x02\x02\xCE\xCF\x07\x03\x02\x02\xCF\xD0\x05\x12\n\x02\xD0\x17\x03\x02" +
+		"\x02\x02\xD1\xDD\x07)\x02\x02\xD2\xD7\x05\x1C\x0F\x02\xD3\xD4\x07\'\x02" +
+		"\x02\xD4\xD6\x05\x1C\x0F\x02\xD5\xD3\x03\x02\x02\x02\xD6\xD9\x03\x02\x02" +
+		"\x02\xD7\xD5\x03\x02\x02\x02\xD7\xD8\x03\x02\x02\x02\xD8\xDB\x03\x02\x02" +
+		"\x02\xD9\xD7\x03\x02\x02\x02\xDA\xDC\x07\'\x02\x02\xDB\xDA\x03\x02\x02" +
+		"\x02\xDB\xDC\x03\x02\x02\x02\xDC\xDE\x03\x02\x02\x02\xDD\xD2\x03\x02\x02" +
+		"\x02\xDD\xDE\x03\x02\x02\x02\xDE\xDF\x03\x02\x02\x02\xDF\xE0\x07*\x02" +
+		"\x02\xE0\x19\x03\x02\x02\x02\xE1\xE2\x07$\x02\x02\xE2\xEE\x07)\x02\x02" +
+		"\xE3\xE8\x05\x14\v\x02\xE4\xE5\x07\'\x02\x02\xE5\xE7\x05\x14\v\x02\xE6" +
+		"\xE4\x03\x02\x02\x02\xE7\xEA\x03\x02\x02\x02\xE8\xE6\x03\x02\x02\x02\xE8" +
+		"\xE9\x03\x02\x02\x02\xE9\xEC\x03\x02\x02\x02\xEA\xE8\x03\x02\x02\x02\xEB" +
+		"\xED\x07\'\x02\x02\xEC\xEB\x03\x02\x02\x02\xEC\xED\x03\x02\x02\x02\xED" +
+		"\xEF\x03\x02\x02\x02\xEE\xE3\x03\x02\x02\x02\xEE\xEF\x03\x02\x02\x02\xEF" +
+		"\xF0\x03\x02\x02\x02\xF0\xF1\x07*\x02\x02\xF1\x1B\x03\x02\x02\x02\xF2" +
+		"\xF6\x05\n\x06\x02\xF3\xF6\x05\f\x07\x02\xF4\xF6\x05\x12\n\x02\xF5\xF2" +
+		"\x03\x02\x02\x02\xF5\xF3\x03\x02\x02\x02\xF5\xF4\x03\x02\x02\x02\xF6\x1D" +
+		"\x03\x02\x02\x02\xF7\xF8\x07\x06\x02\x02\xF8\xF9\x07-\x02\x02\xF9\xFA" +
+		"\x05\x12\n\x02\xFA\xFB\x07.\x02\x02\xFB\xFC\x07\x03\x02\x02\xFC\xFD\x05" +
+		"\x12\n\x02\xFD\x1F\x03\x02\x02\x02\xFE\xFF\x07\x07\x02\x02\xFF\u0100\x07" +
+		"\x03\x02\x02\u0100\u0101\x05\x12\n\x02\u0101!\x03\x02\x02\x02\u0102\u0103" +
+		"\x07\b\x02\x02\u0103\u0104\x07\x03\x02\x02\u0104\u0105\x05\x12\n\x02\u0105" +
+		"#\x03\x02\x02\x02\u0106\u0107\x07\t\x02\x02\u0107\u0108\x07\x03\x02\x02" +
+		"\u0108\u0109\x05\x12\n\x02\u0109%\x03\x02\x02\x02\u010A\u010D\x07\x12" +
+		"\x02\x02\u010B\u010E\x07\t\x02\x02\u010C\u010E\x05\x8AF\x02\u010D\u010B" +
+		"\x03\x02\x02\x02\u010D\u010C\x03\x02\x02\x02\u010E\u0113\x03\x02\x02\x02" +
+		"\u010F\u0110\x07+\x02\x02\u0110\u0111\x05d3\x02\u0111\u0112\x07,\x02\x02" +
+		"\u0112\u0114\x03\x02\x02\x02\u0113\u010F\x03\x02\x02\x02\u0113\u0114\x03" +
+		"\x02\x02\x02\u0114\u011B\x03\x02\x02\x02\u0115\u0116\x07-\x02\x02\u0116" +
+		"\u0117\x05\x12\n\x02\u0117\u0118\x07.\x02\x02\u0118\u011A\x03\x02\x02" +
+		"\x02\u0119\u0115\x03\x02\x02\x02\u011A\u011D\x03\x02\x02\x02\u011B\u0119" +
+		"\x03\x02\x02\x02\u011B\u011C\x03\x02\x02\x02\u011C\u011E\x03\x02\x02\x02" +
+		"\u011D\u011B\x03\x02\x02\x02\u011E\u011F\x07\x03\x02\x02\u011F\u0122\x05" +
+		"\x12\n\x02\u0120\u0121\x07\x1A\x02\x02\u0121\u0123\x05\x12\n\x02\u0122" +
+		"\u0120\x03\x02\x02\x02\u0122\u0123\x03\x02\x02\x02\u0123\u0129\x03\x02" +
+		"\x02\x02\u0124\u0125\x07\x13\x02\x02\u0125\u0126\x07+\x02\x02\u0126\u0127" +
+		"\x05d3\x02\u0127\u0128\x07,\x02\x02\u0128\u012A\x03\x02\x02\x02\u0129" +
+		"\u0124\x03\x02\x02\x02\u0129\u012A\x03\x02\x02\x02\u012A\'\x03\x02\x02" +
+		"\x02\u012B\u012C\x07\x1D\x02\x02\u012C\u0135\x07+\x02\x02\u012D\u0132" +
+		"\x05\x84C\x02\u012E\u012F\x07\'\x02\x02\u012F\u0131\x05\x84C\x02\u0130" +
+		"\u012E\x03\x02\x02\x02\u0131\u0134\x03\x02\x02\x02\u0132\u0130\x03\x02" +
+		"\x02\x02\u0132\u0133\x03\x02\x02\x02\u0133\u0136\x03\x02\x02\x02\u0134" +
+		"\u0132\x03\x02\x02\x02\u0135\u012D\x03\x02\x02\x02\u0135\u0136\x03\x02" +
+		"\x02\x02\u0136\u0137\x03\x02\x02\x02\u0137\u013A\x07,\x02\x02\u0138\u0139" +
+		"\x07&\x02\x02\u0139\u013B\x05\x10\t\x02\u013A\u0138\x03\x02\x02\x02\u013A" +
+		"\u013B\x03\x02\x02\x02\u013B\u0157\x03\x02\x02\x02\u013C\u013D\x07\x1D" +
+		"\x02\x02\u013D\u014F\x07+\x02\x02\u013E\u0143\x05\x84C\x02\u013F\u0140" +
+		"\x05\x8AF\x02\u0140\u0141\b\x15\x01\x02\u0141\u0143\x03\x02\x02\x02\u0142" +
+		"\u013E\x03\x02\x02\x02\u0142\u013F\x03\x02\x02\x02\u0143\u014C\x03\x02" +
+		"\x02\x02\u0144\u0145\x07\'\x02\x02\u0145\u014B\x05\x84C\x02\u0146\u0147" +
+		"\x07\'\x02\x02\u0147\u0148\x05\x8AF\x02\u0148\u0149\b\x15\x01\x02\u0149" +
+		"\u014B\x03\x02\x02\x02\u014A\u0144\x03\x02\x02\x02\u014A\u0146\x03\x02" +
+		"\x02\x02\u014B\u014E\x03\x02\x02\x02\u014C\u014A\x03\x02\x02\x02\u014C" +
+		"\u014D\x03\x02\x02\x02\u014D\u0150\x03\x02\x02\x02\u014E\u014C\x03\x02" +
+		"\x02\x02\u014F\u0142\x03\x02\x02\x02\u014F\u0150\x03\x02\x02\x02\u0150" +
+		"\u0151\x03\x02\x02\x02\u0151\u0154\x07,\x02\x02\u0152\u0153\x07&\x02\x02" +
+		"\u0153\u0155\x05\x10\t\x02\u0154\u0152\x03\x02\x02\x02\u0154\u0155\x03" +
+		"\x02\x02\x02\u0155\u0157\x03\x02\x02\x02\u0156\u012B\x03\x02\x02\x02\u0156" +
+		"\u013C\x03\x02\x02\x02\u0157)\x03\x02\x02\x02\u0158\u0159\x07\x1E\x02" +
+		"\x02\u0159+\x03\x02\x02\x02\u015A\u015B\x07\x1F\x02\x02\u015B-\x03\x02" +
+		"\x02\x02\u015C\u015D\x07 \x02\x02\u015D/\x03\x02\x02\x02\u015E\u0170\x05" +
+		"6\x1C\x02\u015F\u0170\x054\x1B\x02\u0160\u0170\x058\x1D\x02\u0161\u0170" +
+		"\x05:\x1E\x02\u0162\u0170\x05`1\x02\u0163\u0170\x05<\x1F\x02\u0164\u0170" +
+		"\x05@!\x02\u0165\u0170\x05J&\x02\u0166\u0170\x05L\'\x02\u0167\u0170\x05" +
+		"N(\x02\u0168\u0170\x05R*\x02\u0169\u0170\x05T+\x02\u016A\u0170\x05V,\x02" +
+		"\u016B\u0170\x05X-\x02\u016C\u0170\x052\x1A\x02\u016D\u0170\x05> \x02" +
+		"\u016E\u0170\x05H%\x02\u016F\u015E\x03\x02\x02\x02\u016F\u015F\x03\x02" +
+		"\x02\x02\u016F\u0160\x03\x02\x02\x02\u016F\u0161\x03\x02\x02\x02\u016F" +
+		"\u0162\x03\x02\x02\x02\u016F\u0163\x03\x02\x02\x02\u016F\u0164\x03\x02" +
+		"\x02\x02\u016F\u0165\x03\x02\x02\x02\u016F\u0166\x03\x02\x02\x02\u016F" +
+		"\u0167\x03\x02\x02\x02\u016F\u0168\x03\x02\x02\x02\u016F\u0169\x03\x02" +
+		"\x02\x02\u016F\u016A\x03\x02\x02\x02\u016F\u016B\x03\x02\x02\x02\u016F" +
+		"\u016C\x03\x02\x02\x02\u016F\u016D\x03\x02\x02\x02\u016F\u016E\x03\x02" +
+		"\x02\x02\u01701\x03\x02\x02\x02\u0171\u0172\x07%\x02\x02\u01723\x03\x02" +
+		"\x02\x02\u0173\u0174\x05n8\x02\u0174\u0175\t\x02\x02\x02\u0175\u0176\x05" +
+		"b2\x02\u0176\u0177\b\x1B\x01\x02\u01775\x03\x02\x02\x02\u0178\u017C\x07" +
+		")\x02\x02\u0179\u017B\x05\x06\x04\x02\u017A\u0179\x03\x02\x02\x02\u017B" +
+		"\u017E\x03\x02\x02\x02\u017C\u017A\x03\x02\x02\x02\u017C\u017D\x03\x02" +
+		"\x02\x02\u017D\u017F\x03\x02\x02\x02\u017E\u017C\x03\x02\x02\x02\u017F" +
+		"\u0180\x07*\x02\x02\u01807\x03\x02\x02\x02\u0181\u0182\x07\x15\x02\x02" +
+		"\u0182\u0183\b\x1D\x01\x02\u01839\x03\x02\x02\x02\u0184\u0185\x07\x1C" +
+		"\x02\x02\u0185\u0186\b\x1E\x01\x02\u0186;\x03\x02\x02\x02\u0187\u0188" +
+		"\x07\x05\x02\x02\u0188\u0189\x050\x19\x02\u0189\u018A\x07\x14\x02\x02" +
+		"\u018A\u018B\x07+\x02\x02\u018B\u018C\x05b2\x02\u018C\u018D\x07,\x02\x02" +
+		"\u018D\u018E\b\x1F\x01\x02\u018E=\x03\x02\x02\x02\u018F\u0196\x05\x8A" +
+		"F\x02\u0190\u0191\x07-\x02\x02\u0191\u0192\x05b2\x02\u0192\u0193\x07." +
+		"\x02\x02\u0193\u0195\x03\x02\x02\x02\u0194\u0190\x03\x02\x02\x02\u0195" +
+		"\u0198\x03\x02\x02\x02\u0196\u0194\x03\x02\x02\x02\u0196\u0197\x03\x02" +
+		"\x02\x02\u0197\u0199\x03\x02\x02\x02\u0198\u0196\x03\x02\x02\x02\u0199" +
+		"\u019A\x07V\x02\x02\u019A\u019B\b \x01\x02\u019B\u019C\x07\x1A\x02\x02" +
+		"\u019C\u019D\x05b2\x02\u019D\u019E\b \x01\x02\u019E\u01B2\x03\x02\x02" +
+		"\x02\u019F\u01A6\x05\x8AF\x02\u01A0\u01A1\x07-\x02\x02\u01A1\u01A2\x05" +
+		"b2\x02\u01A2\u01A3\x07.\x02\x02\u01A3\u01A5\x03\x02\x02\x02\u01A4\u01A0" +
+		"\x03\x02\x02\x02\u01A5\u01A8\x03\x02\x02\x02\u01A6\u01A4\x03\x02\x02\x02" +
+		"\u01A6\u01A7\x03\x02\x02\x02\u01A7\u01A9\x03\x02\x02\x02\u01A8\u01A6\x03" +
+		"\x02\x02\x02\u01A9\u01AA\x07V\x02\x02\u01AA\u01AD\x05b2\x02\u01AB\u01AC" +
+		"\x07\x1A\x02\x02\u01AC\u01AE\x05b2\x02\u01AD\u01AB\x03\x02\x02\x02\u01AD" +
+		"\u01AE\x03\x02\x02\x02\u01AE\u01AF\x03\x02\x02\x02\u01AF\u01B0\b \x01" +
+		"\x02\u01B0\u01B2\x03\x02\x02\x02\u01B1\u018F\x03\x02\x02\x02\u01B1\u019F" +
+		"\x03\x02\x02\x02\u01B2?\x03\x02\x02\x02\u01B3\u01B4\x07\n\x02\x02\u01B4" +
+		"\u01B6\x07+\x02\x02\u01B5\u01B7\x05B\"\x02\u01B6\u01B5\x03\x02\x02\x02" +
+		"\u01B6\u01B7\x03\x02\x02\x02\u01B7\u01B8\x03\x02\x02\x02\u01B8\u01BA\x07" +
+		"%\x02\x02\u01B9\u01BB\x05b2\x02\u01BA\u01B9\x03\x02\x02\x02\u01BA\u01BB" +
+		"\x03\x02\x02\x02\u01BB\u01BC\x03\x02\x02\x02\u01BC\u01BE\x07%\x02\x02" +
+		"\u01BD\u01BF\x05B\"\x02\u01BE\u01BD\x03\x02\x02\x02\u01BE\u01BF\x03\x02" +
+		"\x02\x02\u01BF\u01C0\x03\x02\x02\x02\u01C0\u01C1\x07,\x02\x02\u01C1\u01C2" +
+		"\x05\x06\x04\x02\u01C2A\x03\x02\x02\x02\u01C3\u01C6\x05D#\x02\u01C4\u01C6" +
+		"\x05F$\x02\u01C5\u01C3\x03\x02\x02\x02\u01C5\u01C4\x03\x02\x02\x02\u01C6" +
+		"C\x03\x02\x02\x02\u01C7\u01C8\x05\x8AF\x02\u01C8\u01CA\x07&\x02\x02\u01C9" +
+		"\u01CB\x05\x10\t\x02\u01CA\u01C9\x03\x02\x02\x02\u01CA\u01CB\x03\x02\x02" +
+		"\x02\u01CB\u01D2\x03\x02\x02\x02\u01CC\u01D0\x07U\x02\x02\u01CD\u01CE" +
+		"\b#\x01\x02\u01CE\u01D1\x05&\x14\x02\u01CF\u01D1\x05b2\x02\u01D0\u01CD" +
+		"\x03\x02\x02\x02\u01D0\u01CF\x03\x02\x02\x02\u01D1\u01D3\x03\x02\x02\x02" +
+		"\u01D2\u01CC\x03\x02\x02\x02\u01D2\u01D3\x03\x02\x02\x02\u01D3E\x03\x02" +
+		"\x02\x02\u01D4\u01D5\x05b2\x02\u01D5\u01D6\t\x03\x02\x02\u01D6\u01D9\x03" +
+		"\x02\x02\x02\u01D7\u01D9\x05b2\x02\u01D8\u01D4\x03\x02\x02\x02\u01D8\u01D7" +
+		"\x03\x02\x02\x02\u01D9G\x03\x02\x02\x02\u01DA\u01DB\x05F$\x02\u01DB\u01DC" +
+		"\b%\x01\x02\u01DCI\x03\x02\x02\x02\u01DD\u01DE\x07\x04\x02\x02\u01DE\u01DF" +
+		"\x07+\x02\x02\u01DF\u01E0\x05b2\x02\u01E0\u01E1\x07,\x02\x02\u01E1\u01E4" +
+		"\x05\x06\x04\x02\u01E2\u01E3\x07\x10\x02\x02\u01E3\u01E5\x05\x06\x04\x02" +
+		"\u01E4\u01E2\x03\x02\x02\x02\u01E4\u01E5\x03\x02\x02\x02\u01E5K\x03\x02" +
+		"\x02\x02\u01E6\u01E8\x07\x19\x02\x02\u01E7\u01E9\x05b2\x02\u01E8\u01E7" +
+		"\x03\x02\x02\x02\u01E8\u01E9\x03\x02\x02\x02\u01E9\u01EA\x03\x02\x02\x02" +
+		"\u01EA\u01EB\b\'\x01\x02\u01EBM\x03\x02\x02\x02\u01EC\u01ED\x07\x18\x02" +
+		"\x02\u01ED\u01EE\x07+\x02\x02\u01EE\u01EF\x05b2\x02\u01EF\u01F0\x07,\x02" +
+		"\x02\u01F0\u01F4\x07)\x02\x02\u01F1\u01F3\x05P)\x02\u01F2\u01F1\x03\x02" +
+		"\x02\x02\u01F3\u01F6\x03\x02\x02\x02\u01F4\u01F2\x03\x02\x02\x02\u01F4" +
+		"\u01F5\x03\x02\x02\x02\u01F5\u01F7\x03\x02\x02\x02\u01F6\u01F4\x03\x02" +
+		"\x02\x02\u01F7\u01F8\x07\x1B\x02\x02\u01F8\u01FA\x07&\x02\x02\u01F9\u01FB" +
+		"\x050";
 	private static readonly _serializedATNSegment1: string =
-		"\x07\x18\x02\x02\u01F6\u01F7\x07+\x02\x02\u01F7\u01F8\x05b2\x02\u01F8" +
-		"\u01F9\x07,\x02\x02\u01F9\u01FD\x07)\x02\x02\u01FA\u01FC\x05P)\x02\u01FB" +
-		"\u01FA\x03\x02\x02\x02\u01FC\u01FF\x03\x02\x02\x02\u01FD\u01FB\x03\x02" +
-		"\x02\x02\u01FD\u01FE\x03\x02\x02\x02\u01FE\u0200\x03\x02\x02\x02\u01FF" +
-		"\u01FD\x03\x02\x02\x02\u0200\u0201\x07\x1B\x02\x02\u0201\u0203\x07&\x02" +
-		"\x02\u0202\u0204\x050\x19\x02\u0203\u0202\x03\x02\x02\x02\u0204\u0205" +
-		"\x03\x02\x02\x02\u0205\u0203\x03\x02\x02\x02\u0205\u0206\x03\x02\x02\x02" +
-		"\u0206\u0207\x03\x02\x02\x02\u0207\u0208\x07*\x02\x02\u0208O\x03\x02\x02" +
-		"\x02\u0209\u020A\x07\x11\x02\x02\u020A\u020B\x05d3\x02\u020B\u020D\x07" +
-		"&\x02\x02\u020C\u020E\x050\x19\x02\u020D\u020C\x03\x02\x02\x02\u020E\u020F" +
-		"\x03\x02\x02\x02\u020F\u020D\x03\x02\x02\x02\u020F\u0210\x03\x02\x02\x02" +
-		"\u0210Q\x03\x02\x02\x02\u0211\u0212\x07\v\x02\x02\u0212\u0213\x07+\x02" +
-		"\x02\u0213\u0214\x05\x88E\x02\u0214\u0215\x07&\x02\x02\u0215\u0216\x05" +
-		"\x10\t\x02\u0216\u0217\x07%\x02\x02\u0217\u0218\x05b2\x02\u0218\u0219" +
-		"\x07,\x02\x02\u0219\u021A\x05\x06\x04\x02\u021AS\x03\x02\x02\x02\u021B" +
-		"\u021C\x07\r\x02\x02\u021C\u021D\x07+\x02\x02\u021D\u021E\x05\x88E\x02" +
-		"\u021E\u021F\x07&\x02\x02\u021F\u0220\x05\x10\t\x02\u0220\u0221\x07%\x02" +
-		"\x02\u0221\u0222\x05b2\x02\u0222\u0223\x07,\x02\x02\u0223\u0224\x05\x06" +
-		"\x04\x02\u0224U\x03\x02\x02\x02\u0225\u0226\x07\f\x02\x02\u0226\u0227" +
-		"\x07+\x02\x02\u0227\u0228\x05\x88E\x02\u0228\u0229\x07&\x02\x02\u0229" +
-		"\u022A\x05\x10\t\x02\u022A\u022B\x07%\x02\x02\u022B\u022C\x05b2\x02\u022C" +
-		"\u022D\x07,\x02\x02\u022D\u022E\x05\x06\x04\x02\u022EW\x03\x02\x02\x02" +
-		"\u022F\u0230\x07\x14\x02\x02\u0230\u0231\x07+\x02\x02\u0231\u0232\x05" +
-		"b2\x02\u0232\u0233\x07,\x02\x02\u0233\u0234\x05\x06\x04\x02\u0234Y\x03" +
-		"\x02\x02\x02\u0235\u0239\x07!\x02\x02\u0236\u0239\x07\"\x02\x02\u0237" +
-		"\u0239\b.\x01\x02\u0238\u0235\x03\x02\x02\x02\u0238\u0236\x03\x02\x02" +
-		"\x02\u0238\u0237\x03\x02\x02\x02\u0239\u0247\x03\x02\x02\x02\u023A\u0248" +
-		"\x07R\x02\x02\u023B\u023C\x05\x88E\x02\u023C\u023D\x07&\x02\x02\u023D" +
-		"\u023E\x05\x88E\x02\u023E\u0248\x03\x02\x02\x02\u023F\u0244\x05\x88E\x02" +
-		"\u0240\u0241\x07\'\x02\x02\u0241\u0243\x05\x88E\x02\u0242\u0240\x03\x02" +
-		"\x02\x02\u0243\u0246\x03\x02\x02\x02\u0244\u0242\x03\x02\x02\x02\u0244" +
-		"\u0245\x03\x02\x02\x02\u0245\u0248\x03\x02\x02\x02\u0246\u0244\x03\x02" +
-		"\x02\x02\u0247\u023A\x03\x02\x02\x02\u0247\u023B\x03\x02\x02\x02\u0247" +
-		"\u023F\x03\x02\x02\x02\u0248\u0249\x03\x02\x02\x02\u0249\u024A\x07W\x02" +
-		"\x02\u024A\u024B\x05\x06\x04\x02\u024B[\x03\x02\x02\x02\u024C\u024D\x07" +
-		"+\x02\x02\u024D\u024E\x05\x88E\x02\u024E\u024F\x07&\x02\x02\u024F\u0250" +
-		"\x05\x88E\x02\u0250\u0253\x07,\x02\x02\u0251\u0252\x07&\x02\x02\u0252" +
-		"\u0254\x05\x10\t\x02\u0253\u0251\x03\x02\x02\x02\u0253\u0254\x03\x02\x02" +
-		"\x02\u0254\u0255\x03\x02\x02\x02\u0255\u0256\x05\x06\x04\x02\u0256]\x03" +
-		"\x02\x02\x02\u0257\u0258\x07+\x02\x02\u0258\u0259\x05\x88E\x02\u0259\u025A" +
-		"\x07\'\x02\x02\u025A\u025B\x05\x88E\x02\u025B\u025C\x07&\x02\x02\u025C" +
-		"\u025D\x05\x88E\x02\u025D\u025E\x07,\x02\x02\u025E\u025F\x07&\x02\x02" +
-		"\u025F\u0260\x05\x10\t\x02\u0260\u0261\x03\x02\x02\x02\u0261\u0262\x05" +
-		"\x06\x04\x02\u0262_\x03\x02\x02\x02\u0263\u0264\x07#\x02\x02\u0264\u0265" +
-		"\b1\x01\x02\u0265a\x03\x02\x02\x02\u0266\u026B\x05f4\x02\u0267\u0268\t" +
-		"\x04\x02\x02\u0268\u026A\x05f4\x02\u0269\u0267\x03\x02\x02\x02\u026A\u026D" +
-		"\x03\x02\x02\x02\u026B\u0269\x03\x02\x02\x02\u026B\u026C\x03\x02\x02\x02" +
-		"\u026Cc\x03\x02\x02\x02\u026D\u026B\x03\x02\x02\x02\u026E\u0273\x05b2" +
-		"\x02\u026F\u0270\x07\'\x02\x02\u0270\u0272\x05b2\x02\u0271\u026F\x03\x02" +
-		"\x02\x02\u0272\u0275\x03\x02\x02\x02\u0273\u0271\x03\x02\x02\x02\u0273" +
-		"\u0274\x03\x02\x02\x02\u0274\u0284\x03\x02\x02\x02\u0275\u0273\x03\x02" +
-		"\x02\x02\u0276\u0280\x05b2\x02\u0277\u0278\b3\x01\x02\u0278\u027F\x05" +
-		"b2\x02\u0279\u027C\x07\'\x02\x02\u027A\u027D\x05b2\x02\u027B\u027D\b3" +
-		"\x01\x02\u027C\u027A\x03\x02\x02\x02\u027C\u027B\x03\x02\x02\x02\u027D" +
-		"\u027F\x03\x02\x02\x02\u027E\u0277\x03\x02\x02\x02\u027E\u0279\x03\x02" +
-		"\x02\x02\u027F\u0282\x03\x02\x02\x02\u0280\u027E\x03\x02\x02\x02\u0280" +
-		"\u0281\x03\x02\x02\x02\u0281\u0284\x03\x02\x02\x02\u0282\u0280\x03\x02" +
-		"\x02\x02\u0283\u026E\x03\x02\x02\x02\u0283\u0276\x03\x02\x02\x02\u0284" +
-		"e\x03\x02\x02\x02\u0285\u028A\x05h5\x02\u0286\u0287\t\x05\x02\x02\u0287" +
-		"\u0289\x05h5\x02\u0288\u0286\x03\x02\x02\x02\u0289\u028C\x03\x02\x02\x02" +
-		"\u028A\u0288\x03\x02\x02\x02\u028A\u028B\x03\x02\x02\x02\u028Bg\x03\x02" +
-		"\x02\x02\u028C\u028A\x03\x02\x02\x02\u028D\u0290\x05j6\x02\u028E\u028F" +
-		"\t\x06\x02\x02\u028F\u0291\x05j6\x02\u0290\u028E\x03\x02\x02\x02\u0290" +
-		"\u0291\x03\x02\x02\x02\u0291i\x03\x02\x02\x02\u0292\u0297\x05l7\x02\u0293" +
-		"\u0294\t\x07\x02\x02\u0294\u0296\x05l7\x02\u0295\u0293\x03\x02\x02\x02" +
-		"\u0296\u0299\x03\x02\x02\x02\u0297\u0295\x03\x02\x02\x02\u0297\u0298\x03" +
-		"\x02\x02\x02\u0298k\x03\x02\x02\x02\u0299\u0297\x03\x02\x02\x02\u029A" +
-		"\u029F\x05n8\x02\u029B\u029C\t\b\x02\x02\u029C\u029E\x05n8\x02\u029D\u029B" +
-		"\x03\x02\x02\x02\u029E\u02A1\x03\x02\x02\x02\u029F\u029D\x03\x02\x02\x02" +
-		"\u029F\u02A0\x03\x02\x02\x02\u02A0m\x03\x02\x02\x02\u02A1\u029F\x03\x02" +
-		"\x02\x02\u02A2\u02A8\x05v<\x02\u02A3\u02A7\x05p9\x02\u02A4\u02A7\x05r" +
-		":\x02\u02A5\u02A7\x05t;\x02\u02A6\u02A3\x03\x02\x02\x02\u02A6\u02A4\x03" +
-		"\x02\x02\x02\u02A6\u02A5\x03\x02\x02\x02\u02A7\u02AA\x03\x02\x02\x02\u02A8" +
-		"\u02A6\x03\x02\x02\x02\u02A8\u02A9\x03\x02\x02\x02\u02A9o\x03\x02\x02" +
-		"\x02\u02AA\u02A8\x03\x02\x02\x02\u02AB\u02AC\x07(\x02\x02\u02AC\u02AD" +
-		"\x05\x88E\x02\u02ADq\x03\x02\x02\x02\u02AE\u02AF\x07-\x02\x02\u02AF\u02B2" +
-		"\x05b2\x02\u02B0\u02B1\x07&\x02\x02\u02B1\u02B3\x05b2\x02\u02B2\u02B0" +
-		"\x03\x02\x02\x02\u02B2\u02B3\x03\x02\x02\x02\u02B3\u02B4\x03\x02\x02\x02" +
-		"\u02B4\u02B5\x07.\x02\x02\u02B5s\x03\x02\x02\x02\u02B6\u02B8\x07+\x02" +
-		"\x02\u02B7\u02B9\x05d3\x02\u02B8\u02B7\x03\x02\x02\x02\u02B8\u02B9\x03" +
-		"\x02\x02\x02\u02B9\u02BA\x03\x02\x02\x02\u02BA\u02BB\x07,\x02\x02\u02BB" +
-		"u\x03\x02\x02\x02\u02BC\u02CB\x05\x90I\x02\u02BD\u02CB\x05\x8EH\x02\u02BE" +
-		"\u02CB\x05\x92J\x02\u02BF\u02CB\x05\x8AF\x02\u02C0\u02CB\x05\x8CG\x02" +
-		"\u02C1\u02CB\x05\x84C\x02\u02C2\u02CB\x05|?\x02\u02C3\u02CB\x05~@\x02" +
-		"\u02C4\u02CB\x05\x80A\x02\u02C5\u02CB\x05\x82B\x02\u02C6\u02CB\x05x=\x02" +
-		"\u02C7\u02CB\x07T\x02\x02\u02C8\u02CB\x05z>\x02\u02C9\u02CB\x05\x88E\x02" +
-		"\u02CA\u02BC\x03\x02\x02\x02\u02CA\u02BD\x03\x02\x02\x02\u02CA\u02BE\x03" +
-		"\x02\x02\x02\u02CA\u02BF\x03\x02\x02\x02\u02CA\u02C0\x03\x02\x02\x02\u02CA" +
-		"\u02C1\x03\x02\x02\x02\u02CA\u02C2\x03\x02\x02\x02\u02CA\u02C3\x03\x02" +
-		"\x02\x02\u02CA\u02C4\x03\x02\x02\x02\u02CA\u02C5\x03\x02\x02\x02\u02CA" +
-		"\u02C6\x03\x02\x02\x02\u02CA\u02C7\x03\x02\x02\x02\u02CA\u02C8\x03\x02" +
-		"\x02\x02\u02CA\u02C9\x03\x02\x02\x02\u02CBw\x03\x02\x02\x02\u02CC\u02CD" +
-		"\t\t\x02\x02\u02CD\u02CE\x05n8\x02\u02CEy\x03\x02\x02\x02\u02CF\u02D0" +
-		"\x07+\x02\x02\u02D0\u02D1\x05b2\x02\u02D1\u02D2\x07,\x02\x02\u02D2{\x03" +
-		"\x02\x02\x02\u02D3\u02D4\x05(\x15\x02\u02D4\u02D5\x056\x1C\x02\u02D5\u02DA" +
-		"\x03\x02\x02\x02\u02D6\u02D7\x05\x88E\x02\u02D7\u02D8\x056\x1C\x02\u02D8" +
-		"\u02DA\x03\x02\x02\x02\u02D9\u02D3\x03\x02\x02\x02\u02D9\u02D6\x03\x02" +
-		"\x02\x02\u02DA}\x03\x02\x02\x02\u02DB\u02DF\x05*\x16\x02\u02DC\u02E0\x05" +
-		"^0\x02\u02DD\u02DE\b@\x01\x02\u02DE\u02E0\x05\x06\x04\x02\u02DF\u02DC" +
-		"\x03\x02\x02\x02\u02DF\u02DD\x03\x02\x02\x02\u02E0\x7F\x03\x02\x02\x02" +
-		"\u02E1\u02E2\x05,\x17\x02\u02E2\u02E6\x07)\x02\x02\u02E3\u02E7\x05Z.\x02" +
-		"\u02E4\u02E5\bA\x01\x02\u02E5\u02E7\x05\x06\x04\x02\u02E6\u02E3\x03\x02" +
-		"\x02\x02\u02E6\u02E4\x03\x02\x02\x02\u02E7\u02E8\x03\x02\x02\x02\u02E8" +
-		"\u02E6\x03\x02\x02\x02\u02E8\u02E9\x03\x02\x02\x02\u02E9\u02EA\x03\x02" +
-		"\x02\x02\u02EA\u02EB\x07*\x02\x02\u02EB\x81\x03\x02\x02\x02\u02EC\u02F0" +
-		"\x05.\x18\x02\u02ED\u02F1\x05\\/\x02\u02EE\u02EF\bB\x01\x02\u02EF\u02F1" +
-		"\x05\x06\x04\x02\u02F0\u02ED\x03\x02\x02\x02\u02F0\u02EE\x03\x02\x02\x02" +
-		"\u02F1\x83\x03\x02\x02\x02\u02F2\u0303\x07)\x02\x02\u02F3\u02F5\x05d3" +
-		"\x02\u02F4\u02F6\x07\'\x02\x02\u02F5\u02F4\x03\x02\x02\x02\u02F5\u02F6" +
-		"\x03\x02\x02\x02\u02F6\u0304\x03\x02\x02\x02\u02F7\u02FC\x05\x86D\x02" +
-		"\u02F8\u02F9\x07\'\x02\x02\u02F9\u02FB\x05\x86D\x02\u02FA\u02F8\x03\x02" +
-		"\x02\x02\u02FB\u02FE\x03\x02\x02\x02\u02FC\u02FA\x03\x02\x02\x02\u02FC" +
-		"\u02FD\x03\x02\x02\x02\u02FD\u0300\x03\x02\x02\x02\u02FE\u02FC\x03\x02" +
-		"\x02\x02\u02FF\u0301\x07\'\x02\x02\u0300\u02FF\x03\x02\x02\x02\u0300\u0301" +
-		"\x03\x02\x02\x02\u0301\u0304\x03\x02\x02\x02\u0302\u0304\x07&\x02\x02" +
-		"\u0303\u02F3\x03\x02\x02\x02\u0303\u02F7\x03\x02\x02\x02\u0303\u0302\x03" +
-		"\x02\x02\x02\u0303\u0304\x03\x02\x02\x02\u0304\u0305\x03\x02\x02\x02\u0305" +
-		"\u0306\x07*\x02\x02\u0306\x85\x03\x02\x02\x02\u0307\u0308\x05b2\x02\u0308" +
-		"\u0309\x07&\x02\x02\u0309\u030A\x05b2\x02\u030A\x87\x03\x02\x02\x02\u030B" +
-		"\u034E\x07`\x02\x02\u030C\u034E\x07\x13\x02\x02\u030D\u030E\x07\x03\x02" +
-		"\x02\u030E\u034E\bE\x01\x02\u030F\u0310\x07\x04\x02\x02\u0310\u034E\b" +
-		"E\x01\x02\u0311\u0312\x07\x05\x02\x02\u0312\u034E\bE\x01\x02\u0313\u0314" +
-		"\x07\x06\x02\x02\u0314\u034E\bE\x01\x02\u0315\u0316\x07\x07\x02\x02\u0316" +
-		"\u034E\bE\x01\x02\u0317\u0318\x07\b\x02\x02\u0318\u034E\bE\x01\x02\u0319" +
-		"\u031A\x07\t\x02\x02\u031A\u034E\bE\x01\x02\u031B\u031C\x07\n\x02\x02" +
-		"\u031C\u034E\bE\x01\x02\u031D\u031E\x07\v\x02\x02\u031E\u034E\bE\x01\x02" +
-		"\u031F\u0320\x07\f\x02\x02\u0320\u034E\bE\x01\x02\u0321\u0322\x07\r\x02" +
-		"\x02\u0322\u034E\bE\x01\x02\u0323\u0324\x07\x0E\x02\x02\u0324\u034E\b" +
-		"E\x01\x02\u0325\u0326\x07\x0F\x02\x02\u0326\u034E\bE\x01\x02\u0327\u0328" +
-		"\x07\x10\x02\x02\u0328\u034E\bE\x01\x02\u0329\u032A\x07\x11\x02\x02\u032A" +
-		"\u034E\bE\x01\x02\u032B\u032C\x07\x12\x02\x02\u032C\u034E\bE\x01\x02\u032D" +
-		"\u032E\x07\x14\x02\x02\u032E\u034E\bE\x01\x02\u032F\u0330\x07\x15\x02" +
-		"\x02\u0330\u034E\bE\x01\x02\u0331\u0332\x07\x16\x02\x02\u0332\u034E\b" +
-		"E\x01\x02\u0333\u0334\x07\x17\x02\x02\u0334\u034E\bE\x01\x02\u0335\u0336" +
-		"\x07\x18\x02\x02\u0336\u034E\bE\x01\x02\u0337\u0338\x07\x19\x02\x02\u0338" +
-		"\u034E\bE\x01\x02\u0339\u033A\x07\x1A\x02\x02\u033A\u034E\bE\x01\x02\u033B" +
-		"\u033C\x07\x1B\x02\x02\u033C\u034E\bE\x01\x02\u033D\u033E\x07\x1C\x02" +
-		"\x02\u033E\u034E\bE\x01\x02\u033F\u0340\x07\x1D\x02\x02\u0340\u034E\b" +
-		"E\x01\x02\u0341\u0342\x07\x1E\x02\x02\u0342\u034E\bE\x01\x02\u0343\u0344" +
-		"\x07\x1F\x02\x02\u0344\u034E\bE\x01\x02\u0345\u0346\x07 \x02\x02\u0346" +
-		"\u034E\bE\x01\x02\u0347\u0348\x07!\x02\x02\u0348\u034E\bE\x01\x02\u0349" +
-		"\u034A\x07\"\x02\x02\u034A\u034E\bE\x01\x02\u034B\u034C\x07#\x02\x02\u034C" +
-		"\u034E\bE\x01\x02\u034D\u030B\x03\x02\x02\x02\u034D\u030C\x03\x02\x02" +
-		"\x02\u034D\u030D\x03\x02\x02\x02\u034D\u030F\x03\x02\x02\x02\u034D\u0311" +
-		"\x03\x02\x02\x02\u034D\u0313\x03\x02\x02\x02\u034D\u0315\x03\x02\x02\x02" +
-		"\u034D\u0317\x03\x02\x02\x02\u034D\u0319\x03\x02\x02\x02\u034D\u031B\x03" +
-		"\x02\x02\x02\u034D\u031D\x03\x02\x02\x02\u034D\u031F\x03\x02\x02\x02\u034D" +
-		"\u0321\x03\x02\x02\x02\u034D\u0323\x03\x02\x02\x02\u034D\u0325\x03\x02" +
-		"\x02\x02\u034D\u0327\x03\x02\x02\x02\u034D\u0329\x03\x02\x02\x02\u034D" +
-		"\u032B\x03\x02\x02\x02\u034D\u032D\x03\x02\x02\x02\u034D\u032F\x03\x02" +
-		"\x02\x02\u034D\u0331\x03\x02\x02\x02\u034D\u0333\x03\x02\x02\x02\u034D" +
-		"\u0335\x03\x02\x02\x02\u034D\u0337\x03\x02\x02\x02\u034D\u0339\x03\x02" +
-		"\x02\x02\u034D\u033B\x03\x02\x02\x02\u034D\u033D\x03\x02\x02\x02\u034D" +
-		"\u033F\x03\x02\x02\x02\u034D\u0341\x03\x02\x02\x02\u034D\u0343\x03\x02" +
-		"\x02\x02\u034D\u0345\x03\x02\x02\x02\u034D\u0347\x03\x02\x02\x02\u034D" +
-		"\u0349\x03\x02\x02\x02\u034D\u034B\x03\x02\x02\x02\u034E\x89\x03\x02\x02" +
-		"\x02\u034F\u0350\x07Y\x02\x02\u0350\x8B\x03\x02\x02\x02\u0351\u0352\x07" +
-		"Z\x02\x02\u0352\x8D\x03\x02\x02\x02\u0353\u0354\x07[\x02\x02\u0354\x8F" +
-		"\x03\x02\x02\x02\u0355\u0356\t\n\x02\x02\u0356\x91\x03\x02\x02\x02\u0357" +
-		"\u0358\x07_\x02\x02\u0358\x93\x03\x02\x02\x02L\x9A\x9E\xA3\xBE\xC3\xD5" +
-		"\xD9\xDB\xE6\xEA\xEC\xF3\u010B\u0111\u0119\u0120\u0127\u0135\u0138\u013D" +
-		"\u0148\u0153\u0155\u0158\u015D\u015F\u0178\u0185\u019F\u01AF\u01B6\u01BA" +
-		"\u01BF\u01C3\u01C7\u01CE\u01D3\u01D9\u01DB\u01E1\u01ED\u01F1\u01FD\u0205" +
-		"\u020F\u0238\u0244\u0247\u0253\u026B\u0273\u027C\u027E\u0280\u0283\u028A" +
-		"\u0290\u0297\u029F\u02A6\u02A8\u02B2\u02B8\u02CA\u02D9\u02DF\u02E6\u02E8" +
-		"\u02F0\u02F5\u02FC\u0300\u0303\u034D";
+		"\x19\x02\u01FA\u01F9\x03\x02\x02\x02\u01FB\u01FC\x03\x02\x02\x02\u01FC" +
+		"\u01FA\x03\x02\x02\x02\u01FC\u01FD\x03\x02\x02\x02\u01FD\u01FE\x03\x02" +
+		"\x02\x02\u01FE\u01FF\x07*\x02\x02\u01FFO\x03\x02\x02\x02\u0200\u0201\x07" +
+		"\x11\x02\x02\u0201\u0202\x05d3\x02\u0202\u0204\x07&\x02\x02\u0203\u0205" +
+		"\x050\x19\x02\u0204\u0203\x03\x02\x02\x02\u0205\u0206\x03\x02\x02\x02" +
+		"\u0206\u0204\x03\x02\x02\x02\u0206\u0207\x03\x02\x02\x02\u0207Q\x03\x02" +
+		"\x02\x02\u0208\u0209\x07\v\x02\x02\u0209\u020A\x07+\x02\x02\u020A\u020B" +
+		"\x05\x84C\x02\u020B\u020C\x07%\x02\x02\u020C\u020D\x05b2\x02\u020D\u020E" +
+		"\x07,\x02\x02\u020E\u020F\x05\x06\x04\x02\u020FS\x03\x02\x02\x02\u0210" +
+		"\u0211\x07\r\x02\x02\u0211\u0212\x07+\x02\x02\u0212\u0213\x05\x84C\x02" +
+		"\u0213\u0214\x07%\x02\x02\u0214\u0215\x05b2\x02\u0215\u0216\x07,\x02\x02" +
+		"\u0216\u0217\x05\x06\x04\x02\u0217U\x03\x02\x02\x02\u0218\u0219\x07\f" +
+		"\x02\x02\u0219\u021A\x07+\x02\x02\u021A\u021B\x05\x84C\x02\u021B\u021C" +
+		"\x07%\x02\x02\u021C\u021D\x05b2\x02\u021D\u021E\x07,\x02\x02\u021E\u021F" +
+		"\x05\x06\x04\x02\u021FW\x03\x02\x02\x02\u0220\u0221\x07\x14\x02\x02\u0221" +
+		"\u0222\x07+\x02\x02\u0222\u0223\x05b2\x02\u0223\u0224\x07,\x02\x02\u0224" +
+		"\u0225\x05\x06\x04\x02\u0225Y\x03\x02\x02\x02\u0226\u022A\x07!\x02\x02" +
+		"\u0227\u022A\x07\"\x02\x02\u0228\u022A\b.\x01\x02\u0229\u0226\x03\x02" +
+		"\x02\x02\u0229\u0227\x03\x02\x02\x02\u0229\u0228\x03\x02\x02\x02\u022A" +
+		"\u0235\x03\x02\x02\x02\u022B\u0236\x07R\x02\x02\u022C\u0236\x05\x84C\x02" +
+		"\u022D\u0232\x05\x8AF\x02\u022E\u022F\x07\'\x02\x02\u022F\u0231\x05\x8A" +
+		"F\x02\u0230\u022E\x03\x02\x02\x02\u0231\u0234\x03\x02\x02\x02\u0232\u0230" +
+		"\x03\x02\x02\x02\u0232\u0233\x03\x02\x02\x02\u0233\u0236\x03\x02\x02\x02" +
+		"\u0234\u0232\x03\x02\x02\x02\u0235\u022B\x03\x02\x02\x02\u0235\u022C\x03" +
+		"\x02\x02\x02\u0235\u022D\x03\x02\x02\x02\u0236\u0237\x03\x02\x02\x02\u0237" +
+		"\u0238\x07W\x02\x02\u0238\u0239\x05\x06\x04\x02\u0239[\x03\x02\x02\x02" +
+		"\u023A\u023B\x07+\x02\x02\u023B\u023C\x05\x8AF\x02\u023C\u023D\x07&\x02" +
+		"\x02\u023D\u023E\x05\x8AF\x02\u023E\u0241\x07,\x02\x02\u023F\u0240\x07" +
+		"&\x02\x02\u0240\u0242\x05\x10\t\x02\u0241\u023F\x03\x02\x02\x02\u0241" +
+		"\u0242\x03\x02\x02\x02\u0242\u0243\x03\x02\x02\x02\u0243\u0244\x05\x06" +
+		"\x04\x02\u0244]\x03\x02\x02\x02\u0245\u0246\x07+\x02\x02\u0246\u0247\x05" +
+		"\x8AF\x02\u0247\u0248\x07\'\x02\x02\u0248\u0249\x05\x8AF\x02\u0249\u024A" +
+		"\x07&\x02\x02\u024A\u024B\x05\x8AF\x02\u024B\u024C\x07,\x02\x02\u024C" +
+		"\u024D\x07&\x02\x02\u024D\u024E\x05\x10\t\x02\u024E\u024F\x03\x02\x02" +
+		"\x02\u024F\u0250\x05\x06\x04\x02\u0250_\x03\x02\x02\x02\u0251\u0252\x07" +
+		"#\x02\x02\u0252\u0253\b1\x01\x02\u0253a\x03\x02\x02\x02\u0254\u0259\x05" +
+		"f4\x02\u0255\u0256\t\x04\x02\x02\u0256\u0258\x05f4\x02\u0257\u0255\x03" +
+		"\x02\x02\x02\u0258\u025B\x03\x02\x02\x02\u0259\u0257\x03\x02\x02\x02\u0259" +
+		"\u025A\x03\x02\x02\x02\u025Ac\x03\x02\x02\x02\u025B\u0259\x03\x02\x02" +
+		"\x02\u025C\u0261\x05b2\x02\u025D\u025E\x07\'\x02\x02\u025E\u0260\x05b" +
+		"2\x02\u025F\u025D\x03\x02\x02\x02\u0260\u0263\x03\x02\x02\x02\u0261\u025F" +
+		"\x03\x02\x02\x02\u0261\u0262\x03\x02\x02\x02\u0262\u0272\x03\x02\x02\x02" +
+		"\u0263\u0261\x03\x02\x02\x02\u0264\u026E\x05b2\x02\u0265\u0266\b3\x01" +
+		"\x02\u0266\u026D\x05b2\x02\u0267\u026A\x07\'\x02\x02\u0268\u026B\x05b" +
+		"2\x02\u0269\u026B\b3\x01\x02\u026A\u0268\x03\x02\x02\x02\u026A\u0269\x03" +
+		"\x02\x02\x02\u026B\u026D\x03\x02\x02\x02\u026C\u0265\x03\x02\x02\x02\u026C" +
+		"\u0267\x03\x02\x02\x02\u026D\u0270\x03\x02\x02\x02\u026E\u026C\x03\x02" +
+		"\x02\x02\u026E\u026F\x03\x02\x02\x02\u026F\u0272\x03\x02\x02\x02\u0270" +
+		"\u026E\x03\x02\x02\x02\u0271\u025C\x03\x02\x02\x02\u0271\u0264\x03\x02" +
+		"\x02\x02\u0272e\x03\x02\x02\x02\u0273\u0278\x05h5\x02\u0274\u0275\t\x05" +
+		"\x02\x02\u0275\u0277\x05h5\x02\u0276\u0274\x03\x02\x02\x02\u0277\u027A" +
+		"\x03\x02\x02\x02\u0278\u0276\x03\x02\x02\x02\u0278\u0279\x03\x02\x02\x02" +
+		"\u0279g\x03\x02\x02\x02\u027A\u0278\x03\x02\x02\x02\u027B\u027E\x05j6" +
+		"\x02\u027C\u027D\t\x06\x02\x02\u027D\u027F\x05j6\x02\u027E\u027C\x03\x02" +
+		"\x02\x02\u027E\u027F\x03\x02\x02\x02\u027Fi\x03\x02\x02\x02\u0280\u0285" +
+		"\x05l7\x02\u0281\u0282\t\x07\x02\x02\u0282\u0284\x05l7\x02\u0283\u0281" +
+		"\x03\x02\x02\x02\u0284\u0287\x03\x02\x02\x02\u0285\u0283\x03\x02\x02\x02" +
+		"\u0285\u0286\x03\x02\x02\x02\u0286k\x03\x02\x02\x02\u0287\u0285\x03\x02" +
+		"\x02\x02\u0288\u028D\x05n8\x02\u0289\u028A\t\b\x02\x02\u028A\u028C\x05" +
+		"n8\x02\u028B\u0289\x03\x02\x02\x02\u028C\u028F\x03\x02\x02\x02\u028D\u028B" +
+		"\x03\x02\x02\x02\u028D\u028E\x03\x02\x02\x02\u028Em\x03\x02\x02\x02\u028F" +
+		"\u028D\x03\x02\x02\x02\u0290\u0296\x05v<\x02\u0291\u0295\x05p9\x02\u0292" +
+		"\u0295\x05r:\x02\u0293\u0295\x05t;\x02\u0294\u0291\x03\x02\x02\x02\u0294" +
+		"\u0292\x03\x02\x02\x02\u0294\u0293\x03\x02\x02\x02\u0295\u0298\x03\x02" +
+		"\x02\x02\u0296\u0294\x03\x02\x02\x02\u0296\u0297\x03\x02\x02\x02\u0297" +
+		"o\x03\x02\x02\x02\u0298\u0296\x03\x02\x02\x02\u0299\u029A\x07(\x02\x02" +
+		"\u029A\u029B\x05\x8AF\x02\u029Bq\x03\x02\x02\x02\u029C\u029D\x07-\x02" +
+		"\x02\u029D\u02A0\x05b2\x02\u029E\u029F\x07&\x02\x02\u029F\u02A1\x05b2" +
+		"\x02\u02A0\u029E\x03\x02\x02\x02\u02A0\u02A1\x03\x02\x02\x02\u02A1\u02A2" +
+		"\x03\x02\x02\x02\u02A2\u02A3\x07.\x02\x02\u02A3s\x03\x02\x02\x02\u02A4" +
+		"\u02A6\x07+\x02\x02\u02A5\u02A7\x05d3\x02\u02A6\u02A5\x03\x02\x02\x02" +
+		"\u02A6\u02A7\x03\x02\x02\x02\u02A7\u02A8\x03\x02\x02\x02\u02A8\u02A9\x07" +
+		",\x02\x02\u02A9u\x03\x02\x02\x02\u02AA\u02B9\x05\x92J\x02\u02AB\u02B9" +
+		"\x05\x90I\x02\u02AC\u02B9\x05\x94K\x02\u02AD\u02B9\x05\x8CG\x02\u02AE" +
+		"\u02B9\x05\x8EH\x02\u02AF\u02B9\x05\x86D\x02\u02B0\u02B9\x05|?\x02\u02B1" +
+		"\u02B9\x05~@\x02\u02B2\u02B9\x05\x80A\x02\u02B3\u02B9\x05\x82B\x02\u02B4" +
+		"\u02B9\x05x=\x02\u02B5\u02B9\x07T\x02\x02\u02B6\u02B9\x05z>\x02\u02B7" +
+		"\u02B9\x05\x8AF\x02\u02B8\u02AA\x03\x02\x02\x02\u02B8\u02AB\x03\x02\x02" +
+		"\x02\u02B8\u02AC\x03\x02\x02\x02\u02B8\u02AD\x03\x02\x02\x02\u02B8\u02AE" +
+		"\x03\x02\x02\x02\u02B8\u02AF\x03\x02\x02\x02\u02B8\u02B0\x03\x02\x02\x02" +
+		"\u02B8\u02B1\x03\x02\x02\x02\u02B8\u02B2\x03\x02\x02\x02\u02B8\u02B3\x03" +
+		"\x02\x02\x02\u02B8\u02B4\x03\x02\x02\x02\u02B8\u02B5\x03\x02\x02\x02\u02B8" +
+		"\u02B6\x03\x02\x02\x02\u02B8\u02B7\x03\x02\x02\x02\u02B9w\x03\x02\x02" +
+		"\x02\u02BA\u02BB\t\t\x02\x02\u02BB\u02BC\x05n8\x02\u02BCy\x03\x02\x02" +
+		"\x02\u02BD\u02BE\x07+\x02\x02\u02BE\u02BF\x05b2\x02\u02BF\u02C0\x07,\x02" +
+		"\x02\u02C0{\x03\x02\x02\x02\u02C1\u02C2\x05(\x15\x02\u02C2\u02C3\x056" +
+		"\x1C\x02\u02C3\u02C8\x03\x02\x02\x02\u02C4\u02C5\x05\x8AF\x02\u02C5\u02C6" +
+		"\x056\x1C\x02\u02C6\u02C8\x03\x02\x02\x02\u02C7\u02C1\x03\x02\x02\x02" +
+		"\u02C7\u02C4\x03\x02\x02\x02\u02C8}\x03\x02\x02\x02\u02C9\u02CD\x05*\x16" +
+		"\x02\u02CA\u02CE\x05^0\x02\u02CB\u02CC\b@\x01\x02\u02CC\u02CE\x05\x06" +
+		"\x04\x02\u02CD\u02CA\x03\x02\x02\x02\u02CD\u02CB\x03\x02\x02\x02\u02CE" +
+		"\x7F\x03\x02\x02\x02\u02CF\u02D0\x05,\x17\x02\u02D0\u02D4\x07)\x02\x02" +
+		"\u02D1\u02D5\x05Z.\x02\u02D2\u02D3\bA\x01\x02\u02D3\u02D5\x05\x06\x04" +
+		"\x02\u02D4\u02D1\x03\x02\x02\x02\u02D4\u02D2\x03\x02\x02\x02\u02D5\u02D6" +
+		"\x03\x02\x02\x02\u02D6\u02D4\x03\x02\x02\x02\u02D6\u02D7\x03\x02\x02\x02" +
+		"\u02D7\u02D8\x03\x02\x02\x02\u02D8\u02D9\x07*\x02\x02\u02D9\x81\x03\x02" +
+		"\x02\x02\u02DA\u02DE\x05.\x18\x02\u02DB\u02DF\x05\\/\x02\u02DC\u02DD\b" +
+		"B\x01\x02\u02DD\u02DF\x05\x06\x04\x02\u02DE\u02DB\x03\x02\x02\x02\u02DE" +
+		"\u02DC\x03\x02\x02\x02\u02DF\x83\x03\x02\x02\x02\u02E0\u02E1\x05\x8AF" +
+		"\x02\u02E1\u02E2\x07&\x02\x02\u02E2\u02E3\x05\x10\t\x02\u02E3\x85\x03" +
+		"\x02\x02\x02\u02E4\u02F5\x07)\x02\x02\u02E5\u02E7\x05d3\x02\u02E6\u02E8" +
+		"\x07\'\x02\x02\u02E7\u02E6\x03\x02\x02\x02\u02E7\u02E8\x03\x02\x02\x02" +
+		"\u02E8\u02F6\x03\x02\x02\x02\u02E9\u02EE\x05\x88E\x02\u02EA\u02EB\x07" +
+		"\'\x02\x02\u02EB\u02ED\x05\x88E\x02\u02EC\u02EA\x03\x02\x02\x02\u02ED" +
+		"\u02F0\x03\x02\x02\x02\u02EE\u02EC\x03\x02\x02\x02\u02EE\u02EF\x03\x02" +
+		"\x02\x02\u02EF\u02F2\x03\x02\x02\x02\u02F0\u02EE\x03\x02\x02\x02\u02F1" +
+		"\u02F3\x07\'\x02\x02\u02F2\u02F1\x03\x02\x02\x02\u02F2\u02F3\x03\x02\x02" +
+		"\x02\u02F3\u02F6\x03\x02\x02\x02\u02F4\u02F6\x07&\x02\x02\u02F5\u02E5" +
+		"\x03\x02\x02\x02\u02F5\u02E9\x03\x02\x02\x02\u02F5\u02F4\x03\x02\x02\x02" +
+		"\u02F5\u02F6\x03\x02\x02\x02\u02F6\u02F7\x03\x02\x02\x02\u02F7\u02F8\x07" +
+		"*\x02\x02\u02F8\x87\x03\x02\x02\x02\u02F9\u02FA\x05b2\x02\u02FA\u02FB" +
+		"\x07&\x02\x02\u02FB\u02FC\x05b2\x02\u02FC\x89\x03\x02\x02\x02\u02FD\u0340" +
+		"\x07`\x02\x02\u02FE\u0340\x07\x13\x02\x02\u02FF\u0300\x07\x03\x02\x02" +
+		"\u0300\u0340\bF\x01\x02\u0301\u0302\x07\x04\x02\x02\u0302\u0340\bF\x01" +
+		"\x02\u0303\u0304\x07\x05\x02\x02\u0304\u0340\bF\x01\x02\u0305\u0306\x07" +
+		"\x06\x02\x02\u0306\u0340\bF\x01\x02\u0307\u0308\x07\x07\x02\x02\u0308" +
+		"\u0340\bF\x01\x02\u0309\u030A\x07\b\x02\x02\u030A\u0340\bF\x01\x02\u030B" +
+		"\u030C\x07\t\x02\x02\u030C\u0340\bF\x01\x02\u030D\u030E\x07\n\x02\x02" +
+		"\u030E\u0340\bF\x01\x02\u030F\u0310\x07\v\x02\x02\u0310\u0340\bF\x01\x02" +
+		"\u0311\u0312\x07\f\x02\x02\u0312\u0340\bF\x01\x02\u0313\u0314\x07\r\x02" +
+		"\x02\u0314\u0340\bF\x01\x02\u0315\u0316\x07\x0E\x02\x02\u0316\u0340\b" +
+		"F\x01\x02\u0317\u0318\x07\x0F\x02\x02\u0318\u0340\bF\x01\x02\u0319\u031A" +
+		"\x07\x10\x02\x02\u031A\u0340\bF\x01\x02\u031B\u031C\x07\x11\x02\x02\u031C" +
+		"\u0340\bF\x01\x02\u031D\u031E\x07\x12\x02\x02\u031E\u0340\bF\x01\x02\u031F" +
+		"\u0320\x07\x14\x02\x02\u0320\u0340\bF\x01\x02\u0321\u0322\x07\x15\x02" +
+		"\x02\u0322\u0340\bF\x01\x02\u0323\u0324\x07\x16\x02\x02\u0324\u0340\b" +
+		"F\x01\x02\u0325\u0326\x07\x17\x02\x02\u0326\u0340\bF\x01\x02\u0327\u0328" +
+		"\x07\x18\x02\x02\u0328\u0340\bF\x01\x02\u0329\u032A\x07\x19\x02\x02\u032A" +
+		"\u0340\bF\x01\x02\u032B\u032C\x07\x1A\x02\x02\u032C\u0340\bF\x01\x02\u032D" +
+		"\u032E\x07\x1B\x02\x02\u032E\u0340\bF\x01\x02\u032F\u0330\x07\x1C\x02" +
+		"\x02\u0330\u0340\bF\x01\x02\u0331\u0332\x07\x1D\x02\x02\u0332\u0340\b" +
+		"F\x01\x02\u0333\u0334\x07\x1E\x02\x02\u0334\u0340\bF\x01\x02\u0335\u0336" +
+		"\x07\x1F\x02\x02\u0336\u0340\bF\x01\x02\u0337\u0338\x07 \x02\x02\u0338" +
+		"\u0340\bF\x01\x02\u0339\u033A\x07!\x02\x02\u033A\u0340\bF\x01\x02\u033B" +
+		"\u033C\x07\"\x02\x02\u033C\u0340\bF\x01\x02\u033D\u033E\x07#\x02\x02\u033E" +
+		"\u0340\bF\x01\x02\u033F\u02FD\x03\x02\x02\x02\u033F\u02FE\x03\x02\x02" +
+		"\x02\u033F\u02FF\x03\x02\x02\x02\u033F\u0301\x03\x02\x02\x02\u033F\u0303" +
+		"\x03\x02\x02\x02\u033F\u0305\x03\x02\x02\x02\u033F\u0307\x03\x02\x02\x02" +
+		"\u033F\u0309\x03\x02\x02\x02\u033F\u030B\x03\x02\x02\x02\u033F\u030D\x03" +
+		"\x02\x02\x02\u033F\u030F\x03\x02\x02\x02\u033F\u0311\x03\x02\x02\x02\u033F" +
+		"\u0313\x03\x02\x02\x02\u033F\u0315\x03\x02\x02\x02\u033F\u0317\x03\x02" +
+		"\x02\x02\u033F\u0319\x03\x02\x02\x02\u033F\u031B\x03\x02\x02\x02\u033F" +
+		"\u031D\x03\x02\x02\x02\u033F\u031F\x03\x02\x02\x02\u033F\u0321\x03\x02" +
+		"\x02\x02\u033F\u0323\x03\x02\x02\x02\u033F\u0325\x03\x02\x02\x02\u033F" +
+		"\u0327\x03\x02\x02\x02\u033F\u0329\x03\x02\x02\x02\u033F\u032B\x03\x02" +
+		"\x02\x02\u033F\u032D\x03\x02\x02\x02\u033F\u032F\x03\x02\x02\x02\u033F" +
+		"\u0331\x03\x02\x02\x02\u033F\u0333\x03\x02\x02\x02\u033F\u0335\x03\x02" +
+		"\x02\x02\u033F\u0337\x03\x02\x02\x02\u033F\u0339\x03\x02\x02\x02\u033F" +
+		"\u033B\x03\x02\x02\x02\u033F\u033D\x03\x02\x02\x02\u0340\x8B\x03\x02\x02" +
+		"\x02\u0341\u0342\x07Y\x02\x02\u0342\x8D\x03\x02\x02\x02\u0343\u0344\x07" +
+		"Z\x02\x02\u0344\x8F\x03\x02\x02\x02\u0345\u0346\x07[\x02\x02\u0346\x91" +
+		"\x03\x02\x02\x02\u0347\u0348\t\n\x02\x02\u0348\x93\x03\x02\x02\x02\u0349" +
+		"\u034A\x07_\x02\x02\u034A\x95\x03\x02\x02\x02L\x9C\xA0\xA5\xC0\xC5\xD7" +
+		"\xDB\xDD\xE8\xEC\xEE\xF5\u010D\u0113\u011B\u0122\u0129\u0132\u0135\u013A" +
+		"\u0142\u014A\u014C\u014F\u0154\u0156\u016F\u017C\u0196\u01A6\u01AD\u01B1" +
+		"\u01B6\u01BA\u01BE\u01C5\u01CA\u01D0\u01D2\u01D8\u01E4\u01E8\u01F4\u01FC" +
+		"\u0206\u0229\u0232\u0235\u0241\u0259\u0261\u026A\u026C\u026E\u0271\u0278" +
+		"\u027E\u0285\u028D\u0294\u0296\u02A0\u02A6\u02B8\u02C7\u02CD\u02D4\u02D6" +
+		"\u02DE\u02E7\u02EE\u02F2\u02F5\u033F";
 	public static readonly _serializedATN: string = Utils.join(
 		[
 			boaParser._serializedATNSegment0,
@@ -4823,8 +4815,6 @@ export class VariableDeclarationContext extends ParserRuleContext {
 
 
 export class TypeContext extends ParserRuleContext {
-	public _fixp!: FixpTypeContext;
-	public _tr!: TraversalTypeContext;
 	public arrayType(): ArrayTypeContext | undefined {
 		return this.tryGetRuleContext(0, ArrayTypeContext);
 	}
@@ -5230,32 +5220,18 @@ export class FunctionTypeContext extends ParserRuleContext {
 	public FUNCTION(): TerminalNode { return this.getToken(boaParser.FUNCTION, 0); }
 	public LPAREN(): TerminalNode { return this.getToken(boaParser.LPAREN, 0); }
 	public RPAREN(): TerminalNode { return this.getToken(boaParser.RPAREN, 0); }
-	public identifier(): IdentifierContext[];
-	public identifier(i: number): IdentifierContext;
-	public identifier(i?: number): IdentifierContext | IdentifierContext[] {
+	public varDecl(): VarDeclContext[];
+	public varDecl(i: number): VarDeclContext;
+	public varDecl(i?: number): VarDeclContext | VarDeclContext[] {
 		if (i === undefined) {
-			return this.getRuleContexts(IdentifierContext);
+			return this.getRuleContexts(VarDeclContext);
 		} else {
-			return this.getRuleContext(i, IdentifierContext);
+			return this.getRuleContext(i, VarDeclContext);
 		}
 	}
-	public COLON(): TerminalNode[];
-	public COLON(i: number): TerminalNode;
-	public COLON(i?: number): TerminalNode | TerminalNode[] {
-		if (i === undefined) {
-			return this.getTokens(boaParser.COLON);
-		} else {
-			return this.getToken(boaParser.COLON, i);
-		}
-	}
-	public type(): TypeContext[];
-	public type(i: number): TypeContext;
-	public type(i?: number): TypeContext | TypeContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(TypeContext);
-		} else {
-			return this.getRuleContext(i, TypeContext);
-		}
+	public COLON(): TerminalNode | undefined { return this.tryGetToken(boaParser.COLON, 0); }
+	public type(): TypeContext | undefined {
+		return this.tryGetRuleContext(0, TypeContext);
 	}
 	public COMMA(): TerminalNode[];
 	public COMMA(i: number): TerminalNode;
@@ -5264,6 +5240,15 @@ export class FunctionTypeContext extends ParserRuleContext {
 			return this.getTokens(boaParser.COMMA);
 		} else {
 			return this.getToken(boaParser.COMMA, i);
+		}
+	}
+	public identifier(): IdentifierContext[];
+	public identifier(i: number): IdentifierContext;
+	public identifier(i?: number): IdentifierContext | IdentifierContext[] {
+		if (i === undefined) {
+			return this.getRuleContexts(IdentifierContext);
+		} else {
+			return this.getRuleContext(i, IdentifierContext);
 		}
 	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
@@ -5895,12 +5880,8 @@ export class SwitchCaseContext extends ParserRuleContext {
 export class ForeachStatementContext extends ParserRuleContext {
 	public FOREACH(): TerminalNode { return this.getToken(boaParser.FOREACH, 0); }
 	public LPAREN(): TerminalNode { return this.getToken(boaParser.LPAREN, 0); }
-	public identifier(): IdentifierContext {
-		return this.getRuleContext(0, IdentifierContext);
-	}
-	public COLON(): TerminalNode { return this.getToken(boaParser.COLON, 0); }
-	public type(): TypeContext {
-		return this.getRuleContext(0, TypeContext);
+	public varDecl(): VarDeclContext {
+		return this.getRuleContext(0, VarDeclContext);
 	}
 	public SEMICOLON(): TerminalNode { return this.getToken(boaParser.SEMICOLON, 0); }
 	public expression(): ExpressionContext {
@@ -5929,12 +5910,8 @@ export class ForeachStatementContext extends ParserRuleContext {
 export class ExistsStatementContext extends ParserRuleContext {
 	public EXISTS(): TerminalNode { return this.getToken(boaParser.EXISTS, 0); }
 	public LPAREN(): TerminalNode { return this.getToken(boaParser.LPAREN, 0); }
-	public identifier(): IdentifierContext {
-		return this.getRuleContext(0, IdentifierContext);
-	}
-	public COLON(): TerminalNode { return this.getToken(boaParser.COLON, 0); }
-	public type(): TypeContext {
-		return this.getRuleContext(0, TypeContext);
+	public varDecl(): VarDeclContext {
+		return this.getRuleContext(0, VarDeclContext);
 	}
 	public SEMICOLON(): TerminalNode { return this.getToken(boaParser.SEMICOLON, 0); }
 	public expression(): ExpressionContext {
@@ -5963,12 +5940,8 @@ export class ExistsStatementContext extends ParserRuleContext {
 export class IfallStatementContext extends ParserRuleContext {
 	public IFALL(): TerminalNode { return this.getToken(boaParser.IFALL, 0); }
 	public LPAREN(): TerminalNode { return this.getToken(boaParser.LPAREN, 0); }
-	public identifier(): IdentifierContext {
-		return this.getRuleContext(0, IdentifierContext);
-	}
-	public COLON(): TerminalNode { return this.getToken(boaParser.COLON, 0); }
-	public type(): TypeContext {
-		return this.getRuleContext(0, TypeContext);
+	public varDecl(): VarDeclContext {
+		return this.getRuleContext(0, VarDeclContext);
 	}
 	public SEMICOLON(): TerminalNode { return this.getToken(boaParser.SEMICOLON, 0); }
 	public expression(): ExpressionContext {
@@ -6028,6 +6001,9 @@ export class VisitStatementContext extends ParserRuleContext {
 	public BEFORE(): TerminalNode | undefined { return this.tryGetToken(boaParser.BEFORE, 0); }
 	public AFTER(): TerminalNode | undefined { return this.tryGetToken(boaParser.AFTER, 0); }
 	public WILDCARD(): TerminalNode | undefined { return this.tryGetToken(boaParser.WILDCARD, 0); }
+	public varDecl(): VarDeclContext | undefined {
+		return this.tryGetRuleContext(0, VarDeclContext);
+	}
 	public identifier(): IdentifierContext[];
 	public identifier(i: number): IdentifierContext;
 	public identifier(i?: number): IdentifierContext | IdentifierContext[] {
@@ -6037,7 +6013,6 @@ export class VisitStatementContext extends ParserRuleContext {
 			return this.getRuleContext(i, IdentifierContext);
 		}
 	}
-	public COLON(): TerminalNode | undefined { return this.tryGetToken(boaParser.COLON, 0); }
 	public COMMA(): TerminalNode[];
 	public COMMA(i: number): TerminalNode;
 	public COMMA(i?: number): TerminalNode | TerminalNode[] {
@@ -6799,6 +6774,30 @@ export class TraversalExpressionContext extends ParserRuleContext {
 	public accept<Result>(visitor: boaVisitor<Result>): Result {
 		if (visitor.visitTraversalExpression) {
 			return visitor.visitTraversalExpression(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class VarDeclContext extends ParserRuleContext {
+	public identifier(): IdentifierContext {
+		return this.getRuleContext(0, IdentifierContext);
+	}
+	public COLON(): TerminalNode { return this.getToken(boaParser.COLON, 0); }
+	public type(): TypeContext {
+		return this.getRuleContext(0, TypeContext);
+	}
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return boaParser.RULE_varDecl; }
+	// @Override
+	public accept<Result>(visitor: boaVisitor<Result>): Result {
+		if (visitor.visitVarDecl) {
+			return visitor.visitVarDecl(this);
 		} else {
 			return visitor.visitChildren(this);
 		}

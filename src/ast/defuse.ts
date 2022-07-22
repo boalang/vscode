@@ -57,9 +57,9 @@ export class ScopedVisitor<T> extends AbstractParseTreeVisitor<void> implements 
         this.visitScopedForStatement(ctx);
         this.exitScope();
     }
-    public visitSwitchCaseStatement(ctx: ast.SwitchCaseContext) {
+    public visitSwitchCase(ctx: ast.SwitchCaseContext) {
         this.enterScope();
-        this.visitScopedSwitchCaseStatement(ctx);
+        this.visitScopedSwitchCase(ctx);
         this.exitScope();
     }
     public visitWhileStatement(ctx: ast.WhileStatementContext) {
@@ -112,7 +112,7 @@ export class ScopedVisitor<T> extends AbstractParseTreeVisitor<void> implements 
     public visitScopedForStatement(ctx: ast.ForStatementContext) {
         this.visitChildren(ctx);
     }
-    public visitScopedSwitchCaseStatement(ctx: ast.SwitchCaseContext) {
+    public visitScopedSwitchCase(ctx: ast.SwitchCaseContext) {
         this.visitChildren(ctx);
     }
     public visitScopedWhileStatement(ctx: ast.WhileStatementContext) {
@@ -175,7 +175,6 @@ export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ast.Identif
 
     private addDef(ctx: ast.IdentifierContext) {
         this._defs[ctx.start.startIndex] = ctx;
-        this.addUse(ctx, ctx);
         this.scopes[this.scopes.length - 1][ctx.text] = ctx;
     }
 
@@ -185,50 +184,48 @@ export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ast.Identif
             if (!(defIdx in this._uses)) {
                 this._uses[defIdx] = [];
             }
-            this._uses[defIdx].push(ctx);
+            if (this._uses[defIdx].indexOf(ctx) == -1) {
+                this._uses[defIdx].push(ctx);
+            }
 
             this.usedefs[ctx.start.startIndex] = defIdx;
         }
     }
 
     // symbol definitions that also scope
-    public visitScopedExistsStatement(ctx: ast.ExistsStatementContext) {
-        this.addDef(ctx.identifier());
-        super.visitScopedExistsStatement(ctx);
-    }
     public visitScopedFixpExpression(ctx: ast.FixpExpressionContext) {
         this.addDef(ctx.fixpStatement().identifier(0));
         this.addDef(ctx.fixpStatement().identifier(1));
         super.visitScopedFixpExpression(ctx);
     }
-    public visitScopedForeachStatement(ctx: ast.ForeachStatementContext) {
-        this.addDef(ctx.identifier());
-        super.visitScopedForeachStatement(ctx);
-    }
+
     public visitScopedFunctionExpression(ctx: ast.FunctionExpressionContext) {
         const type = ctx.functionType();
-        for (const id of type.identifier()) {
-            this.addDef(id);
+        for (const v of type.varDecl()) {
+            this.addDef(v.identifier());
         }
         super.visitScopedFunctionExpression(ctx);
     }
-    public visitScopedIfallStatement(ctx: ast.IfallStatementContext) {
-        this.addDef(ctx.identifier());
-        super.visitScopedIfallStatement(ctx);
-    }
+
     public visitScopedTraversalExpression(ctx: ast.TraversalExpressionContext) {
         this.addDef(ctx.traverseStatement().identifier(0));
         super.visitScopedTraversalExpression(ctx);
     }
+
     public visitScopedVisitStatement(ctx: ast.VisitStatementContext) {
-        const ids = ctx.identifier();
-        if (ids && ids.length == 2) {
-            this.addDef(ids[0]);
+        const v = ctx.varDecl();
+        if (v !== undefined) {
+            this.addDef(v.identifier());
         }
         super.visitScopedVisitStatement(ctx);
     }
 
     // symbol definitions
+    public visitVarDecl(ctx: ast.VarDeclContext) {
+        this.addDef(ctx.identifier());
+        this.visitChildren(ctx);
+    }
+
     public visitForVariableDeclaration(ctx: ast.ForVariableDeclarationContext) {
         this.addDef(ctx.identifier());
         this.visitChildren(ctx);

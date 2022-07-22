@@ -23,7 +23,7 @@ import { boaVisitor } from '../antlr/boaVisitor';
 import { parseBoaCode } from './parser';
 import { builtinFunctions, IFunction } from '../types';
 import { ParserRuleContext } from 'antlr4ts';
-import { DefsUsesVisitor } from './defuse';
+import { ScopedVisitor } from './defuse';
 
 export default class BoaSignatureHelpProvider implements vscode.SignatureHelpProvider {
     public provideSignatureHelp(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.SignatureHelp> {
@@ -117,8 +117,7 @@ class FunctionCallFinder extends AbstractParseTreeVisitor<ast.FactorContext> imp
 }
 
 type funcDict = { [name: string]: IFunction };
-class UDFFinder extends DefsUsesVisitor {
-    private _funcStack: funcDict[] = [{}];
+class UDFFinder extends ScopedVisitor<funcDict> {
     private _found = false;
     private position: number;
 
@@ -128,9 +127,9 @@ class UDFFinder extends DefsUsesVisitor {
     }
 
     get funcs() {
-        let funcs = {...this._funcStack[0]};
-        for (let i = 1; i < this._funcStack.length; i++) {
-            Object.keys(this._funcStack[i]).forEach(k => funcs[k] = this._funcStack[i][k]);
+        let funcs = {...this.scopes[0]};
+        for (let i = 1; i < this.scopes.length; i++) {
+            Object.keys(this.scopes[i]).forEach(k => funcs[k] = this.scopes[i][k]);
         }
         return funcs;
     }
@@ -143,15 +142,10 @@ class UDFFinder extends DefsUsesVisitor {
         return {};
     }
 
-    protected enterScope() {
-        this._funcStack.push({});
-        super.enterScope();
-    }
     protected exitScope() {
         if (!this._found) {
-            this._funcStack.pop();
+            this.scopes.pop();
         }
-        super.exitScope();
     }
 
     visitChildren(node: RuleNode) {
@@ -174,9 +168,9 @@ class UDFFinder extends DefsUsesVisitor {
         const funcExp = ctx.expression()?.conjunction(0).comparison(0).simpleExpression(0).term(0).factor(0).operand().functionExpression();
         if (funcExp) {
             const id = ctx.identifier().text;
-            const type = funcExp.functionType();
-            const numArgs = type.identifier().length;
-            const ret = type.type().length > numArgs ? type.type(numArgs) : undefined;
+            const funcType = funcExp.functionType();
+            const numArgs = funcType.varDecl().length;
+            const funcRet = funcType.varDecl().length > numArgs ? funcType.varDecl(numArgs) : undefined;
 
             const func: IFunction = {
                 args: [],
@@ -184,12 +178,12 @@ class UDFFinder extends DefsUsesVisitor {
                 doc: '',
             };
             for (let i = 0; i < numArgs; i++) {
-                func.args.push({ name: type.identifier(i).text + ': ' + type.type(i).text, doc: '' });
+                func.args.push({ name: funcType.varDecl(i).identifier().text + ': ' + funcType.varDecl(i).type().text, doc: '' });
             }
-            if (ret) {
-                func.ret.type = ': ' + ret.text;
+            if (funcRet) {
+                func.ret.type = ': ' + funcRet.text;
             }
-            this._funcStack[this._funcStack.length - 1][id] = func;
+            this.scopes[this.scopes.length - 1][id] = func;
         }
         this.visitChildren(ctx);
     }

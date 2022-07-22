@@ -57,9 +57,9 @@ export class ScopedVisitor<T> extends AbstractParseTreeVisitor<void> implements 
         this.visitScopedForStatement(ctx);
         this.exitScope();
     }
-    public visitSwitchCaseStatement(ctx: ast.SwitchCaseContext) {
+    public visitSwitchCase(ctx: ast.SwitchCaseContext) {
         this.enterScope();
-        this.visitScopedSwitchCaseStatement(ctx);
+        this.visitScopedSwitchCase(ctx);
         this.exitScope();
     }
     public visitWhileStatement(ctx: ast.WhileStatementContext) {
@@ -112,7 +112,7 @@ export class ScopedVisitor<T> extends AbstractParseTreeVisitor<void> implements 
     public visitScopedForStatement(ctx: ast.ForStatementContext) {
         this.visitChildren(ctx);
     }
-    public visitScopedSwitchCaseStatement(ctx: ast.SwitchCaseContext) {
+    public visitScopedSwitchCase(ctx: ast.SwitchCaseContext) {
         this.visitChildren(ctx);
     }
     public visitScopedWhileStatement(ctx: ast.WhileStatementContext) {

@@ -94,8 +94,8 @@ export class SymbolsVisitor extends AbstractParseTreeVisitor<vscode.SymbolInform
         let str = ctx.BEFORE() ? 'before ' : 'after ';
         if (ctx.WILDCARD() !== undefined)
             str += '_';
-        else if (ctx.COLON() !== undefined)
-            str += ctx.identifier(0).text + ': ' + ctx.identifier(1).text;
+        else if (ctx.varDecl() !== undefined)
+            str += ctx.varDecl().identifier().text + ': ' + ctx.varDecl().type().text;
         else
             str += ctx.identifier().map(id => id.text).join(', ');
         return [new vscode.SymbolInformation(str, vscode.SymbolKind.Property, undefined, getLoc(ctx, this.uri))]
@@ -111,17 +111,7 @@ export class SymbolsVisitor extends AbstractParseTreeVisitor<vscode.SymbolInform
             .concat(this.visitChildren(ctx));
     }
 
-    visitForeachStatement(ctx: ast.ForeachStatementContext) {
-        return [new vscode.SymbolInformation(ctx.identifier().text, vscode.SymbolKind.Variable, undefined, getLoc(ctx.identifier(), this.uri))]
-            .concat(this.visitChildren(ctx));
-    }
-
-    visitExistsStatement(ctx: ast.ExistsStatementContext) {
-        return [new vscode.SymbolInformation(ctx.identifier().text, vscode.SymbolKind.Variable, undefined, getLoc(ctx.identifier(), this.uri))]
-            .concat(this.visitChildren(ctx));
-    }
-
-    visitIfAllStatement(ctx: ast.IfallStatementContext) {
+    visitVarDecl(ctx: ast.VarDeclContext) {
         return [new vscode.SymbolInformation(ctx.identifier().text, vscode.SymbolKind.Variable, undefined, getLoc(ctx.identifier(), this.uri))]
             .concat(this.visitChildren(ctx));
     }

@@ -192,18 +192,10 @@ export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ast.Identif
     }
 
     // symbol definitions that also scope
-    public visitScopedExistsStatement(ctx: ast.ExistsStatementContext) {
-        this.addDef(ctx.identifier());
-        super.visitScopedExistsStatement(ctx);
-    }
     public visitScopedFixpExpression(ctx: ast.FixpExpressionContext) {
         this.addDef(ctx.fixpStatement().identifier(0));
         this.addDef(ctx.fixpStatement().identifier(1));
         super.visitScopedFixpExpression(ctx);
-    }
-    public visitScopedForeachStatement(ctx: ast.ForeachStatementContext) {
-        this.addDef(ctx.identifier());
-        super.visitScopedForeachStatement(ctx);
     }
     public visitScopedFunctionExpression(ctx: ast.FunctionExpressionContext) {
         const type = ctx.functionType();
@@ -211,10 +203,6 @@ export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ast.Identif
             this.addDef(id);
         }
         super.visitScopedFunctionExpression(ctx);
-    }
-    public visitScopedIfallStatement(ctx: ast.IfallStatementContext) {
-        this.addDef(ctx.identifier());
-        super.visitScopedIfallStatement(ctx);
     }
     public visitScopedTraversalExpression(ctx: ast.TraversalExpressionContext) {
         this.addDef(ctx.traverseStatement().identifier(0));
@@ -229,6 +217,11 @@ export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ast.Identif
     }
 
     // symbol definitions
+    public visitVarDecl(ctx: ast.VarDeclContext) {
+        this.addDef(ctx.identifier());
+        this.visitChildren(ctx);
+    }
+
     public visitForVariableDeclaration(ctx: ast.ForVariableDeclarationContext) {
         this.addDef(ctx.identifier());
         this.visitChildren(ctx);

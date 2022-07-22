@@ -51,9 +51,9 @@ type
 	| tupleType
 	| outputType
 	| functionType
-	| fixp=fixpType
+	| fixpType
 	| visitorType
-	| tr=traversalType
+	| traversalType
 	| stackType
 	| queueType
 	| setType
@@ -108,8 +108,8 @@ outputType
 	;
 
 functionType
-	: FUNCTION LPAREN (identifier COLON type (COMMA identifier COLON type)*)? RPAREN (COLON type)?
-	| FUNCTION LPAREN ((identifier COLON type | identifier { this.notifyErrorListeners("function arguments require an identifier and type"); }) (COMMA identifier COLON type | COMMA identifier { this.notifyErrorListeners("function arguments require an identifier and type"); })*)? RPAREN (COLON type)?
+	: FUNCTION LPAREN (varDecl (COMMA varDecl)*)? RPAREN (COLON type)?
+	| FUNCTION LPAREN ((varDecl | identifier { this.notifyErrorListeners("function arguments require an identifier and type"); }) (COMMA varDecl | COMMA identifier { this.notifyErrorListeners("function arguments require an identifier and type"); })*)? RPAREN (COLON type)?
 	;
 
 fixpType
@@ -216,15 +216,15 @@ switchCase
 	;
 
 foreachStatement
-	: FOREACH LPAREN identifier COLON type SEMICOLON expression RPAREN programStatement
+	: FOREACH LPAREN varDecl SEMICOLON expression RPAREN programStatement
 	;
 
 existsStatement
-	: EXISTS LPAREN identifier COLON type SEMICOLON expression RPAREN programStatement
+	: EXISTS LPAREN varDecl SEMICOLON expression RPAREN programStatement
 	;
 
 ifallStatement
-	: IFALL LPAREN identifier COLON type SEMICOLON expression RPAREN programStatement
+	: IFALL LPAREN varDecl SEMICOLON expression RPAREN programStatement
 	;
 
 whileStatement
@@ -235,7 +235,7 @@ visitStatement
 	: (BEFORE | AFTER | { this.notifyErrorListeners("error: visit statements must start with 'before' or 'after'"); })
 		(
 			  WILDCARD
-			| identifier COLON identifier
+			| varDecl
 			| identifier (COMMA identifier)*
 		)
 		RIGHT_ARROW programStatement
@@ -334,6 +334,10 @@ visitorExpression
 
 traversalExpression
 	: traversalType (traverseStatement | { this.notifyErrorListeners("error: only traverse statements allowed inside traversal bodies"); } programStatement)
+	;
+
+varDecl
+	: identifier COLON type
 	;
 
 composite

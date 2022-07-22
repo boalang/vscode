@@ -72,6 +72,7 @@ import { FunctionExpressionContext } from "./boaParser";
 import { FixpExpressionContext } from "./boaParser";
 import { VisitorExpressionContext } from "./boaParser";
 import { TraversalExpressionContext } from "./boaParser";
+import { VarDeclContext } from "./boaParser";
 import { CompositeContext } from "./boaParser";
 import { PairContext } from "./boaParser";
 import { IdentifierContext } from "./boaParser";
@@ -560,6 +561,13 @@ export interface boaVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitTraversalExpression?: (ctx: TraversalExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `boaParser.varDecl`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitVarDecl?: (ctx: VarDeclContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `boaParser.composite`.

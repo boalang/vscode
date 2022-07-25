@@ -200,7 +200,7 @@ export class BoaJob extends vscode.TreeItem {
            this.iconPath = new vscode.ThemeIcon('bug', new vscode.ThemeColor('boalang.icon.jobExecError'));
         } else if (job.compilerStatus == boaapi.CompilerStatus.ERROR) {
            this.iconPath = new vscode.ThemeIcon('bracket-error', new vscode.ThemeColor('boalang.icon.jobCompileError'));
-        } else if (job.isRunning) {
+        } else if (job.running) {
            this.iconPath = new vscode.ThemeIcon('pulse', new vscode.ThemeColor('boalang.icon.jobRunning'));
         } else {
            this.iconPath = new vscode.ThemeIcon('pass', new vscode.ThemeColor('boalang.icon.jobDone'));

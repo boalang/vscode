@@ -61,10 +61,12 @@ export async function extractMethod(document: vscode.TextDocument, range: vscode
     // TODO compute where to put new function?
     const insertPosition = new vscode.Position(0, 0);
 
-    // ensure unique name for new function
     const text = document.getText();
+    const selectedText = document.getText(range);
+
     const tree = parseBoaCode(text);
-    // TODO handle finding all variable uses (args/params) and live vars (returned)
+
+    // ensure unique name for new function
     const visitor = new SymbolsVisitor(document.uri);
     const syms = visitor.visit(tree).filter(s => s.kind == vscode.SymbolKind.Function);
     const existingFuncs = syms.map(s => s.name);
@@ -79,7 +81,7 @@ export async function extractMethod(document: vscode.TextDocument, range: vscode
         }
     }
 
-    const selectedText = document.getText(range);
+    // TODO handle finding all variable uses (args/params) and live vars (returned)
 
     // handle indentation/newlines inside the function body
     const originalIndent = text.split('\n')[range.start.line].match(/^(\s*)/)[1];

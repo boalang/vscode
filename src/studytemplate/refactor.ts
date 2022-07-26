@@ -35,13 +35,15 @@ export class BoaTemplateRefactoringProvider implements vscode.CodeActionProvider
         }
         range = new vscode.Range(start, end);
 
-        const action = new vscode.CodeAction('extract template snippet', vscode.CodeActionKind.RefactorExtract);
-        action.command = {
-            command: 'boalang.refactor.template.extract',
-            title: action.title,
-            arguments: [document, range],
-        };
-        items.push(action);
+        if (!range.isSingleLine || start.character != end.character) {
+            const action = new vscode.CodeAction('extract template snippet', vscode.CodeActionKind.RefactorExtract);
+            action.command = {
+                command: 'boalang.refactor.template.extract',
+                title: action.title,
+                arguments: [document, range],
+            };
+            items.push(action);
+        }
 
         return items;
     }

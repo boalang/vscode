@@ -427,35 +427,44 @@
                     "when": "view == boalang.jobList && viewItem == boalang.jobItem"
                 },
                 {
-                    "command": "boalang.job.showFullOutput",
-                    "when": "view == boalang.jobList && viewItem == boalang.jobItem"
-                },
-                {
-                    "command": "boalang.job.delete",
-                    "when": "view == boalang.jobList && viewItem == boalang.jobItem"
-                },
-                {
-                    "command": "boalang.job.stop",
-                    "when": "view == boalang.jobList && viewItem == boalang.jobItem"
-                },
-                {
-                    "command": "boalang.job.resubmit",
-                    "when": "view == boalang.jobList && viewItem == boalang.jobItem"
-                },
-                {
-                    "command": "boalang.job.togglePublic",
-                    "when": "view == boalang.jobList && viewItem == boalang.jobItem"
-                },
-                {
-                    "command": "boalang.job.viewPublicUrl",
-                    "when": "view == boalang.jobList && viewItem == boalang.jobItem"
-                },
-                {
                     "command": "boalang.job.showSource",
+                    "group": "1_boalang@1",
+                    "when": "view == boalang.jobList && viewItem == boalang.jobItem"
+                },
+                {
+                    "command": "boalang.job.showFullOutput",
+                    "alt": "boalang.job.showOutput",
+                    "group": "1_boalang@2",
                     "when": "view == boalang.jobList && viewItem == boalang.jobItem"
                 },
                 {
                     "command": "boalang.job.downloadOutput",
+                    "group": "1_boalang@3",
+                    "when": "view == boalang.jobList && viewItem == boalang.jobItem"
+                },
+                {
+                    "command": "boalang.job.togglePublic",
+                    "group": "1_boalang@4",
+                    "when": "view == boalang.jobList && viewItem == boalang.jobItem"
+                },
+                {
+                    "command": "boalang.job.viewPublicUrl",
+                    "group": "1_boalang@5",
+                    "when": "view == boalang.jobList && viewItem == boalang.jobItem"
+                },
+                {
+                    "command": "boalang.job.stop",
+                    "group": "2_boalang@1",
+                    "when": "view == boalang.jobList && viewItem == boalang.jobItem"
+                },
+                {
+                    "command": "boalang.job.resubmit",
+                    "group": "2_boalang@2",
+                    "when": "view == boalang.jobList && viewItem == boalang.jobItem"
+                },
+                {
+                    "command": "boalang.job.delete",
+                    "group": "2_boalang@3",
                     "when": "view == boalang.jobList && viewItem == boalang.jobItem"
                 }
             ],

@@ -295,13 +295,8 @@ export function downloadOutput(uri: vscode.Uri|BoaJob) {
     runBoaCommands(async (client: boaapi.BoaClient) => {
         const jobId = getJobId(uri);
         const job = await client.getJob(jobId);
-
-        if (!job.running && await job.outputSize > 0 && job.compilerErrors == undefined) {
-            await job.downloadOutput(getWorkspaceRoot() + `/boa-job${jobId}-output.txt`);
-            vscode.window.showInformationMessage(`Output for Job ${jobId} downloaded`);
-        } else {
-            vscode.window.showInformationMessage(`Job ${jobId} is running`);
-        }
+        await job.downloadOutput(getWorkspaceRoot() + `/boa-job${jobId}-output.txt`);
+        vscode.window.showInformationMessage(`Output for Job ${jobId} downloaded`);
     });
 }
 
@@ -316,13 +311,9 @@ export function showOutput() {
             }
             const job = await client.getJob(jobId);
 
-            if (!job.running && await job.outputSize > 0 && job.compilerErrors == undefined) {
-                outputChannel.clear();
-                outputChannel.append(await JobCache.getOutput(job));
-                outputChannel.show();
-            } else {
-                vscode.window.showInformationMessage(`Job ${jobId} is running`);
-            }
+            outputChannel.clear();
+            outputChannel.append(await JobCache.getOutput(job));
+            outputChannel.show();
         });
     }
 }
@@ -347,14 +338,7 @@ function buildUri(uri: vscode.Uri|BoaJob, path: string, fragment: string) {
 }
 
 export async function showFullOutput(uri: vscode.Uri|BoaJob) {
-    const jobId = getJobId(uri);
-    const job = await client.getJob(jobId);
-
-    if (!job.running && await job.outputSize > 0 && job.compilerErrors == undefined) {
-        showUri(buildUri(uri, 'boa-job$id-output.txt', 'output'));
-    } else {
-        vscode.window.showInformationMessage(`Job ${jobId} is running`);
-    }
+    showUri(buildUri(uri, 'boa-job$id-output.txt', 'output'));
 }
 
 export async function showJob(uri: vscode.Uri|BoaJob) {
@@ -434,13 +418,9 @@ export async function resubmitJob(uri: vscode.Uri|BoaJob) {
             const jobId = getJobId(uri);
             const job = await client.getJob(jobId);
 
-            if (!job.running) {
-                await job.resubmit();
-                vscode.commands.executeCommand('boalang.joblist.refresh');
-                vscode.window.showInformationMessage(`Job ${jobId} has been resubmitted`);
-            } else {
-                vscode.window.showInformationMessage(`Job ${jobId} is running`);
-            }
+            await job.resubmit();
+            vscode.commands.executeCommand('boalang.joblist.refresh');
+            vscode.window.showInformationMessage(`Job ${jobId} has been resubmitted`);
         });
     }
 }

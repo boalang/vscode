@@ -424,48 +424,48 @@
                     "command": "boalang.job.showOutput",
                     "alt": "boalang.job.showFullOutput",
                     "group": "inline",
-                    "when": "view == boalang.jobList && viewItem == boalang.jobItem"
+                    "when": "view == boalang.jobList && viewItem =~ /boalang.jobItem\\d+/"
                 },
                 {
                     "command": "boalang.job.showSource",
                     "group": "1_boalang@1",
-                    "when": "view == boalang.jobList && viewItem == boalang.jobItem"
+                    "when": "view == boalang.jobList && viewItem =~ /boalang.jobItem\\d+/"
                 },
                 {
                     "command": "boalang.job.showFullOutput",
                     "alt": "boalang.job.showOutput",
                     "group": "1_boalang@2",
-                    "when": "view == boalang.jobList && viewItem == boalang.jobItem"
+                    "when": "view == boalang.jobList && viewItem =~ /boalang.jobItem\\d+/"
                 },
                 {
                     "command": "boalang.job.downloadOutput",
                     "group": "1_boalang@3",
-                    "when": "view == boalang.jobList && viewItem == boalang.jobItem"
+                    "when": "view == boalang.jobList && viewItem =~ /boalang.jobItem\\d+/"
                 },
                 {
                     "command": "boalang.job.togglePublic",
                     "group": "1_boalang@4",
-                    "when": "view == boalang.jobList && viewItem == boalang.jobItem"
+                    "when": "view == boalang.jobList && viewItem =~ /boalang.jobItem\\d+/"
                 },
                 {
                     "command": "boalang.job.viewPublicUrl",
                     "group": "1_boalang@5",
-                    "when": "view == boalang.jobList && viewItem == boalang.jobItem"
+                    "when": "view == boalang.jobList && viewItem =~ /boalang.jobItem\\d+/"
                 },
                 {
                     "command": "boalang.job.stop",
                     "group": "2_boalang@1",
-                    "when": "view == boalang.jobList && viewItem == boalang.jobItem"
+                    "when": "view == boalang.jobList && viewItem in boalang.jobsRunning"
                 },
                 {
                     "command": "boalang.job.resubmit",
                     "group": "2_boalang@2",
-                    "when": "view == boalang.jobList && viewItem == boalang.jobItem"
+                    "when": "view == boalang.jobList && viewItem =~ /boalang.jobItem\\d+/"
                 },
                 {
                     "command": "boalang.job.delete",
                     "group": "2_boalang@3",
-                    "when": "view == boalang.jobList && viewItem == boalang.jobItem"
+                    "when": "view == boalang.jobList && viewItem =~ /boalang.jobItem\\d+/"
                 }
             ],
             "explorer/context": [

@@ -114,6 +114,34 @@ class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
         }).then(() => {
             this.jobs.sort((a, b) => (b.label as string).localeCompare(a.label as string))
 
+            //const filteredRunningJobs = this.jobs.filter(async job => await job.job.running);
+            //const filteredOutputJobs = this.jobs.filter(async job => await JobCache.getOutputSize(job));
+
+            //const filteredRunningJobs: BoaJob[] = null;
+            //const filteredOutputJobs: BoaJob[] = null;
+            // for (const job of this.jobs) {
+            //     if (job.job.running) {
+            //         filteredRunningJobs.push(job);
+            //     }
+
+                // runBoaCommands(async (client: boaapi.BoaClient) => {
+                //     if (await JobCache.getOutputSize(job) > 0) {
+                //         filteredOutputJobs.push(job);
+                //     }
+                // });
+            //}
+
+            const filteredRunningJobs: BoaJob[] = null;
+            for (const job of this.jobs) {
+                if (job.job.running) {
+                    filteredRunningJobs.push(job);
+                }
+            }
+
+            //vscode.commands.executeCommand('setContext', 'boalang.tree.jobs', this.jobs.map(j => j.contextValue));
+            vscode.commands.executeCommand('setContext', 'boalang.jobsRunning', filteredRunningJobs.map(j => j.contextValue));
+            //vscode.commands.executeCommand('setContext', 'boalang.tree.jobsOutput', filteredOutputJobs.map(j => j.contextValue));
+
             vscode.commands.executeCommand('setContext', 'boalang.joblist.prevEnabled', this.start > 0);
             vscode.commands.executeCommand('setContext', 'boalang.joblist.nextEnabled', this.start + this.jobs.length < this.max);
             if (this.max < 1) {
@@ -186,7 +214,9 @@ export class BoaJob extends vscode.TreeItem {
         super(`Job #${job.id}`, vscode.TreeItemCollapsibleState.Collapsed);
         this.tooltip = source;
         this.description = job.submitted.toString();
-        this.contextValue = 'boalang.jobItem';
+        this.contextValue = `boalang.jobItem${job.id}`;
+
+
 
         this.command = {
             command: 'boalang.job.showSource',

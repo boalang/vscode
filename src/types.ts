@@ -846,13 +846,21 @@ export const builtinFunctions: { [name: string]: IFunction } = {
         ret: { type: ': array of string', doc: '' },
         doc: 'Search for a match of the regular expression `regex` within `str`, and return. The 0th string is the entire match; following elements of the array hold matches of successive parenthesized subexpressions. This function is equivalent to using matchposns to find successive locations of matches and created array slices of `str` with the indices returned.',
     },
+    join: {
+        args: [
+            { name: 's: string', doc: '' },
+            { name: 'strs: array of string|stack of string', doc: '' },
+        ],
+        ret: { type: ': string', doc: '' },
+        doc: 'Joins all the strings in `strs` together with the string `s` in between each.',
+    },
     split: {
         args: [
             { name: 's: string', doc: '' },
             { name: 'regex: string', doc: '' },
         ],
         ret: { type: ': array of string', doc: '' },
-        doc: 'Slice string `s` into pieces according to subsequent matches of the regular expression `regex`. Runs along the regular expression exactly once.',
+        doc: 'Slice string `s` into pieces according to subsequent matches of the regular expression `regex`. Runs along the regular expression until the input string is exhausted.',
     },
     splitn: {
         args: [
@@ -863,21 +871,13 @@ export const builtinFunctions: { [name: string]: IFunction } = {
         ret: { type: ': array of string', doc: '' },
         doc: 'Slice string `s` into pieces according to subsequent matches of the regular expression `regex`. Runs along the regular expression at most `n` times.',
     },
-    splitall: {
-        args: [
-            { name: 's: string', doc: '' },
-            { name: 'regex: string', doc: '' },
-        ],
-        ret: { type: ': array of string', doc: '' },
-        doc: 'Slice string `s` into pieces according to subsequent matches of the regular expression `regex`. Runs along the regular expression until the input string is exhausted.',
-    },
     regex: {
         args: [
             { name: 't: any_type', doc: '' },
             { name: 'base: int', doc: '' },
         ],
         ret: { type: ': string', doc: '' },
-        doc: 'Returns a `string` holding a regular expression suitable for matching text representing values of the specified type `t`. For example, `regex(int)` generates a `string` to match integer constants (-23, 0x1f, etc.).  At the moment, only `int` and `float` types are supported. When the type is `int`, an optional numerical `base` may be specified for the conversion.',
+        doc: 'Returns a `string` holding a regular expression suitable for matching text representing values of the specified type `t`. For example, `regex(int)` generates a `string` to match integer constants (-23, 0x1f, etc.). At the moment, only `int` and `float` types are supported. When the type is `int`, an optional numerical `base` may be specified for the conversion.',
     },
     format: {
         args: [
@@ -1004,21 +1004,14 @@ export const builtinFunctions: { [name: string]: IFunction } = {
         ret: { type: ': bool', doc: '' },
         doc: 'Return a boolean reporting whether the `key` is present in the map `m`.',
     },
-    // TODO fix this
-    // remove: {
-    //     args: [
-    //         { name: 's: set of val_type', doc: '' },
-    //         { name: 'v: val_type', doc: '' },
-    //     ],
-    //     doc: 'Removes the value `v` from the set, if it contains it.',
-    // },
-    // remove: {
-    //     args: [
-    //         { name: 'm: map[key_type] of val_type', doc: '' },
-    //         { name: 'k: key_type', doc: '' },
-    //     ],
-    //     doc: 'Removes the entry for the key `k`, if it exists in the map.',
-    // },
+    remove: {
+        args: [
+            { name: 's|m: set of val_type|map[key_type] of val_type', doc: '' },
+            { name: 'v|k: val_type|key_type', doc: '' },
+        ],
+        ret: { type: '', doc: '' },
+        doc: 'Removes the value `v` from the set `s`, if it contains it.\nRemoves the entry for the key `k`, if it exists in the map `m`.',
+    },
     keys: {
         args: [
             { name: 'm: map[key_type] of val_type', doc: '' },
@@ -1285,7 +1278,7 @@ export const builtinFunctions: { [name: string]: IFunction } = {
     addday: {
         args: [
             { name: 't: time', doc: '' },
-            { name: 'n: int', doc: '' },
+            { name: 'n: int?', doc: '' },
             { name: 'timezone: string?', doc: '' },
         ],
         ret: { type: ': time', doc: '' },
@@ -1294,7 +1287,7 @@ export const builtinFunctions: { [name: string]: IFunction } = {
     addweek: {
         args: [
             { name: 't: time', doc: '' },
-            { name: 'n: int', doc: '' },
+            { name: 'n: int?', doc: '' },
             { name: 'timezone: string?', doc: '' },
         ],
         ret: { type: ': time', doc: '' },
@@ -1303,7 +1296,7 @@ export const builtinFunctions: { [name: string]: IFunction } = {
     addmonth: {
         args: [
             { name: 't: time', doc: '' },
-            { name: 'n: int', doc: '' },
+            { name: 'n: int?', doc: '' },
             { name: 'timezone: string?', doc: '' },
         ],
         ret: { type: ': time', doc: '' },
@@ -1312,7 +1305,7 @@ export const builtinFunctions: { [name: string]: IFunction } = {
     addyear: {
         args: [
             { name: 't: time', doc: '' },
-            { name: 'n: int', doc: '' },
+            { name: 'n: int?', doc: '' },
             { name: 'timezone: string?', doc: '' },
         ],
         ret: { type: ': time', doc: '' },
@@ -1454,9 +1447,10 @@ export const builtinFunctions: { [name: string]: IFunction } = {
     dot: {
         args: [
             { name: 'g: graph', doc: '' },
+            { name: 'v: bool|string', doc: '' },
         ],
         ret: { type: ': string', doc: '' },
-        doc: 'Returns a string representation of the graph `g`, in Graphviz DOT format.',
+        doc: 'Returns a string representation of the graph `g`, in Graphviz DOT format. The optional second parameter is a string label for the root node, or if `true`, the method pretty printed.',
     },
     getvalue: {
         args: [
@@ -1475,21 +1469,22 @@ export const builtinFunctions: { [name: string]: IFunction } = {
     },
     getcdg: {
         args: [
-            { name: 'm: Method', doc: '' },
+            { name: 'm: Method|CFG', doc: '' },
         ],
         ret: { type: ': CDG', doc: '' },
-        doc: 'Returns a control-dependence graph (`CDG`) for the given Method `m`.',
+        doc: 'Returns a control-dependence graph (`CDG`) for the given Method `m`, or the CFG of a method.',
     },
     getddg: {
         args: [
             { name: 'm: Method', doc: '' },
         ],
         ret: { type: ': DDG', doc: '' },
-        doc: 'Returns a data-dependence graph (`DDG`) for the given Method `m`.',
+        doc: 'Returns a data-dependence graph (`DDG`) for the given Method `m`, or the CFG of a method.',
     },
     getpdg: {
         args: [
             { name: 'm: Method', doc: '' },
+            { name: 'b: bool?', doc: '' },
         ],
         ret: { type: ': PDG', doc: '' },
         doc: 'Returns a program-dependence graph (`PDG`) for the given Method `m`.',
@@ -1517,14 +1512,28 @@ export const builtinFunctions: { [name: string]: IFunction } = {
         ret: { type: ': ASTRoot', doc: '' },
         doc: 'Returns the `ASTRoot` of the specified `file`, if it exists. Otherwise returns an empty `ASTRoot`.',
     },
+    getastcount: {
+        args: [
+            { name: 'file: ChangedFile', doc: '' },
+        ],
+        ret: { type: ': int', doc: '' },
+        doc: 'Returns the number of AST nodes in the specified `file`.',
+    },
+    ast_len: {
+        args: [
+            { name: 'ast: dsl_type', doc: '' },
+        ],
+        ret: { type: ': int', doc: '' },
+        doc: 'Returns the number of AST nodes in the specified `ast`.',
+    },
     getsnapshot: {
         args: [
             { name: 'cr: CodeRepository', doc: '' },
-            { name: 't: time?', doc: '' },
+            { name: 'before: time?|Revision?', doc: '' },
             { name: 'filters: string...', doc: '' },
         ],
         ret: { type: ': array of ChangedFile', doc: '' },
-        doc: 'Returns a snapshot of `ChangedFile`s.  A snapshot is the last version of a file before a given time `t` (if no time is given, `now()` is used).  If any `filters` are given, they are used to filter out files.  The file kind is checked against each string and must match one or more filters.  Matches are performed by comparing the filter against the start of the file kind.\n\n```boalang\ngetsnapshot := function(cr: CodeRepository, t: time, filters: array of string) : array of ChangedFile {\n\tsnapshot: map[string] of ChangedFile;\n\n\tvisit(cr, visitor {\n\t\tbefore node: Revision ->\n\t\t\tif (node.commit_date > t)\n\t\t\t\tstop;\n\t\tbefore node: ChangedFile -> {\n\t\t\tif (node.change == ChangeKind.DELETED) {\n\t\t\t\tremove(snapshot, node.name);\n\t\t\t} else {\n\t\t\t\tfilter := len(filters) > 0;\n\n\t\t\t\texists (i: int; iskind(filters[i], node.kind))\n\t\t\t\t\tfilter = false;\n\n\t\t\t\tif (!filter)\n\t\t\t\t\tsnapshot[node.name] = node;\n\t\t\t}\n\t\t\tstop;\n\t\t}\n\t});\n\n\treturn values(snapshot);\n};\n```',
+        doc: 'Returns a snapshot of `ChangedFile`s. A snapshot is the last version of a file `before` a given time/Revision (if no time is given, `now()` is used). If any `filters` are given, they are used to filter out files. The file kind is checked against each string and must match one or more filters. Matches are performed by comparing the filter against the start of the file kind.',
     },
     hasfiletype: {
         args: [
@@ -1539,16 +1548,8 @@ export const builtinFunctions: { [name: string]: IFunction } = {
             { name: 'log: string|Revision', doc: '' },
         ],
         ret: { type: ': bool', doc: '' },
-        doc: 'Is the given `log` message indicating it is a fixing revision? A message is considered indicating a bug fix if it matches a set of regular expressions.\n\n```boalang\nisfixingrevision := function(log: string) : bool {\n\tif (match(`\bfix(s|es|ing|ed)?\b`, log)) return true;\n\tif (match(`\b(error|bug|issue)(s)\b`, log)) return true;\n\treturn false;\n};\n```\n\n```boalang\nisfixingrevision := function(rev: Revision) : bool {\n\treturn isfixingrevision(rev.log);\n};\n```',
+        doc: 'Is the given (revision `rev`\'s) `log` message indicating it is a fixing revision? A message is considered indicating a bug fix if it matches a set of regular expressions.\n\n```boalang\nisfixingrevision := function(log: string) : bool {\n\tif (match(`\bfix(s|es|ing|ed)?\b`, log)) return true;\n\tif (match(`\b(error|bug|issue)(s)\b`, log)) return true;\n\treturn false;\n};\n```\n\n```boalang\nisfixingrevision := function(rev: Revision) : bool {\n\treturn isfixingrevision(rev.log);\n};\n```',
     },
-    // TODO fix this
-    // isfixingrevision: {
-    //     args: [
-    //         { name: 'rev: Revision', doc: '' },
-    //     ],
-    //     ret: { type: ': bool', doc: '' },
-    //     doc: 'Is the given revision `rev`\'s log message indicating it is a fixing revision? A message is considered indicating a bug fix if it matches a set of regular expressions.',
-    // },
     iskind: {
         args: [
             { name: 's: string', doc: '' },
@@ -1564,5 +1565,257 @@ export const builtinFunctions: { [name: string]: IFunction } = {
         ],
         ret: { type: ': bool', doc: '' },
         doc: 'Returns `true` if the expression `e` is of kind LITERAL and the literal matches the string `s`.\n\n```boalang\nisliteral := function(e: Expression, s: string) : bool {\n\treturn e.kind == ExpressionKind.LITERAL && def(e.literal) && e.literal == s;\n};\n```',
+    },
+    getnoargsvariables: {
+        args: [
+            { name: 'e: Expression', doc: 'the expression in symbolic form' },
+        ],
+        ret: { type: 'array of Expression', doc: 'array of variables which are not arg0, arg1, arg2, ...' },
+        doc: 'Gives list of non-argument variables present in a predicate expression.',
+    },
+    converttosymbolicname: {
+        args: [
+            { name: 'e: Expression', doc: 'predicate expression' },
+            { name: 'rcvr: Expression', doc: 'API receiver' },
+            { name: 'args: array of Expression', doc: 'API arguments' },
+        ],
+        ret: { type: 'array of Expression', doc: 'the expression in symbolic form' },
+        doc: 'Replaces API arguments in the given expression with symbolic names.',
+    },
+    assignlatestvalue: {
+        args: [
+            { name: 'e: Expression', doc: 'the predicate expression with symbolic_name' },
+            { name: 'replace: map[Expression] of Expression', doc: 'the map of literal values of non-argument variables' },
+        ],
+        ret: { type: 'Expression', doc: 'the replaced expression' },
+        doc: 'Assigns literal values to non-argument variables in a precondition expression.',
+    },
+    normalize: {
+        args: [
+            { name: 'e: Expression', doc: 'the expression to be normalized' },
+        ],
+        ret: { type: 'Expression', doc: 'the normalized expression' },
+        doc: 'Normalizes a given expression according to this algorithm:\n\nNormalizing expression -> (arg0 + 3 + arg3 -1 <= arg1 + 1 + 5)\n\nIteration 1:\nReduce step: arg0 + arg3 + 2 <= arg1 + 6\nMove step: arg0 + arg3 - arg1 <= 6 - 2\nMove Step == Reduce Step, False\n\nIteration 2:\nReduce step: arg0 + arg3 - arg1 <= 4\nMove step: arg0 + arg3 - arg1 <= 4\nMove Step == Reduce Step, True, therefore break\n\nSort Left side:\narg0 - arg1 + arg3 <= 4',
+    },
+    reduce: {
+        args: [
+            { name: 'e: Expression', doc: 'the expression to reduce' },
+        ],
+        ret: { type: 'Expression', doc: 'the reduced form of the expression' },
+        doc: 'Attempts to reduce an expression, simplifying wherever possible.',
+    },
+    nnf: {
+        args: [
+            { name: 'e: Expression', doc: 'the expression to compute NNF on' },
+        ],
+        ret: { type: 'Expression', doc: 'the negated normal form of e, simplified' },
+        doc: 'Computes the negated normal form of an expression and then simplifies the result.',
+    },
+    simplify: {
+        args: [
+            { name: 'e: Expression', doc: 'the expression to simplify' },
+        ],
+        ret: { type: 'Expression', doc: 'a simplified version of the expression' },
+        doc: 'Simplifies an expression.',
+    },
+    cnf: {
+        args: [
+            { name: 'e: Expression', doc: 'the expression to compute CNF on' },
+        ],
+        ret: { type: 'Expression', doc: 'the conjunctive normal form of e, simplified' },
+        doc: 'Computes the conjunctive normal form of an expression and then simplifies the result.',
+    },
+    dnf: {
+        args: [
+            { name: 'e: Expression', doc: 'the expression to compute DNF on' },
+        ],
+        ret: { type: 'Expression', doc: 'the disjunctive normal form of e, simplified' },
+        doc: 'Computes the disjunctive normal form of an expression and then simplifies the result.',
+    },
+    prettyprint: {
+        args: [
+            { name: 'ast: dsl_type ', doc: 'the AST to pretty print' },
+        ],
+        ret: { type: 'string', doc: 'the AST, pretty printed back to source code' },
+        doc: 'Pretty prints an `ast` back into source form. Depends on the current lang mode (see: setlang()).\n\nNote: that this process is approximate, so going from source -> AST -> source often produces difference strings, and sometimes may not even produce valid code. This is especially true if the lang mode that generated the AST does not match the current lang mode!',
+    },
+    has_visibility: {
+        args: [
+            { name: 'ast: Declaration|Method|Namespace|Variable', doc: 'the AST node to test' },
+            { name: 'v: Visibility ', doc: 'the Visibility modifier to test for' },
+        ],
+        ret: { type: 'bool', doc: 'if `v` is a modifier of the `ast`' },
+        doc: 'Tests if an `ast` node has a visiblity modifier `v` or not.',
+    },
+    has_modifier: {
+        args: [
+            { name: 'ast: Declaration|Method|Namespace|Variable', doc: 'the AST node to test' },
+            { name: 'm: ModifierKind ', doc: 'the modifier to test for' },
+        ],
+        ret: { type: 'bool', doc: 'if `m` is a modifier of the `ast`' },
+        doc: 'Tests if an `ast` node has a modifier `m` or not.',
+    },
+    has_modifier_final: {
+        args: [
+            { name: 'ast: Declaration|Method|Namespace|Variable', doc: 'the AST node to test' },
+        ],
+        ret: { type: 'bool', doc: 'if FINAL is a modifier of the `ast`' },
+        doc: 'Tests if an `ast` node has a FINAL modifier or not.',
+    },
+    has_modifier_namespace: {
+        args: [
+            { name: 'ast: Declaration|Method|Namespace|Variable', doc: 'the AST node to test' },
+        ],
+        ret: { type: 'bool', doc: 'if NAMESPACE is a modifier of the `ast`' },
+        doc: 'Tests if an `ast` node has a NAMESPACE modifier or not.',
+    },
+    has_modifier_private: {
+        args: [
+            { name: 'ast: Declaration|Method|Namespace|Variable', doc: 'the AST node to test' },
+        ],
+        ret: { type: 'bool', doc: 'if PRIVATE is a modifier of the `ast`' },
+        doc: 'Tests if an `ast` node has a PRIVATE modifier or not.',
+    },
+    has_modifier_protected: {
+        args: [
+            { name: 'ast: Declaration|Method|Namespace|Variable', doc: 'the AST node to test' },
+        ],
+        ret: { type: 'bool', doc: 'if PROTECTED is a modifier of the `ast`' },
+        doc: 'Tests if an `ast` node has a PROTECTED modifier or not.',
+    },
+    has_modifier_public: {
+        args: [
+            { name: 'ast: Declaration|Method|Namespace|Variable', doc: 'the AST node to test' },
+        ],
+        ret: { type: 'bool', doc: 'if PUBLIC is a modifier of the `ast`' },
+        doc: 'Tests if an `ast` node has a PUBLIC modifier or not.',
+    },
+    has_modifier_static: {
+        args: [
+            { name: 'ast: Declaration|Method|Namespace|Variable', doc: 'the AST node to test' },
+        ],
+        ret: { type: 'bool', doc: 'if STATIC is a modifier of the `ast`' },
+        doc: 'Tests if an `ast` node has a STATIC modifier or not.',
+    },
+    has_modifier_synchronized: {
+        args: [
+            { name: 'ast: Declaration|Method|Namespace|Variable', doc: 'the AST node to test' },
+        ],
+        ret: { type: 'bool', doc: 'if SYNCHRONIZED is a modifier of the `ast`' },
+        doc: 'Tests if an `ast` node has a SYNCHRONIZED modifier or not.',
+    },
+    has_annotation: {
+        args: [
+            { name: 'ast: Declaration|Method|Namespace|Variable', doc: 'the AST node to test' },
+            { name: 's: string?', doc: 'the annotation name' },
+        ],
+        ret: { type: 'bool', doc: 'if the `ast` has an annotation (with the name)' },
+        doc: 'Tests if an `ast` node has an annotation. If a name is given, it must have an annotation with that name.',
+    },
+    get_annotation: {
+        args: [
+            { name: 'ast: Declaration|Method|Namespace|Variable', doc: 'the AST node to test' },
+            { name: 's: string', doc: 'the annotation name' },
+        ],
+        ret: { type: 'Modifier', doc: 'the matching annotation, if any' },
+        doc: 'Returns the annotation with that name, if any.',
+    },
+    getrevisionscount: {
+        args: [
+            { name: 'cr: CodeRepository', doc: '' },
+        ],
+        ret: { type: 'int', doc: '' },
+        doc: 'Returns the total number of Revisions in `cr`, across all branches.',
+    },
+    getrevision: {
+        args: [
+            { name: 'cr: CodeRepository', doc: '' },
+            { name: 'idx: int', doc: 'index into `cr`\'s revisions array' },
+        ],
+        ret: { type: 'Revision', doc: '' },
+        doc: 'Returns a Revision from the CodeRepository `cr` at the given revision index `idx`.',
+    },
+    isboollit: {
+        args: [
+            { name: 'e: Expression', doc: '' },
+        ],
+        ret: { type: 'bool', doc: '' },
+        doc: 'Returns if the expression `e` is a boolean literal.',
+    },
+    ischarlit: {
+        args: [
+            { name: 'e: Expression', doc: '' },
+        ],
+        ret: { type: 'bool', doc: '' },
+        doc: 'Returns if the expression `e` is a char literal.',
+    },
+    isfloatlit: {
+        args: [
+            { name: 'e: Expression', doc: '' },
+        ],
+        ret: { type: 'bool', doc: '' },
+        doc: 'Returns if the expression `e` is a float literal.',
+    },
+    isintlit: {
+        args: [
+            { name: 'e: Expression', doc: '' },
+        ],
+        ret: { type: 'bool', doc: '' },
+        doc: 'Returns if the expression `e` is a int literal.',
+    },
+    isnulllit: {
+        args: [
+            { name: 'e: Expression', doc: '' },
+        ],
+        ret: { type: 'bool', doc: '' },
+        doc: 'Returns if the expression `e` is a null literal.',
+    },
+    isstringlit: {
+        args: [
+            { name: 'e: Expression', doc: '' },
+        ],
+        ret: { type: 'bool', doc: '' },
+        doc: 'Returns if the expression `e` is a string literal.',
+    },
+    istypelit: {
+        args: [
+            { name: 'e: Expression', doc: '' },
+        ],
+        ret: { type: 'bool', doc: '' },
+        doc: 'Returns if the expression `e` is a type literal.',
+    },
+    type_name: {
+        args: [
+            { name: 's: string', doc: '' },
+        ],
+        ret: { type: 'string', doc: '' },
+        doc: 'Returns the name of the type in a simplified form, without package/path qualifiers. If there are generics, they are also simplified.',
+    },
+    parse: {
+        args: [
+            { name: 's: string', doc: '' },
+        ],
+        ret: { type: 'ASTRoot', doc: '' },
+        doc: 'Parses the string `s` and returns the parsed AST. On failure, an empty ASTRoot is returned. Depends on the current lang mode (see: setlang()).',
+    },
+    parseexpression: {
+        args: [
+            { name: 's: string', doc: '' },
+        ],
+        ret: { type: 'Expression', doc: '' },
+        doc: 'Parses the expression string `s` and returns the parsed Expression. On failure, an empty Expression with kind OTHER is returned. Depends on the current lang mode (see: setlang()).',
+    },
+    getlang: {
+        args: [
+        ],
+        ret: { type: 'FileKind', doc: '' },
+        doc: 'Returns the current lang mode.',
+    },
+    setlang: {
+        args: [
+            { name: 'k: FileKind', doc: '' },
+        ],
+        ret: { type: '', doc: '' },
+        doc: 'Sets the current lang mode. Language modes are set via a `FileKind`. The language mode will match whatever the particular file kind `k` would parse as. A language mode in Boa controls how various functions operate, including what language to attempt parsing raw strings as, what language to pretty print a tree back into, how helpers that determine kinds of literals match the literal string, etc.',
     },
 };

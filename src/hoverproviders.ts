@@ -15,6 +15,8 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
+import { parseBoaCode } from './ast/parser';
+import { UDFFinder } from './ast/signatures';
 import { builtinFunctions } from './types';
 
 export default class FunctionsHoverProvider implements vscode.HoverProvider {
@@ -32,6 +34,15 @@ ${getFuncSignature(funcName)}
 ----
 
 ${getFuncDoc(funcName)}`));
+            } else {
+                const tree = parseBoaCode(document.getText());
+                const visitor = new UDFFinder(document.offsetAt(position));
+                visitor.visit(tree);
+                const func = visitor.funcs[funcName];
+                if (func !== undefined) {
+                    const args = func.args.map(arg => arg.name).join(', ');
+                    return new vscode.Hover(new vscode.MarkdownString(`\`\`\`boalang\n${funcName}(${args})${func.ret.type}\n\`\`\``));
+                }
             }
         }
 

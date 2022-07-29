@@ -117,7 +117,7 @@ class FunctionCallFinder extends AbstractParseTreeVisitor<ast.FactorContext> imp
 }
 
 type funcDict = { [name: string]: IFunction };
-class UDFFinder extends ScopedVisitor<funcDict> {
+export class UDFFinder extends ScopedVisitor<funcDict> {
     private _found = false;
     private position: number;
 
@@ -170,7 +170,7 @@ class UDFFinder extends ScopedVisitor<funcDict> {
             const id = ctx.identifier().text;
             const funcType = funcExp.functionType();
             const numArgs = funcType.varDecl().length;
-            const funcRet = funcType.varDecl().length > numArgs ? funcType.varDecl(numArgs) : undefined;
+            const funcRet = funcType.type();
 
             const func: IFunction = {
                 args: [],

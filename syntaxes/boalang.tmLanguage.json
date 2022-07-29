@@ -6,6 +6,9 @@
 			"include": "#comments"
 		},
 		{
+			"include": "#consts"
+		},
+		{
 			"include": "#keywords"
 		},
 		{
@@ -29,11 +32,11 @@
 				"end": "$"
 			}]
 		},
-		"keywords": {
+		"consts": {
 			"patterns": [
 				{
 					"name": "constant.language.boalang",
-					"match": "\\b(true|false|PI|Inf|inf|NaN|nan|SECOND|SEC|MINUTE|MIN|HOUR|HR)\\b"
+					"match": "\\b(input|true|false|PI|Inf|inf|NaN|nan|SECOND|SEC|MINUTE|MIN|HOUR|HR)\\b"
 				},
 				{
 					"name": "constant.numeric.boalang",
@@ -46,14 +49,18 @@
 				{
 					"name": "constant.numeric.boalang",
 					"match": "\\b0x[0-9a-fA-F]+\\b"
-				},
+				}
+			]
+		},
+		"keywords": {
+			"patterns": [
 				{
 					"name": "keyword.operator.boalang",
 					"match": "\\b\\+\\+|\\-\\-|\\|\\||\\->|\\?|\\+|\\-|\\*|\\/|:=|:|\\$|%|\\||\\^|~|<<|>>|==|=|!=|<=|>=|<|>|&&|&|!\\b"
 				},
 				{
 					"name": "keyword.boalang",
-					"match": "\\b(visit|traverse|current|function|weight|input|of|before|after|case|default|_)\\b"
+					"match": "\\b(visit|traverse|current|function|weight|of|before|after|case|default|_)\\b"
 				},
 				{
 					"name": "keyword.control.boalang",
@@ -89,11 +96,11 @@
 			"patterns": [
 				{
 					"name": "support.function.boalang",
-					"match": "\\b(hash|clear|remove|clone|add|poll|offer|peek|push|pop|abs|def|fingerprintof|new|regex|split|splitn|splitall|haskey|contains|containsall|values|keys|len|lookup|max|min|sort|sortx|convert|addday|addmonth|addweek|addyear|dayofmonth|dayofweek|dayofyear|hourof|minuteof|monthof|secondof|yearof|trunctoday|trunctohour|trunctominute|trunctomonth|trunctosecond|trunctoyear|now|formattime|lowercase|uppercase|strfind|strrfind|substring|strreplace|match|matchposns|matchstrs|format|highbit|rand|nrand|log|log10|exp|sqrt|pow|sin|cos|tan|asin|acos|atan|atan2|cosh|sinh|tanh|acosh|asinh|atanh|ceil|floor|round|trunc|isnan|isinf|isfinite|isnormal|difference|union|intersect|symdiff|getvalue|getinedge|getoutedge|normalize|gettotalnodes|gettotalcontrolnodes|gettotaledges|getcfg|getcdg|getddg|getpdg|getpdtree|getcfgslice|getpdgslice|dot|parse|parseexpression|prettyprint)\\b\\s*(?=\\()"
+					"match": "\\b(hash|clear|remove|clone|add|poll|offer|peek|push|pop|abs|def|new|regex|split|splitn|haskey|contains|containsall|values|keys|len|lookup|max|min|sort|sortx|convert|addday|addmonth|addweek|addyear|dayofmonth|dayofweek|dayofyear|hourof|minuteof|monthof|secondof|yearof|trunctoday|trunctohour|trunctominute|trunctomonth|trunctosecond|trunctoyear|now|formattime|lowercase|uppercase|strfind|strrfind|substring|strreplace|match|matchposns|matchstrs|format|highbit|rand|nrand|log|log10|exp|sqrt|pow|sin|cos|tan|asin|acos|atan|atan2|cosh|sinh|tanh|acosh|asinh|atanh|ceil|floor|round|trunc|isnan|isinf|isfinite|isnormal|difference|union|intersect|symdiff)\\b\\s*(?=\\()"
 				},
 				{
 					"name": "support.function.dsl.boalang",
-					"match": "\\b(getast|getsnapshot|iskind|isliteral|hasfiletype|isfixingrevision|ast_len)\\b\\s*(?=\\()"
+					"match": "\\b(gettotalnodes|gettotalcontrolnodes|gettotaledges|getpdtree|getcfgslice|getpdgslice|parse|parseexpression|dot|getvalue|getcfg|getcdg|getddg|getpdg|getinedge|getoutedge|getast|getastcount|ast_len|getsnapshot|hasfiletype|isfixingrevision|iskind|isliteral|getnoargsvariables|converttosymbolicname|assignlatestvalue|normalize|reduce|nnf|simplify|cnf|dnf|prettyprint|has_visibility|has_modifier|has_modifier_final|has_modifier_namespace|has_modifier_private|has_modifier_protected|has_modifier_public|has_modifier_static|has_modifier_synchronized|has_annotation|get_annotation|getrevisionscount|getrevision)\\b\\s*(?=\\()"
 				},
 				{
 					"name": "support.function.aggregators.boalang",

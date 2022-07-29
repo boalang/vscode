@@ -208,6 +208,110 @@ export const builtinTypes: { [name: string]: IType } = {
         ],
         doc: 'A single modifier',
     },
+    CFG: {
+        attrs: [
+            { name: 'nodes', type: 'set of CFGNode', doc: 'The set of nodes in the graph' },
+        ],
+        doc: 'A control-flow graph.',
+    },
+    CDG: {
+        attrs: [
+            { name: 'nodes', type: 'set of CDGNode', doc: 'The set of nodes in the graph' },
+        ],
+        doc: 'A control-dependence graph.',
+    },
+    DDG: {
+        attrs: [
+            { name: 'nodes', type: 'set of DDGNode', doc: 'The set of nodes in the graph' },
+        ],
+        doc: 'A data-dependence graph.',
+    },
+    PDG: {
+        attrs: [
+            { name: 'nodes', type: 'set of PDGNode', doc: 'The set of nodes in the graph' },
+        ],
+        doc: 'A program-dependence graph.',
+    },
+    CFGNode: {
+        attrs: [
+            { name: 'kind', type: 'NodeType', doc: 'The kind of node' },
+            { name: 'id', type: 'int', doc: 'The node\'s unique ID in the graph' },
+            { name: 'name', type: 'string', doc: 'A name for the node, derived from the statement/expression it represents' },
+            { name: 'stmt', type: 'Statement?', doc: 'The statement, if any, this ndoe is associated with in the original AST.' },
+            { name: 'expr', type: 'Expression?', doc: 'The expression, if any, this ndoe is associated with in the original AST.' },
+            { name: 'predecessors', type: 'array of CFGNode', doc: 'A list of all predecessor nodes - nodes with an out edge to the curernt node' },
+            { name: 'successors', type: 'arary of CFGNode', doc: 'A list of all successor nodes - nodes with an in edge from the current node' },
+            { name: 'useVariables', type: 'set of string', doc: 'The set of all variables used by this node' },
+            { name: 'defVariables', type: 'string', doc: 'The variables defined by this node' },
+        ],
+        doc: 'A single node in a control-flow graph.',
+    },
+    CDGNode: {
+        attrs: [
+            { name: 'kind', type: 'NodeType', doc: 'The kind of node' },
+            { name: 'id', type: 'int', doc: 'The node\'s unique ID in the graph' },
+            { name: 'stmt', type: 'Statement?', doc: 'The statement, if any, this ndoe is associated with in the original AST.' },
+            { name: 'expr', type: 'Expression?', doc: 'The expression, if any, this ndoe is associated with in the original AST.' },
+            { name: 'predecessors', type: 'array of CDGNode', doc: 'A list of all predecessor nodes - nodes with an out edge to the curernt node' },
+            { name: 'successors', type: 'arary of CDGNode', doc: 'A list of all successor nodes - nodes with an in edge from the current node' },
+            { name: 'cfg_node', type: 'CFGNode?', doc: 'The CFGNode related to this CDGNode, if any' },
+        ],
+        doc: 'A single node in a control-dependence graph.',
+    },
+    DDGNode: {
+        attrs: [
+            { name: 'kind', type: 'NodeType', doc: 'The kind of node' },
+            { name: 'id', type: 'int', doc: 'The node\'s unique ID in the graph' },
+            { name: 'stmt', type: 'Statement?', doc: 'The statement, if any, this ndoe is associated with in the original AST.' },
+            { name: 'expr', type: 'Expression?', doc: 'The expression, if any, this ndoe is associated with in the original AST.' },
+            { name: 'predecessors', type: 'array of DDGNode', doc: 'A list of all predecessor nodes - nodes with an out edge to the curernt node' },
+            { name: 'successors', type: 'arary of DDGNode', doc: 'A list of all successor nodes - nodes with an in edge from the current node' },
+        ],
+        doc: 'A single node in a data-dependence graph.',
+    },
+    PDGNode: {
+        attrs: [
+            { name: 'kind', type: 'NodeType', doc: 'The kind of node' },
+            { name: 'id', type: 'int', doc: 'The node\'s unique ID in the graph' },
+            { name: 'stmt', type: 'Statement?', doc: 'The statement, if any, this ndoe is associated with in the original AST.' },
+            { name: 'expr', type: 'Expression?', doc: 'The expression, if any, this ndoe is associated with in the original AST.' },
+            { name: 'predecessors', type: 'array of PDGNode', doc: 'A list of all predecessor nodes - nodes with an out edge to the curernt node' },
+            { name: 'successors', type: 'arary of PDGNode', doc: 'A list of all successor nodes - nodes with an in edge from the current node' },
+        ],
+        doc: 'A single node in a program-dependence graph.',
+    },
+    CFGEdge: {
+        attrs: [
+            { name: 'label', type: 'EdgeLabel', doc: 'The edge\'s label, indicating what kind of edge it is' },
+            { name: 'src', type: 'CFGNode', doc: 'The edge\'s source node' },
+            { name: 'dest', type: 'CFGNode', doc: 'The edge\'s destination node' },
+        ],
+        doc: 'A single edge in a control-flow graph.',
+    },
+    CDGEdge: {
+        attrs: [
+            { name: 'label', type: 'EdgeLabel', doc: 'The edge\'s label, indicating what kind of edge it is' },
+            { name: 'src', type: 'CDGNode', doc: 'The edge\'s source node' },
+            { name: 'dest', type: 'CDGNode', doc: 'The edge\'s destination node' },
+        ],
+        doc: 'A single edge in a control-dependence graph.',
+    },
+    DDGEdge: {
+        attrs: [
+            { name: 'label', type: 'EdgeLabel', doc: 'The edge\'s label, indicating what kind of edge it is' },
+            { name: 'src', type: 'DDGNode', doc: 'The edge\'s source node' },
+            { name: 'dest', type: 'DDGNode', doc: 'The edge\'s destination node' },
+        ],
+        doc: 'A single edge in a data-dependence graph.',
+    },
+    PDGEdge: {
+        attrs: [
+            { name: 'label', type: 'EdgeLabel', doc: 'The edge\'s label, indicating what kind of edge it is' },
+            { name: 'src', type: 'PDGNode', doc: 'The edge\'s source node' },
+            { name: 'dest', type: 'PDGNode', doc: 'The edge\'s destination node' },
+        ],
+        doc: 'A single edge in a program-dependence graph.',
+    },
 };
 
 interface IEnumValue {

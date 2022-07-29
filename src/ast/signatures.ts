@@ -170,7 +170,7 @@ class UDFFinder extends ScopedVisitor<funcDict> {
             const id = ctx.identifier().text;
             const funcType = funcExp.functionType();
             const numArgs = funcType.varDecl().length;
-            const funcRet = funcType.varDecl().length > numArgs ? funcType.varDecl(numArgs) : undefined;
+            const funcRet = funcType.type();
 
             const func: IFunction = {
                 args: [],

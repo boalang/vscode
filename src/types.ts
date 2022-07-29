@@ -519,6 +519,54 @@ export const builtinEnums: { [name: string]: IEnum } = {
         },
         doc: 'The kinds of types in an AST.',
     },
+    TraversalKind: {
+        attrs: {
+            DFS: '',
+            POSTORDER: '',
+            REVERSEPOSTORDER: '',
+            WORKLIST_POSTORDER: '',
+            WORKLIST_REVERSEPOSTORDER: '',
+            ITERATIVE: '',
+            RANDOM: '',
+            HYBRID: '',
+        },
+        doc: 'The kind of graph traversal to perform.',
+    },
+    TraversalDirection: {
+        attrs: {
+            FORWARD: 'Data flows forwards in the graph',
+            BACKWARD: 'Data flows backwards in the graph',
+        },
+        doc: 'The direction data flows in a program analysis traversal.',
+    },
+    NodeType: {
+        attrs: {
+            CONTROL: 'A node with a control statement (such as if or loops)',
+            ENTRY: 'Nodes added to the graph to indicate entry or exit',
+            METHOD: 'Includes a method call (may lead to external graphs)',
+            OTHER: 'A normal/sequential node',
+        },
+        doc: 'The type of a graph node.',
+    },
+    EdgeType: {
+        attrs: {
+            CONTROL: 'A control dependency edge',
+            DATA: 'A data dependency edge',
+        },
+        doc: 'The type of a graph edge.',
+    },
+    EdgeLabel: {
+        attrs: {
+            NIL: 'No label - a normal edge',
+            DEFAULT: 'A normal, sequential edge',
+            TRUE: 'Indicates a true branch from a control node',
+            FALSE: 'Indicates a false branch from a control node',
+            BACKEDGE: 'A loop back-edge',
+            EXITEDGE: 'An exit edge from a loop',
+            VARDEF: 'A variable definition edge',
+        },
+        doc: 'The label added to a graph edge.',
+    },
 };
 
 export interface IFunctionArg {

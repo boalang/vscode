@@ -429,7 +429,7 @@
                 {
                     "command": "boalang.job.showSource",
                     "group": "1_boalang@1",
-                    "when": "view == boalang.jobList && viewItem =~ /boalang.jobItem\\d+/"
+                    "when": "view == boalang.jobList"
                 },
                 {
                     "command": "boalang.job.showFullOutput",
@@ -445,12 +445,12 @@
                 {
                     "command": "boalang.job.togglePublic",
                     "group": "1_boalang@4",
-                    "when": "view == boalang.jobList && viewItem =~ /boalang.jobItem\\d+/"
+                    "when": "view == boalang.jobList"
                 },
                 {
                     "command": "boalang.job.viewPublicUrl",
                     "group": "1_boalang@5",
-                    "when": "view == boalang.jobList && viewItem =~ /boalang.jobItem\\d+/"
+                    "when": "view == boalang.jobList"
                 },
                 {
                     "command": "boalang.job.stop",
@@ -465,7 +465,7 @@
                 {
                     "command": "boalang.job.delete",
                     "group": "2_boalang@3",
-                    "when": "view == boalang.jobList && viewItem =~ /boalang.jobItem\\d+/"
+                    "when": "view == boalang.jobList"
                 }
             ],
             "explorer/context": [

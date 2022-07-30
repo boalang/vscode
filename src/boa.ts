@@ -296,7 +296,7 @@ export function downloadOutput(uri: vscode.Uri|BoaJob) {
         const jobId = getJobId(uri);
         const job = await client.getJob(jobId);
 
-        if (!job.running && await job.outputSize > 0 && job.compilerErrors == undefined) {
+        if (await job.outputSize > 0) {
             await job.downloadOutput(getWorkspaceRoot() + `/boa-job${jobId}-output.txt`);
             vscode.window.showInformationMessage(`Output for Job ${jobId} downloaded`);
         } else {

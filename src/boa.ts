@@ -316,7 +316,7 @@ export function showOutput() {
             }
             const job = await client.getJob(jobId);
 
-            if (!job.running && await job.outputSize > 0 && job.compilerErrors == undefined) {
+            if (await job.outputSize > 0) {
                 outputChannel.clear();
                 outputChannel.append(await JobCache.getOutput(job));
                 outputChannel.show();

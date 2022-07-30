@@ -111,37 +111,27 @@ class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
                 }
                 this.jobs.push(new BoaJob(job, source, size));
             }
-        }).then(() => {
+        }).then(async() => {
             this.jobs.sort((a, b) => (b.label as string).localeCompare(a.label as string))
 
-            //const filteredRunningJobs = this.jobs.filter(async job => await job.job.running);
-            //const filteredOutputJobs = this.jobs.filter(async job => await JobCache.getOutputSize(job));
-
-            //const filteredRunningJobs: BoaJob[] = null;
-            //const filteredOutputJobs: BoaJob[] = null;
-            // for (const job of this.jobs) {
-            //     if (job.job.running) {
-            //         filteredRunningJobs.push(job);
-            //     }
-
-                // runBoaCommands(async (client: boaapi.BoaClient) => {
-                //     if (await JobCache.getOutputSize(job) > 0) {
-                //         filteredOutputJobs.push(job);
-                //     }
-                // });
-            //}
-
-            const filteredRunningJobs: BoaJob[] = null;
+            const filteredRunningJobs: BoaJob[] = [];
+            const filteredOutputJobs: BoaJob[] = [];
+            const filteredResubmitJobs: BoaJob[] = [];
             for (const job of this.jobs) {
                 if (job.job.running) {
                     filteredRunningJobs.push(job);
                 }
+                if (!job.job.running) {
+                    filteredResubmitJobs.push(job);
+                }
+                if ((await JobCache.getOutputSize(job.job)) > 0) {
+                    filteredOutputJobs.push(job);
+                }
             }
 
-            //vscode.commands.executeCommand('setContext', 'boalang.tree.jobs', this.jobs.map(j => j.contextValue));
-            vscode.commands.executeCommand('setContext', 'boalang.jobsRunning', filteredRunningJobs.map(j => j.contextValue));
-            //vscode.commands.executeCommand('setContext', 'boalang.tree.jobsOutput', filteredOutputJobs.map(j => j.contextValue));
-
+            vscode.commands.executeCommand('setContext', 'boalang.tree.jobsRunning', filteredRunningJobs.map(j => j.contextValue));
+            vscode.commands.executeCommand('setContext', 'boalang.tree.jobsOutput', filteredOutputJobs.map(j => j.contextValue));
+            vscode.commands.executeCommand('setContext', 'boalang.tree.resubmitJobs', filteredResubmitJobs.map(j => j.contextValue));
             vscode.commands.executeCommand('setContext', 'boalang.joblist.prevEnabled', this.start > 0);
             vscode.commands.executeCommand('setContext', 'boalang.joblist.nextEnabled', this.start + this.jobs.length < this.max);
             if (this.max < 1) {

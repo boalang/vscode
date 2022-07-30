@@ -350,7 +350,7 @@ export async function showFullOutput(uri: vscode.Uri|BoaJob) {
     const jobId = getJobId(uri);
     const job = await client.getJob(jobId);
 
-    if (!job.running && await job.outputSize > 0 && job.compilerErrors == undefined) {
+    if (await job.outputSize > 0) {
         showUri(buildUri(uri, 'boa-job$id-output.txt', 'output'));
     } else {
         vscode.window.showInformationMessage(`Job ${jobId} has no output`);

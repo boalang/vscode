@@ -300,7 +300,7 @@ export function downloadOutput(uri: vscode.Uri|BoaJob) {
             await job.downloadOutput(getWorkspaceRoot() + `/boa-job${jobId}-output.txt`);
             vscode.window.showInformationMessage(`Output for Job ${jobId} downloaded`);
         } else {
-            vscode.window.showInformationMessage(`Job ${jobId} is running`);
+            vscode.window.showInformationMessage(`Job ${jobId} has no output`);
         }
     });
 }

@@ -424,7 +424,7 @@
                     "command": "boalang.job.showOutput",
                     "alt": "boalang.job.showFullOutput",
                     "group": "inline",
-                    "when": "view == boalang.jobList && viewItem in boalang.tree.jobsOutput"
+                    "when": "view == boalang.jobList && viewItem in boalang.joblist.hasoutput"
                 },
                 {
                     "command": "boalang.job.showSource",
@@ -435,12 +435,12 @@
                     "command": "boalang.job.showFullOutput",
                     "alt": "boalang.job.showOutput",
                     "group": "1_boalang@2",
-                    "when": "view == boalang.jobList && viewItem in boalang.tree.jobsOutput"
+                    "when": "view == boalang.jobList && viewItem in boalang.joblist.hasoutput"
                 },
                 {
                     "command": "boalang.job.downloadOutput",
                     "group": "1_boalang@3",
-                    "when": "view == boalang.jobList && viewItem in boalang.tree.jobsOutput"
+                    "when": "view == boalang.jobList && viewItem in boalang.joblist.hasoutput"
                 },
                 {
                     "command": "boalang.job.togglePublic",
@@ -455,12 +455,12 @@
                 {
                     "command": "boalang.job.stop",
                     "group": "2_boalang@1",
-                    "when": "view == boalang.jobList && viewItem in boalang.tree.jobsRunning"
+                    "when": "view == boalang.jobList && viewItem in boalang.joblist.running"
                 },
                 {
                     "command": "boalang.job.resubmit",
                     "group": "2_boalang@2",
-                    "when": "view == boalang.jobList && viewItem in boalang.tree.resubmitJobs"
+                    "when": "view == boalang.jobList && viewItem in boalang.joblist.stopped"
                 },
                 {
                     "command": "boalang.job.delete",

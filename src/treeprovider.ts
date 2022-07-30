@@ -204,7 +204,7 @@ export class BoaJob extends vscode.TreeItem {
         super(`Job #${job.id}`, vscode.TreeItemCollapsibleState.Collapsed);
         this.tooltip = source;
         this.description = job.submitted.toString();
-        this.contextValue = `boalang.jobItem${job.id}`;
+        this.contextValue = `boalang.joblist.job${job.id}`;
 
 
 

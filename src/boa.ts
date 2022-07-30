@@ -439,7 +439,7 @@ export async function resubmitJob(uri: vscode.Uri|BoaJob) {
                 vscode.commands.executeCommand('boalang.joblist.refresh');
                 vscode.window.showInformationMessage(`Job ${jobId} has been resubmitted`);
             } else {
-                vscode.window.showInformationMessage(`Job ${jobId} is running`);
+                vscode.window.showInformationMessage(`Job ${jobId} is already running, stop it first`);
             }
         });
     }

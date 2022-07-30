@@ -321,7 +321,7 @@ export function showOutput() {
                 outputChannel.append(await JobCache.getOutput(job));
                 outputChannel.show();
             } else {
-                vscode.window.showInformationMessage(`Job ${jobId} is running`);
+                vscode.window.showInformationMessage(`Job ${jobId} has no output`);
             }
         });
     }

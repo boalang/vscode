@@ -1,5 +1,5 @@
 //
-// Copyright 2022, Robert Dyer,
+// Copyright 2022, Robert Dyer, Kareem Keshk
 //                 and University of Nebraska Board of Regents
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -111,9 +111,21 @@ class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
                 }
                 this.jobs.push(new BoaJob(job, source, size));
             }
-        }).then(() => {
+        }).then(async() => {
             this.jobs.sort((a, b) => (b.label as string).localeCompare(a.label as string))
 
+            const filteredOutputJobs: String[] = [];
+            for (const job of this.jobs) {
+                if ((await JobCache.getOutputSize(job.job)) > 0) {
+                    filteredOutputJobs.push(job.contextValue);
+                }
+            }
+
+            vscode.commands.executeCommand('setContext', 'boalang.joblist.hasoutput', filteredOutputJobs);
+            vscode.commands.executeCommand('setContext', 'boalang.joblist.running', this.jobs.filter(j => j.job.running).map(j => j.contextValue));
+            // FIXME at some point, the 'not in' when context operator will be released (1.70.0) and we can drop this context once we bump vscode version
+            // see: https://github.com/microsoft/vscode/issues/154582
+            vscode.commands.executeCommand('setContext', 'boalang.joblist.stopped', this.jobs.filter(j => !j.job.running).map(j => j.contextValue));
             vscode.commands.executeCommand('setContext', 'boalang.joblist.prevEnabled', this.start > 0);
             vscode.commands.executeCommand('setContext', 'boalang.joblist.nextEnabled', this.start + this.jobs.length < this.max);
             if (this.max < 1) {
@@ -186,7 +198,9 @@ export class BoaJob extends vscode.TreeItem {
         super(`Job #${job.id}`, vscode.TreeItemCollapsibleState.Collapsed);
         this.tooltip = source;
         this.description = job.submitted.toString();
-        this.contextValue = 'boalang.jobItem';
+        this.contextValue = `boalang.joblist.job${job.id}`;
+
+
 
         this.command = {
             command: 'boalang.job.showSource',

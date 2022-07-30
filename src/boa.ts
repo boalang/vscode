@@ -1,5 +1,5 @@
 //
-// Copyright 2022, Robert Dyer,
+// Copyright 2022, Robert Dyer, Kareem Keshk
 //                 and University of Nebraska Board of Regents
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -295,8 +295,13 @@ export function downloadOutput(uri: vscode.Uri|BoaJob) {
     runBoaCommands(async (client: boaapi.BoaClient) => {
         const jobId = getJobId(uri);
         const job = await client.getJob(jobId);
-        await job.downloadOutput(getWorkspaceRoot() + `/boa-job${jobId}-output.txt`);
-        vscode.window.showInformationMessage(`Output for Job ${jobId} downloaded`);
+
+        if (await job.outputSize > 0) {
+            await job.downloadOutput(getWorkspaceRoot() + `/boa-job${jobId}-output.txt`);
+            vscode.window.showInformationMessage(`Output for Job ${jobId} downloaded`);
+        } else {
+            vscode.window.showInformationMessage(`Job ${jobId} has no output`);
+        }
     });
 }
 
@@ -311,9 +316,13 @@ export function showOutput() {
             }
             const job = await client.getJob(jobId);
 
-            outputChannel.clear();
-            outputChannel.append(await JobCache.getOutput(job));
-            outputChannel.show();
+            if (await job.outputSize > 0) {
+                outputChannel.clear();
+                outputChannel.append(await JobCache.getOutput(job));
+                outputChannel.show();
+            } else {
+                vscode.window.showInformationMessage(`Job ${jobId} has no output`);
+            }
         });
     }
 }
@@ -338,7 +347,14 @@ function buildUri(uri: vscode.Uri|BoaJob, path: string, fragment: string) {
 }
 
 export async function showFullOutput(uri: vscode.Uri|BoaJob) {
-    showUri(buildUri(uri, 'boa-job$id-output.txt', 'output'));
+    const jobId = getJobId(uri);
+    const job = await client.getJob(jobId);
+
+    if (await job.outputSize > 0) {
+        showUri(buildUri(uri, 'boa-job$id-output.txt', 'output'));
+    } else {
+        vscode.window.showInformationMessage(`Job ${jobId} has no output`);
+    }
 }
 
 export async function showJob(uri: vscode.Uri|BoaJob) {
@@ -418,9 +434,13 @@ export async function resubmitJob(uri: vscode.Uri|BoaJob) {
             const jobId = getJobId(uri);
             const job = await client.getJob(jobId);
 
-            await job.resubmit();
-            vscode.commands.executeCommand('boalang.joblist.refresh');
-            vscode.window.showInformationMessage(`Job ${jobId} has been resubmitted`);
+            if (!job.running) {
+                await job.resubmit();
+                vscode.commands.executeCommand('boalang.joblist.refresh');
+                vscode.window.showInformationMessage(`Job ${jobId} has been resubmitted`);
+            } else {
+                vscode.window.showInformationMessage(`Job ${jobId} is already running, stop it first`);
+            }
         });
     }
 }

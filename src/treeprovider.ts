@@ -125,7 +125,7 @@ class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
                     filteredResubmitJobs.push(job);
                 }
                 if ((await JobCache.getOutputSize(job.job)) > 0) {
-                    filteredOutputJobs.push(job);
+                    filteredOutputJobs.push(job.contextValue);
                 }
             }
 

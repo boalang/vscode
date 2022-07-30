@@ -353,7 +353,7 @@ export async function showFullOutput(uri: vscode.Uri|BoaJob) {
     if (!job.running && await job.outputSize > 0 && job.compilerErrors == undefined) {
         showUri(buildUri(uri, 'boa-job$id-output.txt', 'output'));
     } else {
-        vscode.window.showInformationMessage(`Job ${jobId} is running`);
+        vscode.window.showInformationMessage(`Job ${jobId} has no output`);
     }
 }
 

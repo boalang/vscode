@@ -45,7 +45,7 @@ export class StudyDatasetActionProvider implements vscode.CodeActionProvider {
 }
 
 function createReplaceCodeAction(diagnostic: vscode.Diagnostic, uri: vscode.Uri, replacement: string): vscode.CodeAction {
-    const action = new vscode.CodeAction('replace with: ' + replacement, vscode.CodeActionKind.QuickFix);
+    const action = new vscode.CodeAction(`Replace with "${replacement}"`, vscode.CodeActionKind.QuickFix);
     action.diagnostics = [diagnostic];
     action.edit = new vscode.WorkspaceEdit();
     action.edit.replace(uri, diagnostic.range, replacement);
@@ -77,7 +77,7 @@ export class TemplateTagActionProvider implements vscode.CodeActionProvider {
 }
 
 function createMakeTagCodeAction(diagnostic: vscode.Diagnostic, uri: vscode.Uri, tag: string): vscode.CodeAction {
-    const action = new vscode.CodeAction('create tag in study config', vscode.CodeActionKind.QuickFix);
+    const action = new vscode.CodeAction(`Create global tag "${tag}"`, vscode.CodeActionKind.QuickFix);
     action.diagnostics = [diagnostic];
     action.command = {
         command: 'boalang.template.addtag',

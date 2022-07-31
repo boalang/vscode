@@ -60,6 +60,7 @@ function _internalParse(txt: string, uri: vscode.Uri|string) {
 
     parser.removeErrorListeners();
     parser.errorHandler = new BailErrorStrategy();
+    parser.addErrorListener(listener);
     parser.interpreter.setPredictionMode(PredictionMode.SLL);
 
     let tree: StartContext;
@@ -69,6 +70,7 @@ function _internalParse(txt: string, uri: vscode.Uri|string) {
         tokenStream.seek(0);
         parser.reset();
 
+        parser.removeErrorListeners();
         parser.addErrorListener(listener);
         parser.errorHandler = new DefaultErrorStrategy();
         parser.interpreter.setPredictionMode(PredictionMode.LL);

@@ -29,7 +29,7 @@ export default class TemplateTagRenameProvider implements vscode.RenameProvider 
             }
         }
 
-        throw new Error('You cannot rename this element.');
+        return null;
     }
 
     async provideRenameEdits(document: vscode.TextDocument, position: vscode.Position, newName: string, token: vscode.CancellationToken): Promise<vscode.WorkspaceEdit> {

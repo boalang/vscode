@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
-import { ANTLRErrorListener, CharStreams, CommonTokenStream, RecognitionException, Recognizer, Token } from 'antlr4ts';
+import { ANTLRErrorListener, BailErrorStrategy, CharStreams, CommonTokenStream, DefaultErrorStrategy, RecognitionException, Recognizer, Token } from 'antlr4ts';
 import { PredictionMode } from 'antlr4ts/atn/PredictionMode';
 import { boaLexer } from '../antlr/BoaLexer';
 import { boaParser, StartContext } from '../antlr/boaParser';
@@ -56,11 +56,10 @@ function _internalParse(txt: string, uri: vscode.Uri|string) {
     const tokenStream = new CommonTokenStream(lexer);
 
     const parser = new boaParser(tokenStream);
+    const listener = new ErrorListener(uri);
 
     parser.removeErrorListeners();
-    const listener = new ErrorListener(uri);
-    parser.addErrorListener(listener);
-
+    parser.errorHandler = new BailErrorStrategy();
     parser.interpreter.setPredictionMode(PredictionMode.SLL);
 
     let tree: StartContext;
@@ -70,7 +69,10 @@ function _internalParse(txt: string, uri: vscode.Uri|string) {
         tokenStream.seek(0);
         parser.reset();
 
+        parser.addErrorListener(listener);
+        parser.errorHandler = new DefaultErrorStrategy();
         parser.interpreter.setPredictionMode(PredictionMode.LL);
+
         tree = parser.start();
     }
 

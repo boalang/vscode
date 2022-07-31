@@ -26,10 +26,19 @@ export default class PrettyPrinter extends AbstractParseTreeVisitor<string> impl
 
     protected wslines: { [idx: number]: string } = {};
 
-    constructor(protected wsLineTokens, protected templates) {
+    constructor(protected wsLineTokens, protected templates, protected options = undefined) {
         super();
 
         wsLineTokens.forEach(t => this.wslines[t.tokenIndex - 1] = t.text);
+
+        if (!options.insertSpaces) {
+            this.tab = '\t';
+        } else {
+            this.tab = '';
+            for (let i = 0; i < options.tabSize; i++) {
+                this.tab += ' ';
+            }
+        }
     }
 
     protected indents: number = 0;

@@ -26,15 +26,7 @@ export class BoaDocumentFormatter implements vscode.DocumentFormattingEditProvid
 
         const { tree, errors, lines: blanks, templates } = parseBoaCodeWithWhitespace(original);
         if (errors.length == 0) {
-            const printer = new PrettyPrinter(blanks, templates);
-            if (!options.insertSpaces) {
-                printer.tab = '\t';
-            } else {
-                printer.tab = '';
-                for (let i = 0; i < options.tabSize; i++) {
-                    printer.tab += ' ';
-                }
-            }
+            const printer = new PrettyPrinter(blanks, templates, options);
             const newText = printer.visit(tree);
 
             items.push(vscode.TextEdit.replace(new vscode.Range(new vscode.Position(0, 0), document.positionAt(original.length)), newText));

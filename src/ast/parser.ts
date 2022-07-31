@@ -22,14 +22,11 @@ import { boaParser, StartContext } from '../antlr/boaParser';
 import { reportDocumentErrors } from '../diagnostics';
 
 class ErrorListener implements ANTLRErrorListener<Token> {
-    uri: vscode.Uri = undefined;
+    uri = undefined;
     errors: vscode.Diagnostic[] = [];
 
-    constructor(uri: vscode.Uri|string) {
-        if (typeof(uri) === 'string')
-            this.uri = vscode.Uri.parse(uri);
-        else if (uri instanceof vscode.Uri)
-            this.uri = uri;
+    constructor(uri: any) {
+        this.uri = uri;
     }
 
     syntaxError(recognizer: Recognizer<Token, any>,
@@ -37,21 +34,17 @@ class ErrorListener implements ANTLRErrorListener<Token> {
         line: number,
         charPositionInLine: number,
         msg: string, e: RecognitionException | undefined) {
-            if (this.uri) {
+            if (this.uri !== undefined) {
                 const start = new vscode.Position(line - 1, charPositionInLine);
                 const end = new vscode.Position(line - 1, charPositionInLine);
                 this.errors.push(new vscode.Diagnostic(new vscode.Range(start, end), msg));
             } else {
-                if (this.uri) {
-                    console.error(`${this.uri}:${line}:${charPositionInLine} ${msg}`);
-                } else {
-                    console.error(`${line}:${charPositionInLine} ${msg}`);
-                }
+                console.error(`${line}:${charPositionInLine} ${msg}`);
             }
     }
 }
 
-function _internalParse(txt: string, uri: vscode.Uri|string) {
+function _internalParse(txt: string, uri: any) {
     const lexer = new boaLexer(CharStreams.fromString(txt));
     const tokenStream = new CommonTokenStream(lexer);
 

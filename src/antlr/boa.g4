@@ -1,8 +1,5 @@
 grammar boa;
 
-@header {
-}
-
 @parser::members {
 public isSemicolon() {
 	if (this.currentToken.text != ";") {
@@ -12,6 +9,12 @@ public isSemicolon() {
 	this.state = this.state + 1;
 	this.match(boaParser.SEMICOLON);
 }
+}
+
+@lexer::members {
+	public static readonly WHITESPACE = 1;
+	public static readonly LINES = 2;
+	public static readonly INLINETEMPLATE = 3;
 }
 
 start
@@ -637,14 +640,24 @@ Identifier
 //
 
 WS
-	: [ \t\r\n\f]+ -> skip
+	: [ \t\f]+ -> channel(1)
 	;
 
-LINE_COMMENT
-	: [#] ~[\r\n]* -> skip
+LineComment
+	: WS? [#] ~[\r\n]* -> channel(1)
 	;
 
-// templates are treated as whitespace for parsing in vscode helpers
-TemplateIdentifier
-	: TEMPLATEL ([-a-zA-Z0-9_.:]+ | .+?) TEMPLATER? -> skip
+NewLine
+	: [\r\n] -> channel(1)
+	;
+
+// keep these (on a hidden channel) for formatting helpers
+KeepWhitespace
+	: ((WS | InlineTemplateIdentifier)? LineComment? NewLine)+ -> channel(2)
+	;
+
+// templates are ignored for parsing in most of the vscode helpers
+// but must be kept for formatting helpers
+InlineTemplateIdentifier
+	: (WS? TEMPLATEL ([-a-zA-Z0-9_.:]+ | ~[@]+?) TEMPLATER? WS?)+ -> channel(3)
 	;

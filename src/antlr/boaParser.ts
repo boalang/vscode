@@ -1,8 +1,6 @@
 // Generated from src/antlr/boa.g4 by ANTLR 4.9.0-SNAPSHOT
 
 
-
-
 import { ATN } from "antlr4ts/atn/ATN";
 import { ATNDeserializer } from "antlr4ts/atn/ATNDeserializer";
 import { FailedPredicateException } from "antlr4ts/FailedPredicateException";
@@ -124,8 +122,10 @@ export class boaParser extends Parser {
 	public static readonly TimeLiteral = 93;
 	public static readonly Identifier = 94;
 	public static readonly WS = 95;
-	public static readonly LINE_COMMENT = 96;
-	public static readonly TemplateIdentifier = 97;
+	public static readonly LineComment = 96;
+	public static readonly NewLine = 97;
+	public static readonly KeepWhitespace = 98;
+	public static readonly InlineTemplateIdentifier = 99;
 	public static readonly RULE_start = 0;
 	public static readonly RULE_program = 1;
 	public static readonly RULE_programStatement = 2;
@@ -246,7 +246,8 @@ export class boaParser extends Parser {
 		"ONEOREQ", "XOREQ", "MODEQ", "ONEANDEQ", "RSHIFTEQ", "LSHIFTEQ", "WILDCARD", 
 		"QUESTION", "DOLLAR", "EQUALS", "EMIT", "RIGHT_ARROW", "ML_STRING", "IntegerLiteral", 
 		"FloatingPointLiteral", "CharacterLiteral", "RegexLiteral", "MultilineStringLiteral", 
-		"StringLiteral", "TimeLiteral", "Identifier", "WS", "LINE_COMMENT", "TemplateIdentifier",
+		"StringLiteral", "TimeLiteral", "Identifier", "WS", "LineComment", "NewLine", 
+		"KeepWhitespace", "InlineTemplateIdentifier",
 	];
 	public static readonly VOCABULARY: Vocabulary = new VocabularyImpl(boaParser._LITERAL_NAMES, boaParser._SYMBOLIC_NAMES, []);
 
@@ -4204,7 +4205,7 @@ export class boaParser extends Parser {
 
 	private static readonly _serializedATNSegments: number = 2;
 	private static readonly _serializedATNSegment0: string =
-		"\x03\uC91D\uCABA\u058D\uAFBA\u4F53\u0607\uEA8B\uC241\x03c\u034B\x04\x02" +
+		"\x03\uC91D\uCABA\u058D\uAFBA\u4F53\u0607\uEA8B\uC241\x03e\u034B\x04\x02" +
 		"\t\x02\x04\x03\t\x03\x04\x04\t\x04\x04\x05\t\x05\x04\x06\t\x06\x04\x07" +
 		"\t\x07\x04\b\t\b\x04\t\t\t\x04\n\t\n\x04\v\t\v\x04\f\t\f\x04\r\t\r\x04" +
 		"\x0E\t\x0E\x04\x0F\t\x0F\x04\x10\t\x10\x04\x11\t\x11\x04\x12\t\x12\x04" +

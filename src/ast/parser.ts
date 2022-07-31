@@ -71,7 +71,17 @@ function _internalParse(txt: string, uri: any) {
         tree = parser.start();
     }
 
-    return { tree, errors: listener.errors };
+    return {
+        tree,
+        errors: listener.errors,
+        stream: tokenStream,
+        lines: tokenStream.getTokens().filter(t => t.channel == boaLexer.LINES),
+        templates: tokenStream.getTokens().filter(t => t.channel == boaLexer.INLINETEMPLATE),
+    };
+}
+
+export function parseBoaCodeWithWhitespace(txt: string) {
+    return _internalParse(txt + '\n', true);
 }
 
 export function parseBoaCode(txt: string, uri: vscode.Uri|string = undefined) {

@@ -142,10 +142,10 @@ export class DSLTypesCompletionItemProvider implements vscode.CompletionItemProv
             hasPartialType = colonIdx < startWords.length - 1;
         }
 
-        let hasSpace = document.getText(new vscode.Range(position.translate(0, -1), position)).trim().length == 0;
-        if (!hasSpace && hasPartialType) {
-            const spacePos = position.translate(0, 0 - startWords[startWords.length - 1].length);
-            hasSpace = document.getText(new vscode.Range(spacePos.translate(0, -1), spacePos)).trim().length == 0;
+        let hasSpace = startText.charAt(startText.length - 1).trim().length == 0;
+        if (!hasSpace && hasPartialType && startWords.length > 0) {
+            const spacePos = startText.length - startWords[startWords.length - 1].length;
+            hasSpace = startText.charAt(spacePos - 1).trim().length == 0;
         }
 
         let trailingArrow = false;

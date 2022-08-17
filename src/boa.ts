@@ -336,11 +336,13 @@ export async function showUri(uri: vscode.Uri) {
     });
 }
 
-function buildUri(uri: vscode.Uri|BoaJob, path: string, fragment: string) {
+export function buildUri(uri: vscode.Uri|BoaJob|boaapi.JobHandle, path: string, fragment: string) {
     if (uri instanceof BoaJob) {
         uri = getJobUri(uri.job.id);
-    } else {
+    } else if (uri instanceof vscode.Uri) {
         uri = getJobUri(uri.authority);
+    } else {
+        uri = getJobUri(uri.id);
     }
     path = path.replace('$id', uri.authority);
     return vscode.Uri.parse(`${uri.toString()}${path}#${fragment}`);

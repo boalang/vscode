@@ -421,15 +421,15 @@
             ],
             "view/item/context": [
                 {
+                    "command": "boalang.job.showSource",
+                    "group": "1_boalang@1",
+                    "when": "view == boalang.jobList"
+                },
+                {
                     "command": "boalang.job.showOutput",
                     "alt": "boalang.job.showFullOutput",
                     "group": "inline",
                     "when": "view == boalang.jobList && viewItem in boalang.joblist.hasoutput"
-                },
-                {
-                    "command": "boalang.job.showSource",
-                    "group": "1_boalang@1",
-                    "when": "view == boalang.jobList"
                 },
                 {
                     "command": "boalang.job.showFullOutput",
@@ -477,47 +477,28 @@
             "editor/title": [
                 {
                     "command": "boalang.runQuery",
-                    "group": "navigation",
+                    "group": "navigation@1",
                     "when": "editorLangId == boalang && resourceDirname =~ /(?<!\\/snippets(\\/[^/]+)*)$/"
                 },
                 {
                     "command": "boalang.template.preview",
-                    "group": "navigation",
-                    "when": "editorLangId == boalang && resourceScheme != boalang && resourceDirname =~ /(?<!\\/snippets(\\/[^/]+)*)$/"
+                    "group": "navigation@2",
+                    "when": "editorLangId == boalang && resourceDirname =~ /(?<!\\/snippets(\\/[^/]+)*)$/ && resourceScheme != boalang"
+                },
+                {
+                    "command": "boalang.job.showSource",
+                    "group": "navigation@1",
+                    "when": "resourceScheme == boalang && resource =~ /#output$/"
                 },
                 {
                     "command": "boalang.job.showOutput",
                     "alt": "boalang.job.showFullOutput",
-                    "group": "navigation",
-                    "when": "resourceScheme == boalang"
-                },
-                {
-                    "command": "boalang.job.showFullOutput",
-                    "when": "resourceScheme == boalang"
+                    "group": "navigation@2",
+                    "when": "resourceScheme == boalang && resource =~ /(?<!#output)$/"
                 },
                 {
                     "command": "boalang.job.viewPublicUrl",
-                    "group": "navigation",
-                    "when": "resourceScheme == boalang"
-                },
-                {
-                    "command": "boalang.job.downloadOutput",
-                    "when": "resourceScheme == boalang"
-                },
-                {
-                    "command": "boalang.job.delete",
-                    "when": "resourceScheme == boalang"
-                },
-                {
-                    "command": "boalang.job.stop",
-                    "when": "resourceScheme == boalang"
-                },
-                {
-                    "command": "boalang.job.resubmit",
-                    "when": "resourceScheme == boalang"
-                },
-                {
-                    "command": "boalang.job.togglePublic",
+                    "group": "navigation@3",
                     "when": "resourceScheme == boalang"
                 },
                 {
@@ -529,6 +510,41 @@
                     "command": "boalang.template.zip",
                     "group": "navigation@4",
                     "when": "editorLangId == json && resourceFilename == study-config.json"
+                },
+                {
+                    "command": "boalang.job.showOutput",
+                    "group": "1_boalang@1",
+                    "when": "resourceScheme == boalang && resource =~ /#output$/"
+                },
+                {
+                    "command": "boalang.job.showFullOutput",
+                    "group": "1_boalang@2",
+                    "when": "resourceScheme == boalang && resource =~ /(?<!#output)$/"
+                },
+                {
+                    "command": "boalang.job.downloadOutput",
+                    "group": "1_boalang@3",
+                    "when": "resourceScheme == boalang"
+                },
+                {
+                    "command": "boalang.job.togglePublic",
+                    "group": "1_boalang@4",
+                    "when": "resourceScheme == boalang"
+                },
+                {
+                    "command": "boalang.job.stop",
+                    "group": "2_boalang@1",
+                    "when": "resourceScheme == boalang"
+                },
+                {
+                    "command": "boalang.job.resubmit",
+                    "group": "2_boalang@2",
+                    "when": "resourceScheme == boalang"
+                },
+                {
+                    "command": "boalang.job.delete",
+                    "group": "2_boalang@3",
+                    "when": "resourceScheme == boalang"
                 }
             ]
         },

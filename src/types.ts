@@ -81,6 +81,7 @@ export const builtinTypes: { [name: string]: IType } = {
             { name: 'kind', type: 'RepositoryKind', doc: 'The kind of code repository (SVN, GIT, etc).', },
             { name: 'revisions', type: 'array of Revision', doc: 'All of the revisions contained in the code repository.', },
             { name: 'url', type: 'string', doc: 'The URL to access the code repository.', },
+            { name: 'head', type: 'int', doc: 'The index of the repository\'s head commit.', },
         ],
         doc: 'A source code repository (SVN, CVS, Git, etc.).',
     },

@@ -93,6 +93,7 @@ export const builtinTypes: { [name: string]: IType } = {
             { name: 'files', type: 'array of ChangedFile', doc: 'A list of all files committed in the revision.', },
             { name: 'id', type: 'string', doc: 'A unique identifier for the revision.', },
             { name: 'log', type: 'string', doc: 'The log message attached to the revision.', },
+            { name: 'parents', type: 'array of int', doc: 'An array of commit indexes indicating the parent revision(s) of this revision.', },
         ],
         doc: 'A single revision inside a `CodeRepository`.',
     },

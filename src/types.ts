@@ -729,7 +729,7 @@ export const builtinFunctions: { [name: string]: IFunction } = {
             { name: 's: stack of val_type', doc: 'the stack to pop' },
             { name: 'val: val_type', doc: 'the value to push' },
         ],
-        ret: { type: ': ', doc: '' },
+        ret: { type: '', doc: '' },
         doc: 'Pushes the value `val` onto the stack `s`.',
     },
     bool: {

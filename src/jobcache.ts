@@ -15,6 +15,8 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
+import { buildUri } from './boa';
+import { JobHandle } from '@boalang/boa-api';
 
 export default class JobCache {
     private static source = {};
@@ -81,5 +83,48 @@ export default class JobCache {
 
     static clearOutputs() {
         this.output = {};
+    }
+
+    private static jobContexts = {
+        hasoutput: [],
+        running: [],
+        stopped: [],
+    };
+
+    static async updateContext(job: JobHandle) {
+        const uri1 = buildUri(job, 'boa-job$id-source.boa', 'source');
+        const uri2 = buildUri(job, 'boa-job$id-output.txt', 'output');
+
+        let idx = this.jobContexts.hasoutput.indexOf(uri1);
+        if (idx !== -1) this.jobContexts.hasoutput.splice(idx, 1);
+        idx = this.jobContexts.hasoutput.indexOf(uri2);
+        if (idx !== -1) this.jobContexts.hasoutput.splice(idx, 1);
+
+        idx = this.jobContexts.running.indexOf(uri1);
+        if (idx !== -1) this.jobContexts.running.splice(idx, 1);
+        idx = this.jobContexts.running.indexOf(uri2);
+        if (idx !== -1) this.jobContexts.running.splice(idx, 1);
+
+        idx = this.jobContexts.stopped.indexOf(uri1);
+        if (idx !== -1) this.jobContexts.stopped.splice(idx, 1);
+        idx = this.jobContexts.stopped.indexOf(uri2);
+        if (idx !== -1) this.jobContexts.stopped.splice(idx, 1);
+
+        if (job.running) {
+            this.jobContexts.running.push(uri1);
+            this.jobContexts.running.push(uri2);
+        } else {
+            this.jobContexts.stopped.push(uri1);
+            this.jobContexts.stopped.push(uri2);
+        }
+
+        if (await this.getOutputSize(job) > 0) {
+            this.jobContexts.hasoutput.push(uri1);
+            this.jobContexts.hasoutput.push(uri2);
+        }
+
+        vscode.commands.executeCommand('setContext', 'boalang.jobs.hasoutput', this.jobContexts.hasoutput);
+        vscode.commands.executeCommand('setContext', 'boalang.jobs.running', this.jobContexts.running);
+        vscode.commands.executeCommand('setContext', 'boalang.jobs.stopped', this.jobContexts.stopped);
     }
 }

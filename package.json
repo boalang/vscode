@@ -494,7 +494,7 @@
                     "command": "boalang.job.showOutput",
                     "alt": "boalang.job.showFullOutput",
                     "group": "navigation@2",
-                    "when": "resourceScheme == boalang && resource =~ /(?<!#output)$/"
+                    "when": "resourceScheme == boalang && resource =~ /(?<!#output)$/ && resource in boalang.jobs.hasoutput"
                 },
                 {
                     "command": "boalang.job.viewPublicUrl",
@@ -514,17 +514,17 @@
                 {
                     "command": "boalang.job.showOutput",
                     "group": "1_boalang@1",
-                    "when": "resourceScheme == boalang && resource =~ /#output$/"
+                    "when": "resourceScheme == boalang && resource =~ /#output$/ && resource in boalang.jobs.hasoutput"
                 },
                 {
                     "command": "boalang.job.showFullOutput",
                     "group": "1_boalang@2",
-                    "when": "resourceScheme == boalang && resource =~ /(?<!#output)$/"
+                    "when": "resourceScheme == boalang && resource =~ /(?<!#output)$/ && resource in boalang.jobs.hasoutput"
                 },
                 {
                     "command": "boalang.job.downloadOutput",
                     "group": "1_boalang@3",
-                    "when": "resourceScheme == boalang"
+                    "when": "resourceScheme == boalang && resource in boalang.jobs.hasoutput"
                 },
                 {
                     "command": "boalang.job.togglePublic",
@@ -534,12 +534,12 @@
                 {
                     "command": "boalang.job.stop",
                     "group": "2_boalang@1",
-                    "when": "resourceScheme == boalang"
+                    "when": "resourceScheme == boalang && resource in boalang.jobs.running"
                 },
                 {
                     "command": "boalang.job.resubmit",
                     "group": "2_boalang@2",
-                    "when": "resourceScheme == boalang"
+                    "when": "resourceScheme == boalang && resource in boalang.jobs.stopped"
                 },
                 {
                     "command": "boalang.job.delete",

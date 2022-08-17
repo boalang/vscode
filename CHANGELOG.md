@@ -1,5 +1,16 @@
 # Change Log
 
+## [0.2.1] - 2022-08-17
+ - initial support for document formatting
+ - adds diagnostics and quick fixes for bad template tags
+ - updated built-in function documentation
+ - better UDF support for signature helpers, including showing their return type
+ - improved the refactoring support to ensure unique names
+ - menu items now hide if the relevant job does not support that action
+ - improved error messages
+ - more permissive parsing for bad template tags
+ - fixes bug with renaming template tags in dirty editors
+
 ## [0.2.0] - 2022-07-15
  - extension is no longer considered a preview
  - better support for method signature helpers, including user-defined functions

@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
-import { getWorkspaceRoot, removeDuplicates } from '../utils';
+import { atDot, getWorkspaceRoot, removeDuplicates } from '../utils';
 import { cache } from './jsoncache';
 import { getDatasets } from '../boa';
 import * as consts from '../consts';
@@ -24,6 +24,7 @@ import { builtinEnums } from '../types';
 export class TemplateCompletionItemProvider implements vscode.CompletionItemProvider {
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.CompletionItem[]> {
         const items = [];
+        if (atDot(document, position)) return items;
 
         // if autocompleting an enum, dont suggest other built-ins
         const word = document.getText(document.getWordRangeAtPosition(position.translate(0, -1))).trim();

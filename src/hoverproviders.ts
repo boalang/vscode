@@ -53,7 +53,8 @@ ${getFuncDoc(funcName)}`));
 export function getFuncSignature(funcName: string) {
     const func = builtinFunctions[funcName];
     const args = func.args.map(arg => arg.name).join(', ');
-    return `(method) ${funcName}(${args})${func.ret.type}`;
+    const ret = func.ret.type.length > 0 ? `: ${func.ret.type}` : '';
+    return `(method) ${funcName}(${args})${ret}`;
 }
 
 export function getFuncDoc(funcName: string) {

@@ -76,7 +76,7 @@ class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
             } else {
                 const compiler = new vscode.TreeItem('compile: ' + element.job.compilerStatus);
                 if (element.job.compilerStatus == boaapi.CompilerStatus.ERROR) {
-                    const errs = await element.job.compilerErrors;
+                    const errs = await JobCache.getCompilerErrors(element.job);
                     compiler.tooltip = errs.join('\n').replace('\\n', '\n');
                 }
                 children.push(compiler);
@@ -126,6 +126,7 @@ class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
             // FIXME at some point, the 'not in' when context operator will be released (1.70.0) and we can drop this context once we bump vscode version
             // see: https://github.com/microsoft/vscode/issues/154582
             vscode.commands.executeCommand('setContext', 'boalang.joblist.stopped', this.jobs.filter(j => !j.job.running).map(j => j.contextValue));
+
             vscode.commands.executeCommand('setContext', 'boalang.joblist.prevEnabled', this.start > 0);
             vscode.commands.executeCommand('setContext', 'boalang.joblist.nextEnabled', this.start + this.jobs.length < this.max);
             if (this.max < 1) {
@@ -196,11 +197,10 @@ export const treeProvider = new BoaJobsProvider();
 export class BoaJob extends vscode.TreeItem {
     constructor(public readonly job, public readonly source, public readonly size) {
         super(`Job #${job.id}`, vscode.TreeItemCollapsibleState.Collapsed);
+
         this.tooltip = source;
         this.description = job.submitted.toString();
         this.contextValue = `boalang.joblist.job${job.id}`;
-
-
 
         this.command = {
             command: 'boalang.job.showSource',

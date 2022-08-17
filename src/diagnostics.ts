@@ -18,6 +18,7 @@ import * as vscode from 'vscode';
 import { runBoaCommands } from './boa';
 import { CompilerStatus, ExecutionStatus } from '@boalang/boa-api';
 import { parseBoaCode } from './ast/parser';
+import JobCache from './jobcache';
 
 let diagnosticCollection: vscode.DiagnosticCollection;
 const diagsCache = new Map<vscode.Uri, vscode.Diagnostic[]>();
@@ -44,7 +45,7 @@ export async function enableDiagnostics(context: vscode.ExtensionContext) {
                     const job = await client.getJob(uri.authority);
                     await job.wait();
                     if (job.compilerStatus == CompilerStatus.ERROR) {
-                        reportWebErrors(uri, await job.compilerErrors);
+                        reportWebErrors(uri, await JobCache.getCompilerErrors(job));
                     } else if (job.executionStatus == ExecutionStatus.ERROR) {
                         reportWebErrors(uri, ['There was a runtime error.']);
                     } else {

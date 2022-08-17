@@ -50,5 +50,6 @@ export async function getFileContents(path: string): Promise<string> {
 }
 
 export function atDot(document: vscode.TextDocument, position: vscode.Position) {
-    return document.getText(new vscode.Range(position.translate(0, -1), position)) === '.';
+    const r = document.getWordRangeAtPosition(position, /[\s.]+/);
+    return document.getText(r).trim() === '.';
 }

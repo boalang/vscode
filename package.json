@@ -145,8 +145,8 @@
             },
             {
                 "command": "boalang.job.showSource",
-                "title": "Display Boa Job",
-                "icon": "$(inspect)",
+                "title": "View Job Source",
+                "icon": "$(file-code)",
                 "category": "Boa"
             },
             {

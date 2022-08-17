@@ -286,7 +286,7 @@ factor
 	;
 
 selector
-	: DOT identifier
+	: DOT identifier?
 	;
 
 index

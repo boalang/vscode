@@ -297,7 +297,7 @@ export function downloadOutput(uri: vscode.Uri|BoaJob) {
         const job = await client.getJob(jobId);
 
         if (await job.outputSize > 0) {
-            await job.downloadOutput(getWorkspaceRoot() + `/boa-job${jobId}-output.txt`);
+            await job.downloadOutput(`${getWorkspaceRoot()}/boa-job${jobId}-output.txt`);
             vscode.window.showInformationMessage(`Output for Job ${jobId} downloaded`);
         } else {
             vscode.window.showInformationMessage(`Job ${jobId} has no output`);
@@ -343,7 +343,7 @@ function buildUri(uri: vscode.Uri|BoaJob, path: string, fragment: string) {
         uri = getJobUri(uri.authority);
     }
     path = path.replace('$id', uri.authority);
-    return vscode.Uri.parse(uri.toString() + path + `#${fragment}`);
+    return vscode.Uri.parse(`${uri.toString()}${path}#${fragment}`);
 }
 
 export async function showFullOutput(uri: vscode.Uri|BoaJob) {

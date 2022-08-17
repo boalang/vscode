@@ -145,6 +145,7 @@ export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ast.Identif
     private _defs: { [defIdx: number]: ast.IdentifierContext } = {};
     private _uses: { [defIdx: number]: ast.IdentifierContext[] } = {};
     private _usedefs: { [defIdx: number]: number } = {};
+    private _types: { [defIdx: number]: ast.TypeContext } = {};
 
     public get defs() {
         return this._defs;
@@ -156,6 +157,10 @@ export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ast.Identif
 
     public get usedefs() {
         return this._usedefs;
+    }
+
+    public getType(def: number) {
+        return this._types[def];
     }
 
     protected getDef(ctx: ast.IdentifierContext, depth: number = 0): ast.IdentifierContext {
@@ -173,9 +178,12 @@ export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ast.Identif
         return this.getDef(ctx, depth + 1);
     }
 
-    private addDef(ctx: ast.IdentifierContext) {
+    private addDef(ctx: ast.IdentifierContext, type: ast.TypeContext = undefined) {
         this._defs[ctx.start.startIndex] = ctx;
         this.scopes[this.scopes.length - 1][ctx.text] = ctx;
+        if (type !== undefined) {            
+            this._types[ctx.start.startIndex] = type;
+        }
     }
 
     private addUse(ctx: ast.IdentifierContext, defCtx: ast.IdentifierContext) {
@@ -194,40 +202,40 @@ export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ast.Identif
 
     // symbol definitions that also scope
     public visitScopedFixpExpression(ctx: ast.FixpExpressionContext) {
-        this.addDef(ctx.fixpStatement().identifier(0));
-        this.addDef(ctx.fixpStatement().identifier(1));
+        this.addDef(ctx.fixpStatement().identifier(0), ctx.fixpStatement().type());
+        this.addDef(ctx.fixpStatement().identifier(1), ctx.fixpStatement().type());
         super.visitScopedFixpExpression(ctx);
     }
 
     public visitScopedFunctionExpression(ctx: ast.FunctionExpressionContext) {
         const type = ctx.functionType();
         for (const v of type.varDecl()) {
-            this.addDef(v.identifier());
+            this.addDef(v.identifier(), v.type());
         }
         super.visitScopedFunctionExpression(ctx);
     }
 
     public visitScopedTraversalExpression(ctx: ast.TraversalExpressionContext) {
-        this.addDef(ctx.traverseStatement().identifier(0));
+        this.addDef(ctx.traverseStatement().identifier(0), ctx.traverseStatement().type());
         super.visitScopedTraversalExpression(ctx);
     }
 
     public visitScopedVisitStatement(ctx: ast.VisitStatementContext) {
         const v = ctx.varDecl();
         if (v !== undefined) {
-            this.addDef(v.identifier());
+            this.addDef(v.identifier(), v.type());
         }
         super.visitScopedVisitStatement(ctx);
     }
 
     // symbol definitions
     public visitVarDecl(ctx: ast.VarDeclContext) {
-        this.addDef(ctx.identifier());
+        this.addDef(ctx.identifier(), ctx.type());
         this.visitChildren(ctx);
     }
 
     public visitForVariableDeclaration(ctx: ast.ForVariableDeclarationContext) {
-        this.addDef(ctx.identifier());
+        this.addDef(ctx.identifier(), ctx.type());
         this.visitChildren(ctx);
     }
 

@@ -358,7 +358,7 @@ export async function showFullOutput(uri: vscode.Uri|BoaJob) {
 }
 
 export async function showJob(uri: vscode.Uri|BoaJob) {
-    showUri(buildUri(uri, 'boa-job$id-source.boa', 'details'));
+    showUri(buildUri(uri, 'boa-job$id-source.boa', 'source'));
 }
 
 function getJobId(uri: vscode.Uri|BoaJob) {

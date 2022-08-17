@@ -32,7 +32,7 @@ export const boaDocumentProvider = new class implements vscode.TextDocumentConte
                 parseBoaCode(data, uri);
                 break;
 
-            case 'details':
+            case 'source':
                 await runBoaCommands(async (client) => {
                     const job = await client.getJob(uri.authority);
                     data = await JobCache.getSource(job);

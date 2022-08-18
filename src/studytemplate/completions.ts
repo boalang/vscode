@@ -24,12 +24,17 @@ import { builtinEnums } from '../types';
 export class TemplateCompletionItemProvider implements vscode.CompletionItemProvider {
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.CompletionItem[]> {
         const items = [];
-        if (atDot(document, position)) return items;
+
+        // this completion provide should not respond if the character was '.'
+        if (atDot(document, position)) {
+            return items;
+        }
 
         // if autocompleting an enum, dont suggest other built-ins
         const word = document.getText(document.getWordRangeAtPosition(position.translate(0, -1))).trim();
-        if (Object.keys(builtinEnums).indexOf(word) != -1)
+        if (Object.keys(builtinEnums).indexOf(word) != -1) {
             return items;
+        }
 
         const substitutions = cache.getSubstitutions();
         let keys = Object.keys(substitutions.substitutions);

@@ -22,12 +22,17 @@ import { atDot } from './utils';
 export class BuiltInsCompletionItemProvider implements vscode.CompletionItemProvider {
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.CompletionItem[]> {
         const items = [];
-        if (atDot(document, position)) return items;
+
+        // this completion provide should not respond if the character was '.'
+        if (atDot(document, position)) {
+            return items;
+        }
 
         // if autocompleting an enum, dont suggest other built-ins
         const word = document.getText(document.getWordRangeAtPosition(position.translate(0, -1))).trim();
-        if (Object.keys(builtinEnums).indexOf(word) != -1)
+        if (Object.keys(builtinEnums).indexOf(word) != -1) {
             return items;
+        }
 
         for (const c of Object.keys(builtinConsts)) {
             if (token.isCancellationRequested) return items;
@@ -112,7 +117,11 @@ export class EnumValuesCompletionItemProvider implements vscode.CompletionItemPr
 export class DSLTypesCompletionItemProvider implements vscode.CompletionItemProvider {
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.CompletionItem[]> {
         const items = [];
-        if (atDot(document, position)) return items;
+
+        // this completion provide should not respond if the character was '.'
+        if (atDot(document, position)) {
+            return items;
+        }
 
         const startText = document.getText(new vscode.Range(new vscode.Position(0, 0), position));
         const startWords = startText.split(/\s+/).filter(s => s.length > 0).slice(-4);

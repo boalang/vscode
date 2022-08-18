@@ -15,6 +15,9 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
+import { DefsUsesVisitor } from './ast/defuse';
+import { parseBoaCode } from './ast/parser';
+import { UDFFinder } from './ast/signatures';
 import { getFuncDoc, getFuncSignature } from './hoverproviders';
 import { builtinConsts, builtinEnums, builtinFunctions, builtinTypes, builtinVars } from './types';
 import { atDot } from './utils';
@@ -72,23 +75,87 @@ export class BuiltInsCompletionItemProvider implements vscode.CompletionItemProv
     }
 }
 
+function cleanType(t: string) {
+    return t.replace('array of ', '').replace('?', '').replace(': ', '');
+}
+
 export class AttributeCompletionItemProvider implements vscode.CompletionItemProvider {
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.CompletionItem[]> {
         const items = [];
 
-        // if autocompleting an enum, dont suggest attributes
-        const word = document.getText(document.getWordRangeAtPosition(position.translate(0, -1))).trim();
-        if (Object.keys(builtinEnums).indexOf(word) != -1)
+        // this completion provide should ONLY respond if the character was '.'
+        if (!atDot(document, position)) {
             return items;
+        }
 
-        for (const type of Object.keys(builtinTypes)) {
-            for (const attr of builtinTypes[type].attrs) {
-                if (token.isCancellationRequested) return items;
-                const item = new vscode.CompletionItem(attr.name, vscode.CompletionItemKind.Field);
-                item.detail = `(attr) ${attr.type} ${type}.${attr.name}`;
-                item.documentation = new vscode.MarkdownString(attr.doc);
-                items.push(item);
+        const pos = document.validatePosition(position.translate(0, -1));
+
+        // if autocompleting an enum, dont suggest attributes
+        const word = document.getText(document.getWordRangeAtPosition(pos)).trim();
+        if (Object.keys(builtinEnums).indexOf(word) != -1) {
+            return items;
+        }
+
+        const tree = parseBoaCode(document.getText());
+        const defuses = new DefsUsesVisitor();
+        defuses.visit(tree);
+
+        const exprRange = new vscode.Range(document.getWordRangeAtPosition(pos, /[^\s]+/).start, pos);
+        let exprOffset = document.offsetAt(exprRange.start);
+
+        let parts = document.getText(exprRange).split('.').reverse();
+        let type: string = undefined;
+        while (parts.length > 0) {
+            const funcMatches = parts[parts.length - 1].match(/^([a-zA-Z0-9_]+)\s*\(([^)]*)\)$/);
+            if (funcMatches !== null) {
+                const funcName = funcMatches[1];
+                const args = funcMatches[2];
+                if (funcName in builtinFunctions) {
+                    // TODO support: pop, peek, poll, lookup - type is 'val_type', based on first arg e.g. 'stack of val_type'
+                    // TODO support: getvalue - type is 'T' but based on traversal's return type
+                    // TODO support: getinedge, getoutedge - type is 'graph_edge', related to argument node's type
+                    if (funcName === 'current') {
+                        type = args;
+                    } else {
+                        type = cleanType(builtinFunctions[funcName].ret.type);
+                    }
+                } else {
+                    const visitor = new UDFFinder(exprOffset);
+                    visitor.visit(tree);
+                    type = cleanType(visitor.funcs[funcName].ret.type);
+                }
+            } else if (type === undefined && exprOffset in defuses.usedefs) {
+                type = cleanType(defuses.getType(defuses.usedefs[exprOffset]).text);
+            } else if (type in builtinTypes) {
+                const attrMatches = parts[parts.length - 1].match(/^([a-zA-Z0-9_]+)(\[[^\]]+\])?$/);
+                const attrName = attrMatches[1];
+                if (attrName !== undefined) {
+                    const attr = builtinTypes[type].attrs.filter(a => a.name == attrName)[0];
+                    if (attr !== undefined) {
+                        type = undefined;
+                        if (attr.type.indexOf('array of ') == -1 || attrMatches[2] !== undefined) {
+                            type = cleanType(attr.type);
+                        }
+                    }
+                }
             }
+
+            if (type === undefined) {
+                break;
+            }
+            exprOffset += parts.pop().length + 1;
+        }
+
+        if (type === undefined) {
+            return items;
+        }
+
+        for (const attr of builtinTypes[type].attrs) {
+            if (token.isCancellationRequested) return items;
+            const item = new vscode.CompletionItem(attr.name, vscode.CompletionItemKind.Field);
+            item.detail = `(attr) ${attr.type} ${type}.${attr.name}`;
+            item.documentation = new vscode.MarkdownString(attr.doc);
+            items.push(item);
         }
 
         return items;
@@ -98,6 +165,11 @@ export class AttributeCompletionItemProvider implements vscode.CompletionItemPro
 export class EnumValuesCompletionItemProvider implements vscode.CompletionItemProvider {
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.CompletionItem[]> {
         const items = [];
+
+        // this completion provide should ONLY respond if the character was '.'
+        if (!atDot(document, position)) {
+            return items;
+        }
 
         const word = document.getText(document.getWordRangeAtPosition(position.translate(0, -1))).trim();
 

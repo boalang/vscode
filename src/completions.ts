@@ -100,7 +100,7 @@ export class AttributeCompletionItemProvider implements vscode.CompletionItemPro
         const defuses = new DefsUsesVisitor();
         defuses.visit(tree);
 
-        const exprRange = new vscode.Range(document.getWordRangeAtPosition(pos, /[^\s]+/).start, pos);
+        const exprRange = new vscode.Range(document.getWordRangeAtPosition(pos, /[a-zA-Z0-9_]+\s*\([^)]*\)|[^\s]+/).start, pos);
         let exprOffset = document.offsetAt(exprRange.start);
 
         let parts = document.getText(exprRange).split('.').reverse();
@@ -111,11 +111,26 @@ export class AttributeCompletionItemProvider implements vscode.CompletionItemPro
                 const funcName = funcMatches[1];
                 const args = funcMatches[2];
                 if (funcName in builtinFunctions) {
-                    // TODO support: pop, peek, poll, lookup - type is 'val_type', based on first arg e.g. 'stack of val_type'
-                    // TODO support: getvalue - type is 'T' but based on traversal's return type
-                    // TODO support: getinedge, getoutedge - type is 'graph_edge', related to argument node's type
                     if (funcName === 'current') {
                         type = args;
+                    } else if (funcName == 'pop' || funcName == 'peek' || funcName == 'poll' || funcName == 'lookup') {
+                        // type is 'val_type', based on first arg e.g. 'stack of val_type'
+                        const argType = cleanType(defuses.getType(defuses.usedefs[exprOffset + funcName.length + 1]));
+                        type = argType.replace('stackof', '').replace('queueof', '').replace(/^map\[[^\]]+\]of/, '');
+                    } else if (funcName == 'getvalue') {
+                        // type is 'T' but based on traversal's return type
+                        const argParts = args.split(',');
+                        if (argParts.length == 2) {
+                            // named traversal
+                            const idx = exprOffset + funcName.length + 2 + argParts[0].length + (argParts[1].length - argParts[1].trim().length);
+                            type = cleanType(defuses.getType(defuses.usedefs[idx])).split('):')[1];
+                        } else {
+                            // TODO return type of current traversal
+                        }
+                    } else if (funcName == 'getinedge' || funcName == 'getoutedge') {
+                        // type is 'graph_edge', related to argument node's type
+                        const argType = cleanType(defuses.getType(defuses.usedefs[exprOffset + funcName.length + 1]));
+                        type = argType.replace(/Node$/, 'Edge');
                     } else {
                         type = cleanType(builtinFunctions[funcName].ret.type);
                     }

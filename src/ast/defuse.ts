@@ -18,6 +18,8 @@ import { RuleNode } from 'antlr4ts/tree/RuleNode';
 import { AbstractParseTreeVisitor } from 'antlr4ts/tree/AbstractParseTreeVisitor';
 import * as ast from '../antlr/boaParser';
 import { boaVisitor } from '../antlr/boaVisitor';
+import { getOperand } from '../utils';
+import { ParserRuleContext } from 'antlr4ts';
 
 export class ScopedVisitor<T> extends AbstractParseTreeVisitor<void> implements boaVisitor<void> {
     protected scopes: T[] = [];

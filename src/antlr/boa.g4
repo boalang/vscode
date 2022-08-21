@@ -177,7 +177,7 @@ emitStatement
 	;
 
 forStatement
-	: FOR LPAREN (forExpression)? SEMICOLON (expression)? SEMICOLON (forExpression)? RPAREN programStatement
+	: FOR LPAREN (forExpression)? SEMICOLON (expression)? SEMICOLON (forExpressionStatement)? RPAREN programStatement
 	;
 
 forExpression

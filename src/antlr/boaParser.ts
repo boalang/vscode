@@ -1922,7 +1922,7 @@ export class boaParser extends Parser {
 			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << boaParser.OF) | (1 << boaParser.IF) | (1 << boaParser.DO) | (1 << boaParser.MAP) | (1 << boaParser.STACK) | (1 << boaParser.QUEUE) | (1 << boaParser.SET) | (1 << boaParser.FOR) | (1 << boaParser.FOREACH) | (1 << boaParser.IFALL) | (1 << boaParser.EXISTS) | (1 << boaParser.NOT) | (1 << boaParser.TYPE) | (1 << boaParser.ELSE) | (1 << boaParser.CASE) | (1 << boaParser.OUTPUT) | (1 << boaParser.FORMAT) | (1 << boaParser.WHILE) | (1 << boaParser.BREAK) | (1 << boaParser.ARRAY) | (1 << boaParser.STATIC) | (1 << boaParser.SWITCH) | (1 << boaParser.RETURN) | (1 << boaParser.WEIGHT) | (1 << boaParser.DEFAULT) | (1 << boaParser.CONTINUE) | (1 << boaParser.FUNCTION) | (1 << boaParser.FIXP) | (1 << boaParser.VISITOR) | (1 << boaParser.TRAVERSAL) | (1 << boaParser.BEFORE))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (boaParser.AFTER - 32)) | (1 << (boaParser.STOP - 32)) | (1 << (boaParser.LBRACE - 32)) | (1 << (boaParser.LPAREN - 32)) | (1 << (boaParser.PLUS - 32)) | (1 << (boaParser.MINUS - 32)))) !== 0) || ((((_la - 68)) & ~0x1F) === 0 && ((1 << (_la - 68)) & ((1 << (boaParser.NEG - 68)) | (1 << (boaParser.INV - 68)) | (1 << (boaParser.DOLLAR - 68)) | (1 << (boaParser.IntegerLiteral - 68)) | (1 << (boaParser.FloatingPointLiteral - 68)) | (1 << (boaParser.CharacterLiteral - 68)) | (1 << (boaParser.RegexLiteral - 68)) | (1 << (boaParser.MultilineStringLiteral - 68)) | (1 << (boaParser.StringLiteral - 68)) | (1 << (boaParser.TimeLiteral - 68)) | (1 << (boaParser.Identifier - 68)))) !== 0)) {
 				{
 				this.state = 456;
-				this.forExpression();
+				this.forExpressionStatement();
 				}
 			}
 
@@ -4359,7 +4359,7 @@ export class boaParser extends Parser {
 		"\u01C3\u01C4\x03\x02\x02\x02\u01C4\u01C5\x03\x02\x02\x02\u01C5\u01C7\x07" +
 		"%\x02\x02\u01C6\u01C8\x05^0\x02\u01C7\u01C6\x03\x02\x02\x02\u01C7\u01C8" +
 		"\x03\x02\x02\x02\u01C8\u01C9\x03\x02\x02\x02\u01C9\u01CB\x07%\x02\x02" +
-		"\u01CA\u01CC\x05B\"\x02\u01CB\u01CA\x03\x02\x02\x02\u01CB\u01CC\x03\x02" +
+		"\u01CA\u01CC\x05F$\x02\u01CB\u01CA\x03\x02\x02\x02\u01CB\u01CC\x03\x02" +
 		"\x02\x02\u01CC\u01CD\x03\x02\x02\x02\u01CD\u01CE\x07,\x02\x02\u01CE\u01CF" +
 		"\x05\x06\x04\x02\u01CFA\x03\x02\x02\x02\u01D0\u01D3\x05D#\x02\u01D1\u01D3" +
 		"\x05F$\x02\u01D2\u01D0\x03\x02\x02\x02\u01D2\u01D1\x03\x02\x02\x02\u01D3" +
@@ -5543,17 +5543,14 @@ export class ForStatementContext extends ParserRuleContext {
 	public programStatement(): ProgramStatementContext {
 		return this.getRuleContext(0, ProgramStatementContext);
 	}
-	public forExpression(): ForExpressionContext[];
-	public forExpression(i: number): ForExpressionContext;
-	public forExpression(i?: number): ForExpressionContext | ForExpressionContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(ForExpressionContext);
-		} else {
-			return this.getRuleContext(i, ForExpressionContext);
-		}
+	public forExpression(): ForExpressionContext | undefined {
+		return this.tryGetRuleContext(0, ForExpressionContext);
 	}
 	public expression(): ExpressionContext | undefined {
 		return this.tryGetRuleContext(0, ExpressionContext);
+	}
+	public forExpressionStatement(): ForExpressionStatementContext | undefined {
+		return this.tryGetRuleContext(0, ForExpressionStatementContext);
 	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);

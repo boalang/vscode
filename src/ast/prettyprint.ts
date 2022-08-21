@@ -291,7 +291,7 @@ export default class PrettyPrinter extends AbstractParseTreeVisitor<string> impl
     visitForStatement(ctx: ast.ForStatementContext) {
         const body = ctx.programStatement();
         // FIXME this does not work - we cant tell which case a single forExpression() is
-        return 'for (' + ctx.forExpression(0)?.accept(this) + '; ' + ctx.expression()?.accept(this) + '; ' + ctx.forExpression(1)?.accept(this) + ')' + this.openStmtIsBlock(ctx.RPAREN(), body) +
+        return 'for (' + ctx.forExpression()?.accept(this) + '; ' + ctx.expression()?.accept(this) + '; ' + ctx.forExpressionStatement()?.accept(this) + ')' + this.openStmtIsBlock(ctx.RPAREN(), body) +
                 body.accept(this) +
             this.closeStmtIsBlock(body);
     }

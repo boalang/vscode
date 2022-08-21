@@ -76,7 +76,7 @@ export class BuiltInsCompletionItemProvider implements vscode.CompletionItemProv
 }
 
 function cleanType(t: string) {
-    return t.replace('array of ', '').replace('?', '').replace(': ', '');
+    return t.replace('array of ', '').replace('?', '').replace(': ', '').trim();
 }
 
 export class AttributeCompletionItemProvider implements vscode.CompletionItemProvider {
@@ -123,9 +123,14 @@ export class AttributeCompletionItemProvider implements vscode.CompletionItemPro
                         if (argParts.length == 2) {
                             // named traversal
                             const idx = exprOffset + funcName.length + 2 + argParts[0].length + (argParts[1].length - argParts[1].trim().length);
-                            type = cleanType(defuses.getType(defuses.usedefs[idx])).split('):')[1];
+                            type = cleanType(defuses.getType(defuses.usedefs[idx]).split('):')[1]);
                         } else {
-                            // TODO return type of current traversal
+                            // return type of current traversal
+                            let text = document.getText(new vscode.Range(new vscode.Position(0, 0), document.positionAt(exprOffset)));
+                            text = text.substring(text.lastIndexOf('traversal'));
+                            text = text.substring(0, text.indexOf('{'));
+                            const typeParts = text.split(':');
+                            type = typeParts[typeParts.length - 1].trim();
                         }
                     } else if (funcName == 'getinedge' || funcName == 'getoutedge') {
                         // type is 'graph_edge', related to argument node's type

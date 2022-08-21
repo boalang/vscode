@@ -16,7 +16,7 @@
 //
 import * as vscode from 'vscode';
 import { parseBoaCode } from './ast/parser';
-import { UDFFinder } from './ast/signatures';
+import UDFFinder from "./ast/UDFFinder";
 import { builtinFunctions } from './types';
 
 export default class FunctionsHoverProvider implements vscode.HoverProvider {

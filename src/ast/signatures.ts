@@ -16,15 +16,12 @@
 //
 import * as vscode from 'vscode';
 import { AbstractParseTreeVisitor } from 'antlr4ts/tree/AbstractParseTreeVisitor';
-import { ParseTree } from 'antlr4ts/tree/ParseTree';
 import { RuleNode } from 'antlr4ts/tree/RuleNode';
 import * as ast from '../antlr/boaParser';
 import { boaVisitor } from '../antlr/boaVisitor';
 import { parseBoaCode } from './parser';
-import { builtinFunctions, IFunction } from '../types';
-import { ParserRuleContext } from 'antlr4ts';
-import { ScopedVisitor } from './defuse';
-import { getOperand } from '../utils';
+import { builtinFunctions } from '../types';
+import UDFFinder from "./UDFFinder";
 
 export default class BoaSignatureHelpProvider implements vscode.SignatureHelpProvider {
     public provideSignatureHelp(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.SignatureHelp> {
@@ -115,78 +112,5 @@ class FunctionCallFinder extends AbstractParseTreeVisitor<ast.FactorContext> imp
         }
 
         return ret;
-    }
-}
-
-type funcDict = { [name: string]: IFunction };
-export class UDFFinder extends ScopedVisitor<funcDict> {
-    private _found = false;
-    private position: number;
-
-    constructor(position: number) {
-        super();
-        this.position = position;
-    }
-
-    get funcs() {
-        let funcs = {...this.scopes[0]};
-        for (let i = 1; i < this.scopes.length; i++) {
-            Object.keys(this.scopes[i]).forEach(k => funcs[k] = this.scopes[i][k]);
-        }
-        return funcs;
-    }
-
-    visit(tree: ParseTree) {
-        tree.accept(this);
-    }
-
-    protected defaultResult() {
-        return {};
-    }
-
-    protected exitScope() {
-        if (!this._found) {
-            this.scopes.pop();
-        }
-    }
-
-    visitChildren(node: RuleNode) {
-        if (!this._found) {
-            if ((node.ruleContext as ParserRuleContext).start.startIndex <= this.position) {
-                const n = node.childCount;
-                for (let i = 0; i < n; i++) {
-                    node.getChild(i).accept(this);
-                }
-                if ((node.ruleContext as ParserRuleContext).stop.stopIndex > this.position) {
-                    this._found = true;
-                }
-            } else {
-                this._found = true;
-            }
-        }
-    }
-
-    visitForVariableDeclaration(ctx: ast.ForVariableDeclarationContext) {
-        const funcExp = getOperand(ctx.expression())?.functionExpression();
-        if (funcExp) {
-            const id = ctx.identifier().text;
-            const funcType = funcExp.functionType();
-            const numArgs = funcType.varDecl().length;
-            const funcRet = funcType.type();
-
-            const func: IFunction = {
-                args: [],
-                ret: { type: '', doc: '' },
-                doc: '',
-            };
-            for (let i = 0; i < numArgs; i++) {
-                func.args.push({ name: funcType.varDecl(i).identifier().text + ': ' + funcType.varDecl(i).type().text, doc: '' });
-            }
-            if (funcRet) {
-                func.ret.type = ': ' + funcRet.text;
-            }
-            this.scopes[this.scopes.length - 1][id] = func;
-        }
-        this.visitChildren(ctx);
     }
 }

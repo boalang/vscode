@@ -35,6 +35,8 @@
         "onView:boalang.jobList",
         "onCommand:boalang.refactor.extractfunction",
         "onCommand:boalang.refactor.template.extract",
+        "onCommand:boalang.source.cfg",
+        "onCommand:boalang.source.cfgzoom",
         "onCommand:boalang.runQuery",
         "onCommand:boalang.setFavorite",
         "onCommand:boalang.setEndpoint",
@@ -75,6 +77,20 @@
             {
                 "command": "boalang.refactor.template.extract",
                 "title": "Extract Template Snippet",
+                "category": "Boa"
+            },
+            {
+                "command": "boalang.source.cfg",
+                "title": "Generate CFG",
+                "enablement": "config.boalang.debug.enabled && resourceLangId == boalang",
+                "icon": "$(type-hierarchy-sub)",
+                "category": "Boa"
+            },
+            {
+                "command": "boalang.source.cfgzoom",
+                "title": "Generate CFG",
+                "enablement": "config.boalang.debug.enabled && resourceLangId == boalang",
+                "icon": "$(type-hierarchy-sub)",
                 "category": "Boa"
             },
             {
@@ -252,6 +268,20 @@
                 "command": "boalang.template.addtag",
                 "title": "Add Global Template Tag",
                 "category": "Boa"
+            }
+        ],
+        "keybindings": [
+            {
+                "command": "boalang.source.cfg",
+                "key": "ctrl+alt+g",
+                "mac": "ctrl+cmd+g",                
+                "when": "config.boalang.debug.enabled && editorLangId == boalang"
+            },
+            {
+                "command": "boalang.source.cfgzoom",
+                "key": "ctrl+shift+alt+g",
+                "mac": "ctrl+cmd+alt+g",                
+                "when": "config.boalang.debug.enabled && editorLangId == boalang"
             }
         ],
         "colors": [
@@ -472,6 +502,18 @@
                 {
                     "command": "boalang.runQuery",
                     "when": "resourceLangId == boalang"
+                },
+                {
+                    "command": "boalang.source.cfg",
+                    "when": "config.boalang.debug.enabled && resourceLangId == boalang"
+                }
+            ],
+            "editor/context": [
+                {
+                    "command": "boalang.source.cfg",
+                    "alt": "boalang.source.cfgzoom",
+                    "group": "1_modification@9",
+                    "when": "config.boalang.debug.enabled && editorLangId == boalang"
                 }
             ],
             "editor/title": [
@@ -593,6 +635,12 @@
                     "description": "Last used Boa dataset",
                     "order": 6,
                     "default": null
+                },
+                "boalang.debug.enabled": {
+                    "type": "boolean",
+                    "description": "Enable debug options",
+                    "order": 7,
+                    "default": false
                 }
             }
         },

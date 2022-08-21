@@ -24,8 +24,24 @@ import { ParserRuleContext } from 'antlr4ts';
 export class ScopedVisitor<T> extends AbstractParseTreeVisitor<void> implements boaVisitor<void> {
     protected scopes: T[] = [];
 
+    public static dotEscape(s: string) {
+        return s.replace(/"/g, '\\"')
+            .replace(/\n/g, '\\n');
+    }
+    
+    public static dotHTMLEscape(s: string) {
+        return s.replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/\n/g, '\\n');
+    }
+
     protected defaultResult() {
         return undefined;
+    }
+
+    public getRecord(node: string): string {
+        return ScopedVisitor.dotHTMLEscape(node);
     }
 
     public visitChildren(node: RuleNode) {

@@ -222,7 +222,7 @@ export default class PrettyPrinter extends AbstractParseTreeVisitor<string> impl
     }
 
     visitFixpType(ctx: ast.FixpTypeContext) {
-        return 'fixp';
+        return 'fixp(' + ctx.identifier(0).accept(this) + ', ' + ctx.identifier(1).accept(this) + ': ' + ctx.identifier(2).accept(this) + '): ' + ctx.type().accept(this) + this.lineEnd(ctx.LPAREN(), ctx.type());
     }
 
     visitVisitorType(ctx: ast.VisitorTypeContext) {
@@ -398,11 +398,6 @@ export default class PrettyPrinter extends AbstractParseTreeVisitor<string> impl
         return start + ' ' + node + ' ' + ctx.RIGHT_ARROW().text + ' ' + ctx.programStatement().accept(this) + this.lineEnd(ctx);
     }
 
-    visitFixpStatement(ctx: ast.FixpStatementContext) {
-        return '(' + ctx.identifier(0).accept(this) + ', ' + ctx.identifier(1).accept(this) + ': ' + ctx.identifier(2).accept(this) + '): ' + ctx.type().accept(this) + this.lineEnd(ctx.LPAREN(), ctx.type()) +
-            ctx.programStatement().accept(this) + this.lineEnd(ctx);
-    }
-
     visitStopStatement(ctx: ast.StopStatementContext) {
         return 'stop;';
     }
@@ -496,7 +491,7 @@ export default class PrettyPrinter extends AbstractParseTreeVisitor<string> impl
     }
 
     visitFixpExpression(ctx: ast.FixpExpressionContext) {
-        return ctx.fixpType().accept(this) + this.lineEnd(ctx.fixpType()) + ctx.fixpStatement().accept(this) + this.lineEnd(ctx);
+        return ctx.fixpType().accept(this) + this.lineEnd(ctx.fixpType()) + ctx.block().accept(this) + this.lineEnd(ctx);
     }
 
     visitVisitorExpression(ctx: ast.VisitorExpressionContext) {
@@ -508,7 +503,7 @@ export default class PrettyPrinter extends AbstractParseTreeVisitor<string> impl
     }
 
     visitTraversalExpression(ctx: ast.TraversalExpressionContext) {
-        return ctx.traversalType().accept(this) + this.lineEnd(ctx.traversalType()) + ctx.programStatement().accept(this) + this.lineEnd(ctx);
+        return ctx.traversalType().accept(this) + this.lineEnd(ctx.traversalType()) + ctx.block().accept(this) + this.lineEnd(ctx);
     }
 
     visitVarDecl(ctx: ast.VarDeclContext) {

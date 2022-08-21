@@ -116,7 +116,7 @@ functionType
 	;
 
 fixpType
-	: FIXP
+	: FIXP LPAREN identifier COMMA identifier COLON identifier RPAREN COLON type
 	;
 
 visitorType
@@ -244,10 +244,6 @@ visitStatement
 		RIGHT_ARROW programStatement
 	;
 
-fixpStatement
-	: LPAREN identifier COMMA identifier COLON identifier RPAREN COLON type programStatement
-	;
-
 stopStatement
 	: STOP { this.isSemicolon(); }
 	;
@@ -324,7 +320,7 @@ functionExpression
 	;
 
 fixpExpression
-	: fixpType (fixpStatement | { this.notifyErrorListeners("error: only fixpoint statement allowed inside fixpoint expression"); } programStatement)
+	: fixpType block
 	;
 
 visitorExpression
@@ -332,7 +328,7 @@ visitorExpression
 	;
 
 traversalExpression
-	: traversalType (programStatement | { this.notifyErrorListeners("error: only traverse statements allowed inside traversal bodies"); } programStatement)
+	: traversalType block
 	;
 
 varDecl

@@ -208,8 +208,8 @@ export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ast.Identif
 
     // symbol definitions that also scope
     public visitScopedFixpExpression(ctx: ast.FixpExpressionContext) {
-        this.addDef(ctx.fixpStatement().identifier(0), ctx.fixpStatement().type());
-        this.addDef(ctx.fixpStatement().identifier(1), ctx.fixpStatement().type());
+        this.addDef(ctx.fixpType().identifier(0), ctx.fixpType().type());
+        this.addDef(ctx.fixpType().identifier(1), ctx.fixpType().type());
         super.visitScopedFixpExpression(ctx);
     }
 

@@ -124,7 +124,7 @@ visitorType
 	;
 
 traversalType
-	: TRAVERSAL
+	: TRAVERSAL LPAREN identifier COLON identifier RPAREN (COLON type)?
 	;
 
 statement
@@ -244,10 +244,6 @@ visitStatement
 		RIGHT_ARROW programStatement
 	;
 
-traverseStatement
-	: LPAREN identifier COLON identifier RPAREN (COLON type)? programStatement
-	;
-
 fixpStatement
 	: LPAREN identifier COMMA identifier COLON identifier RPAREN COLON type programStatement
 	;
@@ -336,7 +332,7 @@ visitorExpression
 	;
 
 traversalExpression
-	: traversalType (traverseStatement | { this.notifyErrorListeners("error: only traverse statements allowed inside traversal bodies"); } programStatement)
+	: traversalType (programStatement | { this.notifyErrorListeners("error: only traverse statements allowed inside traversal bodies"); } programStatement)
 	;
 
 varDecl

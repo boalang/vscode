@@ -230,7 +230,8 @@ export default class PrettyPrinter extends AbstractParseTreeVisitor<string> impl
     }
 
     visitTraversalType(ctx: ast.TraversalTypeContext) {
-        return 'traversal';
+        const ret = !ctx.type() ? '' : ': ' + ctx.type().accept(this);
+        return 'traversal(' + ctx.identifier(0).accept(this) + ': ' + ctx.identifier(1).accept(this) + ')' + ret + this.lineEnd(ctx.LPAREN(), ctx.type() ? ctx.type() : ctx.RPAREN());
     }
 
     visitEmptyStatement(ctx: ast.EmptyStatementContext) {
@@ -397,12 +398,6 @@ export default class PrettyPrinter extends AbstractParseTreeVisitor<string> impl
         return start + ' ' + node + ' ' + ctx.RIGHT_ARROW().text + ' ' + ctx.programStatement().accept(this) + this.lineEnd(ctx);
     }
 
-    visitTraverseStatement(ctx: ast.TraverseStatementContext) {
-        const ret = !ctx.type() ? '' : ': ' + ctx.type().accept(this);
-        return '(' + ctx.identifier(0).accept(this) + ': ' + ctx.identifier(1).accept(this) + ')' + ret + this.lineEnd(ctx.LPAREN(), ctx.type() ? ctx.type() : ctx.RPAREN())
-            + ctx.programStatement().accept(this) + this.lineEnd(ctx);
-    }
-
     visitFixpStatement(ctx: ast.FixpStatementContext) {
         return '(' + ctx.identifier(0).accept(this) + ', ' + ctx.identifier(1).accept(this) + ': ' + ctx.identifier(2).accept(this) + '): ' + ctx.type().accept(this) + this.lineEnd(ctx.LPAREN(), ctx.type()) +
             ctx.programStatement().accept(this) + this.lineEnd(ctx);
@@ -513,7 +508,7 @@ export default class PrettyPrinter extends AbstractParseTreeVisitor<string> impl
     }
 
     visitTraversalExpression(ctx: ast.TraversalExpressionContext) {
-        return ctx.traversalType().accept(this) + this.lineEnd(ctx.traversalType()) + ctx.traverseStatement().accept(this) + this.lineEnd(ctx);
+        return ctx.traversalType().accept(this) + this.lineEnd(ctx.traversalType()) + ctx.programStatement().accept(this) + this.lineEnd(ctx);
     }
 
     visitVarDecl(ctx: ast.VarDeclContext) {

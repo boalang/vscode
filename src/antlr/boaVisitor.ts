@@ -50,7 +50,6 @@ import { ExistsStatementContext } from "./boaParser";
 import { IfallStatementContext } from "./boaParser";
 import { WhileStatementContext } from "./boaParser";
 import { VisitStatementContext } from "./boaParser";
-import { TraverseStatementContext } from "./boaParser";
 import { FixpStatementContext } from "./boaParser";
 import { StopStatementContext } from "./boaParser";
 import { ExpressionContext } from "./boaParser";
@@ -419,13 +418,6 @@ export interface boaVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitVisitStatement?: (ctx: VisitStatementContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `boaParser.traverseStatement`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitTraverseStatement?: (ctx: TraverseStatementContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `boaParser.fixpStatement`.

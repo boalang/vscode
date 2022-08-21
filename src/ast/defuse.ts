@@ -216,7 +216,7 @@ export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ast.Identif
     }
 
     public visitScopedTraversalExpression(ctx: ast.TraversalExpressionContext) {
-        this.addDef(ctx.traverseStatement().identifier(0), ctx.traverseStatement().type());
+        this.addDef(ctx.traversalType().identifier(0), ctx.traversalType().type());
         super.visitScopedTraversalExpression(ctx);
     }
 

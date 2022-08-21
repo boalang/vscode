@@ -150,11 +150,11 @@ export class AttributeCompletionItemProvider implements vscode.CompletionItemPro
                 const attrMatches = parts[parts.length - 1].match(/^([a-zA-Z0-9_]+)(\[[^\]]+\])?$/);
                 const attrName = attrMatches[1];
                 if (attrName !== undefined) {
-                    const attr = builtinTypes[type].attrs.filter(a => a.name == attrName)[0];
-                    if (attr !== undefined) {
+                    if (Object.keys(builtinTypes[type].attrs).indexOf(attrName) != -1) {
+                        const attrType = builtinTypes[type].attrs[attrName].type;
                         type = undefined;
-                        if (attr.type.indexOf('array of ') == -1 || attrMatches[2] !== undefined) {
-                            type = cleanType(attr.type);
+                        if (attrType.indexOf('array of ') == -1 || attrMatches[2] !== undefined) {
+                            type = cleanType(attrType);
                         }
                     }
                 }
@@ -170,10 +170,11 @@ export class AttributeCompletionItemProvider implements vscode.CompletionItemPro
             return items;
         }
 
-        for (const attr of builtinTypes[type].attrs) {
+        for (const attrName of Object.keys(builtinTypes[type].attrs)) {
+            const attr = builtinTypes[type].attrs[attrName];
             if (token.isCancellationRequested) return items;
-            const item = new vscode.CompletionItem(attr.name, vscode.CompletionItemKind.Field);
-            item.detail = `(attr) ${attr.type} ${type}.${attr.name}`;
+            const item = new vscode.CompletionItem(attrName, vscode.CompletionItemKind.Field);
+            item.detail = `(attr) ${attr.type} ${type}.${attrName}`;
             item.documentation = new vscode.MarkdownString(attr.doc);
             items.push(item);
         }

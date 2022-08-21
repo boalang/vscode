@@ -145,7 +145,7 @@ export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ast.Identif
     private _defs: { [defIdx: number]: ast.IdentifierContext } = {};
     private _uses: { [defIdx: number]: ast.IdentifierContext[] } = {};
     private _usedefs: { [defIdx: number]: number } = {};
-    private _types: { [defIdx: number]: ast.TypeContext } = {};
+    private _types: { [defIdx: number]: ParserRuleContext|string } = {};
 
     public get defs() {
         return this._defs;
@@ -160,7 +160,11 @@ export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ast.Identif
     }
 
     public getType(def: number) {
-        return this._types[def];
+        const t = this._types[def];
+        if (t instanceof ParserRuleContext) {
+            return t.text;
+        }
+        return t;
     }
 
     protected getDef(ctx: ast.IdentifierContext, depth: number = 0): ast.IdentifierContext {
@@ -178,7 +182,7 @@ export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ast.Identif
         return this.getDef(ctx, depth + 1);
     }
 
-    private addDef(ctx: ast.IdentifierContext, type: ast.TypeContext = undefined) {
+    private addDef(ctx: ast.IdentifierContext, type: ParserRuleContext|string = undefined) {
         this._defs[ctx.start.startIndex] = ctx;
         this.scopes[this.scopes.length - 1][ctx.text] = ctx;
         if (type !== undefined) {            
@@ -235,7 +239,22 @@ export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ast.Identif
     }
 
     public visitForVariableDeclaration(ctx: ast.ForVariableDeclarationContext) {
-        this.addDef(ctx.identifier(), ctx.type());
+        if (ctx.type()) {
+            this.addDef(ctx.identifier(), ctx.type());
+        } else {
+            const op = getOperand(ctx.expression());
+            let type = undefined;
+            if (op.stringLiteral()) type = 'string';
+            else if (op.characterLiteral()) type = 'char';
+            else if (op.timeLiteral()) type = 'time';
+            else if (op.integerLiteral()) type = 'int';
+            else if (op.floatingPointLiteral()) type = 'float';
+            else if (op.functionExpression()) type = op.functionExpression().functionType();
+            else if (op.fixpExpression()) type = op.fixpExpression().fixpType();
+            else if (op.visitorExpression()) type = 'visitor';
+            else if (op.traversalExpression()) type = op.traversalExpression().traversalType();
+            this.addDef(ctx.identifier(), type);
+        }
         this.visitChildren(ctx);
     }
 

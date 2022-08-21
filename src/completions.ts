@@ -125,7 +125,7 @@ export class AttributeCompletionItemProvider implements vscode.CompletionItemPro
                     type = cleanType(visitor.funcs[funcName].ret.type);
                 }
             } else if (type === undefined && exprOffset in defuses.usedefs) {
-                type = cleanType(defuses.getType(defuses.usedefs[exprOffset]).text);
+                type = cleanType(defuses.getType(defuses.usedefs[exprOffset]));
             } else if (type in builtinTypes) {
                 const attrMatches = parts[parts.length - 1].match(/^([a-zA-Z0-9_]+)(\[[^\]]+\])?$/);
                 const attrName = attrMatches[1];

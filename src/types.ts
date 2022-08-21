@@ -316,11 +316,6 @@ export const builtinTypes: { [name: string]: IType } = {
     },
 };
 
-interface IEnumValue {
-    name: string,
-    doc: string,
-}
-
 interface IEnum {
     attrs: { [name: string]: string },
     doc: string,

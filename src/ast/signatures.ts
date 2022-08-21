@@ -42,11 +42,11 @@ export default class BoaSignatureHelpProvider implements vscode.SignatureHelpPro
         if (func === undefined)
             return undefined;
 
-        const args = func.args.map(arg => arg.name).join(', ');
+        const args = Object.keys(func.args).map(arg => arg + ': ' + func.args[arg].type).join(', ');
         const ret = func.ret.type.length > 0 ? `: ${func.ret.type}` : '';
         const sig = new vscode.SignatureInformation(`${funcName}(${args})${ret}`, new vscode.MarkdownString(func.doc));
-        sig.parameters = func.args
-            .map(arg => new vscode.ParameterInformation(arg.name, arg.doc.length > 0 ? new vscode.MarkdownString(`**${arg.name}** - ${arg.doc}`) : ''));
+        sig.parameters = Object.keys(func.args)
+            .map(arg => new vscode.ParameterInformation(arg + ': ' + func.args[arg].type, func.args[arg].doc.length > 0 ? new vscode.MarkdownString(`**${arg + ': ' + func.args[arg].type}** - ${func.args[arg].doc}`) : ''));
 
         const help = new vscode.SignatureHelp();
         help.signatures = [sig];

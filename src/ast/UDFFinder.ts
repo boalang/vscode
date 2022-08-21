@@ -78,12 +78,12 @@ export default class UDFFinder extends ScopedVisitor<{ [name: string]: IFunction
             const funcRet = funcType.type();
 
             const func: IFunction = {
-                args: [],
+                args: {},
                 ret: { type: '', doc: '' },
                 doc: '',
             };
             for (let i = 0; i < numArgs; i++) {
-                func.args.push({ name: funcType.varDecl(i).identifier().text + ': ' + funcType.varDecl(i).type().text, doc: '' });
+                func.args[funcType.varDecl(i).identifier().text] = { type: funcType.varDecl(i).type().text, doc: '' };
             }
             if (funcRet) {
                 func.ret.type = ': ' + funcRet.text;

@@ -40,7 +40,7 @@ ${getFuncDoc(funcName)}`));
                 visitor.visit(tree);
                 const func = visitor.funcs[funcName];
                 if (func !== undefined) {
-                    const args = func.args.map(arg => arg.name).join(', ');
+                    const args = Object.keys(func.args).map(arg => arg + ': ' + func.args[arg].type).join(', ');
                     return new vscode.Hover(new vscode.MarkdownString(`\`\`\`boalang\n${funcName}(${args})${func.ret.type}\n\`\`\``));
                 }
             }
@@ -52,14 +52,14 @@ ${getFuncDoc(funcName)}`));
 
 export function getFuncSignature(funcName: string) {
     const func = builtinFunctions[funcName];
-    const args = func.args.map(arg => arg.name).join(', ');
+    const args = Object.keys(func.args).map(arg => arg + ': ' + func.args[arg].type).join(', ');
     const ret = func.ret.type.length > 0 ? `: ${func.ret.type}` : '';
     return `(method) ${funcName}(${args})${ret}`;
 }
 
 export function getFuncDoc(funcName: string) {
     const func = builtinFunctions[funcName];
-    const argDocs = func.args.map(arg => `*@param* \`${arg.name}\` - ${arg.doc}`).join('\n\n');
+    const argDocs = Object.keys(func.args).map(arg => `*@param* \`${arg + ': ' + func.args[arg].type}\` - ${func.args[arg].doc}`).join('\n\n');
     const ret = func.ret.doc.length > 0 ? `\n\n*@return* ${func.ret.doc}` : '';
 
     return `${func.doc}\n\n${argDocs}${ret}`;

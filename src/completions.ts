@@ -100,7 +100,7 @@ export class AttributeCompletionItemProvider implements vscode.CompletionItemPro
         const defuses = new DefsUsesVisitor();
         defuses.visit(tree);
 
-        const exprRange = new vscode.Range(document.getWordRangeAtPosition(pos, /[a-zA-Z0-9_]+\s*\([^)]*\)|[^\s]+/).start, pos);
+        const exprRange = new vscode.Range(document.getWordRangeAtPosition(pos, /(([a-zA-Z0-9_]+(\[[^\]]+\])?(\([^)]+\))?)\.)+/).start, pos);
         let exprOffset = document.offsetAt(exprRange.start);
 
         let parts = document.getText(exprRange).split('.').reverse();

@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
+import { ExpressionContext, OperandContext } from './antlr/boaParser';
 
 export function getWorkspaceRoot() {
     return vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0].uri.fsPath : '';
@@ -52,4 +53,9 @@ export async function getFileContents(path: string): Promise<string> {
 export function atDot(document: vscode.TextDocument, position: vscode.Position) {
     const r = document.getWordRangeAtPosition(position, /[\s.]+/);
     return document.getText(r).trim() === '.';
+}
+
+export function getOperand(e: ExpressionContext|undefined): OperandContext|undefined {
+    if (e === undefined) return undefined;
+    return e.conjunction(0).comparison(0).simpleExpression(0).term(0).factor(0).operand();
 }

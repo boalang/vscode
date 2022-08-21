@@ -20,7 +20,7 @@ import { AbstractParseTreeVisitor } from 'antlr4ts/tree/AbstractParseTreeVisitor
 import * as ast from '../antlr/boaParser';
 import { boaVisitor } from '../antlr/boaVisitor';
 import { parseBoaCode } from './parser';
-import { getFileContents, getWorkspaceRoot } from '../utils';
+import { getFileContents, getOperand, getWorkspaceRoot } from '../utils';
 import * as consts from '../consts';
 
 export class BoaDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
@@ -103,10 +103,7 @@ export class SymbolsVisitor extends AbstractParseTreeVisitor<vscode.SymbolInform
     }
 
     visitForVariableDeclaration(ctx: ast.ForVariableDeclarationContext) {
-        const isfunc = ctx.expression() ?
-            ctx.expression().conjunction(0).comparison(0).simpleExpression(0).term(0).factor(0).operand().functionExpression() :
-            false;
-
+        const isfunc = ctx.expression() ? getOperand(ctx.expression()).functionExpression() : false;
         return [new vscode.SymbolInformation(ctx.identifier().text, isfunc ? vscode.SymbolKind.Function : vscode.SymbolKind.Variable, undefined, getLoc(ctx, this.uri))]
             .concat(this.visitChildren(ctx));
     }

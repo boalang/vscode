@@ -24,6 +24,7 @@ import { parseBoaCode } from './parser';
 import { builtinFunctions, IFunction } from '../types';
 import { ParserRuleContext } from 'antlr4ts';
 import { ScopedVisitor } from './defuse';
+import { getOperand } from '../utils';
 
 export default class BoaSignatureHelpProvider implements vscode.SignatureHelpProvider {
     public provideSignatureHelp(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.SignatureHelp> {
@@ -166,7 +167,7 @@ export class UDFFinder extends ScopedVisitor<funcDict> {
     }
 
     visitForVariableDeclaration(ctx: ast.ForVariableDeclarationContext) {
-        const funcExp = ctx.expression()?.conjunction(0).comparison(0).simpleExpression(0).term(0).factor(0).operand().functionExpression();
+        const funcExp = getOperand(ctx.expression())?.functionExpression();
         if (funcExp) {
             const id = ctx.identifier().text;
             const funcType = funcExp.functionType();

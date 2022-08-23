@@ -357,7 +357,7 @@ export default class PrettyPrinter extends AbstractParseTreeVisitor<string> impl
     visitSwitchCase(ctx: ast.SwitchCaseContext) {
         return 'case ' + ctx.expressionList().accept(this) + ':' + this.lineEnd(ctx.CASE(), ctx.COLON()) +
             this.indent() +
-                ctx.statement().map(s => this.lineStart() + s.accept(this) + this.lineEnd(s)).join('') +
+                ctx.programStatement().map(s => this.lineStart() + s.accept(this) + this.lineEnd(s)).join('') +
             this.dedent();
     }
 

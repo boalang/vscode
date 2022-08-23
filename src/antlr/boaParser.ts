@@ -2303,7 +2303,7 @@ export class boaParser extends Parser {
 					{
 					{
 					this.state = 526;
-					this.statement();
+					this.programStatement();
 					}
 					}
 					break;
@@ -4389,21 +4389,21 @@ export class boaParser extends Parser {
 		"\x03\x02\x02\x02\u0208\u0209\x03\x02\x02\x02\u0209\u0207\x03\x02\x02\x02" +
 		"\u0209\u020A\x03\x02\x02\x02\u020A\u020B\x03\x02\x02\x02\u020B\u020C\x07" +
 		"*\x02\x02\u020CO\x03\x02\x02\x02\u020D\u020E\x07\x11\x02\x02\u020E\u020F" +
-		"\x05`1\x02\u020F\u0211\x07&\x02\x02\u0210\u0212\x050\x19\x02\u0211\u0210" +
-		"\x03\x02\x02\x02\u0212\u0213\x03\x02\x02\x02\u0213\u0211\x03\x02\x02\x02" +
-		"\u0213\u0214\x03\x02\x02\x02\u0214Q\x03\x02\x02\x02\u0215\u0216\x07\v" +
-		"\x02\x02\u0216\u0217\x07+\x02\x02\u0217\u0218\x05\x80A\x02\u0218\u0219" +
-		"\x07%\x02\x02\u0219\u021A\x05^0\x02\u021A\u021B\x07,\x02\x02\u021B\u021C" +
-		"\x05\x06\x04\x02\u021CS\x03\x02\x02\x02\u021D\u021E\x07\r\x02\x02\u021E" +
-		"\u021F\x07+\x02\x02\u021F\u0220\x05\x80A\x02\u0220\u0221\x07%\x02\x02" +
-		"\u0221\u0222\x05^0\x02\u0222\u0223\x07,\x02\x02\u0223\u0224\x05\x06\x04" +
-		"\x02\u0224U\x03\x02\x02\x02\u0225\u0226\x07\f\x02\x02\u0226\u0227\x07" +
-		"+\x02\x02\u0227\u0228\x05\x80A\x02\u0228\u0229\x07%\x02\x02\u0229\u022A" +
-		"\x05^0\x02\u022A\u022B\x07,\x02\x02\u022B\u022C\x05\x06\x04\x02\u022C" +
-		"W\x03\x02\x02\x02\u022D\u022E\x07\x14\x02\x02\u022E\u022F\x07+\x02\x02" +
-		"\u022F\u0230\x05^0\x02\u0230\u0231\x07,\x02\x02\u0231\u0232\x05\x06\x04" +
-		"\x02\u0232Y\x03\x02\x02\x02\u0233\u0237\x07!\x02\x02\u0234\u0237\x07\"" +
-		"\x02\x02\u0235\u0237\b.\x01\x02\u0236\u0233\x03\x02\x02\x02\u0236\u0234" +
+		"\x05`1\x02\u020F\u0211\x07&\x02\x02\u0210\u0212\x05\x06\x04\x02\u0211" +
+		"\u0210\x03\x02\x02\x02\u0212\u0213\x03\x02\x02\x02\u0213\u0211\x03\x02" +
+		"\x02\x02\u0213\u0214\x03\x02\x02\x02\u0214Q\x03\x02\x02\x02\u0215\u0216" +
+		"\x07\v\x02\x02\u0216\u0217\x07+\x02\x02\u0217\u0218\x05\x80A\x02\u0218" +
+		"\u0219\x07%\x02\x02\u0219\u021A\x05^0\x02\u021A\u021B\x07,\x02\x02\u021B" +
+		"\u021C\x05\x06\x04\x02\u021CS\x03\x02\x02\x02\u021D\u021E\x07\r\x02\x02" +
+		"\u021E\u021F\x07+\x02\x02\u021F\u0220\x05\x80A\x02\u0220\u0221\x07%\x02" +
+		"\x02\u0221\u0222\x05^0\x02\u0222\u0223\x07,\x02\x02\u0223\u0224\x05\x06" +
+		"\x04\x02\u0224U\x03\x02\x02\x02\u0225\u0226\x07\f\x02\x02\u0226\u0227" +
+		"\x07+\x02\x02\u0227\u0228\x05\x80A\x02\u0228\u0229\x07%\x02\x02\u0229" +
+		"\u022A\x05^0\x02\u022A\u022B\x07,\x02\x02\u022B\u022C\x05\x06\x04\x02" +
+		"\u022CW\x03\x02\x02\x02\u022D\u022E\x07\x14\x02\x02\u022E\u022F\x07+\x02" +
+		"\x02\u022F\u0230\x05^0\x02\u0230\u0231\x07,\x02\x02\u0231\u0232\x05\x06" +
+		"\x04\x02\u0232Y\x03\x02\x02\x02\u0233\u0237\x07!\x02\x02\u0234\u0237\x07" +
+		"\"\x02\x02\u0235\u0237\b.\x01\x02\u0236\u0233\x03\x02\x02\x02\u0236\u0234" +
 		"\x03\x02\x02\x02\u0236\u0235\x03\x02\x02\x02\u0237\u0242\x03\x02\x02\x02" +
 		"\u0238\u0243\x07R\x02\x02\u0239\u0243\x05\x80A\x02\u023A\u023F\x05\x86" +
 		"D\x02\u023B\u023C\x07\'\x02\x02\u023C\u023E\x05\x86D\x02\u023D\u023B\x03" +
@@ -5795,13 +5795,13 @@ export class SwitchCaseContext extends ParserRuleContext {
 		return this.getRuleContext(0, ExpressionListContext);
 	}
 	public COLON(): TerminalNode { return this.getToken(boaParser.COLON, 0); }
-	public statement(): StatementContext[];
-	public statement(i: number): StatementContext;
-	public statement(i?: number): StatementContext | StatementContext[] {
+	public programStatement(): ProgramStatementContext[];
+	public programStatement(i: number): ProgramStatementContext;
+	public programStatement(i?: number): ProgramStatementContext | ProgramStatementContext[] {
 		if (i === undefined) {
-			return this.getRuleContexts(StatementContext);
+			return this.getRuleContexts(ProgramStatementContext);
 		} else {
-			return this.getRuleContext(i, StatementContext);
+			return this.getRuleContext(i, ProgramStatementContext);
 		}
 	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {

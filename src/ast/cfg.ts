@@ -299,7 +299,7 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
             }
             this._blockExits = [];
             switchCase.accept(this);
-            fallthrough = this._blockOuts[this._blockOuts.length - 1].indexOf(switchCase.statement(switchCase.statement.length - 1)) != -1;
+            fallthrough = this._blockOuts[this._blockOuts.length - 1].indexOf(switchCase.programStatement(switchCase.programStatement().length - 1)) != -1;
             if (!fallthrough) {
                 outs.push(...this._blockOuts.pop());
             }
@@ -326,7 +326,7 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
     public visitScopedSwitchCase(ctx: ast.SwitchCaseContext) {
         const outs = this._blockOuts.pop();
         super.visitScopedSwitchCase(ctx);
-        const stmt = ctx.statement(0);
+        const stmt = ctx.programStatement(0);
         outs.forEach(o => this.addEdge(o, stmt, ctx.expressionList().text));
     }
 

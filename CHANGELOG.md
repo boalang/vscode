@@ -1,5 +1,10 @@
 # Change Log
 
+## [0.2.2] - 2022-08-23
+ - added missing documentation for CodeRepository/Revision attributes
+ - improved code completion support
+ - several bug fixes
+
 ## [0.2.1] - 2022-08-17
  - initial support for document formatting
  - adds diagnostics and quick fixes for bad template tags

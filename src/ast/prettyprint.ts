@@ -349,7 +349,7 @@ export default class PrettyPrinter extends AbstractParseTreeVisitor<string> impl
             ctx.switchCase().map(c => this.lineStart() + c.accept(this)).join('') +
             this.lineStart() + ctx.DEFAULT().text + ctx.COLON().text + this.lineEnd(ctx.DEFAULT(), ctx.COLON()) +
             this.indent() +
-                ctx.statement().map(s => this.lineStart() + s.accept(this) + this.lineEnd(s)).join('') +
+                ctx.programStatement().map(s => this.lineStart() + s.accept(this) + this.lineEnd(s)).join('') +
             this.dedent() +
             this.lineStart() + '}';
     }

@@ -210,12 +210,13 @@ switchStatement
 	: SWITCH LPAREN expression RPAREN LBRACE
 		(switchCase)*
 		DEFAULT COLON
-		(statement)+
+			(programStatement)+
 		RBRACE
 	;
 
 switchCase
-	: CASE expressionList COLON (programStatement)+
+	: CASE expressionList COLON
+		programStatement+? // make this non-greedy, fixes #33
 	;
 
 foreachStatement

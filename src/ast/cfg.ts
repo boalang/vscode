@@ -312,13 +312,13 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
             this._blockOuts[this._blockOuts.length - 1].push(ctx);
         }
         this._blockExits = [];
-        ctx.statement().forEach(stmt => {
+        ctx.programStatement().forEach(stmt => {
             stmt.accept(this);
         });
         outs.push(...this._blockOuts.pop());
         outs.push(...this._blockExits.splice(0));
 
-        this.addEdge(ctx, ctx.statement(0), 'default');
+        this.addEdge(ctx, ctx.programStatement(0), 'default');
 
         this._blockOuts.push(outs);
     }

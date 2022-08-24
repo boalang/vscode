@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.2.3] - 2022-08-24
+ - fixes bug #33 - switch cases did not allow variable declarations
+
 ## [0.2.2] - 2022-08-23
  - added missing documentation for CodeRepository/Revision attributes
  - improved code completion support

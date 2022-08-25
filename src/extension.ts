@@ -22,7 +22,7 @@ import { activateStudyTemplateSupport } from './studytemplate/extension';
 import { boaDocumentProvider } from './contentprovider';
 import { enableDiagnostics } from './diagnostics';
 import JobCache from './jobcache';
-import { AttributeCompletionItemProvider, BuiltInsCompletionItemProvider, DSLTypesCompletionItemProvider, EnumValuesCompletionItemProvider } from './completions';
+import { AttributeCompletionItemProvider, BuiltInsCompletionItemProvider, DSLTypesCompletionItemProvider, EnumValuesCompletionItemProvider, IdentifierCompletionItemProvider } from './completions';
 import BoaSignatureHelpProvider from './ast/signatures';
 import FunctionsHoverProvider from './hoverproviders';
 import BoaDefinitionProvider from './ast/definitions';
@@ -76,6 +76,7 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('boalang.source.cfgzoom', uri => generateCFG(uri, true)));
 
     context.subscriptions.push(vscode.languages.registerCompletionItemProvider('boalang', new BuiltInsCompletionItemProvider()));
+    context.subscriptions.push(vscode.languages.registerCompletionItemProvider('boalang', new IdentifierCompletionItemProvider()));
     context.subscriptions.push(vscode.languages.registerCompletionItemProvider('boalang', new EnumValuesCompletionItemProvider(), '.'));
     context.subscriptions.push(vscode.languages.registerCompletionItemProvider('boalang', new DSLTypesCompletionItemProvider(), ':'));
     context.subscriptions.push(vscode.languages.registerCompletionItemProvider('boalang', new AttributeCompletionItemProvider(), '.'));

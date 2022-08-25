@@ -22,6 +22,7 @@ import { boaVisitor } from '../antlr/boaVisitor';
 import { parseBoaCode } from './parser';
 import { getFileContents, getOperand, getWorkspaceRoot } from '../utils';
 import * as consts from '../consts';
+import { RuleNode } from 'antlr4ts/tree/RuleNode';
 
 export class BoaDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
     public provideDocumentSymbols(document: vscode.TextDocument, token: vscode.CancellationToken): Thenable<vscode.SymbolInformation[]> {
@@ -73,12 +74,16 @@ export function getRange(rule: ParserRuleContext) {
 }
 
 export class SymbolsVisitor extends AbstractParseTreeVisitor<vscode.SymbolInformation[]> implements boaVisitor<vscode.SymbolInformation[]> {
-    constructor(private uri: vscode.Uri) {
+    constructor(private uri: vscode.Uri, private offset: number = undefined) {
         super();
     }
 
     defaultResult() {
         return [];
+    }
+
+    protected shouldVisitNextChild(node: RuleNode, currentResult: vscode.SymbolInformation[]): boolean {
+        return this.offset === undefined || (node.ruleContext as ParserRuleContext).start.startIndex <= this.offset;
     }
 
     protected aggregateResult(aggregate: vscode.SymbolInformation[], nextResult: vscode.SymbolInformation[]): vscode.SymbolInformation[] {

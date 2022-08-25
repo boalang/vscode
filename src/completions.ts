@@ -17,6 +17,7 @@
 import * as vscode from 'vscode';
 import { DefsUsesVisitor } from './ast/defuse';
 import { parseBoaCode } from './ast/parser';
+import { SymbolsVisitor } from './ast/symbols';
 import UDFFinder from "./ast/UDFFinder";
 import { getFuncDoc, getFuncSignature } from './hoverproviders';
 import { builtinConsts, builtinEnums, builtinFunctions, builtinTypes, builtinVars } from './types';
@@ -269,6 +270,27 @@ export class DSLTypesCompletionItemProvider implements vscode.CompletionItemProv
             item.documentation = new vscode.MarkdownString(builtinTypes[t].doc);
             items.push(item);
         });
+
+        return items;
+    }
+}
+
+export class IdentifierCompletionItemProvider implements vscode.CompletionItemProvider {
+    public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.CompletionItem[]> {
+        const items = [];
+
+        // this completion provide should not respond if the character was '.'
+        if (atDot(document, position)) {
+            return items;
+        }
+
+        const tree = parseBoaCode(document.getText(), document.uri);
+        const syms = new SymbolsVisitor(document.uri, document.offsetAt(position)).visit(tree);
+
+        for (const s of syms.filter(s => s.kind == vscode.SymbolKind.Variable)) {
+            const item = new vscode.CompletionItem(s.name, vscode.CompletionItemKind.Variable);
+            items.push(item);
+        }
 
         return items;
     }

@@ -88,8 +88,8 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     const watcher = vscode.workspace.createFileSystemWatcher(getWorkspaceRoot() + '/' + jobsFile, false, false, true);
     context.subscriptions.push(watcher);
 
-    watcher.onDidChange(() => vscode.commands.executeCommand('boalang.joblist.refresh'));
-    watcher.onDidCreate(() => vscode.commands.executeCommand('boalang.joblist.refresh'));
+    watcher.onDidChange(() => vscode.commands.executeCommand('boalang.joblist.refreshIfLoaded'));
+    watcher.onDidCreate(() => vscode.commands.executeCommand('boalang.joblist.refreshIfLoaded'));
 
     cache.onDidChange(e => {
         Object.keys(previewMap).forEach(

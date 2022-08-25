@@ -408,7 +408,7 @@ export async function deleteJob(uri: vscode.Uri|BoaJob) {
                     }
                 }
             }
-            vscode.commands.executeCommand('boalang.joblist.refresh');
+            vscode.commands.executeCommand('boalang.joblist.refreshIfLoaded');
             vscode.window.showInformationMessage(`Job ${jobId} has been deleted`);
         });
     }
@@ -454,7 +454,7 @@ export function stopJob(uri: vscode.Uri|BoaJob) {
 
         if (job.running) {
             await job.stop();
-            vscode.commands.executeCommand('boalang.joblist.refresh');
+            vscode.commands.executeCommand('boalang.joblist.refreshIfLoaded');
             vscode.window.showInformationMessage(`Job ${jobId} was stopped`);
         } else {
             vscode.window.showInformationMessage(`Job ${jobId} is not currently running`);

@@ -109,7 +109,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     vscode.workspace.onDidChangeConfiguration(event => {
         if (event.affectsConfiguration('boalang.joblist.pagesize')) {
-            vscode.commands.executeCommand('boalang.joblist.refresh');
+            vscode.commands.executeCommand('boalang.joblist.refreshIfLoaded');
         } else if (event.affectsConfiguration('boalang.output.size')) {
             JobCache.clearOutputs();
         } else if (event.affectsConfiguration('boalang.login.username')) {

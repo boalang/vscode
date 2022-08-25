@@ -54,6 +54,7 @@
         "onCommand:boalang.joblist.prev",
         "onCommand:boalang.joblist.next",
         "onCommand:boalang.joblist.refresh",
+        "onCommand:boalang.joblist.refreshIfLoaded",
         "onCommand:boalang.template.preview",
         "onCommand:boalang.template.downloadOutput",
         "onCommand:boalang.template.generateCSV",
@@ -194,6 +195,12 @@
             },
             {
                 "command": "boalang.joblist.refresh",
+                "title": "Refresh Jobs",
+                "icon": "$(refresh)",
+                "category": "Boa"
+            },
+            {
+                "command": "boalang.joblist.refreshIfLoaded",
                 "title": "Refresh Jobs",
                 "icon": "$(refresh)",
                 "category": "Boa"
@@ -365,6 +372,10 @@
                 {
                     "command": "boalang.joblist.prev",
                     "when": "sideBarFocus && activeViewlet == 'workbench.view.explorer'"
+                },
+                {
+                    "command": "boalang.joblist.refreshIfLoaded",
+                    "when": "false"
                 },
                 {
                     "command": "boalang.job.showSource",

@@ -179,6 +179,12 @@ class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
         this._onDidChangeTreeData.fire(undefined);
     }
 
+    async refreshIfLoaded() {
+        if (this.jobs !== null) {
+            this.firstPage();
+        }
+    }
+
     private length(): number {
         return vscode.workspace.getConfiguration('boalang').get('joblist.pagesize', 10);
     }

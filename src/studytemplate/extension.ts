@@ -140,7 +140,7 @@ async function runMakeCommand(target: string, shouldRefresh = true) {
 
     await vscode.tasks.executeTask(makeTask);
     if (shouldRefresh) {
-        vscode.commands.executeCommand('boalang.joblist.first');
+        vscode.commands.executeCommand('boalang.joblist.refreshIfLoaded');
     }
 }
 

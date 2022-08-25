@@ -59,6 +59,7 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('boalang.joblist.prev', () => treeProvider.prevPage()));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.joblist.next', () => treeProvider.nextPage()));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.joblist.refresh', () => treeProvider.refresh()));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.joblist.refreshIfLoaded', () => treeProvider.refreshIfLoaded()));
 
     context.subscriptions.push(vscode.commands.registerCommand('boalang.job.showSource', showJob));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.job.showOutput', showOutput()));

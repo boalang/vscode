@@ -147,6 +147,8 @@ export class AttributeCompletionItemProvider implements vscode.CompletionItemPro
                 }
             } else if (type === undefined && exprOffset in defuses.usedefs) {
                 type = cleanType(defuses.getType(defuses.usedefs[exprOffset]));
+            } else if (type === undefined && parts[parts.length - 1] === 'input') {
+                type = 'Project';
             } else if (type in builtinTypes) {
                 const attrMatches = parts[parts.length - 1].match(/^([a-zA-Z0-9_]+)(\[[^\]]+\])?$/);
                 const attrName = attrMatches[1];

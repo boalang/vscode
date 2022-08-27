@@ -180,7 +180,11 @@ export default class PrettyPrinter extends AbstractParseTreeVisitor<string> impl
     }
 
     visitEnumType(ctx: ast.EnumTypeContext) {
-        return 'enum {' + ctx.enumBodyDeclaration().map(b => b.accept(this)).join(', ') + '}';
+        return 'enum {' + this.lineEnd(ctx.ENUM(), ctx.LBRACE()) +
+            this.indent() +
+                ctx.enumBodyDeclaration().map(b => this.lineStart() + b.accept(this) + ',' + this.lineEnd(b)).join('') +
+            this.dedent() +
+            this.lineStart() + '}';
     }
 
     visitMapType(ctx: ast.MapTypeContext) {

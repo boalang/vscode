@@ -60,7 +60,7 @@
 				},
 				{
 					"name": "keyword.boalang",
-					"match": "\\b(visit|traverse|current|function|weight|of|before|after|case|default|_)\\b"
+					"match": "\\b(visit|traverse|current|function|weight|of|before|after|case|default|_|type)\\b"
 				},
 				{
 					"name": "keyword.control.boalang",

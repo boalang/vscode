@@ -176,7 +176,11 @@ export default class PrettyPrinter extends AbstractParseTreeVisitor<string> impl
     }
 
     visitTupleType(ctx: ast.TupleTypeContext) {
-        return '{ ' + ctx.member().map(b => b.accept(this)).join(', ') + '}';
+        return '{' + this.lineEnd(ctx.LBRACE(), ctx.LBRACE()) +
+            this.indent() +
+                ctx.member().map(b => this.lineStart() + b.accept(this) + ',' + this.lineEnd(b)).join('') +
+            this.dedent() +
+            this.lineStart() + '}';
     }
 
     visitEnumType(ctx: ast.EnumTypeContext) {

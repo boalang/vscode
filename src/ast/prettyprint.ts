@@ -494,6 +494,10 @@ export default class PrettyPrinter extends AbstractParseTreeVisitor<string> impl
         return '(' + ctx.expression().accept(this) + ')';
     }
 
+    visitFunctionExpression(ctx: ast.FunctionExpressionContext) {
+        return ctx.functionType().accept(this) + ' ' + ctx.block().accept(this);
+    }
+
     visitFixpExpression(ctx: ast.FixpExpressionContext) {
         return ctx.fixpType().accept(this) + this.lineEnd(ctx.fixpType()) + ctx.block().accept(this) + this.lineEnd(ctx);
     }

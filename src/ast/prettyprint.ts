@@ -66,28 +66,6 @@ export default class PrettyPrinter extends AbstractParseTreeVisitor<string> impl
         return this.lineEnding;
     }
 
-    protected defaultResult(): string {
-        return '';
-    }
-
-    protected aggregateResult(aggregate: string, nextResult: string): string {
-        return aggregate + nextResult;
-    }
-
-    protected stmtIsBlock(stmt: ast.ProgramStatementContext) {
-        return stmt.statement().block() !== undefined;
-    }
-
-    protected openStmtIsBlock(ctx, stmt: ast.ProgramStatementContext) {
-        if (this.stmtIsBlock(stmt)) return ' ';
-        return this.lineEnd(ctx) + this.indent() + this.lineStart();
-    }
-
-    protected closeStmtIsBlock(stmt: ast.ProgramStatementContext) {
-        if (this.stmtIsBlock(stmt)) return '';
-        return this.dedent();
-    }
-
     protected addWS(ctx: ParserRuleContext|TerminalNode, endctx: ParserRuleContext|TerminalNode = undefined) {
         let start: number;
         if (ctx instanceof TerminalNode) {
@@ -121,6 +99,28 @@ export default class PrettyPrinter extends AbstractParseTreeVisitor<string> impl
         }
 
         return ws.join('');
+    }
+
+    protected defaultResult(): string {
+        return '';
+    }
+
+    protected aggregateResult(aggregate: string, nextResult: string): string {
+        return aggregate + nextResult;
+    }
+
+    protected stmtIsBlock(stmt: ast.ProgramStatementContext) {
+        return stmt.statement().block() !== undefined;
+    }
+
+    protected openStmtIsBlock(ctx, stmt: ast.ProgramStatementContext) {
+        if (this.stmtIsBlock(stmt)) return ' ';
+        return this.lineEnd(ctx) + this.indent() + this.lineStart();
+    }
+
+    protected closeStmtIsBlock(stmt: ast.ProgramStatementContext) {
+        if (this.stmtIsBlock(stmt)) return '';
+        return this.dedent();
     }
 
     visitStart(ctx: ast.StartContext) {

@@ -1,5 +1,13 @@
 # Change Log
 
+## [0.2.4] - 2022-08-28
+ - now only updates the jobs list if there is already a list shown
+ - fixes bug #32 - code suggest the names of variables
+ - added code completion for 'input.'
+ - fix some code breaking if certain tabs (like PDF previews) are open
+ - improved document formatting for functions, enums, and tuples
+ - syntax highlight the 'type' keyword
+
 ## [0.2.3] - 2022-08-24
  - fixes bug #33 - switch cases did not allow variable declarations
 

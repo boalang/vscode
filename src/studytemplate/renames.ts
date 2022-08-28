@@ -93,7 +93,7 @@ async function getRenameEdits(path: string, edit: vscode.WorkspaceEdit, tag: str
     vscode.window.tabGroups.all.forEach(grp => {
         grp.tabs.filter(tab => tab.isDirty).forEach(tab => {
             const input = tab.input as vscode.TabInputText;
-            if (input?.uri.fsPath == path) {
+            if (input?.uri?.fsPath == path) {
                 uri = input.uri;
                 text = vscode.workspace.textDocuments.find((doc) => doc.uri.toString() == uri.toString()).getText();
             }

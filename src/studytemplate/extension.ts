@@ -113,7 +113,7 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     });
     vscode.window.tabGroups.onDidChangeTabs(e => {
         for (const tab of e.closed) {
-            removePreviewCache((tab.input as vscode.TabInputText).uri);
+            removePreviewCache((tab.input as vscode.TabInputText)?.uri);
         }
     });
 }

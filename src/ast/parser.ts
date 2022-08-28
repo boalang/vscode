@@ -93,7 +93,7 @@ export function parseBoaCode(txt: string, uri: vscode.Uri|string = undefined) {
         for (const tabGroup of vscode.window.tabGroups.all) {
             for (const tab of tabGroup.tabs) {
                 const input = tab.input as vscode.TabInputText;
-                if (input.uri.toString() == uri) {
+                if (input?.uri?.toString() == uri) {
                     reportDocumentErrors(vscode.workspace.textDocuments.filter(d => d.uri.toString() == uri).pop()?.uri, errors);
                     break;
                 }

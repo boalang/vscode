@@ -35,8 +35,13 @@ export const boaDocumentProvider = new class implements vscode.TextDocumentConte
             case 'source':
                 await runBoaCommands(async (client) => {
                     const job = await client.getJob(uri.authority);
-                    data = await JobCache.getSource(job);
-                    await JobCache.updateContext(job);
+                    if (job.id == uri.authority) {
+                        data = await JobCache.getSource(job);
+                        await JobCache.updateContext(job);
+                    } else {
+                        vscode.window.showErrorMessage(`Invalid job ID ${job.authority} or you do not have access to that job.`);
+                        return undefined;
+                    }
                 });
                 break;
 

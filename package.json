@@ -378,18 +378,6 @@
                     "when": "false"
                 },
                 {
-                    "command": "boalang.job.showSource",
-                    "when": "false"
-                },
-                {
-                    "command": "boalang.job.showOutput",
-                    "when": "false"
-                },
-                {
-                    "command": "boalang.job.showFullOutput",
-                    "when": "false"
-                },
-                {
                     "command": "boalang.job.delete",
                     "when": "false"
                 },

@@ -305,8 +305,21 @@ export function downloadOutput(uri: vscode.Uri|BoaJob) {
     });
 }
 
+async function promptJobId() {
+    const jobId = await vscode.window.showInputBox({
+        placeHolder: '<job id>',
+        title: 'Enter the Job ID',
+        prompt: 'Enter your the Job ID you want to view',
+    });
+    return getJobUri(jobId);
+}
+
 export function showOutput() {
-    return function showOutput(uri: vscode.Uri|BoaJob) {
+    return async function showOutput(uri: vscode.Uri|BoaJob|undefined) {
+        if (uri === undefined) {
+            uri = await promptJobId();
+        }
+
         runBoaCommands(async (client: boaapi.BoaClient) => {
             let jobId: string;
             if (uri instanceof vscode.Uri) {
@@ -348,7 +361,11 @@ export function buildUri(uri: vscode.Uri|BoaJob|boaapi.JobHandle, path: string, 
     return vscode.Uri.parse(`${uri.toString()}${path}#${fragment}`);
 }
 
-export async function showFullOutput(uri: vscode.Uri|BoaJob) {
+export async function showFullOutput(uri: vscode.Uri|BoaJob|undefined) {
+    if (uri === undefined) {
+        uri = await promptJobId();
+    }
+
     const jobId = getJobId(uri);
     const job = await client.getJob(jobId);
 
@@ -359,7 +376,10 @@ export async function showFullOutput(uri: vscode.Uri|BoaJob) {
     }
 }
 
-export async function showJob(uri: vscode.Uri|BoaJob) {
+export async function showJob(uri: vscode.Uri|BoaJob|undefined) {
+    if (uri === undefined) {
+        uri = await promptJobId();
+    }
     showUri(buildUri(uri, 'boa-job$id-source.boa', 'source'));
 }
 

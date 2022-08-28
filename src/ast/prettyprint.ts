@@ -176,7 +176,7 @@ export default class PrettyPrinter extends AbstractParseTreeVisitor<string> impl
     }
 
     visitTupleType(ctx: ast.TupleTypeContext) {
-        return '{' + this.lineEnd(ctx.LBRACE(), ctx.LBRACE()) +
+        return '{' + this.lineEnd(ctx.LBRACE()) +
             this.indent() +
                 ctx.member().map(b => this.lineStart() + b.accept(this) + ',' + this.lineEnd(b)).join('') +
             this.dedent() +
@@ -523,11 +523,18 @@ export default class PrettyPrinter extends AbstractParseTreeVisitor<string> impl
     }
 
     visitComposite(ctx: ast.CompositeContext) {
-        let s = '';
-        if (ctx.COLON()) s += ':';
-        else if (ctx.expressionList()) s += ctx.expressionList().accept(this);
-        else s += ctx.pair().map(p => p.accept(this)).join(', ');
-        return '{ ' + s + ' }';
+        if (ctx.COLON()) {
+            return '{ : }';
+        }
+        let s = '{' + this.lineEnd(ctx.LBRACE()) + this.indent();
+        if (ctx.expressionList()) {
+            s += ctx.expressionList().expression().map(e => this.lineStart() + e.accept(this) + ',' + this.lineEnd(e)).join('');
+        } else {
+            s += ctx.pair().map(p => this.lineStart() + p.accept(this) + ',' + this.lineEnd(p)).join('');
+        }
+        return s +
+            this.dedent() +
+            this.lineStart() + '}';
     }
 
     visitPair(ctx: ast.PairContext) {

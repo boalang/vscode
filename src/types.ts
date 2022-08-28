@@ -565,6 +565,7 @@ export const builtinEnums: { [name: string]: IEnum } = {
         attrs: {
             ABSTRACT: 'An abstract modifier.',
             ANNOTATION: 'An annotation modifier.',
+            FINAL: 'A final modifier.\n\nThis is an alias of `ModifierKind.FINAL`.',
             CONSTANT: 'A final modifier.\n\nThis is an alias of `ModifierKind.FINAL`.',
             GETTER: 'A getter modifier.',
             NATIVE: 'A native modifier.',

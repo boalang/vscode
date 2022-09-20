@@ -22,6 +22,7 @@ export const studyConfigFile = 'study-config.json';
 export const jobsFile = 'jobs.json';
 
 // paths in the study template, used for linking
+export const binPath = 'bin';
 export const scriptPath = 'boa';
 export const snippetPath = scriptPath + '/snippets';
 export const outputPath = 'data/txt';

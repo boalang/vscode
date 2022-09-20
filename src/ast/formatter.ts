@@ -26,6 +26,7 @@ export class BoaDocumentFormatter implements vscode.DocumentFormattingEditProvid
 
         const { tree, errors, lines: blanks, templates } = parseBoaCodeWithWhitespace(original);
         if (errors.length == 0) {
+            options['eol'] = document.eol;
             const printer = new PrettyPrinter(blanks, templates, options);
             const newText = printer.visit(tree);
 

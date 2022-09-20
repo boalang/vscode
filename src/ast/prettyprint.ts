@@ -14,6 +14,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
+import * as vscode from 'vscode';
 import { ParserRuleContext } from 'antlr4ts';
 import { AbstractParseTreeVisitor } from 'antlr4ts/tree/AbstractParseTreeVisitor';
 import { TerminalNode } from 'antlr4ts/tree/TerminalNode';
@@ -21,27 +22,33 @@ import * as ast from '../antlr/boaParser';
 import { boaVisitor } from '../antlr/boaVisitor';
 
 export default class PrettyPrinter extends AbstractParseTreeVisitor<string> implements boaVisitor<string> {
-    public lineEnding = '\n';
-    public tab = '    ';
+    protected lineEnding = '\n';
+    protected tab = '    ';
+
+    protected indents: number = 0;
 
     protected wslines: { [idx: number]: string } = {};
 
-    constructor(protected wsLineTokens, protected templates, protected options = undefined) {
+    constructor(protected wsLineTokens, protected templates, protected options: vscode.FormattingOptions = undefined) {
         super();
 
         wsLineTokens.forEach(t => this.wslines[t.tokenIndex - 1] = t.text);
 
-        if (!options.insertSpaces) {
-            this.tab = '\t';
-        } else {
-            this.tab = '';
-            for (let i = 0; i < options.tabSize; i++) {
-                this.tab += ' ';
+        if (options !== undefined) {
+            if (!options.insertSpaces) {
+                this.tab = '\t';
+            } else {
+                this.tab = '';
+                for (let i = 0; i < options.tabSize; i++) {
+                    this.tab += ' ';
+                }
+            }
+
+            if ('eol' in options && options['eol'] as number == vscode.EndOfLine.CRLF) {
+                this.lineEnding = '\r\n';
             }
         }
     }
-
-    protected indents: number = 0;
 
     protected indent() {
         this.indents++;

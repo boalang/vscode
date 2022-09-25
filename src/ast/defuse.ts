@@ -28,7 +28,7 @@ export class ScopedVisitor<T> extends AbstractParseTreeVisitor<void> implements 
         return s.replace(/"/g, '\\"')
             .replace(/\n/g, '\\n');
     }
-    
+
     public static dotHTMLEscape(s: string) {
         return s.replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
@@ -203,7 +203,7 @@ export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ast.Identif
     private addDef(ctx: ast.IdentifierContext, type: ParserRuleContext|string = undefined) {
         this._defs[ctx.start.startIndex] = ctx;
         this.scopes[this.scopes.length - 1][ctx.text] = ctx;
-        if (type !== undefined) {            
+        if (type !== undefined) {
             this._types[ctx.start.startIndex] = type;
         }
     }

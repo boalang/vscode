@@ -47,6 +47,10 @@ export default class PrettyPrinter extends AbstractParseTreeVisitor<string> impl
             if ('eol' in options && options['eol'] as number == vscode.EndOfLine.CRLF) {
                 this.lineEnding = '\r\n';
             }
+
+            if ('startIndent' in options) {
+                this.indents = options['startIndent'] as number;
+            }
         }
     }
 

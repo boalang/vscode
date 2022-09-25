@@ -147,7 +147,7 @@ export default class PrettyPrinter extends AbstractParseTreeVisitor<string> impl
         }
 
         ctx.programStatement().forEach(stmt => {
-            s += stmt.accept(this) + this.lineEnd(stmt);
+            s += this.lineStart() + stmt.accept(this) + this.lineEnd(stmt);
         });
 
         for (const k of Object.keys(this.wslines).sort()) {

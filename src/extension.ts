@@ -32,7 +32,7 @@ import { BoaDocumentSymbolProvider, BoaWorkspaceSymbolProvider } from './ast/sym
 import BoaRenameProvider from './ast/renames';
 import { BoaRefactoringProvider, extractMethod } from './ast/refactor';
 import { generateCFG } from './ast/cfg';
-import { BoaDocumentFormatter } from './ast/formatter';
+import { BoaDocumentFormatter, BoaDocumentRangeFormatter } from './ast/formatter';
 
 export var outputChannel: vscode.OutputChannel;
 
@@ -95,6 +95,7 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.languages.registerRenameProvider('boalang', new BoaRenameProvider()));
 
     context.subscriptions.push(vscode.languages.registerDocumentFormattingEditProvider('boalang', new BoaDocumentFormatter()));
+    context.subscriptions.push(vscode.languages.registerDocumentRangeFormattingEditProvider('boalang', new BoaDocumentRangeFormatter()));
 
     context.subscriptions.push(vscode.languages.registerCodeActionsProvider('boalang', new BoaRefactoringProvider(), {
         providedCodeActionKinds: [vscode.CodeActionKind.RefactorExtract]

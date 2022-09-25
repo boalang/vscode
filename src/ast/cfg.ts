@@ -560,7 +560,7 @@ async function graphToDot(g: Graph, document: vscode.TextDocument = undefined, s
         }
         return undefined;
     };
-    
+
     const verts = new Set<string>();
 
     let s = 'digraph G {\n\tbgcolor=white;\n\n';

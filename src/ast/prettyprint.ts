@@ -414,7 +414,9 @@ export default class PrettyPrinter extends AbstractParseTreeVisitor<string> impl
         if (ctx.WILDCARD()) node = ctx.WILDCARD().text;
         else if (ctx.varDecl()) node = ctx.varDecl().accept(this);
         else node = ctx.identifier().map(id => id.accept(this)).join(', ');
-        return start + ' ' + node + ' ' + ctx.RIGHT_ARROW().text + ' ' + ctx.programStatement().accept(this) + this.lineEnd(ctx);
+        return start + ' ' + node + ' ' + ctx.RIGHT_ARROW().text + this.openStmtIsBlock(ctx.RIGHT_ARROW(), ctx.programStatement()) +
+                ctx.programStatement().accept(this) +
+            this.closeStmtIsBlock(ctx.programStatement()) + this.lineEnd(ctx.programStatement());
     }
 
     visitStopStatement(ctx: ast.StopStatementContext) {

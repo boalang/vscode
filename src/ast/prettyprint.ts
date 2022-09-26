@@ -221,7 +221,7 @@ export default class PrettyPrinter extends AbstractParseTreeVisitor<string> impl
     visitOutputType(ctx: ast.OutputTypeContext) {
         const id = ctx.SET() ? ctx.SET().text : ctx.identifier().accept(this);
 
-        const hasparen = ctx.expressionList().length > 1 || ctx.FORMAT();
+        const hasparen = ctx.expressionList().length > 1 || ctx.FORMAT() === undefined;
         const paren = !hasparen ? '' : ctx.LPAREN(0).text + ctx.expressionList(0).accept(this) + ctx.RPAREN(0).text;
 
         let idx = '';
@@ -229,8 +229,8 @@ export default class PrettyPrinter extends AbstractParseTreeVisitor<string> impl
             idx += ctx.LBRACKET(i) + ctx.component(i).accept(this) + ctx.RBRACKET(i);
         }
 
-        const weight = !ctx.WEIGHT() ? '' : ' ' + ctx.WEIGHT().text + ' ' + ctx.component(ctx.LBRACKET().length + 1);
-        const format = !ctx.FORMAT() ? '' : ' ' + ctx.FORMAT() + ctx.LPAREN(0) + ctx.expressionList(hasparen ? 1 : 0).accept(this) + ctx.RPAREN(0);
+        const weight = !ctx.WEIGHT() ? '' : ' ' + ctx.WEIGHT().text + ' ' + ctx.component(ctx.LBRACKET().length + 1).accept(this);
+        const format = !ctx.FORMAT() ? '' : ' ' + ctx.FORMAT() + ctx.LPAREN(hasparen ? 1 : 0) + ctx.expressionList(hasparen ? 1 : 0).accept(this) + ctx.RPAREN(hasparen ? 1 : 0);
 
         return 'output ' + id + paren + idx + ' of ' + ctx.component(ctx.LBRACKET().length).accept(this) + weight + format;
     }

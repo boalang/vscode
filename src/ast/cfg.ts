@@ -267,19 +267,39 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
     }
 
     public visitScopedForStatement(ctx: ast.ForStatementContext) {
-        this.addVertex(ctx, 'CONTROL');
+        // handle init
+        if (ctx.forExpression()) {
+            const init = ctx.forExpression();
+            this.addVertex(init);
+            this._blockOuts.pop();
+            this._blockOuts.push([init]);
+        }
+
+        // handle condition
+        const cond = ctx.expression() ? ctx.expression() : ctx;
+        this.addVertex(cond, 'CONTROL');
         this._blockOuts.pop();
 
-        this._blockEntries.push(ctx);
+        this._blockEntries.push(cond);
 
-        this._blockOuts.push([ctx]);
-        super.visitScopedForStatement(ctx);
-        this.addEdge(ctx, this.stmtOrBlock(ctx.programStatement().statement()), 'T');
-        this._blockOuts.pop().forEach(src => this.addEdge(src, ctx, 'B'));
+        // handle body
+        this._blockOuts.push([cond]);
+        ctx.programStatement().accept(this);
+        this.addEdge(cond, this.stmtOrBlock(ctx.programStatement().statement()), 'T');
+
+        // handle update expr
+        if (ctx.forExpressionStatement()) {
+            const update = ctx.forExpressionStatement();
+            this.addVertex(update);
+            this._blockOuts.pop().forEach(src => this.addEdge(src, update));
+            this.addEdge(update, cond, 'B');
+        } else {
+            this._blockOuts.pop().forEach(src => this.addEdge(src, cond, 'B'));
+        }
 
         this._blockEntries.pop();
 
-        this._blockOuts.push([ctx, ...this._blockExits]);
+        this._blockOuts.push([cond, ...this._blockExits]);
         this._blockExits = [];
     }
 

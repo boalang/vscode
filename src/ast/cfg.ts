@@ -37,8 +37,8 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
     private _edges: { [name: string]: { [name: string]: string } } = {};
     private _kinds: { [name: string]: string } = {};
 
-    private _blockEntries: any[] = [];
-    private _blockExits: any[] = [];
+    private _blockEntries: nodeType[] = [];
+    private _blockExits: nodeType[][] = [ [] ];
     private _blockOuts: nodeType[][] = [ [] ];
 
     protected readonly programEntry = '<entry:program>';
@@ -183,6 +183,7 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
         this._blockOuts.pop();
 
         this._blockEntries.push(ctx);
+        this._blockExits.push([]);
 
         const stmt = ctx.programStatement();
         this._blockOuts.push([ctx]);
@@ -192,8 +193,7 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
 
         this._blockEntries.pop();
 
-        this._blockOuts.push([ctx, ...this._blockExits]);
-        this._blockExits = [];
+        this._blockOuts.push([ctx, ...this._blockExits.pop()]);
     }
 
     public visitScopedExistsStatement(ctx: ast.ExistsStatementContext) {
@@ -201,6 +201,7 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
         this._blockOuts.pop();
 
         this._blockEntries.push(ctx);
+        this._blockExits.push([]);
 
         const stmt = ctx.programStatement();
         this._blockOuts.push([ctx]);
@@ -210,8 +211,7 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
 
         this._blockEntries.pop();
 
-        this._blockOuts.push([ctx, ...this._blockExits]);
-        this._blockExits = [];
+        this._blockOuts.push([ctx, ...this._blockExits.pop()]);
     }
 
     public visitScopedIfallStatement(ctx: ast.IfallStatementContext) {
@@ -219,6 +219,7 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
         this._blockOuts.pop();
 
         this._blockEntries.push(ctx);
+        this._blockExits.push([]);
 
         const stmt = ctx.programStatement();
         this._blockOuts.push([ctx]);
@@ -228,8 +229,7 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
 
         this._blockEntries.pop();
 
-        this._blockOuts.push([ctx, ...this._blockExits]);
-        this._blockExits = [];
+        this._blockOuts.push([ctx, ...this._blockExits.pop()]);
     }
 
     public visitScopedDoStatement(ctx: ast.DoStatementContext) {
@@ -238,6 +238,7 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
         this._blockOuts.pop();
 
         this._blockEntries.push(ctx);
+        this._blockExits.push([]);
 
         super.visitScopedDoStatement(ctx);
         this.addEdge(ctx, this.stmtOrBlock(ctx.statement()), 'T');
@@ -245,8 +246,7 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
 
         this._blockEntries.pop();
 
-        this._blockOuts.push([ctx, ...this._blockExits]);
-        this._blockExits = [];
+        this._blockOuts.push([ctx, ...this._blockExits.pop()]);
     }
 
     public visitScopedWhileStatement(ctx: ast.WhileStatementContext) {
@@ -254,6 +254,7 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
         this._blockOuts.pop();
 
         this._blockEntries.push(ctx);
+        this._blockExits.push([]);
 
         this._blockOuts.push([ctx]);
         super.visitScopedWhileStatement(ctx);
@@ -262,8 +263,7 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
 
         this._blockEntries.pop();
 
-        this._blockOuts.push([ctx, ...this._blockExits]);
-        this._blockExits = [];
+        this._blockOuts.push([ctx, ...this._blockExits.pop()]);
     }
 
     public visitScopedForStatement(ctx: ast.ForStatementContext) {
@@ -281,6 +281,7 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
         this._blockOuts.pop();
 
         this._blockEntries.push(cond);
+        this._blockExits.push([]);
 
         // handle body
         this._blockOuts.push([cond]);
@@ -299,8 +300,7 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
 
         this._blockEntries.pop();
 
-        this._blockOuts.push([cond, ...this._blockExits]);
-        this._blockExits = [];
+        this._blockOuts.push([cond, ...this._blockExits.pop()]);
     }
 
     public visitSwitchStatement(ctx: ast.SwitchStatementContext) {
@@ -308,6 +308,7 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
 
         this.addVertex(ctx, 'CONTROL');
         this._blockOuts.pop();
+        this._blockExits.push([]);
 
         const outs: nodeType[] = [];
         let fallthrough = false;
@@ -317,13 +318,11 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
             } else {
                 this._blockOuts[this._blockOuts.length - 1].push(ctx);
             }
-            this._blockExits = [];
             switchCase.accept(this);
-            fallthrough = this._blockOuts[this._blockOuts.length - 1].indexOf(switchCase.programStatement(switchCase.programStatement().length - 1)) != -1;
+            fallthrough = switchCase.programStatement(switchCase.programStatement().length - 1).text != 'break;';
             if (!fallthrough) {
                 outs.push(...this._blockOuts.pop());
             }
-            outs.push(...this._blockExits.splice(0));
         });
 
         if (!fallthrough) {
@@ -331,23 +330,21 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
         } else {
             this._blockOuts[this._blockOuts.length - 1].push(ctx);
         }
-        this._blockExits = [];
         ctx.programStatement().forEach(stmt => {
             stmt.accept(this);
         });
         outs.push(...this._blockOuts.pop());
-        outs.push(...this._blockExits.splice(0));
 
         this.addEdge(ctx, ctx.programStatement(0), 'default');
 
+        outs.push(...this._blockExits.pop());
         this._blockOuts.push(outs);
     }
 
     public visitScopedSwitchCase(ctx: ast.SwitchCaseContext) {
         const outs = this._blockOuts.pop();
         super.visitScopedSwitchCase(ctx);
-        const stmt = ctx.programStatement(0);
-        outs.forEach(o => this.addEdge(o, stmt, ctx.expressionList().text));
+        outs.forEach(o => this.addEdge(o, ctx.programStatement(0), ctx.expressionList().text));
     }
 
     public visitContinueStatement(ctx: ast.ContinueStatementContext) {
@@ -360,8 +357,8 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
 
     public visitBreakStatement(ctx: ast.BreakStatementContext) {
         this.addVertex(ctx);
-        this._blockExits.push(ctx);
         this._blockOuts.pop();
+        this._blockExits[this._blockExits.length - 1].push(ctx);
         this._blockOuts.push([]);
         this.visitChildren(ctx);
     }
@@ -377,7 +374,7 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
     public visitReturnStatement(ctx: ast.ReturnStatementContext) {
         this.addVertex(ctx);
         this._blockOuts.pop();
-        this.addEdge(ctx, this._blockExits[this._blockExits.length - 1]);
+        this._blockExits[this._blockExits.length - 1].push(ctx);
         this._blockOuts.push([]);
         this.visitChildren(ctx);
     }
@@ -397,18 +394,18 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
         this.addVertex(ctx);
         this._blockOuts.pop();
 
-        const exit = '<exit:' + this.getId(ctx) + '>';
-        this._blockOuts.push([]);
-        this.addVertex(exit, 'EXIT');
-        this._blockOuts.pop();
-
-        this._blockExits.push(exit);
+        this._blockExits.push([]);
 
         this._blockOuts.push([ctx]);
         super.visitScopedFunctionExpression(ctx);
         this._blockOuts.pop();
 
-        this._blockExits.pop();
+        const exit = '<exit:' + this.getId(ctx) + '>';
+        this._blockOuts.push([]);
+        this.addVertex(exit, 'EXIT');
+        this._blockExits.pop().forEach(src => this.addEdge(src, exit));
+        this._blockOuts.pop();
+
         // TODO store function entry/exit somewhere?
     }
 
@@ -421,18 +418,18 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
         this.addVertex(ctx);
         this._blockOuts.pop();
 
-        const exit = '<exit:' + this.getId(ctx) + '>';
-        this._blockOuts.push([]);
-        this.addVertex(exit, 'EXIT');
-        this._blockOuts.pop();
-
-        this._blockExits.push(exit);
+        this._blockExits.push([]);
 
         this._blockOuts.push([ctx]);
         super.visitScopedFixpExpression(ctx);
         this._blockOuts.pop();
 
-        this._blockExits.pop();
+        const exit = '<exit:' + this.getId(ctx) + '>';
+        this._blockOuts.push([]);
+        this.addVertex(exit, 'EXIT');
+        this._blockExits.pop().forEach(src => this.addEdge(src, exit));
+        this._blockOuts.pop();
+
         // TODO store function entry/exit somewhere?
     }
 
@@ -445,18 +442,18 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
         this.addVertex(ctx);
         this._blockOuts.pop();
 
-        const exit = '<exit:' + this.getId(ctx) + '>';
-        this._blockOuts.push([]);
-        this.addVertex(exit, 'EXIT');
-        this._blockOuts.pop();
-
-        this._blockExits.push(exit);
+        this._blockExits.push([]);
 
         this._blockOuts.push([ctx]);
         super.visitScopedTraversalExpression(ctx);
         this._blockOuts.pop();
 
-        this._blockExits.pop();
+        const exit = '<exit:' + this.getId(ctx) + '>';
+        this._blockOuts.push([]);
+        this.addVertex(exit, 'EXIT');
+        this._blockExits.pop().forEach(src => this.addEdge(src, exit));
+        this._blockOuts.pop();
+
         // TODO store function entry/exit somewhere?
     }
 

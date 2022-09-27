@@ -57,14 +57,12 @@ function canExtractFunction(document: vscode.TextDocument, range: vscode.Range) 
     return true;
 }
 
-export async function extractMethod(document: vscode.TextDocument, range: vscode.Range) {
-    // TODO compute where to put new function?
-    const insertPosition = new vscode.Position(0, 0);
-
+export async function extractFunction(document: vscode.TextDocument, range: vscode.Range) {
     const text = document.getText();
-    const selectedText = document.getText(range);
-
     const tree = parseBoaCode(text);
+
+    // TODO adjust the range? or if the range is bad, we say we can't extract?
+    const selectedText = document.getText(range);
 
     // ensure unique name for new function
     const visitor = new SymbolsVisitor(document.uri);
@@ -115,6 +113,9 @@ export async function extractMethod(document: vscode.TextDocument, range: vscode
     if (selectedText.endsWith('\n')) {
         funcCall += '\n';
     }
+
+    // TODO compute where to put new function - should be at global scope, right before current block
+    const insertPosition = new vscode.Position(0, 0);
 
     const edit = new vscode.WorkspaceEdit();
     edit.replace(document.uri, range, funcCall);

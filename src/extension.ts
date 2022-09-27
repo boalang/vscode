@@ -30,7 +30,7 @@ import BoaReferenceProvider from './ast/references';
 import BoaDocumentHighlightProvider from './highlights';
 import { BoaDocumentSymbolProvider, BoaWorkspaceSymbolProvider } from './ast/symbols';
 import BoaRenameProvider from './ast/renames';
-import { BoaRefactoringProvider, extractMethod } from './ast/refactor';
+import { BoaRefactoringProvider, extractFunction } from './ast/refactor';
 import { generateCFG } from './ast/cfg';
 import { BoaDocumentFormatter, BoaDocumentRangeFormatter } from './ast/formatter';
 
@@ -71,7 +71,7 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('boalang.job.resubmit', resubmitJob));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.job.stop', stopJob));
 
-    context.subscriptions.push(vscode.commands.registerCommand('boalang.refactor.extractfunction', extractMethod));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.refactor.extractfunction', extractFunction));
 
     context.subscriptions.push(vscode.commands.registerCommand('boalang.source.cfg', uri => generateCFG(uri, false)));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.source.cfgzoom', uri => generateCFG(uri, true)));

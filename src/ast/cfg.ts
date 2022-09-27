@@ -19,12 +19,12 @@ import { ParserRuleContext, RuleContext } from 'antlr4ts';
 import * as ast from '../antlr/boaParser';
 import { DefsUsesVisitor, ScopedVisitor } from './defuse';
 import { TextEncoder } from 'util';
-import { getFileContents, getOperand, getWorkspaceRoot } from '../utils';
+import { getFileContents, getWorkspaceRoot } from '../utils';
 import { parseBoaCode } from './parser';
 
 type nodeType = RuleContext|string;
 
-interface Graph {
+export interface Graph {
     vertices: string[];
     edges: { [name: string]: { [name: string]: string } };
     kinds: { [name: string]: string };

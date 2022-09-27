@@ -122,9 +122,8 @@ export async function extractFunction(document: vscode.TextDocument, range: vsco
     edit.insert(document.uri, insertPosition, newFunc);
     await vscode.workspace.applyEdit(edit);
 
-    vscode.window.activeTextEditor.selection = new vscode.Selection(
-        new vscode.Position(range.start.line + addedLines, range.start.character + indent.length + returned.length),
-        new vscode.Position(range.start.line + addedLines, range.start.character + indent.length + funcName.length));
+    const funcNamePos = new vscode.Position(range.start.line + addedLines, range.start.character + indent.length + returned.length);
+    vscode.window.activeTextEditor.selection = new vscode.Selection(funcNamePos, funcNamePos.translate(0, funcName.length));
     await vscode.commands.executeCommand('editor.action.rename', [
         document.uri
     ]);

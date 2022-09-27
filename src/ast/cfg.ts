@@ -19,7 +19,7 @@ import { ParserRuleContext, RuleContext } from 'antlr4ts';
 import * as ast from '../antlr/boaParser';
 import { DefsUsesVisitor, ScopedVisitor } from './defuse';
 import { TextEncoder } from 'util';
-import { getFileContents, getWorkspaceRoot } from '../utils';
+import { getFileContents, getOperand, getWorkspaceRoot } from '../utils';
 import { parseBoaCode } from './parser';
 
 type nodeType = RuleContext|string;
@@ -270,6 +270,7 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
         // handle init
         if (ctx.forExpression()) {
             const init = ctx.forExpression();
+            init.accept(this);
             this.addVertex(init);
             this._blockOuts.pop();
             this._blockOuts.push([init]);
@@ -277,6 +278,9 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
 
         // handle condition
         const cond = ctx.expression() ? ctx.expression() : ctx;
+        if (ctx.expression()) {
+            ctx.expression().accept(this);
+        }
         this.addVertex(cond, 'CONTROL');
         this._blockOuts.pop();
 
@@ -291,6 +295,7 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
         // handle update expr
         if (ctx.forExpressionStatement()) {
             const update = ctx.forExpressionStatement();
+            update.accept(this);
             this.addVertex(update);
             this._blockOuts.pop().forEach(src => this.addEdge(src, update));
             this.addEdge(update, cond, 'B');

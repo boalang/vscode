@@ -1,5 +1,14 @@
 # Change Log
 
+## [0.2.5] - 2022-09-28
+ - document formatting now respects the documents EOL and indentation settings
+ - added the ability to view any arbitrary job (by giving the job number)
+ - added ability to only format selected text
+ - improved document formatting for visit statements, traversals, and fixp functions
+ - fixed a bug with opening processor files from the study config file
+ - fixed a bug in document formatting of output variables with aggregator parameters
+ - fixed a bug in document formatting of output variables with weights
+
 ## [0.2.4] - 2022-08-28
  - now only updates the jobs list if there is already a list shown
  - fixes bug #32 - code suggest the names of variables

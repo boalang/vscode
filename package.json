@@ -5,7 +5,7 @@
     "description": "This extension provides syntax highlighting for Boa source queries and support for submitting them to the Boa infrastructure.",
     "icon": "images/boa-white.png",
     "license": "Apache-2.0",
-    "version": "0.2.4",
+    "version": "0.2.5",
     "engines": {
         "vscode": "^1.66.2"
     },

@@ -33,6 +33,8 @@ export class BoaRefactoringProvider implements vscode.CodeActionProvider {
         }
         range = new vscode.Range(start, end);
 
+        // TODO adjust the range? or if the range is bad, we say we can't extract?
+
         if (!canExtractFunction(document, range)) {
             return items;
         }
@@ -51,7 +53,7 @@ export class BoaRefactoringProvider implements vscode.CodeActionProvider {
 }
 
 function canExtractFunction(document: vscode.TextDocument, range: vscode.Range) {
-    if (range.start == range.end)                   return false;
+    if (range.isEmpty)                              return false;
     if (document.getText(range).trim().length == 0) return false;
     // TODO determine if selection is something we can extract
     return true;
@@ -61,13 +63,11 @@ export async function extractFunction(document: vscode.TextDocument, range: vsco
     const text = document.getText();
     const tree = parseBoaCode(text);
 
-    // TODO adjust the range? or if the range is bad, we say we can't extract?
     const selectedText = document.getText(range);
 
     // ensure unique name for new function
     const visitor = new SymbolsVisitor(document.uri);
-    const syms = visitor.visit(tree).filter(s => s.kind == vscode.SymbolKind.Function);
-    const existingFuncs = syms.map(s => s.name);
+    const existingFuncs = visitor.visit(tree).filter(s => s.kind == vscode.SymbolKind.Function).map(s => s.name);
 
     let funcName = 'new_func';
     let exists = 1;

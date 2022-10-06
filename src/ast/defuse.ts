@@ -206,6 +206,7 @@ export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ast.Identif
         if (type !== undefined) {
             this._types[ctx.start.startIndex] = type;
         }
+        this.addUse(ctx, ctx);
     }
 
     private addUse(ctx: ast.IdentifierContext, defCtx: ast.IdentifierContext) {
@@ -276,9 +277,38 @@ export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ast.Identif
         this.visitChildren(ctx);
     }
 
+    private isvarstack: boolean[] = [true];
+    public visitFactor(ctx: ast.FactorContext) {
+        this.isvarstack.push(true);
+        ctx.operand().accept(this);
+        this.isvarstack.push(false);
+        if (ctx.selector() !== undefined) {
+            ctx.selector().forEach(s => s.accept(this));
+        }
+        if (ctx.index() !== undefined) {
+            ctx.index().forEach(i => i.accept(this));
+        }
+        if (ctx.call() !== undefined) {
+            ctx.call().forEach(c => c.accept(this));
+        }
+        this.isvarstack.pop();
+        this.isvarstack.pop();
+    }
+
+    public visitComponent(ctx: ast.ComponentContext) {
+        this.isvarstack.push(false);
+        this.visitChildren(ctx);
+        this.isvarstack.pop();
+        if (ctx.identifier() !== undefined) {
+            this.addDef(ctx.identifier(), ctx.type());
+        }
+    }
+
     // symbol uses
     public visitIdentifier(ctx: ast.IdentifierContext) {
-        this.addUse(ctx, this.getDef(ctx));
+        if (this.isvarstack[this.isvarstack.length - 1]) {
+            this.addUse(ctx, this.getDef(ctx));
+        }
         this.visitChildren(ctx);
     }
 }

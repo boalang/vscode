@@ -276,13 +276,16 @@ export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ParserRuleC
         this.visitChildren(ctx);
     }
 
-    private isvarstack: boolean[] = [true];
+    private allowAddUses: boolean[] = [true];
+    private operands: ast.OperandContext[] = [];
     public visitFactor(ctx: ast.FactorContext) {
-        this.isvarstack.push(true);
+        this.allowAddUses.push(true);
         ctx.operand().accept(this);
-        this.isvarstack.push(false);
+        this.allowAddUses.push(false);
         if (ctx.selector() !== undefined) {
+            this.operands.push(ctx.operand());
             ctx.selector().forEach(s => s.accept(this));
+            this.operands.pop();
         }
         if (ctx.index() !== undefined) {
             ctx.index().forEach(i => i.accept(this));
@@ -290,22 +293,37 @@ export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ParserRuleC
         if (ctx.call() !== undefined) {
             ctx.call().forEach(c => c.accept(this));
         }
-        this.isvarstack.pop();
-        this.isvarstack.pop();
+        this.allowAddUses.pop();
+        this.allowAddUses.pop();
     }
 
     public visitComponent(ctx: ast.ComponentContext) {
-        this.isvarstack.push(false);
-        this.visitChildren(ctx);
-        this.isvarstack.pop();
         if (ctx.identifier() !== undefined) {
+            this.allowAddUses.push(false);
+            ctx.identifier().accept(this);
+            this.allowAddUses.pop();
             this.addDef(ctx.identifier(), ctx.type());
         }
+        ctx.type().accept(this);
+    }
+
+    public visitEnumBodyDeclaration(ctx: ast.EnumBodyDeclarationContext) {
+        this.allowAddUses.push(false);
+        this.visitChildren(ctx);
+        this.allowAddUses.pop();
+        if (ctx.identifier() !== undefined) {
+            this.addDef(ctx.identifier());
+        }
+    }
+
+    public visitTypeDeclaration(ctx: ast.TypeDeclarationContext) {
+        this.addDef(ctx.identifier(), ctx.identifier());
+        this.visitChildren(ctx);
     }
 
     // symbol uses
     public visitIdentifier(ctx: ast.IdentifierContext) {
-        if (this.isvarstack[this.isvarstack.length - 1]) {
+        if (this.allowAddUses[this.allowAddUses.length - 1]) {
             this.addUse(ctx, this.getDef(ctx));
         }
         this.visitChildren(ctx);

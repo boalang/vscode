@@ -159,9 +159,9 @@ export class ScopedVisitor<T> extends AbstractParseTreeVisitor<void> implements 
     }
 }
 
-export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ast.IdentifierContext }> {
-    private _defs: { [defIdx: number]: ast.IdentifierContext } = {};
-    private _uses: { [defIdx: number]: ast.IdentifierContext[] } = {};
+export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ParserRuleContext }> {
+    private _defs: { [defIdx: number]: ParserRuleContext } = {};
+    private _uses: { [defIdx: number]: ParserRuleContext[] } = {};
     private _usedefs: { [defIdx: number]: number } = {};
     private _types: { [defIdx: number]: ParserRuleContext|string } = {};
 
@@ -185,13 +185,12 @@ export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ast.Identif
         return t;
     }
 
-    protected getDef(ctx: ast.IdentifierContext, depth: number = 0): ast.IdentifierContext {
-        const id = ctx.text;
-
+    protected getDef(ctx: ParserRuleContext, depth: number = 0): ParserRuleContext {
         if (this.scopes.length - depth == 0) {
             return undefined;
         }
 
+        const id = ctx.text;
         const curScope = this.scopes[this.scopes.length - depth - 1];
         if (id in curScope) {
             return curScope[id];
@@ -200,7 +199,7 @@ export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ast.Identif
         return this.getDef(ctx, depth + 1);
     }
 
-    private addDef(ctx: ast.IdentifierContext, type: ParserRuleContext|string = undefined) {
+    private addDef(ctx: ParserRuleContext, type: ParserRuleContext|string = undefined) {
         this._defs[ctx.start.startIndex] = ctx;
         this.scopes[this.scopes.length - 1][ctx.text] = ctx;
         if (type !== undefined) {
@@ -209,7 +208,7 @@ export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ast.Identif
         this.addUse(ctx, ctx);
     }
 
-    private addUse(ctx: ast.IdentifierContext, defCtx: ast.IdentifierContext) {
+    private addUse(ctx: ParserRuleContext, defCtx: ParserRuleContext) {
         if (defCtx !== undefined) {
             const defIdx = defCtx.start.startIndex;
             if (!(defIdx in this._uses)) {

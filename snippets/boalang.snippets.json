@@ -1,72 +1,58 @@
 {
     "visitor snippet": {
-        "scope": "source.boalang",
         "prefix": "visitor",
-        "body": "visit(${1:input}, visitor {\n\t${2:before} ${3:n}: ${4:type} -> {\n\t\t${5}\n\t}\n});"
+        "body": "visit(${1:input}, visitor {\n\t${2:before} ${3:n}: ${4:type} -> {\n\t\t$5\n\t}$0\n});"
     },
     "before clause": {
-        "scope": "source.boalang",
         "prefix": "before",
-        "body": "before ${1:n}: ${2:type} -> {\n\t${3}\n}"
+        "body": "before ${1:n}: ${2:type} -> {\n\t$3\n}"
     },
     "after clause": {
-        "scope": "source.boalang",
         "prefix": "after",
-        "body": "after ${1:n}: ${2:type} -> {\n\t${3}\n}"
+        "body": "after ${1:n}: ${2:type} -> {\n\t$3\n}"
     },
     "snapshot snippet": {
-        "scope": "source.boalang",
         "prefix": "snapshot",
         "body": "before node: CodeRepository -> {\n\tsnapshot := getsnapshot(node);\n\tforeach (i: int; def(snapshot[i]))\n\t\tvisit(snapshot[i]);\n\tstop;\n}"
     },
     "traversal snippet": {
-        "scope": "source.boalang",
         "prefix": "traversal",
-        "body": "${1:name} := traversal(${2:node}: ${3:CFGNode}) {\n\t${4}\n};"
+        "body": "${1:name} := traversal(${2:node}: ${3:CFGNode}) {\n\t$4\n};"
     },
     "traversal-return snippet": {
-        "scope": "source.boalang",
         "prefix": "traversal-return",
-        "body": "${1:name} := traversal(${2:node}: ${3:CFGNode}) : ${4} {\n\t${5}\n\treturn ${6};\n};"
+        "body": "${1:name} := traversal(${2:node}: ${3:CFGNode}) : $4 {\n\t$5\n\treturn $6;\n};"
     },
     "traverse snippet": {
-        "scope": "source.boalang",
         "prefix": "traverse",
-        "body": "traverse(${1:cfg}, TraversalDirection.${2:BACKWARD}, TraversalKind.${3:HYBRID}, ${4});"
+        "body": "traverse(${1:cfg}, TraversalDirection.${2:BACKWARD}, TraversalKind.${3:HYBRID}, $4);"
     },
     "traverse-fp snippet": {
-        "scope": "source.boalang",
         "prefix": "traverse-fp",
-        "body": "traverse(${1:cfg}, TraversalDirection.${2:BACKWARD}, TraversalKind.${3:HYBRID}, ${4}, ${5:fp});"
+        "body": "traverse(${1:cfg}, TraversalDirection.${2:BACKWARD}, TraversalKind.${3:HYBRID}, $4, ${5:fp});"
     },
     "fixp snippet": {
-        "scope": "source.boalang",
         "prefix": "fixp",
-        "body": "${1:name} := fixp(${2:curr}, ${3:prev}: ${4}) : bool {\n\treturn ${5};\n};"
+        "body": "${1:name} := fixp(${2:curr}, ${3:prev}: $4) : bool {\n\treturn $5;\n};"
     },
     "foreach snippet": {
-        "scope": "source.boalang",
         "prefix": "foreach",
-        "body": "foreach (${1:i}: ${2:int}; ${3:condition}) {\n\t${4}\n}"
+        "body": "foreach (${1:i}: ${2:int}; ${3:condition}) {\n\t$4\n}"
     },
     "exists snippet": {
-        "scope": "source.boalang",
         "prefix": "exists",
-        "body": "exists (${1:i}: ${2:int}; ${3:condition}) {\n\t${4}\n}"
+        "body": "exists (${1:i}: ${2:int}; ${3:condition}) {\n\t$4\n}"
     },
     "ifall snippet": {
-        "scope": "source.boalang",
         "prefix": "ifall",
-        "body": "ifall (${1:i}: ${2:int}; ${3:condition}) {\n\t${4}\n}"
+        "body": "ifall (${1:i}: ${2:int}; ${3:condition}) {\n\t$4\n}"
     },
     "if snippet": {
-        "scope": "source.boalang",
         "prefix": "if",
-        "body": "if (${1:condition}) {\n\t${2}\n}"
+        "body": "if (${1:condition}) {\n\t$2\n}"
     },
     "ife snippet": {
-        "scope": "source.boalang",
         "prefix": "ife",
-        "body": "if (${1:condition}) {\n\t${2}\n} else {\n\t${3}\n}"
+        "body": "if (${1:condition}) {\n\t$2\n} else {\n\t$3\n}"
     }
 }

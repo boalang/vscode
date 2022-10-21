@@ -189,6 +189,8 @@ export async function runBoaCommands(func: { (client: boaapi.BoaClient): Promise
                                 vscode.window.showInformationMessage('Your Boa account is blocked for too many invalid logins. Please wait an hour.');
                             } else if (err.message.indexOf('getaddrinfo ENOTFOUND') > -1) {
                                 vscode.window.showInformationMessage('Unable to connect to the Boa API.');
+                            } else {
+                                vscode.window.showInformationMessage(err.message.replace(/user\.login\([^)]+\)/, 'user.login()'));
                             }
                             throw err;
                         }

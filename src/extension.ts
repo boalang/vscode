@@ -113,6 +113,8 @@ export function activate(context: vscode.ExtensionContext) {
             vscode.commands.executeCommand('boalang.joblist.refreshIfLoaded');
         } else if (event.affectsConfiguration('boalang.output.size')) {
             JobCache.clearOutputs();
+        } else if (event.affectsConfiguration('boalang.api.endpoint')) {
+            closeClient();
         } else if (event.affectsConfiguration('boalang.login.username')) {
             resetPassword();
             closeClient();

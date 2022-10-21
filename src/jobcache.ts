@@ -127,4 +127,15 @@ export default class JobCache {
         vscode.commands.executeCommand('setContext', 'boalang.jobs.running', this.jobContexts.running);
         vscode.commands.executeCommand('setContext', 'boalang.jobs.stopped', this.jobContexts.stopped);
     }
+
+    static async reset() {
+        this.source = {};
+        this.outputSize = {};
+        this.url = {};
+        this.compilerErrors = {};
+        this.output = {};
+        this.jobContexts.hasoutput = [];
+        this.jobContexts.running = [];
+        this.jobContexts.stopped = [];
+    }
 }

@@ -156,6 +156,7 @@ export async function closeClient() {
     }
     datasets = null;
     treeProvider.reset();
+    JobCache.reset();
 }
 
 let client = null;

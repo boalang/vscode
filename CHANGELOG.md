@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.2.6] - 2022-10-21
+ - better handling of login error messages, specifically if the user needs to agree to T&C
+ - now when switching between Boa API endpoints, cleans up the cache and resets the job list
+ - fixed some crashes in the document formatter
+ - fixed a bug with symbol matching grabbing too much, which caused renaming symbols to rename too much
+
 ## [0.2.5] - 2022-09-28
  - document formatting now respects the documents EOL and indentation settings
  - added the ability to view any arbitrary job (by giving the job number)

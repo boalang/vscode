@@ -221,7 +221,7 @@ export default class PrettyPrinter extends AbstractParseTreeVisitor<string> impl
     visitOutputType(ctx: ast.OutputTypeContext) {
         const id = ctx.SET() ? ctx.SET().text : ctx.identifier().accept(this);
 
-        const hasparen = ctx.expressionList().length > 1 || ctx.FORMAT() === undefined;
+        const hasparen = ctx.expressionList().length > 1 || (ctx.expressionList().length == 1 && ctx.FORMAT() === undefined);
         const paren = !hasparen ? '' : ctx.LPAREN(0).text + ctx.expressionList(0).accept(this) + ctx.RPAREN(0).text;
 
         let idx = '';
@@ -496,7 +496,10 @@ export default class PrettyPrinter extends AbstractParseTreeVisitor<string> impl
     }
 
     visitCall(ctx: ast.CallContext) {
-        return ctx.LPAREN().text + ctx.expressionList().accept(this) + ctx.RPAREN().text;
+        if (ctx.expressionList() !== undefined) {
+            return ctx.LPAREN().text + ctx.expressionList().accept(this) + ctx.RPAREN().text;
+        }
+        return ctx.LPAREN().text + ctx.RPAREN().text;
     }
 
     visitUnaryFactor(ctx: ast.UnaryFactorContext) {

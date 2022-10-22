@@ -99,11 +99,6 @@ export async function setFavorite() {
     }
 }
 
-const endpoints = [
-    boaapi.BOA_API_ENDPOINT,
-    boaapi.BOAC_API_ENDPOINT
-];
-
 async function selectEndpoint(): Promise<string> {
     return new Promise((resolve) => {
         const quickPick = vscode.window.createQuickPick();
@@ -112,7 +107,7 @@ async function selectEndpoint(): Promise<string> {
         quickPick.placeholder = boaConfig.get<string>('api.endpoint');
         quickPick.title = 'Select the Boa API endpoint';
 
-        const sortedItems = [quickPick.placeholder, ...endpoints.filter(item => item != quickPick.placeholder)];
+        const sortedItems = [quickPick.placeholder, ...boaapi.KNOWN_ENDPOINTS.filter(item => item != quickPick.placeholder)];
         let defaultItems = sortedItems.map(label => ({ label: label }));
         if (!sortedItems.includes(quickPick.placeholder)) {
             defaultItems = [{ label: quickPick.placeholder }, ...defaultItems];

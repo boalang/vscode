@@ -39,7 +39,7 @@ export const boaDocumentProvider = new class implements vscode.TextDocumentConte
                         data = await JobCache.getSource(job);
                         await JobCache.updateContext(job);
                     } else {
-                        vscode.window.showErrorMessage(`Invalid job ID ${job.authority} or you do not have access to that job.`);
+                        vscode.window.showErrorMessage(`Invalid/undefined job ID or you do not have access to that job.`);
                         return undefined;
                     }
                 });

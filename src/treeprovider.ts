@@ -112,7 +112,7 @@ class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
                 this.jobs.push(new BoaJob(job, source, size));
             }
         }).then(async() => {
-            this.jobs.sort((a, b) => (b.label as string).localeCompare(a.label as string))
+            this.jobs.sort((a, b) => b.job.id - a.job.id)
 
             const filteredOutputJobs: String[] = [];
             for (const job of this.jobs) {

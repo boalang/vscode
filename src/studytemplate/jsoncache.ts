@@ -128,7 +128,7 @@ class StudyConfigCache {
             if (replacement.length == 0) {
                 query = query.replace(new RegExp('^' + k.replace(/[{}]/g, '\\$&') + '\n', 'gm'), '');
             }
-            query = query.replace(new RegExp('([ \t]*)' + k.replace(/[{}]/g, '\\$&') + '(\n?)', 'g'), '$1' + replacement + '$2');
+            query = query.replace(new RegExp('([ \t]*)(.*(?=' + k.replace(/[{}]/g, '\\$&') + '))' + k.replace(/[{}]/g, '\\$&') + '(\n?)', 'g'), '$1$2' + replacement + '$3');
         }
         if (orig != query) {
             return this.performSubstitutions(query, subs);

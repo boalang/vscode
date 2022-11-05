@@ -1,8 +1,8 @@
-[![version](https://vsmarketplacebadges.dev/version/Boa.boalang.svg)](https://marketplace.visualstudio.com/items?itemName=Boa.boalang)
-[![Downloads](https://vsmarketplacebadges.dev/downloads-short/Boa.boalang.svg)](https://marketplace.visualstudio.com/items?itemName=Boa.boalang)
-[![Installs](https://vsmarketplacebadges.dev/installs-short/Boa.boalang.svg)](https://marketplace.visualstudio.com/items?itemName=Boa.boalang)
-[![Rating](https://vsmarketplacebadges.dev/rating-star/Boa.boalang.svg)](https://marketplace.visualstudio.com/items?itemName=Boa.boalang&ssr=false#review-details)
-[![license](https://img.shields.io/badge/license-Apache2.0-brightgreen.svg)](https://raw.githubusercontent.com/boalang/vscode/main/LICENSE)
+[![version](https://vsmarketplacebadges.dev/version/Boa.boalang.png)](https://marketplace.visualstudio.com/items?itemName=Boa.boalang)
+[![Downloads](https://vsmarketplacebadges.dev/downloads-short/Boa.boalang.png)](https://marketplace.visualstudio.com/items?itemName=Boa.boalang)
+[![Installs](https://vsmarketplacebadges.dev/installs-short/Boa.boalang.png)](https://marketplace.visualstudio.com/items?itemName=Boa.boalang)
+[![Rating](https://vsmarketplacebadges.dev/rating-star/Boa.boalang.png)](https://marketplace.visualstudio.com/items?itemName=Boa.boalang&ssr=false#review-details)
+[![license](https://img.shields.io/badge/license-Apache2.0-brightgreen.png)](https://raw.githubusercontent.com/boalang/vscode/main/LICENSE)
 
 # Boa Language and Infrastructure
 

@@ -1,5 +1,10 @@
 # Change Log
 
+## [0.2.7] - 2022-11-05
+ - update Boa API to 0.2.1
+ - better handling of Boa terms & conditions prompts
+ - jobs lists now sorts based on job number
+
 ## [0.2.6] - 2022-10-21
  - better handling of login error messages, specifically if the user needs to agree to T&C
  - now when switching between Boa API endpoints, cleans up the cache and resets the job list

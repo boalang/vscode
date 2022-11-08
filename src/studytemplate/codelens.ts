@@ -16,6 +16,7 @@
 //
 import * as vscode from 'vscode';
 import * as consts from '../consts';
+import { getAnalysesRange } from '../utils';
 
 export default class StudyConfigCodelensProvider implements vscode.CodeLensProvider {
     public provideCodeLenses(document: vscode.TextDocument, token: vscode.CancellationToken): vscode.CodeLens[] | Thenable<vscode.CodeLens[]> {
@@ -93,15 +94,23 @@ export default class StudyConfigCodelensProvider implements vscode.CodeLensProvi
             }));
         }
 
+        // scope completions to the "analyses" key
+        const { analysesStart, analysesEnd } = getAnalysesRange(document);
+
         // looks for analyses, e.g.: "rq1.py": {
         for (const target of document.getText().matchAll(/"([^"]+)\.py"\s*:/g)) {
-            const range = new vscode.Range(document.positionAt(target.index + 1), document.positionAt(target.index + 1 + target[1].length));
-            lenses.push(new vscode.CodeLens(range, {
-                title: '$(play) Run Analysis',
-                tooltip: 'Runs the selected analysis script - this will download all inputs',
-                command: 'boalang.template.runAnalysis',
-                arguments: [target[1]]
-            }));
+            const startPos = target.index + 1;
+
+            // scope completions to the "analyses" key
+            if (startPos > analysesStart && startPos < analysesEnd) {
+                const range = new vscode.Range(document.positionAt(startPos), document.positionAt(startPos + target[1].length));
+                lenses.push(new vscode.CodeLens(range, {
+                    title: '$(play) Run Analysis',
+                    tooltip: 'Runs the selected analysis script - this will download all inputs',
+                    command: 'boalang.template.runAnalysis',
+                    arguments: [target[1]]
+                }));
+            }
         }
 
         return lenses;

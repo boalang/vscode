@@ -59,3 +59,28 @@ export function getOperand(e: ExpressionContext|undefined): OperandContext|undef
     if (e === undefined) return undefined;
     return e.conjunction(0).comparison(0).simpleExpression(0).term(0).factor(0).operand();
 }
+
+export function getAnalysesRange(document: vscode.TextDocument) {
+    var analysesEnd = -1;
+    var analysesStart = -1;
+
+    const text = document.getText();
+    const analyses = text.match(/"analyses"\s*:\s*{/);
+
+    if (analyses) {
+        analysesStart = analyses.index + analyses[0].length + 1;
+        var brackets = 1;
+        for (analysesEnd = analysesStart; analysesEnd < text.length; analysesEnd++) {
+            const char = text.charAt(analysesEnd);
+            if (char == '}') {
+                brackets--;
+            } else if (char == '{') {
+                brackets++;
+            }
+            if (brackets == 0) {
+                break;
+            }
+        }
+    }
+    return { analysesStart, analysesEnd };
+}

@@ -16,6 +16,7 @@
 //
 import * as vscode from 'vscode';
 import * as consts from '../consts';
+import { getAnalysesRange } from '../utils';
 
 /**
  * Processes the study template's jobs.json file to make file paths and job numbers into links.
@@ -89,27 +90,24 @@ export class StudyConfigJSONLinkProvider implements vscode.DocumentLinkProvider 
             links.push(link);
         }
 
+        // scope completions to the "analyses" key
+        const { analysesStart, analysesEnd } = getAnalysesRange(document);
+
         // looks for analyses, e.g.: "rq1.py": {
         for (const script of document.getText().matchAll(/"([^"]+\.py)"\s*:/g)) {
             const startPos = script.index + 1;
 
             // scope completions to the "analyses" key
-            const prefix = document.getText(new vscode.Range(new vscode.Position(0, 0), document.positionAt(startPos)));
-            const bracePos = prefix.lastIndexOf('{', prefix.length);
-
-            if (bracePos > -1) {
-                const matches = prefix.match(/"analyses"\s*:\s*{/);
-                if (matches && matches.index + matches[0].length == bracePos + 1) {
-                    const range = new vscode.Range(document.positionAt(startPos), document.positionAt(startPos + script[1].length));
-                    const link = new vscode.DocumentLink(range, vscode.Uri.parse(`file://${docPath}/${consts.analysesPath}/${script[1]}`));
-                    link.tooltip = `View the analysis file '${consts.analysesPath}/${script[1]}'`;
-                    links.push(link);
-                } else {
-                    const range = new vscode.Range(document.positionAt(startPos), document.positionAt(startPos + script[1].length));
-                    const link = new vscode.DocumentLink(range, vscode.Uri.parse(`file://${docPath}/${consts.binPath}/${script[1]}`));
-                    link.tooltip = `View the processor '${consts.binPath}/${script[1]}'`;
-                    links.push(link);
-                }
+            if (startPos > analysesStart && startPos < analysesEnd) {
+                const range = new vscode.Range(document.positionAt(startPos), document.positionAt(startPos + script[1].length));
+                const link = new vscode.DocumentLink(range, vscode.Uri.parse(`file://${docPath}/${consts.analysesPath}/${script[1]}`));
+                link.tooltip = `View the analysis file '${consts.analysesPath}/${script[1]}'`;
+                links.push(link);
+            } else {
+                const range = new vscode.Range(document.positionAt(startPos), document.positionAt(startPos + script[1].length));
+                const link = new vscode.DocumentLink(range, vscode.Uri.parse(`file://${docPath}/${consts.binPath}/${script[1]}`));
+                link.tooltip = `View the processor '${consts.binPath}/${script[1]}'`;
+                links.push(link);
             }
         }
 

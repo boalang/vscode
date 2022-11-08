@@ -58,7 +58,7 @@
         "onCommand:boalang.template.preview",
         "onCommand:boalang.template.downloadOutput",
         "onCommand:boalang.template.generateCSV",
-        "onCommand:boalang.template.generateDupes",
+        "onCommand:boalang.template.runProcessor",
         "onCommand:boalang.template.generateData",
         "onCommand:boalang.template.runAnalysis",
         "onCommand:boalang.template.clean",
@@ -224,7 +224,7 @@
                 "category": "Boa"
             },
             {
-                "command": "boalang.template.generateDupes",
+                "command": "boalang.template.runProcessor",
                 "title": "Generate Dupes Output",
                 "icon": "$(list-filter)",
                 "category": "Boa"
@@ -414,7 +414,7 @@
                     "when": "false"
                 },
                 {
-                    "command": "boalang.template.generateDupes",
+                    "command": "boalang.template.runProcessor",
                     "when": "false"
                 },
                 {

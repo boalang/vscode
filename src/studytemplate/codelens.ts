@@ -82,13 +82,13 @@ export default class StudyConfigCodelensProvider implements vscode.CodeLensProvi
             }));
         }
 
-        // looks for dupes output files, e.g.: "output": "kotlin/dupes.txt",
+        // looks for processor output files, e.g.: "output": "kotlin/dupes.txt",
         for (const output of document.getText().matchAll(/"output"\s*:\s*"([^"]+\.txt)"/g)) {
             const range = new vscode.Range(document.positionAt(output.index + 1), document.positionAt(output.index + 1 + output[1].length));
             lenses.push(new vscode.CodeLens(range, {
-                title: '$(list-filter) Generate Dupes',
-                tooltip: 'Generates the Dupes output - this might trigger a download on the input',
-                command: 'boalang.template.generateDupes',
+                title: '$(list-filter) Run Processor',
+                tooltip: 'Run the processor - this might trigger a download on the input',
+                command: 'boalang.template.runProcessor',
                 arguments: [output[1]]
             }));
         }

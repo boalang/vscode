@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.2.8] - 2022-11-08
+ - better code lens tooltips for study template (shows the make command)
+ - renamed 'gen dupes' code lens to more generic 'run processor'
+ - fixed the 'run processor' code lens using bad processor path
+ - fixed issue with code lens/links not knowing if a Python file was an analysis or processor
+
 ## [0.2.7] - 2022-11-05
  - update Boa API to 0.2.1
  - better handling of Boa terms & conditions prompts

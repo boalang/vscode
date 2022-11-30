@@ -27,7 +27,7 @@ export class BuiltInsCompletionItemProvider implements vscode.CompletionItemProv
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.CompletionItem[]> {
         const items = [];
 
-        // this completion provide should not respond if the character was '.'
+        // this completion provider should not respond if the character was '.'
         if (atDot(document, position)) {
             return items;
         }
@@ -84,7 +84,7 @@ export class AttributeCompletionItemProvider implements vscode.CompletionItemPro
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.CompletionItem[]> {
         const items = [];
 
-        // this completion provide should ONLY respond if the character was '.'
+        // this completion provider should ONLY respond if the character was '.'
         if (!atDot(document, position)) {
             return items;
         }
@@ -190,7 +190,7 @@ export class EnumValuesCompletionItemProvider implements vscode.CompletionItemPr
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.CompletionItem[]> {
         const items = [];
 
-        // this completion provide should ONLY respond if the character was '.'
+        // this completion provider should ONLY respond if the character was '.'
         if (!atDot(document, position)) {
             return items;
         }
@@ -214,7 +214,7 @@ export class DSLTypesCompletionItemProvider implements vscode.CompletionItemProv
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.CompletionItem[]> {
         const items = [];
 
-        // this completion provide should not respond if the character was '.'
+        // this completion provider should not respond if the character was '.'
         if (atDot(document, position)) {
             return items;
         }
@@ -281,7 +281,7 @@ export class IdentifierCompletionItemProvider implements vscode.CompletionItemPr
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.CompletionItem[]> {
         const items = [];
 
-        // this completion provide should not respond if the character was '.'
+        // this completion provider should not respond if the character was '.'
         if (atDot(document, position)) {
             return items;
         }

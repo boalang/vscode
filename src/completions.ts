@@ -289,7 +289,7 @@ export class IdentifierCompletionItemProvider implements vscode.CompletionItemPr
         const tree = parseBoaCode(document.getText(), document.uri);
         const syms = new SymbolsVisitor(document.uri, document.offsetAt(position)).visit(tree);
 
-        for (const s of syms.filter(s => s.kind == vscode.SymbolKind.Variable)) {
+        for (const s of syms.filter(s => s.kind == vscode.SymbolKind.Variable || s.kind == vscode.SymbolKind.Struct)) {
             const item = new vscode.CompletionItem(s.name, vscode.CompletionItemKind.Variable);
             items.push(item);
         }

@@ -107,6 +107,16 @@ export class SymbolsVisitor extends AbstractParseTreeVisitor<vscode.SymbolInform
             .concat(this.visitChildren(ctx));
     }
 
+    visitTypeDeclaration(ctx: ast.TypeDeclarationContext) {
+        return [new vscode.SymbolInformation(ctx.identifier().text, vscode.SymbolKind.Struct, undefined, getLoc(ctx, this.uri))]
+            .concat(this.visitChildren(ctx));
+    }
+
+    visitEnumBodyDeclaration(ctx: ast.EnumBodyDeclarationContext) {
+        return [new vscode.SymbolInformation(ctx.identifier().text, vscode.SymbolKind.Field, undefined, getLoc(ctx, this.uri))]
+            .concat(this.visitChildren(ctx));
+    }
+
     visitForVariableDeclaration(ctx: ast.ForVariableDeclarationContext) {
         const isfunc = ctx.expression() ? getOperand(ctx.expression()).functionExpression() : false;
         return [new vscode.SymbolInformation(ctx.identifier().text, isfunc ? vscode.SymbolKind.Function : vscode.SymbolKind.Variable, undefined, getLoc(ctx, this.uri))]

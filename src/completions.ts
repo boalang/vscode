@@ -197,6 +197,13 @@ export class EnumValuesCompletionItemProvider implements vscode.CompletionItemPr
 
         const word = document.getText(document.getWordRangeAtPosition(position.translate(0, -1))).trim();
 
+        const tree = parseBoaCode(document.getText(), document.uri);
+        const syms = new SymbolsVisitor(document.uri, document.offsetAt(position)).visit(tree);
+
+        for (const s of syms.filter(s => s.containerName == word && s.kind == vscode.SymbolKind.Field)) {
+            items.push(new vscode.CompletionItem(s.name, symbolToCompletion(s.kind)));
+        }
+
         if (Object.keys(builtinEnums).indexOf(word) != -1) {
             Object.keys(builtinEnums[word].attrs).forEach(attr => {
                 const item = new vscode.CompletionItem(attr, vscode.CompletionItemKind.Function);

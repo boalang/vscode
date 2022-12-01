@@ -91,6 +91,8 @@ export function symbolToCompletion(k: vscode.SymbolKind): vscode.CompletionItemK
             return vscode.CompletionItemKind.Variable;
         case vscode.SymbolKind.Struct:
             return vscode.CompletionItemKind.Struct;
+        case vscode.SymbolKind.Field:
+            return vscode.CompletionItemKind.Field;
         default:
             return vscode.CompletionItemKind.Text;
     }

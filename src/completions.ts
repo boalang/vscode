@@ -21,7 +21,7 @@ import { SymbolsVisitor } from './ast/symbols';
 import UDFFinder from "./ast/UDFFinder";
 import { getFuncDoc, getFuncSignature } from './hoverproviders';
 import { builtinConsts, builtinEnums, builtinFunctions, builtinTypes, builtinVars } from './types';
-import { atDot } from './utils';
+import { atDot, symbolToCompletion } from './utils';
 
 export class BuiltInsCompletionItemProvider implements vscode.CompletionItemProvider {
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.CompletionItem[]> {
@@ -290,8 +290,7 @@ export class IdentifierCompletionItemProvider implements vscode.CompletionItemPr
         const syms = new SymbolsVisitor(document.uri, document.offsetAt(position)).visit(tree);
 
         for (const s of syms.filter(s => s.kind == vscode.SymbolKind.Variable || s.kind == vscode.SymbolKind.Struct)) {
-            const item = new vscode.CompletionItem(s.name, vscode.CompletionItemKind.Variable);
-            items.push(item);
+            items.push(new vscode.CompletionItem(s.name, symbolToCompletion(s.kind)));
         }
 
         return items;

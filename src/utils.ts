@@ -84,3 +84,14 @@ export function getAnalysesRange(document: vscode.TextDocument) {
     }
     return { analysesStart, analysesEnd };
 }
+
+export function symbolToCompletion(k: vscode.SymbolKind): vscode.CompletionItemKind {
+    switch (k) {
+        case vscode.SymbolKind.Variable:
+            return vscode.CompletionItemKind.Variable;
+        case vscode.SymbolKind.Struct:
+            return vscode.CompletionItemKind.Struct;
+        default:
+            return vscode.CompletionItemKind.Text;
+    }
+}

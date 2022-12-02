@@ -15,11 +15,65 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
+import { DefsUsesVisitor } from './ast/defuse';
 import { parseBoaCode } from './ast/parser';
 import UDFFinder from "./ast/UDFFinder";
-import { builtinFunctions } from './types';
+import { builtinConsts, builtinEnums, builtinFunctions, builtinTypes, builtinVars } from './types';
+import { getType } from './utils';
 
-export default class FunctionsHoverProvider implements vscode.HoverProvider {
+export class BoaHoverProvider implements vscode.HoverProvider {
+    async provideHover(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.Hover> {
+        const word = document.getText(document.getWordRangeAtPosition(position)).trim();
+
+        if (word in builtinVars) {
+            return new vscode.Hover(new vscode.MarkdownString(`\`\`\`boalang\n${word}: ${builtinVars[word].type}\n\`\`\`\n${builtinVars[word].doc}`));
+        }
+
+        if (word in builtinConsts) {
+            return new vscode.Hover(new vscode.MarkdownString(`\`\`\`boalang\n${word}: ${builtinConsts[word].type}\n\`\`\`\n${builtinConsts[word].doc}`));
+        }
+
+        if (word in builtinTypes) {
+            return new vscode.Hover(new vscode.MarkdownString(`\`\`\`boalang\n${word}\n\`\`\`\n${builtinTypes[word].doc}`));
+        }
+
+        if (word in builtinEnums) {
+            return new vscode.Hover(new vscode.MarkdownString(`\`\`\`boalang\n${word}\n\`\`\`\n${builtinEnums[word].doc}`));
+        }
+
+        const tree = parseBoaCode(document.getText());
+        const defuses = new DefsUsesVisitor();
+        defuses.visit(tree);
+
+        const t = defuses.getType(defuses.usedefs[document.offsetAt(position)]);
+        if (t !== undefined) {
+            return new vscode.Hover(new vscode.MarkdownString(`\`\`\`boalang\n${word}: ${t}\n\`\`\``));
+        }
+
+        const r = document.getWordRangeAtPosition(position, /(([a-zA-Z0-9_]+(\[[^\]]+\])?(\([^)]+\))?)\.)+\w+/);
+        let prevWord = document.getText(r).trim();
+        if (prevWord.length < document.offsetAt(position)) {
+            const dots = prevWord.split('.');
+            prevWord = dots[dots.length - 2];
+            if (prevWord in builtinEnums) {
+                return new vscode.Hover(new vscode.MarkdownString(`\`\`\`boalang\n${prevWord}.${word}\n\`\`\`\n${builtinEnums[prevWord].attrs[word]}`));
+            }
+
+            const exprRange = new vscode.Range(r.start, position);
+            const type = getType(document, exprRange, tree, defuses);
+
+            if (type in builtinTypes) {
+                const attr = builtinTypes[type].attrs[word];
+                if (token.isCancellationRequested) return undefined;
+                return new vscode.Hover(new vscode.MarkdownString(`\`\`\`boalang\n${type}.${word}: ${attr.type}\n\`\`\`\n${attr.doc}`));
+            }
+        }
+
+        return undefined;
+    }
+}
+
+export class FunctionsHoverProvider implements vscode.HoverProvider {
     async provideHover(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.Hover> {
         const funcRange = document.getWordRangeAtPosition(position, /[a-zA-Z0-9_]+(?=\s*\()/);
 

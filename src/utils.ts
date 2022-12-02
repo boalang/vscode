@@ -14,8 +14,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
+import { ParseTree } from 'antlr4ts/tree/ParseTree';
 import * as vscode from 'vscode';
-import { ExpressionContext, OperandContext } from './antlr/boaParser';
+import { ExpressionContext, OperandContext, ProgramContext } from './antlr/boaParser';
+import { DefsUsesVisitor } from './ast/defuse';
+import UDFFinder from './ast/UDFFinder';
+import { builtinFunctions, builtinTypes } from './types';
 
 export function getWorkspaceRoot() {
     return vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0].uri.fsPath : '';
@@ -96,4 +100,81 @@ export function symbolToCompletion(k: vscode.SymbolKind): vscode.CompletionItemK
         default:
             return vscode.CompletionItemKind.Text;
     }
+}
+
+function cleanType(t: string) {
+    return t.replace('array of ', '').replace('?', '').replace(': ', '').trim();
+}
+
+export function getType(document: vscode.TextDocument, exprRange: vscode.Range, tree: ProgramContext, defuses: DefsUsesVisitor): string|undefined {
+    let exprOffset = document.offsetAt(exprRange.start);
+
+    let parts = document.getText(exprRange).split('.').reverse();
+    let type: string = undefined;
+
+    while (parts.length > 0) {
+        const funcMatches = parts[parts.length - 1].match(/^([a-zA-Z0-9_]+)\s*\(([^)]*)\)$/);
+        if (funcMatches !== null) {
+            const funcName = funcMatches[1];
+            const args = funcMatches[2];
+            if (funcName in builtinFunctions) {
+                if (funcName === 'current') {
+                    type = args;
+                } else if (funcName == 'pop' || funcName == 'peek' || funcName == 'poll' || funcName == 'lookup') {
+                    // type is 'val_type', based on first arg e.g. 'stack of val_type'
+                    const argType = cleanType(defuses.getType(defuses.usedefs[exprOffset + funcName.length + 1]));
+                    type = argType.replace('stackof', '').replace('queueof', '').replace(/^map\[[^\]]+\]of/, '');
+                } else if (funcName == 'getvalue') {
+                    // type is 'T' but based on traversal's return type
+                    const argParts = args.split(',');
+                    if (argParts.length == 2) {
+                        // named traversal
+                        const idx = exprOffset + funcName.length + 2 + argParts[0].length + (argParts[1].length - argParts[1].trim().length);
+                        type = cleanType(defuses.getType(defuses.usedefs[idx]).split('):')[1]);
+                    } else {
+                        // return type of current traversal
+                        let text = document.getText(new vscode.Range(new vscode.Position(0, 0), document.positionAt(exprOffset)));
+                        text = text.substring(text.lastIndexOf('traversal'));
+                        text = text.substring(0, text.indexOf('{'));
+                        const typeParts = text.split(':');
+                        type = typeParts[typeParts.length - 1].trim();
+                    }
+                } else if (funcName == 'getinedge' || funcName == 'getoutedge') {
+                    // type is 'graph_edge', related to argument node's type
+                    const argType = cleanType(defuses.getType(defuses.usedefs[exprOffset + funcName.length + 1]));
+                    type = argType.replace(/Node$/, 'Edge');
+                } else {
+                    type = cleanType(builtinFunctions[funcName].ret.type);
+                }
+            } else {
+                const visitor = new UDFFinder(exprOffset);
+                visitor.visit(tree);
+                type = cleanType(visitor.funcs[funcName].ret.type);
+            }
+        } else if (type === undefined && exprOffset in defuses.usedefs) {
+            type = cleanType(defuses.getType(defuses.usedefs[exprOffset]));
+        } else if (type === undefined && parts[parts.length - 1] === 'input') {
+            type = 'Project';
+        } else if (type in builtinTypes) {
+            const attrMatches = parts[parts.length - 1].match(/^([a-zA-Z0-9_]+)(\[[^\]]+\])?$/);
+            const attrName = attrMatches[1];
+            if (attrName !== undefined) {
+                if (Object.keys(builtinTypes[type].attrs).indexOf(attrName) != -1) {
+                    const attrType = builtinTypes[type].attrs[attrName].type;
+                    type = undefined;
+                    if (attrType.indexOf('array of ') == -1 || attrMatches[2] !== undefined) {
+                        type = cleanType(attrType);
+                    }
+                }
+            }
+        }
+
+        if (type === undefined) {
+            return undefined;
+        }
+
+        exprOffset += parts.pop().length + 1;
+    }
+
+    return type;
 }

@@ -24,7 +24,7 @@ import { enableDiagnostics } from './diagnostics';
 import JobCache from './jobcache';
 import { AttributeCompletionItemProvider, BuiltInsCompletionItemProvider, DSLTypesCompletionItemProvider, EnumValuesCompletionItemProvider, IdentifierCompletionItemProvider } from './completions';
 import BoaSignatureHelpProvider from './ast/signatures';
-import FunctionsHoverProvider from './hoverproviders';
+import { FunctionsHoverProvider, BoaHoverProvider } from './hoverproviders';
 import BoaDefinitionProvider from './ast/definitions';
 import BoaReferenceProvider from './ast/references';
 import BoaDocumentHighlightProvider from './highlights';
@@ -90,6 +90,7 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.languages.registerWorkspaceSymbolProvider(new BoaWorkspaceSymbolProvider()));
 
     context.subscriptions.push(vscode.languages.registerHoverProvider('boalang', new FunctionsHoverProvider()));
+    context.subscriptions.push(vscode.languages.registerHoverProvider('boalang', new BoaHoverProvider()));
     context.subscriptions.push(vscode.languages.registerSignatureHelpProvider('boalang', new BoaSignatureHelpProvider(), '(', ','));
 
     context.subscriptions.push(vscode.languages.registerRenameProvider('boalang', new BoaRenameProvider()));

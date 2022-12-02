@@ -173,13 +173,21 @@ export class AttributeCompletionItemProvider implements vscode.CompletionItemPro
             return items;
         }
 
-        for (const attrName of Object.keys(builtinTypes[type].attrs)) {
-            const attr = builtinTypes[type].attrs[attrName];
-            if (token.isCancellationRequested) return items;
-            const item = new vscode.CompletionItem(attrName, vscode.CompletionItemKind.Field);
-            item.detail = `(attr) ${attr.type} ${type}.${attrName}`;
-            item.documentation = new vscode.MarkdownString(attr.doc);
-            items.push(item);
+        if (type in builtinTypes) {
+            for (const attrName of Object.keys(builtinTypes[type].attrs)) {
+                const attr = builtinTypes[type].attrs[attrName];
+                if (token.isCancellationRequested) return items;
+                const item = new vscode.CompletionItem(attrName, vscode.CompletionItemKind.Field);
+                item.detail = `(attr) ${attr.type} ${type}.${attrName}`;
+                item.documentation = new vscode.MarkdownString(attr.doc);
+                items.push(item);
+            }
+        } else {
+            const syms = new SymbolsVisitor(document.uri, document.offsetAt(position)).visit(tree);
+
+            for (const s of syms.filter(s => s.containerName == type && s.kind == vscode.SymbolKind.Field)) {
+                items.push(new vscode.CompletionItem(s.name, symbolToCompletion(s.kind)));
+            }
         }
 
         return items;

@@ -181,9 +181,22 @@ export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ParserRuleC
     public getType(def: number) {
         const t = this._types[def];
         if (t instanceof ParserRuleContext) {
-            return t.text;
+            return this.pp(t);
         }
         return t;
+    }
+
+    private pp(t: ParserRuleContext) {
+        if (t.childCount == 0) return t.text;
+
+        let s = ''
+        for (let i = 0; i < t.childCount; i++) {
+            const s2 = this.pp(t.children[i] as ParserRuleContext);
+
+            if (s.length > 0 && s2 != ':' && s2 != '[' && s2 != ']' && !s.endsWith('[')) s += ' ';
+            s += s2;
+        }
+        return s;
     }
 
     protected getDef(ctx: ParserRuleContext, depth: number = 0): ParserRuleContext {

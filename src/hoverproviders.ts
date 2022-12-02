@@ -26,19 +26,19 @@ export class BoaHoverProvider implements vscode.HoverProvider {
         const word = document.getText(document.getWordRangeAtPosition(position)).trim();
 
         if (word in builtinVars) {
-            return new vscode.Hover(new vscode.MarkdownString(`\`\`\`boalang\n${word}: ${builtinVars[word].type}\n\`\`\`\n${builtinVars[word].doc}`));
+            return new vscode.Hover(new vscode.MarkdownString(`\`\`\`boalang\n(var) ${word}: ${builtinVars[word].type}\n\`\`\`\n\n----\n\n${builtinVars[word].doc}`));
         }
 
         if (word in builtinConsts) {
-            return new vscode.Hover(new vscode.MarkdownString(`\`\`\`boalang\n${word}: ${builtinConsts[word].type}\n\`\`\`\n${builtinConsts[word].doc}`));
+            return new vscode.Hover(new vscode.MarkdownString(`\`\`\`boalang\n(const) ${word}: ${builtinConsts[word].type}\n\`\`\`\n\n----\n\n${builtinConsts[word].doc}`));
         }
 
         if (word in builtinTypes) {
-            return new vscode.Hover(new vscode.MarkdownString(`\`\`\`boalang\n${word}\n\`\`\`\n${builtinTypes[word].doc}`));
+            return new vscode.Hover(new vscode.MarkdownString(`\`\`\`boalang\n(tuple) ${word}\n\`\`\`\n\n----\n\n${builtinTypes[word].doc}`));
         }
 
         if (word in builtinEnums) {
-            return new vscode.Hover(new vscode.MarkdownString(`\`\`\`boalang\n${word}\n\`\`\`\n${builtinEnums[word].doc}`));
+            return new vscode.Hover(new vscode.MarkdownString(`\`\`\`boalang\n(enum) ${word}\n\`\`\`\n\n----\n\n${builtinEnums[word].doc}`));
         }
 
         const tree = parseBoaCode(document.getText());
@@ -56,7 +56,7 @@ export class BoaHoverProvider implements vscode.HoverProvider {
             const dots = prevWord.split('.');
             prevWord = dots[dots.length - 2];
             if (prevWord in builtinEnums) {
-                return new vscode.Hover(new vscode.MarkdownString(`\`\`\`boalang\n${prevWord}.${word}\n\`\`\`\n${builtinEnums[prevWord].attrs[word]}`));
+                return new vscode.Hover(new vscode.MarkdownString(`\`\`\`boalang\n(enum) ${prevWord}.${word}\n\`\`\`\n\n----\n\n${builtinEnums[prevWord].attrs[word]}`));
             }
 
             const exprRange = new vscode.Range(r.start, position);
@@ -65,7 +65,7 @@ export class BoaHoverProvider implements vscode.HoverProvider {
             if (type in builtinTypes) {
                 const attr = builtinTypes[type].attrs[word];
                 if (token.isCancellationRequested) return undefined;
-                return new vscode.Hover(new vscode.MarkdownString(`\`\`\`boalang\n${type}.${word}: ${attr.type}\n\`\`\`\n${attr.doc}`));
+                return new vscode.Hover(new vscode.MarkdownString(`\`\`\`boalang\n(attr) ${type}.${word}: ${attr.type}\n\`\`\`\n\n----\n\n${attr.doc}`));
             }
         }
 

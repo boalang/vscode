@@ -1,5 +1,12 @@
 # Change Log
 
+## [0.2.9] - 2022-12-02
+ - better support for hovers - now when you hover types and variables, it provides information/documentation about it
+ - improved auto-completion support for enum types
+ - improved auto-completion support for tuple types
+ - improved symbols support for enum types
+ - improved symbols support for tuple types
+
 ## [0.2.8] - 2022-11-08
  - better code lens tooltips for study template (shows the make command)
  - renamed 'gen dupes' code lens to more generic 'run processor'

@@ -23,7 +23,8 @@ import { getType } from './utils';
 
 export class BoaHoverProvider implements vscode.HoverProvider {
     async provideHover(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.Hover> {
-        const word = document.getText(document.getWordRangeAtPosition(position)).trim();
+        const wordRange = document.getWordRangeAtPosition(position);
+        const word = document.getText(wordRange).trim();
 
         if (word in builtinVars) {
             return new vscode.Hover(new vscode.MarkdownString(`\`\`\`boalang\n(var) ${word}: ${builtinVars[word].type}\n\`\`\`\n\n----\n\n${builtinVars[word].doc}`));
@@ -45,9 +46,9 @@ export class BoaHoverProvider implements vscode.HoverProvider {
         const defuses = new DefsUsesVisitor();
         defuses.visit(tree);
 
-        const t = defuses.getType(defuses.usedefs[document.offsetAt(position)]);
+        const t = defuses.getType(defuses.usedefs[document.offsetAt(wordRange.start)]);
         if (t !== undefined) {
-            return new vscode.Hover(new vscode.MarkdownString(`\`\`\`boalang\n${word}: ${t}\n\`\`\``));
+            return new vscode.Hover(new vscode.MarkdownString(`\`\`\`boalang\n(var) ${word}: ${t}\n\`\`\``));
         }
 
         const r = document.getWordRangeAtPosition(position, /(([a-zA-Z0-9_]+(\[[^\]]+\])?(\([^)]+\))?)\.)+\w+/);

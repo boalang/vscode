@@ -20,6 +20,7 @@ import * as ast from '../antlr/boaParser';
 import { boaVisitor } from '../antlr/boaVisitor';
 import { getOperand } from '../utils';
 import { ParserRuleContext } from 'antlr4ts';
+import { builtinFunctions } from '../types';
 
 export class ScopedVisitor<T> extends AbstractParseTreeVisitor<void> implements boaVisitor<void> {
     protected scopes: T[] = [];
@@ -271,6 +272,10 @@ export class DefsUsesVisitor extends ScopedVisitor<{ [name: string]: ParserRuleC
             else if (op.fixpExpression()) type = op.fixpExpression().fixpType();
             else if (op.visitorExpression()) type = 'visitor';
             else if (op.traversalExpression()) type = op.traversalExpression().traversalType();
+            else {
+                // probably a call
+                type = builtinFunctions[op.text].ret.type;
+            }
             this.addDef(ctx.identifier(), type);
         }
         this.visitChildren(ctx);

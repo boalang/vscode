@@ -42,8 +42,8 @@ export class BuiltInsCompletionItemProvider implements vscode.CompletionItemProv
             if (token.isCancellationRequested) return items;
             const item = new vscode.CompletionItem(c, vscode.CompletionItemKind.Value);
             item.detail = c;
-            if (builtinConsts[c].length > 0)
-                item.documentation = new vscode.MarkdownString(builtinConsts[c]);
+            if (builtinConsts[c].doc.length > 0)
+                item.documentation = new vscode.MarkdownString(builtinConsts[c].doc);
             items.push(item);
         }
 

@@ -15,19 +15,58 @@
 // limitations under the License.
 //
 export const builtinConsts = {
-    true: '',
-    false: '',
-    PI: 'A floating point approximation of Pi, `3.1415926535897931`',
-    Inf: 'IEEE 754 infinity',
-    inf: 'IEEE 754 infinity',
-    NaN: 'IEEE 754 not a number',
-    nan: 'IEEE 754 not a number',
-    SECOND: 'One million microseconds',
-    SEC: 'Synonym for `SECOND`',
-    MINUTE: 'Sixty (60) `SECOND`s',
-    MIN: 'Synonym for `MINUTE`',
-    HOUR: 'Sixty (60) `MINUTE`s',
-    HR: 'Synonym for `HOUR`',
+    true: {
+        type: 'bool',
+        doc: '',
+    },
+    false: {
+        type: 'bool',
+        doc: '',
+    },
+    PI: {
+        type: 'float',
+        doc: 'A floating point approximation of Pi, `3.1415926535897931`',
+    },
+    Inf: {
+        type: 'float',
+        doc: 'IEEE 754 infinity',
+    },
+    inf: {
+        type: 'float',
+        doc: 'IEEE 754 infinity',
+    },
+    NaN: {
+        type: 'float',
+        doc: 'IEEE 754 not a number',
+    },
+    nan: {
+        type: 'float',
+        doc: 'IEEE 754 not a number',
+    },
+    SECOND: {
+        type: 'int',
+        doc: 'One million microseconds',
+    },
+    SEC: {
+        type: 'int',
+        doc: 'Synonym for `SECOND`',
+    },
+    MINUTE: {
+        type: 'int',
+        doc: 'Sixty (60) `SECOND`s',
+    },
+    MIN: {
+        type: 'int',
+        doc: 'Synonym for `MINUTE`',
+    },
+    HOUR: {
+        type: 'int',
+        doc: 'Sixty (60) `MINUTE`s',
+    },
+    HR: {
+        type: 'int',
+        doc: 'Synonym for `HOUR`',
+    },
 };
 
 interface IVariable {

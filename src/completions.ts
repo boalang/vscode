@@ -18,7 +18,6 @@ import * as vscode from 'vscode';
 import { DefsUsesVisitor } from './ast/defuse';
 import { parseBoaCode } from './ast/parser';
 import { SymbolsVisitor } from './ast/symbols';
-import UDFFinder from "./ast/UDFFinder";
 import { getFuncDoc, getFuncSignature } from './hoverproviders';
 import { builtinConsts, builtinEnums, builtinFunctions, builtinTypes, builtinVars } from './types';
 import { atDot, getType, symbolToCompletion } from './utils';

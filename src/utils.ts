@@ -14,7 +14,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-import { ParseTree } from 'antlr4ts/tree/ParseTree';
 import * as vscode from 'vscode';
 import { ExpressionContext, OperandContext, ProgramContext } from './antlr/boaParser';
 import { DefsUsesVisitor } from './ast/defuse';

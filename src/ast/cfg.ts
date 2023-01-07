@@ -41,7 +41,7 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
     private _blockExits: nodeType[][] = [ [] ];
     private _blockOuts: nodeType[][] = [ [] ];
 
-    protected readonly programEntry = '<entry:program>';
+    protected readonly programEntry = '<enter:program>';
     protected readonly programExit = '<exit:program>';
 
     get vertices() {

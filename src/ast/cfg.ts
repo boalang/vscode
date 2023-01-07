@@ -21,6 +21,7 @@ import { DefsUsesVisitor, ScopedVisitor } from './defuse';
 import { TextEncoder } from 'util';
 import { getFileContents, getWorkspaceRoot } from '../utils';
 import { parseBoaCode } from './parser';
+import PrettyPrinter from './prettyprint';
 
 type nodeType = RuleContext|string;
 
@@ -86,13 +87,20 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
         return undefined;
     }
 
+    private printer = new PrettyPrinter([], []);
     protected getId(ctx: nodeType) {
         if (typeof ctx === 'string') {
             return ctx;
         }
         // return ctx.sourceInterval;
         // return new PrettyPrinter().visit(ctx) + '[' + (ctx as ParserRuleContext).start.startIndex + '..' + (ctx as ParserRuleContext).stop.stopIndex + ']';
-        return ctx.text.substring(0, 30) + '[' + (ctx as ParserRuleContext).start.startIndex + '..' + (ctx as ParserRuleContext).stop.stopIndex + ']';
+        let newText = this.printer.visit(ctx);
+        const idx = newText.indexOf('\n')
+        if (idx > -1) {
+            newText = newText.substring(0, idx);
+        }
+
+        return newText + '[' + (ctx as ParserRuleContext).start.startIndex + '..' + (ctx as ParserRuleContext).stop.stopIndex + ']';
     }
 
     protected addVertex(ctx: nodeType, kind: string = undefined) {

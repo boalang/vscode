@@ -612,11 +612,7 @@ async function graphToDot(g: Graph, document: vscode.TextDocument = undefined, s
                     attrs['color'] = '"#ff6666"';
                 }
                 if (Object.keys(attrs).length > 0) {
-                    s += ' [';
-                    for (const k of Object.keys(attrs)) {
-                        s += `${k}=${attrs[k]} `;
-                    }
-                    s += ']';
+                    s += ' [' + Object.keys(attrs).map(k => `${k}=${attrs[k]}`).join(' ') + ']';
                 }
                 s += '\n';
             }
@@ -669,11 +665,7 @@ async function graphToDot(g: Graph, document: vscode.TextDocument = undefined, s
             attrs['fillcolor'] = '"#ccccff"';
         }
         if (Object.keys(attrs).length > 0) {
-            s += ' [';
-            for (const k of Object.keys(attrs)) {
-                s += `${k}=${attrs[k]} `;
-            }
-            s += ']';
+            s += ' [' + Object.keys(attrs).map(k => `${k}=${attrs[k]}`).join(' ') + ']';
         }
         s += '\n';
         if (g.kinds[v] == 'ENTRY' || g.kinds[v] == 'EXIT') {
@@ -682,8 +674,7 @@ async function graphToDot(g: Graph, document: vscode.TextDocument = undefined, s
     }
     s += '}';
 
-    const uri = vscode.Uri.file(getWorkspaceRoot() + '/cfg.dot');
-    await vscode.workspace.fs.writeFile(uri, new TextEncoder().encode(s));
+    await vscode.workspace.fs.writeFile(vscode.Uri.file(getWorkspaceRoot() + '/cfg.dot'), new TextEncoder().encode(s));
 }
 
 export async function generateCFG(uri: vscode.Uri|undefined, zoomed = false) {

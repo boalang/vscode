@@ -626,7 +626,7 @@ async function graphToDot(g: Graph, document: vscode.TextDocument = undefined, s
         }
         s += `\t"${ScopedVisitor.dotEscape(v)}"`;
         const attrs = {};
-        attrs['label'] = `<${g.getRecord(v)}>`;
+        attrs['label'] = `"${g.getRecord(v)}"`;
         if (v in g.kinds) {
             switch (g.kinds[v]) {
                 case 'CONTROL':

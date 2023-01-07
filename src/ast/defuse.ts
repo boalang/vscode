@@ -27,6 +27,7 @@ export class ScopedVisitor<T> extends AbstractParseTreeVisitor<void> implements 
 
     public static dotEscape(s: string) {
         return s.replace(/"/g, '\\"')
+            .replace(/[$]/g, '$$$$')
             .replace(/\n/g, '\\n');
     }
 
@@ -34,6 +35,9 @@ export class ScopedVisitor<T> extends AbstractParseTreeVisitor<void> implements 
         return s.replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
             .replace(/>/g, '&gt;')
+            .replace(/[$]/g, '$$$$')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;')
             .replace(/\n/g, '\\n');
     }
 

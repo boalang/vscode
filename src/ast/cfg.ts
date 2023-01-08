@@ -611,7 +611,7 @@ async function graphToDot(g: Graph, document: vscode.TextDocument = undefined, s
 
     const verts = new Set<string>();
 
-    let s = 'digraph G {\n\tbgcolor=white;\n\n';
+    let s = 'digraph G {\n\tbgcolor=white;\n\tforcelabels=true;\n\n';
     for (const src of Object.keys(g.edges)) {
         for (const dst of Object.keys(g.edges[src])) {
             const edge = g.edges[src][dst];

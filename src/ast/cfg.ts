@@ -417,7 +417,7 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
 
     public visitScopedFunctionExpression(ctx: ast.FunctionExpressionContext) {
         const entry = `<enter:${this.getId(ctx)}>`;
-        const exit = '<exit:' + this.getId(ctx) + '>';
+        const exit = `<exit:${this.getId(ctx)}>`;
 
         this._blockOuts.push([]);
         this.addEntry(entry);
@@ -441,7 +441,7 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
 
     public visitScopedFixpExpression(ctx: ast.FixpExpressionContext) {
         const entry = `<enter:${this.getId(ctx)}>`;
-        const exit = '<exit:' + this.getId(ctx) + '>';
+        const exit = `<exit:${this.getId(ctx)}>`;
 
         this._blockOuts.push([]);
         this.addEntry(entry);
@@ -465,7 +465,7 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
 
     public visitScopedTraversalExpression(ctx: ast.TraversalExpressionContext) {
         const entry = `<enter:${this.getId(ctx)}>`;
-        const exit = '<exit:' + this.getId(ctx) + '>';
+        const exit = `<exit:${this.getId(ctx)}>`;
 
         this._blockOuts.push([]);
         this.addEntry(entry);
@@ -489,7 +489,7 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
 
     public visitVisitorExpression(ctx: ast.VisitorExpressionContext) {
         const entry = `<enter:${this.getId(ctx)}>`;
-        const exit = '<exit:' + this.getId(ctx) + '>';
+        const exit = `<exit:${this.getId(ctx)}>`;
 
         this._blockOuts.push([]);
         this.addEntry(entry);

@@ -92,15 +92,13 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
         if (typeof ctx === 'string') {
             return ctx;
         }
-        // return ctx.sourceInterval;
-        // return new PrettyPrinter().visit(ctx) + '[' + (ctx as ParserRuleContext).start.startIndex + '..' + (ctx as ParserRuleContext).stop.stopIndex + ']';
+
         let newText = this.printer.visit(ctx);
         const idx = newText.indexOf('\n')
         if (idx > -1) {
             newText = newText.substring(0, idx);
         }
-
-        return newText + '[' + (ctx as ParserRuleContext).start.startIndex + '..' + (ctx as ParserRuleContext).stop.stopIndex + ']';
+        return newText + '\n[' + (ctx as ParserRuleContext).start.startIndex + '..' + (ctx as ParserRuleContext).stop.stopIndex + ']';
     }
 
     protected addVertex(ctx: nodeType, kind: string = undefined) {

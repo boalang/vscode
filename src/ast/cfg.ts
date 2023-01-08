@@ -25,6 +25,11 @@ import PrettyPrinter from './prettyprint';
 
 type nodeType = RuleContext|string;
 
+const EntryKind = 'ENTRY';
+const ExitKind = 'EXIT';
+const CallKind = 'CALL';
+const ControlKind = 'CONTROL';
+
 export interface Graph {
     vertices: string[];
     edges: { [name: string]: { [name: string]: string } };
@@ -59,13 +64,13 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
 
     get entries() {
         return Object.entries(this._kinds)
-            .filter(([_, value]) => value == 'ENTRY')
+            .filter(([_, value]) => value == EntryKind)
             .map(([key, _]) => key);
     }
 
     get exits() {
         return Object.entries(this._kinds)
-            .filter(([_, value]) => value == 'EXIT')
+            .filter(([_, value]) => value == ExitKind)
             .map(([key, _]) => key);
     }
 
@@ -101,6 +106,20 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
         return newText + '\n[' + (ctx as ParserRuleContext).start.startIndex + '..' + (ctx as ParserRuleContext).stop.stopIndex + ']';
     }
 
+    protected addEntry(ctx: nodeType, kind: string = EntryKind) {
+        // TODO store somewhere?
+        this.addVertex(ctx, kind);
+    }
+
+    protected addExit(ctx: nodeType, kind: string = ExitKind) {
+        // TODO store somewhere?
+        this.addVertex(ctx, kind);
+    }
+
+    protected addControl(ctx: nodeType, kind: string = ControlKind) {
+        this.addVertex(ctx, kind);
+    }
+
     protected addVertex(ctx: nodeType, kind: string = undefined) {
         const id = this.getId(ctx);
         if (this._vertices.indexOf(id) == -1) {
@@ -130,12 +149,12 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
     }
 
     public visitScopedProgram(ctx: ast.ProgramContext) {
-        this.addVertex(this.programEntry, 'ENTRY');
+        this.addEntry(this.programEntry);
         this._blockOuts[this._blockOuts.length - 1].push(this.programEntry);
 
         super.visitScopedProgram(ctx);
 
-        this.addVertex(this.programExit, 'EXIT');
+        this.addExit(this.programExit);
     }
 
     public visitStatement(ctx: ast.StatementContext) {
@@ -160,7 +179,7 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
     public visitIfStatement(ctx: ast.IfStatementContext) {
         ctx.expression().accept(this);
 
-        this.addVertex(ctx, 'CONTROL');
+        this.addControl(ctx);
         this._blockOuts.pop();
 
         const outs: nodeType[] = [];
@@ -185,7 +204,7 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
     }
 
     public visitScopedForeachStatement(ctx: ast.ForeachStatementContext) {
-        this.addVertex(ctx, 'CONTROL');
+        this.addControl(ctx);
         this._blockOuts.pop();
 
         this._blockEntries.push(ctx);
@@ -203,7 +222,7 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
     }
 
     public visitScopedExistsStatement(ctx: ast.ExistsStatementContext) {
-        this.addVertex(ctx, 'CONTROL');
+        this.addControl(ctx);
         this._blockOuts.pop();
 
         this._blockEntries.push(ctx);
@@ -221,7 +240,7 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
     }
 
     public visitScopedIfallStatement(ctx: ast.IfallStatementContext) {
-        this.addVertex(ctx, 'CONTROL');
+        this.addControl(ctx);
         this._blockOuts.pop();
 
         this._blockEntries.push(ctx);
@@ -240,7 +259,7 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
 
     public visitScopedDoStatement(ctx: ast.DoStatementContext) {
         this._blockOuts.push([]);
-        this.addVertex(ctx, 'CONTROL');
+        this.addControl(ctx);
         this._blockOuts.pop();
 
         this._blockEntries.push(ctx);
@@ -256,7 +275,7 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
     }
 
     public visitScopedWhileStatement(ctx: ast.WhileStatementContext) {
-        this.addVertex(ctx, 'CONTROL');
+        this.addControl(ctx);
         this._blockOuts.pop();
 
         this._blockEntries.push(ctx);
@@ -287,7 +306,7 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
         if (ctx.expression()) {
             ctx.expression().accept(this);
         }
-        this.addVertex(cond, 'CONTROL');
+        this.addControl(cond);
         this._blockOuts.pop();
 
         this._blockEntries.push(cond);
@@ -317,7 +336,7 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
     public visitSwitchStatement(ctx: ast.SwitchStatementContext) {
         ctx.expression().accept(this);
 
-        this.addVertex(ctx, 'CONTROL');
+        this.addControl(ctx);
         this._blockOuts.pop();
         this._blockExits.push([]);
 
@@ -397,11 +416,14 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
     }
 
     public visitScopedFunctionExpression(ctx: ast.FunctionExpressionContext) {
+        const entry = `<enter:${this.getId(ctx)}>`;
+        const exit = '<exit:' + this.getId(ctx) + '>';
+
         this._blockOuts.push([]);
-        this.addVertex(`<enter:${this.getId(ctx)}>`, 'ENTRY');
+        this.addEntry(entry);
         this._blockOuts.pop();
 
-        this._blockOuts.push([`<enter:${this.getId(ctx)}>`]);
+        this._blockOuts.push([entry]);
         this.addVertex(ctx);
         this._blockOuts.pop();
 
@@ -411,21 +433,21 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
         super.visitScopedFunctionExpression(ctx);
         this._blockOuts.pop();
 
-        const exit = '<exit:' + this.getId(ctx) + '>';
         this._blockOuts.push([]);
-        this.addVertex(exit, 'EXIT');
+        this.addExit(exit);
         this._blockExits.pop().forEach(src => this.addEdge(src, exit));
         this._blockOuts.pop();
-
-        // TODO store function entry/exit somewhere?
     }
 
     public visitScopedFixpExpression(ctx: ast.FixpExpressionContext) {
+        const entry = `<enter:${this.getId(ctx)}>`;
+        const exit = '<exit:' + this.getId(ctx) + '>';
+
         this._blockOuts.push([]);
-        this.addVertex(`<enter:${this.getId(ctx)}>`, 'ENTRY');
+        this.addEntry(entry);
         this._blockOuts.pop();
 
-        this._blockOuts.push([`<enter:${this.getId(ctx)}>`]);
+        this._blockOuts.push([entry]);
         this.addVertex(ctx);
         this._blockOuts.pop();
 
@@ -435,21 +457,21 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
         super.visitScopedFixpExpression(ctx);
         this._blockOuts.pop();
 
-        const exit = '<exit:' + this.getId(ctx) + '>';
         this._blockOuts.push([]);
-        this.addVertex(exit, 'EXIT');
+        this.addExit(exit);
         this._blockExits.pop().forEach(src => this.addEdge(src, exit));
         this._blockOuts.pop();
-
-        // TODO store function entry/exit somewhere?
     }
 
     public visitScopedTraversalExpression(ctx: ast.TraversalExpressionContext) {
+        const entry = `<enter:${this.getId(ctx)}>`;
+        const exit = '<exit:' + this.getId(ctx) + '>';
+
         this._blockOuts.push([]);
-        this.addVertex(`<enter:${this.getId(ctx)}>`, 'ENTRY');
+        this.addEntry(entry);
         this._blockOuts.pop();
 
-        this._blockOuts.push([`<enter:${this.getId(ctx)}>`]);
+        this._blockOuts.push([entry]);
         this.addVertex(ctx);
         this._blockOuts.pop();
 
@@ -459,27 +481,26 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
         super.visitScopedTraversalExpression(ctx);
         this._blockOuts.pop();
 
-        const exit = '<exit:' + this.getId(ctx) + '>';
         this._blockOuts.push([]);
-        this.addVertex(exit, 'EXIT');
+        this.addExit(exit);
         this._blockExits.pop().forEach(src => this.addEdge(src, exit));
         this._blockOuts.pop();
-
-        // TODO store function entry/exit somewhere?
     }
 
     public visitVisitorExpression(ctx: ast.VisitorExpressionContext) {
+        const entry = `<enter:${this.getId(ctx)}>`;
+        const exit = '<exit:' + this.getId(ctx) + '>';
+
         this._blockOuts.push([]);
-        this.addVertex(`<enter:${this.getId(ctx)}>`, 'ENTRY');
+        this.addEntry(entry);
         this._blockOuts.pop();
 
-        this._blockOuts.push([`<enter:${this.getId(ctx)}>`]);
+        this._blockOuts.push([entry]);
         this.addVertex(ctx);
         this._blockOuts.pop();
 
-        const exit = '<exit:' + this.getId(ctx) + '>';
         this._blockOuts.push([ctx]);
-        this.addVertex(exit, 'EXIT');
+        this.addExit(exit);
         this._blockOuts.pop();
 
         this._blockEntries.push(ctx);
@@ -491,7 +512,6 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
         });
 
         this._blockEntries.pop();
-        // TODO store function entry/exit somewhere?
     }
 
     public visitScopedVisitStatement(ctx: ast.VisitStatementContext) {
@@ -510,10 +530,10 @@ export class CFGVisitor extends DefsUsesVisitor implements Graph {
 
         const expr = ctx.parent.parent.parent.parent.parent;
         if (expr.parent instanceof ast.ExprStatementContext) {
-            this._kinds[this.getId(expr.parent.parent.parent)] = 'CALL';
+            this._kinds[this.getId(expr.parent.parent.parent)] = CallKind;
         } else {
             // console.log('type: ' + typeof expr.parent);
-            // this._kinds[this.getId(expr.parent.parent.parent)] = 'CALL';
+            // this._kinds[this.getId(expr.parent.parent.parent)] = CallKind;
         }
 
         const call = ctx.call(0).expressionList();
@@ -621,9 +641,9 @@ async function graphToDot(g: Graph, document: vscode.TextDocument = undefined, s
         if (zoomed && !verts.has(v)) {
             continue;
         }
-        if (g.kinds[v] == 'ENTRY') {
+        if (g.kinds[v] == EntryKind) {
             s += '\t{\n\t\trank=source\n\t';
-        } else if (g.kinds[v] == 'EXIT') {
+        } else if (g.kinds[v] == ExitKind) {
             s += '\t{\n\t\trank=sink\n\t';
         }
         s += `\t"${ScopedVisitor.dotEscape(v)}"`;
@@ -631,21 +651,21 @@ async function graphToDot(g: Graph, document: vscode.TextDocument = undefined, s
         attrs['label'] = `"${g.getRecord(v)}"`;
         if (v in g.kinds) {
             switch (g.kinds[v]) {
-                case 'CONTROL':
+                case ControlKind:
                     attrs['shape'] = 'diamond';
                     attrs['width'] = 0;
                     attrs['height'] = 0;
                     attrs['margin'] = 0;
                     break;
-                case 'CALL':
+                case CallKind:
                     attrs['shape'] = 'polygon';
                     attrs['skew'] = '0.1';
                     attrs['width'] = 0;
                     attrs['height'] = 0;
                     attrs['margin'] = 0;
                     break;
-                case 'EXIT':
-                case 'ENTRY':
+                case ExitKind:
+                case EntryKind:
                     attrs['shape'] = 'point';
                     attrs['width'] = '0.2';
                     attrs['xlabel'] = `<${ScopedVisitor.dotHTMLEscape(v)}>`;
@@ -666,7 +686,7 @@ async function graphToDot(g: Graph, document: vscode.TextDocument = undefined, s
             s += ' [' + Object.keys(attrs).map(k => `${k}=${attrs[k]}`).join(' ') + ']';
         }
         s += '\n';
-        if (g.kinds[v] == 'ENTRY' || g.kinds[v] == 'EXIT') {
+        if (g.kinds[v] == EntryKind || g.kinds[v] == ExitKind) {
             s += '\t}\n';
         }
     }

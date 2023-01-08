@@ -89,7 +89,7 @@
             },
             {
                 "command": "boalang.source.cfgzoom",
-                "title": "Generate CFG",
+                "title": "Generate Zoomed CFG",
                 "enablement": "config.boalang.debug.enabled && resourceLangId == boalang",
                 "icon": "$(type-hierarchy-sub)",
                 "category": "Boa"

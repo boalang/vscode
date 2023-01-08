@@ -155,8 +155,8 @@ export default class PrettyPrinter extends AbstractParseTreeVisitor<string> impl
             delete this.wslines[k];
         }
 
-        // FIXME right now all inline templates get pulled to the top of the document
-        // instead of staying where they originally were
+        // FIXME issue #46 - right now all inline templates get pulled to the top of
+        // the document instead of staying where they originally were
         return this.templates.map(t => t.text).join('') + s.trim() + this.addWS(ctx);
     }
 

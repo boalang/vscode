@@ -261,7 +261,7 @@ export async function runQuery(uri: vscode.Uri) {
 
 async function submitQuery(query: string, dataset: any) {
     if (query.indexOf('{@') != -1) {
-        if (!(await promptUser('The query contains template variables and will not run directly.  Continue anyway?'))) {
+        if (!(await promptUser('The query contains template variables and will not run directly.  You should use the study template make system instead.  Continue anyway?'))) {
             return;
         }
     }

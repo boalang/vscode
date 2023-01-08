@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 import * as vscode from 'vscode';
-import { atDot, getWorkspaceRoot, removeDuplicates } from '../utils';
+import { atDot, getWorkspaceRoot, inComment, removeDuplicates } from '../utils';
 import { cache } from './jsoncache';
 import { getDatasets } from '../boa';
 import * as consts from '../consts';
@@ -25,7 +25,12 @@ export class TemplateCompletionItemProvider implements vscode.CompletionItemProv
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.CompletionItem[]> {
         const items = [];
 
-        // this completion provide should not respond if the character was '.'
+        // this completion provider should not respond if we are inside a comment
+        if (inComment(document, position)) {
+            return items;
+        }
+
+        // this completion provider should not respond if the character was '.'
         if (atDot(document, position)) {
             return items;
         }
@@ -89,6 +94,11 @@ export class TemplateCompletionItemProvider implements vscode.CompletionItemProv
  */
  export class StudyConfigCompletionItemProvider implements vscode.CompletionItemProvider {
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.CompletionItem[]> {
+        // this completion provider should not respond if we are inside a comment
+        if (inComment(document, position)) {
+            return [];
+        }
+
         if (position.character >= 0) {
             const prefix = document.getText(new vscode.Range(new vscode.Position(0, 0), position));
             let hasSpace = document.getText(new vscode.Range(position.translate(0, -1), position)).trim().length == 0;

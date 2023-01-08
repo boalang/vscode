@@ -20,11 +20,16 @@ import { parseBoaCode } from './ast/parser';
 import { SymbolsVisitor } from './ast/symbols';
 import { getFuncDoc, getFuncSignature } from './hoverproviders';
 import { builtinConsts, builtinEnums, builtinFunctions, builtinTypes, builtinVars } from './types';
-import { atDot, getType, symbolToCompletion } from './utils';
+import { atDot, getType, inComment, symbolToCompletion } from './utils';
 
 export class BuiltInsCompletionItemProvider implements vscode.CompletionItemProvider {
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.CompletionItem[]> {
         const items = [];
+
+        // this completion provider should not respond if we are inside a comment
+        if (inComment(document, position)) {
+            return items;
+        }
 
         // this completion provider should not respond if the character was '.'
         if (atDot(document, position)) {
@@ -79,6 +84,11 @@ export class AttributeCompletionItemProvider implements vscode.CompletionItemPro
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.CompletionItem[]> {
         const items = [];
 
+        // this completion provider should not respond if we are inside a comment
+        if (inComment(document, position)) {
+            return items;
+        }
+
         // this completion provider should ONLY respond if the character was '.'
         if (!atDot(document, position)) {
             return items;
@@ -128,6 +138,11 @@ export class EnumValuesCompletionItemProvider implements vscode.CompletionItemPr
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.CompletionItem[]> {
         const items = [];
 
+        // this completion provider should not respond if we are inside a comment
+        if (inComment(document, position)) {
+            return items;
+        }
+
         // this completion provider should ONLY respond if the character was '.'
         if (!atDot(document, position)) {
             return items;
@@ -151,6 +166,11 @@ export class EnumValuesCompletionItemProvider implements vscode.CompletionItemPr
 export class DSLTypesCompletionItemProvider implements vscode.CompletionItemProvider {
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.CompletionItem[]> {
         const items = [];
+
+        // this completion provider should not respond if we are inside a comment
+        if (inComment(document, position)) {
+            return items;
+        }
 
         // this completion provider should not respond if the character was '.'
         if (atDot(document, position)) {
@@ -218,6 +238,11 @@ export class DSLTypesCompletionItemProvider implements vscode.CompletionItemProv
 export class IdentifierCompletionItemProvider implements vscode.CompletionItemProvider {
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.CompletionItem[]> {
         const items = [];
+
+        // this completion provider should not respond if we are inside a comment
+        if (inComment(document, position)) {
+            return items;
+        }
 
         // this completion provider should not respond if the character was '.'
         if (atDot(document, position)) {

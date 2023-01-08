@@ -58,6 +58,12 @@ export function atDot(document: vscode.TextDocument, position: vscode.Position) 
     return document.getText(r).trim() === '.';
 }
 
+export function inComment(document: vscode.TextDocument, position: vscode.Position) {
+    const txt = document.getText(new vscode.Range(new vscode.Position(position.line, 0), position));
+    const pos = txt.lastIndexOf('#');
+    return pos > -1 && pos < position.character;
+}
+
 export function getOperand(e: ExpressionContext|undefined): OperandContext|undefined {
     if (e === undefined) return undefined;
     return e.conjunction(0).comparison(0).simpleExpression(0).term(0).factor(0).operand();

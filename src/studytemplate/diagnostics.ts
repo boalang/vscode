@@ -24,7 +24,7 @@ import * as consts from './consts';
 
 let diagnosticCollection: vscode.DiagnosticCollection;
 
-export default async function enableDiagnostics(context: vscode.ExtensionContext, studyConfigSelector: vscode.DocumentSelector) {
+export async function enableDiagnostics(context: vscode.ExtensionContext, studyConfigSelector: vscode.DocumentSelector) {
     diagnosticCollection = vscode.languages.createDiagnosticCollection(studyConfigSelector.toString());
     context.subscriptions.push(diagnosticCollection);
 
@@ -46,7 +46,7 @@ export default async function enableDiagnostics(context: vscode.ExtensionContext
     cache.onDidChange(_ => vscode.workspace.textDocuments.forEach(doc => updateTemplateTagDiagnostics(doc)));
 }
 
-async function checkStudyConfig() {
+export async function checkStudyConfig() {
     const diags = [];
 
     const datasets = await getDatasets(false);

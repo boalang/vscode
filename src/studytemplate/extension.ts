@@ -25,7 +25,7 @@ import StudyConfigCodelensProvider from './codelens';
 import { showUri } from '../boa';
 import { cache } from './jsoncache';
 import { boaDocumentProvider } from '../contentprovider';
-import enableDiagnostics from './diagnostics';
+import { enableDiagnostics, checkStudyConfig } from './diagnostics';
 import { reportDocumentErrors } from '../diagnostics';
 import { BoaTemplateRefactoringProvider, extractSnippet } from './refactor';
 import TemplateTagRenameProvider from './renames';
@@ -83,6 +83,10 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.languages.registerRenameProvider(studyConfigSelector, new TemplateTagRenameProvider()));
 
     enableDiagnostics(context, studyConfigSelector);
+
+    vscode.workspace.onDidRenameFiles(e => {
+        checkStudyConfig();
+    });
 
     // watch jobs.json for changes, then refresh the jobs list
     const watcher = vscode.workspace.createFileSystemWatcher(getWorkspaceRoot() + '/' + jobsFile, false, false, true);

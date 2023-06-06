@@ -84,6 +84,11 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
 
     enableDiagnostics(context, studyConfigSelector);
 
+    vscode.workspace.onWillRenameFiles(async (e) => {
+        if (e.files.some(f => f.oldUri.fsPath.endsWith('.txt'))) {
+            e.files.forEach(f => cache.renameOutput(f.oldUri, f.newUri));
+        }
+    });
     vscode.workspace.onDidRenameFiles(e => {
         checkStudyConfig();
     });

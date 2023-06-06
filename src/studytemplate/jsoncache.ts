@@ -16,7 +16,7 @@
 //
 import { TextEncoder } from 'util';
 import * as vscode from 'vscode';
-import { snippetPath, studyConfigFile } from '../consts';
+import { jobsFile, outputPath, snippetPath, studyConfigFile } from '../consts';
 import { getFileContents, getWorkspaceRoot } from '../utils';
 
 class StudyConfigCache {
@@ -279,6 +279,65 @@ class StudyConfigCache {
             replacement: '',
         });
 
+        await this.writeFile();
+    }
+
+    async renameOutput(oldUri: vscode.Uri, newUri: vscode.Uri) {
+        if (!this.json.hasOwnProperty('queries'))
+            return;
+
+        let changed = false;
+
+        const keys = Object.keys(this.json['queries']).filter(k => oldUri.path.endsWith(k));
+        keys.forEach(q => {
+            changed = true;
+            let newName = newUri.toString();
+            newName = newName.substring(newName.lastIndexOf(outputPath) + outputPath.length + 1);
+
+            this._json['queries'][newName] = this._json['queries'][q];
+            delete this._json['queries'][q];
+            this.rewriteJobs(q, newName);
+        });
+
+        if (changed)
+            await this.writeFile();
+    }
+
+    private async rewriteJobs(oldName: string, newName: string) {
+        const fileName = getWorkspaceRoot() + '/' + jobsFile;
+        const jobsUri = vscode.Uri.file(fileName);
+
+        let raw = '';
+        let jobsJson = {};
+        try {
+            raw = '';
+            jobsJson = {};
+            await getFileContents(fileName).then(
+                (val) => {
+                    raw = val;
+                    jobsJson = JSON.parse(val);
+                }
+            );
+        } catch (e) {
+            raw = '';
+            jobsJson = {};
+        }
+        jobsJson[newName] = jobsJson[oldName];
+        delete jobsJson[oldName];
+
+        const json = JSON.stringify(jobsJson, null, 2);
+        try {
+            const fs = require('fs');
+            fs.chmod(fileName, 0o644, async () => {
+                await vscode.workspace.fs.writeFile(jobsUri, new TextEncoder().encode(json));
+                fs.chmod(fileName, 0o444, () => {});
+            });
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    async writeFile() {
         const json = JSON.stringify(this._json, null, 4) + '\n';
         await vscode.workspace.fs.writeFile(this.uri, new TextEncoder().encode(json));
     }

@@ -154,7 +154,7 @@ export async function showPreview(uri: vscode.Uri) {
     const uriStr = uri.toString();
     const uriPath = uri.path.substring(getWorkspaceRoot().length);
 
-    const items = cache.getQueryTargets(uri);
+    const items = cache.getOutputsForQuery(uri);
     if (items.length == 0) {
         targetUriStr = `boalang:///preview/from${uriPath}?${encodeURIComponent(uriStr)}#preview`;
     } else {

@@ -60,7 +60,7 @@ export async function checkStudyConfig() {
         }
     }
 
-    const datasetNames = cache.getDatasets();
+    const datasetNames = cache.getDatasetNames();
 
     for (const outputPath in cache.json['queries']) {
         const ds = cache.json['queries'][outputPath]['dataset'];

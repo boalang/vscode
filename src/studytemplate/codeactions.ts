@@ -36,7 +36,7 @@ export class DatasetActionProvider implements vscode.CodeActionProvider {
 
 export class StudyDatasetActionProvider implements vscode.CodeActionProvider {
     provideCodeActions(document: vscode.TextDocument, range: vscode.Range | vscode.Selection, context: vscode.CodeActionContext, token: vscode.CancellationToken): vscode.CodeAction[] {
-        const datasetNames = cache.getDatasets();
+        const datasetNames = cache.getDatasetNames();
         return context.diagnostics
             .filter(diagnostic => diagnostic.code === consts.CODE_UNKNOWN_STUDY_DS)
             .map(diagnostic => datasetNames.map(ds => createReplaceCodeAction(diagnostic, cache.uri, ds)))

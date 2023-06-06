@@ -105,7 +105,7 @@ export class TemplateCompletionItemProvider implements vscode.CompletionItemProv
 
             // scope completions to just the "dataset" key
             if (prefix.match(/"dataset"\s*:\s*$/)) {
-                const items = cache.getDatasets().map(ds => new vscode.CompletionItem(ds, vscode.CompletionItemKind.Constant));
+                const items = cache.getDatasetNames().map(ds => new vscode.CompletionItem(ds, vscode.CompletionItemKind.Constant));
                 items.forEach((item) => item.insertText = ensureSpace('"' + (item.label as string).replace(consts.adminPrefix, '') + '"', hasSpace));
                 return items;
             } else if (prefix.match(/"file"\s*:\s*$/)) {
@@ -156,7 +156,7 @@ export class TemplateCompletionItemProvider implements vscode.CompletionItemProv
                         });
                     } else if (parts[i] == '"queries"') {
                         // scope completions to just the "queries" key
-                        const existingQueries = cache.getQueries();
+                        const existingQueries = cache.getOutputs();
                         const files = await getAllFiles(getWorkspaceRoot() + '/' + consts.outputPath, '.txt');
                         const items = files.filter(f => existingQueries.indexOf(f) == -1).map(f => new vscode.CompletionItem(f, vscode.CompletionItemKind.File));
                         items.forEach((item) => item.insertText = ensureSpace('"' + item.label + '": {\n\t\n}', hasSpace));

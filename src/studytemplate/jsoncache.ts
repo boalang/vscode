@@ -58,7 +58,7 @@ class StudyConfigCache {
     }
 
     private datasets: string[] = null;
-    getDatasets() {
+    getDatasetNames() {
         if (this.datasets === null) {
             if (!this.json.hasOwnProperty('datasets')) {
                 return [];
@@ -172,18 +172,30 @@ class StudyConfigCache {
 
     private async getFileSnippet(path: string, limit: number) {
         return getFileContents(path).then(
-            (val) => {
-                return val.trim().split('\n').slice(0, limit).join('\n');
-            }
+            (val) => val.trim().split('\n').slice(0, limit).join('\n')
         );
     }
 
-    getQueries() {
-        if (!this.json.hasOwnProperty('queries')) return [];
+    getOutputs() {
+        if (!this.json.hasOwnProperty('queries'))
+            return [];
         return Object.keys(this.json['queries']);
     }
 
-    getQueryTargets(uri: vscode.Uri) {
+    getQueries() {
+        const queries = new Set<string>();
+        if (!this.json.hasOwnProperty('queries'))
+            return queries;
+        const keys = Object.keys(this.json['queries']);
+        keys.forEach(k => {
+            const q = this.json['queries'][k];
+            if (q.hasOwnProperty('query'))
+                queries.add(q['query']);
+        });
+        return queries;
+    }
+
+    getOutputsForQuery(uri: vscode.Uri|string) {
         const uriStr = uri.toString();
 
         const targets = [];
@@ -195,10 +207,26 @@ class StudyConfigCache {
         return targets;
     }
 
+    getSubstitutionFiles() {
+        if (!this.json.hasOwnProperty('substitutions'))
+            return [];
+        // TODO implement
+        return [];
+    }
+
+    getAnalyses() {
+        if (!this.json.hasOwnProperty('analyses'))
+            return [];
+        return Object.keys(this.json['analyses']);
+    }
+
     getAnalysisInputs(filename: string) {
-        if (!this.json.hasOwnProperty('analyses')) return [];
-        if (!this.json['analyses'].hasOwnProperty(filename)) return [];
-        if (!this.json['analyses'][filename].hasOwnProperty('input')) return [];
+        if (!this.json.hasOwnProperty('analyses'))
+            return [];
+        if (!this.json['analyses'].hasOwnProperty(filename))
+            return [];
+        if (!this.json['analyses'][filename].hasOwnProperty('input'))
+            return [];
         return this.json['analyses'][filename].input;
     }
 
@@ -237,8 +265,10 @@ class StudyConfigCache {
 
         // normalize the tag
         tag = tag.trim();
-        if (!tag.startsWith('{@')) tag = '{@' + tag;
-        if (!tag.endsWith('@}')) tag = tag + '@}';
+        if (!tag.startsWith('{@'))
+            tag = '{@' + tag;
+        if (!tag.endsWith('@}'))
+            tag = tag + '@}';
 
         // add it globally
         if (!('substitutions' in this._json)) {

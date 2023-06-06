@@ -16,7 +16,7 @@
 //
 import { TextEncoder } from 'util';
 import * as vscode from 'vscode';
-import { jobsFile, outputPath, snippetPath, studyConfigFile } from '../consts';
+import { analysesPath, binPath, csvPath, jobsFile, outputPath, scriptPath, snippetPath, studyConfigFile } from '../consts';
 import { getFileContents, getWorkspaceRoot } from '../utils';
 
 class StudyConfigCache {
@@ -282,22 +282,163 @@ class StudyConfigCache {
         await this.writeFile();
     }
 
-    async renameOutput(oldUri: vscode.Uri, newUri: vscode.Uri) {
-        if (!this.json.hasOwnProperty('queries'))
-            return;
+    async renameQuery(oldUri: vscode.Uri, newUri: vscode.Uri) {
+        let changed = false;
+        const substNewName = newUri.path.substring(getWorkspaceRoot().length + snippetPath.length + 2);
 
+        // file is a 'query'
+        if (this.json.hasOwnProperty('queries')) {
+            const queryNewName = newUri.path.substring(getWorkspaceRoot().length + scriptPath.length + 2);
+            const keys = Object.keys(this.json['queries']);
+            keys.forEach(k => {
+                if (this.json['queries'][k].hasOwnProperty('query')) {
+                    if (oldUri.toString().endsWith(this.json['queries'][k]['query'])) {
+                        changed = true;
+                        this._json['queries'][k]['query'] = queryNewName;
+                    }
+                }
+
+                // file is a local substitution's 'file'
+                if (this.json['queries'][k].hasOwnProperty('substitutions')) {
+                    for (let i = 0; i < this.json['queries'][k]['substitutions'].length; i++) {
+                        if (this.json['queries'][k]['substitutions'][i].hasOwnProperty('file')) {
+                            if (oldUri.toString().endsWith(this.json['queries'][k]['substitutions'][i]['file'])) {
+                                changed = true;
+                                this._json['queries'][k]['substitutions'][i]['file'] = substNewName;
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // file is a global substitution's 'file'
+        if (this.json.hasOwnProperty('substitutions')) {
+            for (let i = 0; i < this.json['substitutions'].length; i++) {
+                if (this.json['substitutions'][i].hasOwnProperty('file')) {
+                    if (oldUri.toString().endsWith(this.json['substitutions'][i]['file'])) {
+                        changed = true;
+                        this._json['substitutions'][i]['file'] = substNewName;
+                    }
+                }
+            }
+        }
+
+        if (changed)
+            await this.writeFile();
+    }
+
+    async renameCSV(oldUri: vscode.Uri, newUri: vscode.Uri) {
         let changed = false;
 
-        const keys = Object.keys(this.json['queries']).filter(k => oldUri.path.endsWith(k));
-        keys.forEach(q => {
-            changed = true;
-            let newName = newUri.toString();
-            newName = newName.substring(newName.lastIndexOf(outputPath) + outputPath.length + 1);
+        if (this.json.hasOwnProperty('queries')) {
+            const newName = newUri.path.substring(getWorkspaceRoot().length + csvPath.length + 2);
+            const keys = Object.keys(this.json['queries']);
+            keys.forEach(k => {
+                // file is a query's 'csv' 'output' entry
+                if (this.json['queries'][k].hasOwnProperty('csv') && this.json['queries'][k]['csv'].hasOwnProperty('output')) {
+                    if (oldUri.path.endsWith(csvPath + '/' + this.json['queries'][k]['csv']['output'])) {
+                        changed = true;
+                        this._json['queries'][k]['csv']['output'] = newName;
+                    }
+                }
 
-            this._json['queries'][newName] = this._json['queries'][q];
-            delete this._json['queries'][q];
-            this.rewriteJobs(q, newName);
-        });
+                // file is a processor's 'csv' entry
+                if (this.json['queries'][k].hasOwnProperty('processors')) {
+                    const processorKeys = Object.keys(this.json['queries'][k]['processors']);
+                    processorKeys.forEach(pk => {
+                        if (this.json['queries'][k]['processors'][pk].hasOwnProperty('csv')
+                                && oldUri.path.endsWith(csvPath + '/' + this.json['queries'][k]['processors'][pk]['csv'])) {
+                            changed = true;
+                            this._json['queries'][k]['processors'][pk]['csv'] = newName;
+                        }
+                    });
+                }
+            });
+        }
+
+        // file is an 'input' in an analysis
+        if (this.json.hasOwnProperty('analyses')) {
+            const newName = newUri.path.substring(getWorkspaceRoot().length + analysesPath.length + 2);
+            const keys = Object.keys(this.json['analyses']);
+            keys.forEach(k => {
+                if (this.json['analyses'][k].hasOwnProperty('input')) {
+                    for (let i = 0; i < this.json['analyses'][k]['input'].length; i++) {
+                        if (oldUri.path.endsWith(csvPath + '/' + this.json['analyses'][k]['input'][i])) {
+                            changed = true;
+                            this.json['analyses'][k]['input'][i] = newName;
+                        }
+                    }
+                }
+            });
+        }
+
+        if (changed)
+            await this.writeFile();
+    }
+
+    async renameScript(oldUri: vscode.Uri, newUri: vscode.Uri) {
+        let changed = false;
+
+        const scriptFilename = oldUri.toString().substring(oldUri.toString().lastIndexOf('/') + 1);
+
+        // file is an analysis
+        if (oldUri.path.includes(analysesPath) && this.json.hasOwnProperty('analyses') && scriptFilename in this.json['analyses']) {
+            changed = true;
+            const newName = newUri.path.substring(getWorkspaceRoot().length + analysesPath.length + 2);
+            this._json['analyses'][newName] = this.json['analyses'][scriptFilename];
+            delete this._json['analyses'][scriptFilename];
+        } else if (oldUri.path.includes(binPath)) {
+            // file is a processor
+            if (this.json.hasOwnProperty('queries')) {
+                const keys = Object.keys(this.json['queries']);
+                keys.forEach(k => {
+                    if (this.json['queries'][k].hasOwnProperty('processors') && scriptFilename in this.json['queries'][k]['processors']) {
+                        changed = true;
+                        const newName = newUri.path.substring(getWorkspaceRoot().length + binPath.length + 2);
+                        this._json['queries'][k]['processors'][newName] = this.json['queries'][k]['processors'][scriptFilename];
+                        delete this._json['queries'][k]['processors'][scriptFilename];
+                    }
+                });
+            }
+        }
+
+        if (changed)
+            await this.writeFile();
+    }
+
+    async renameOutput(oldUri: vscode.Uri, newUri: vscode.Uri) {
+        let changed = false;
+
+        if (this.json.hasOwnProperty('queries')) {
+            const newName = newUri.path.substring(getWorkspaceRoot().length + csvPath.length + 2);
+            const keys = Object.keys(this.json['queries']);
+
+            // file is a processor 'output' entry
+            keys.forEach(k => {
+                if (this.json['queries'][k].hasOwnProperty('processors')) {
+                    const processorKeys = Object.keys(this.json['queries'][k]['processors']);
+                    processorKeys.forEach(pk => {
+                        if (this.json['queries'][k]['processors'][pk].hasOwnProperty('output')
+                                && oldUri.path.endsWith(this.json['queries'][k]['processors'][pk]['output'])) {
+                            changed = true;
+                            this._json['queries'][k]['processors'][pk]['output'] = newUri.path.substring(getWorkspaceRoot().length + 1);
+                        }
+                    });
+                }
+            });
+
+            // file is a top-level output
+            Object.keys(this.json['queries']).filter(k => oldUri.path.endsWith(k)).forEach(q => {
+                changed = true;
+                let newName = newUri.toString();
+                newName = newName.substring(newName.lastIndexOf(outputPath) + outputPath.length + 1);
+    
+                this._json['queries'][newName] = this._json['queries'][q];
+                delete this._json['queries'][q];
+                this.rewriteJobs(q, newName);
+            });
+        }
 
         if (changed)
             await this.writeFile();

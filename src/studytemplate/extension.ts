@@ -85,8 +85,17 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     enableDiagnostics(context, studyConfigSelector);
 
     vscode.workspace.onWillRenameFiles(async (e) => {
+        if (e.files.some(f => f.oldUri.fsPath.endsWith('.boa'))) {
+            e.files.forEach(f => cache.renameQuery(f.oldUri, f.newUri));
+        }
         if (e.files.some(f => f.oldUri.fsPath.endsWith('.txt'))) {
             e.files.forEach(f => cache.renameOutput(f.oldUri, f.newUri));
+        }
+        if (e.files.some(f => f.oldUri.fsPath.endsWith('.csv'))) {
+            e.files.forEach(f => cache.renameCSV(f.oldUri, f.newUri));
+        }
+        if (e.files.some(f => f.oldUri.fsPath.endsWith('.py'))) {
+            e.files.forEach(f => cache.renameScript(f.oldUri, f.newUri));
         }
     });
     vscode.workspace.onDidRenameFiles(e => {

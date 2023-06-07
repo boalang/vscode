@@ -1,5 +1,15 @@
 # Change Log
 
+## [0.3.0] - 2023-06-07
+ - now automatically updates the study-config.json (and jobs.json) if files are moved/renamed via the Explorer UI
+ - study-config.json now immediately triggers a diagnostic recheck whenever files are renamed
+ - improved rendering of hovers for output variables
+ - now infers and displays in hovers the type of a call as the called function's return type
+ - improved debugging support for CFG generation
+ - fixed bug with codelense on CSV files in processor tags
+ - fixes issues with hovers on variables that used type inference
+ - fixes bug #45 - dont autocomplete Boa code if inside a comment
+
 ## [0.2.9] - 2022-12-02
  - better support for hovers - now when you hover types and variables, it provides information/documentation about it
  - improved auto-completion support for enum types

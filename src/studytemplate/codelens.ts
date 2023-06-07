@@ -76,11 +76,15 @@ export default class StudyConfigCodelensProvider implements vscode.CodeLensProvi
         // looks for CSV files, e.g.: "csv": "kotlin/dupes.csv"
         for (const csv of document.getText().matchAll(/"([^"]+\.csv)"/g)) {
             const range = new vscode.Range(document.positionAt(csv.index + 1), document.positionAt(csv.index + 1 + csv[1].length));
+            let csvfile = csv[1];
+            if (csvfile.indexOf(consts.csvPath) > -1) {
+                csvfile = csv[1].substring(consts.csvPath.length + 1);
+            }
             lenses.push(new vscode.CodeLens(range, {
                 title: '$(table) Generate CSV',
-                tooltip: `Generates the CSV output (make ${consts.csvPath}/${csv[1].substring(consts.csvPath.length + 1)})\nNote: this might trigger a download on the input`,
+                tooltip: `Generates the CSV output (make ${consts.csvPath}/${csvfile})\nNote: this might trigger a download on the input`,
                 command: 'boalang.template.generateCSV',
-                arguments: [csv[1].substring(consts.csvPath.length + 1)]
+                arguments: [csvfile]
             }));
         }
 

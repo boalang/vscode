@@ -78,9 +78,9 @@ export default class StudyConfigCodelensProvider implements vscode.CodeLensProvi
             const range = new vscode.Range(document.positionAt(csv.index + 1), document.positionAt(csv.index + 1 + csv[1].length));
             lenses.push(new vscode.CodeLens(range, {
                 title: '$(table) Generate CSV',
-                tooltip: `Generates the CSV output (make ${consts.csvPath}/${csv[1]})\nNote: this might trigger a download on the input`,
+                tooltip: `Generates the CSV output (make ${consts.csvPath}/${csv[1].substring(consts.csvPath.length + 1)})\nNote: this might trigger a download on the input`,
                 command: 'boalang.template.generateCSV',
-                arguments: [csv[1]]
+                arguments: [csv[1].substring(consts.csvPath.length + 1)]
             }));
         }
 

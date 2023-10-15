@@ -144,6 +144,7 @@ class StudyConfigCache {
         } else {
             content = replacement['replacement'];
         }
+        if (!content) return "";
         return content;
     }
 

@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.3.1] - 2023-10-16
+ - add new 'wizards' for adding new datasets, queries, and analyses to the study config, that can be triggered as commands or from code lenses
+ - fix autocomplete breaking if a snippet file path failed to load
+
 ## [0.3.0] - 2023-06-07
  - now automatically updates the study-config.json (and jobs.json) if files are moved/renamed via the Explorer UI
  - study-config.json now immediately triggers a diagnostic recheck whenever files are renamed

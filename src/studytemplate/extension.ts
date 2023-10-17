@@ -31,6 +31,7 @@ import { BoaTemplateRefactoringProvider, extractSnippet } from './refactor';
 import TemplateTagRenameProvider from './renames';
 import TemplateTagHighlightProvider from './highlights';
 import { TemplateTagSymbolProvider } from './symbols';
+import { treeProvider } from './treeprovider';
 
 export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     const jobsSelector: vscode.DocumentSelector = {
@@ -49,7 +50,7 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.downloadOutput', filename => runMakeCommand(`${consts.outputPath}/${filename}`)));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.generateCSV', filename => runMakeCommand(`${consts.csvPath}/${filename}`)));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.runProcessor', filename => runMakeCommand(`${filename}`)));
-    context.subscriptions.push(vscode.commands.registerCommand('boalang.template.runAnalysis', target => runMakeCommand(target)));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.template.runAnalysis', runAnalysis));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.generateData', _ => runMakeCommand('data')));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.clean', _ => runMakeCommand('clean', false)));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.cleanData', async _ => {
@@ -86,6 +87,11 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.languages.registerRenameProvider('boalang', new TemplateTagRenameProvider()));
     context.subscriptions.push(vscode.languages.registerRenameProvider(studyConfigSelector, new TemplateTagRenameProvider()));
 
+    // set up the study template TreeView
+    context.subscriptions.push(vscode.window.createTreeView('boalang.studyTemplateTree', {
+        treeDataProvider: treeProvider
+    }));
+
     enableDiagnostics(context, studyConfigSelector);
 
     vscode.workspace.onWillRenameFiles(async (e) => {
@@ -118,6 +124,7 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
             uriStr => previewMap[uriStr].forEach(
                 t => boaDocumentProvider.onDidChangeEmitter.fire(vscode.Uri.parse(t))));
     });
+    cache.onDidChange(e => treeProvider.refresh());
 
     // live updating of previews
     vscode.workspace.onDidChangeTextDocument(e => {
@@ -164,6 +171,15 @@ async function runMakeCommand(target: string, shouldRefresh = true) {
     if (shouldRefresh) {
         vscode.commands.executeCommand('boalang.joblist.refreshIfLoaded');
     }
+}
+
+function runAnalysis(target: string|vscode.TreeItem) {
+    var arg: string;
+    if (typeof target !== 'string')
+        arg = target.label as string;
+    else
+        arg = target as string;
+    runMakeCommand(arg.replace('.py', ''));
 }
 
 const previewMap: { [key: string]: string[] } = {};

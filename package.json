@@ -33,6 +33,7 @@
         "workspaceContains:**/*.boa",
         "workspaceContains:**/study-config.json",
         "onView:boalang.jobList",
+        "onView:boalang.studyTemplateTree",
         "onCommand:boalang.refactor.extractfunction",
         "onCommand:boalang.refactor.template.extract",
         "onCommand:boalang.source.cfg",
@@ -264,7 +265,7 @@
             },
             {
                 "command": "boalang.template.make",
-                "title": "Make Full Analysis",
+                "title": "Run All Analyses",
                 "icon": "$(debug-continue)",
                 "category": "Boa"
             },
@@ -282,16 +283,19 @@
             {
                 "command": "boalang.template.addDataset",
                 "title": "Add Dataset",
+                "icon": "$(add)",
                 "category": "Boa"
             },
             {
                 "command": "boalang.template.addAnalysis",
                 "title": "Add Analysis",
+                "icon": "$(new-file)",
                 "category": "Boa"
             },
             {
                 "command": "boalang.template.addQuery",
                 "title": "Add Query",
+                "icon": "$(new-file)",
                 "category": "Boa"
             }
         ],
@@ -356,6 +360,10 @@
                 {
                     "id": "boalang.jobList",
                     "name": "Boa: Recent Jobs"
+                },
+                {
+                    "id": "boalang.studyTemplateTree",
+                    "name": "Boa: Study Template"
                 }
             ]
         },
@@ -363,6 +371,10 @@
             {
                 "view": "boalang.jobList",
                 "contents": "Click [refresh](command:boalang.joblist.refresh) to list recent Boa jobs."
+            },
+            {
+                "view": "boalang.studyTemplateTree",
+                "contents": "Refreshing from the study config..."
             }
         ],
         "menus": {
@@ -513,6 +525,36 @@
                     "command": "boalang.job.delete",
                     "group": "2_boalang@3",
                     "when": "view == boalang.jobList"
+                },
+                {
+                    "command": "boalang.template.addDataset",
+                    "group": "inline",
+                    "when": "view == boalang.studyTemplateTree && viewItem == boalang.tree.datasets"
+                },
+                {
+                    "command": "boalang.template.addAnalysis",
+                    "group": "inline",
+                    "when": "view == boalang.studyTemplateTree && viewItem == boalang.tree.analyses"
+                },
+                {
+                    "command": "boalang.template.make",
+                    "group": "inline",
+                    "when": "view == boalang.studyTemplateTree && viewItem == boalang.tree.analyses"
+                },
+                {
+                    "command": "boalang.template.runAnalysis",
+                    "group": "inline",
+                    "when": "view == boalang.studyTemplateTree && viewItem == boalang.tree.analysis"
+                },
+                {
+                    "command": "boalang.template.generateData",
+                    "group": "inline",
+                    "when": "view == boalang.studyTemplateTree && viewItem == boalang.tree.queries"
+                },
+                {
+                    "command": "boalang.template.addQuery",
+                    "group": "inline",
+                    "when": "view == boalang.studyTemplateTree && viewItem == boalang.tree.queries"
                 }
             ],
             "explorer/context": [

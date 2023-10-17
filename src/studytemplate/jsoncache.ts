@@ -70,6 +70,14 @@ class StudyConfigCache {
         return this.datasets;
     }
 
+    getDatasetTarget(name: String) {
+        if (!this.json.hasOwnProperty('datasets') || !this.json['datasets'].hasOwnProperty(name)) {
+            return undefined;
+        }
+
+        return this.json['datasets'][name];
+    }
+
     private substitutions = null;
     getSubstitutions() {
         if (this.substitutions !== null) {
@@ -223,6 +231,18 @@ class StudyConfigCache {
         return targets;
     }
 
+    getDatasetsForQuery(uri: vscode.Uri|string) {
+        const uriStr = uri.toString();
+
+        const targets = [];
+        for (const output in this.json['queries']) {
+            if (uriStr.endsWith(this.json['queries'][output]['query'])) {
+                targets.push(this.json['queries'][output]['dataset']);
+            }
+        }
+        return targets;
+    }
+
     getSubstitutionFiles() {
         if (!this.json.hasOwnProperty('substitutions'))
             return [];
@@ -236,7 +256,7 @@ class StudyConfigCache {
         return Object.keys(this.json['analyses']);
     }
 
-    getAnalysisInputs(filename: string) {
+    getAnalysisInputs(filename: string): string[] {
         if (!this.json.hasOwnProperty('analyses'))
             return [];
         if (!this.json['analyses'].hasOwnProperty(filename))

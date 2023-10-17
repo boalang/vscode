@@ -23,9 +23,25 @@ export default class StudyConfigCodelensProvider implements vscode.CodeLensProvi
         const lenses = [];
         const docPath = document.uri.fsPath.substring(0, document.uri.fsPath.lastIndexOf('/'));
 
+        // looks for the datasets section, e.g.: "datasets": {
+            for (const output of document.getText().matchAll(/"datasets"\s*:\s*{/g)) {
+                const range = new vscode.Range(document.positionAt(output.index), document.positionAt(output.index + 1));
+                lenses.push(new vscode.CodeLens(range, {
+                    title: '$(add) Add Dataset',
+                    tooltip: 'Add a new dataset to this study',
+                    command: 'boalang.template.addDataset'
+                }));
+            }
+    
         // looks for the analysis section, e.g.: "analyses": {
         for (const output of document.getText().matchAll(/"analyses"\s*:\s*{/g)) {
             const range = new vscode.Range(document.positionAt(output.index), document.positionAt(output.index + 1));
+            lenses.push(new vscode.CodeLens(range, {
+                title: '$(new-file) Add Analysis',
+                tooltip: 'Add a new analysis to this study',
+                command: 'boalang.template.addAnalysis'
+            }));
+
             lenses.push(new vscode.CodeLens(range, {
                 title: '$(run-all) Run All Analyses',
                 tooltip: 'Runs all known analyses (make all)\nNote: this might trigger queries to run and/or download',
@@ -42,6 +58,12 @@ export default class StudyConfigCodelensProvider implements vscode.CodeLensProvi
         // looks for the analysis section, e.g.: "queries": {
         for (const output of document.getText().matchAll(/"queries"\s*:\s*{/g)) {
             const range = new vscode.Range(document.positionAt(output.index), document.positionAt(output.index + 1));
+            lenses.push(new vscode.CodeLens(range, {
+                title: '$(new-file) Add Query',
+                tooltip: 'Add a new query to this study',
+                command: 'boalang.template.addQuery'
+            }));
+
             lenses.push(new vscode.CodeLens(range, {
                 title: '$(graph) Generate All Data',
                 tooltip: 'Runs queries, downloads outputs, and converts to CSV as necessary (make data)',

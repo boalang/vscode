@@ -66,7 +66,10 @@
         "onCommand:boalang.template.cleanOutput",
         "onCommand:boalang.template.make",
         "onCommand:boalang.template.zip",
-        "onCommand:boalang.template.addtag"
+        "onCommand:boalang.template.addtag",
+        "onCommand:boalang.template.addDataset",
+        "onCommand:boalang.template.addAnalysis",
+        "onCommand:boalang.template.addQuery"
     ],
     "contributes": {
         "commands": [
@@ -274,6 +277,21 @@
             {
                 "command": "boalang.template.addtag",
                 "title": "Add Global Template Tag",
+                "category": "Boa"
+            },
+            {
+                "command": "boalang.template.addDataset",
+                "title": "Add Dataset",
+                "category": "Boa"
+            },
+            {
+                "command": "boalang.template.addAnalysis",
+                "title": "Add Analysis",
+                "category": "Boa"
+            },
+            {
+                "command": "boalang.template.addQuery",
+                "title": "Add Query",
                 "category": "Boa"
             }
         ],

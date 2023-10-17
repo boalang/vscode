@@ -17,12 +17,12 @@
 import * as vscode from 'vscode';
 import * as consts from '../consts';
 import { jobsFile } from '../consts';
-import { getFileContents, getWorkspaceRoot, promptUser } from '../utils';
+import { getFileContents, getFiles, getWorkspaceRoot, promptUser } from '../utils';
 import { StudyConfigCompletionItemProvider, TemplateCompletionItemProvider } from './completions';
 import SubstitutionHoverProvider from './hoverproviders';
 import { JobsJSONLinkProvider, StudyConfigJSONLinkProvider } from './linkproviders';
 import StudyConfigCodelensProvider from './codelens';
-import { showUri } from '../boa';
+import { getDatasets, showUri } from '../boa';
 import { cache } from './jsoncache';
 import { boaDocumentProvider } from '../contentprovider';
 import { enableDiagnostics, checkStudyConfig } from './diagnostics';
@@ -61,6 +61,10 @@ export function activateStudyTemplateSupport(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.make', _ => runMakeCommand(undefined)));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.zip', _ => runMakeCommand('zip', false)));
     context.subscriptions.push(vscode.commands.registerCommand('boalang.template.addtag', tag => cache.addTemplateTag(tag)));
+
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.template.addDataset', addDataset));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.template.addAnalysis', addAnalysis));
+    context.subscriptions.push(vscode.commands.registerCommand('boalang.template.addQuery', addQuery));
 
     context.subscriptions.push(vscode.languages.registerDocumentLinkProvider(jobsSelector, new JobsJSONLinkProvider()));
     context.subscriptions.push(vscode.languages.registerDocumentLinkProvider(studyConfigSelector, new StudyConfigJSONLinkProvider()));
@@ -225,4 +229,138 @@ export async function getQuery(uri: vscode.Uri, authority: string) {
 
     const subs = await cache.resolveSubstitutions(decodeURIComponent(authority));
     return await cache.performSubstitutions(query, subs);
+}
+
+function addDataset() {
+    vscode.window.showInputBox({
+        prompt: 'Enter the name of the new dataset in the study config',
+        ignoreFocusOut: false,
+        validateInput: (value: string) => {
+            if (value.match(/^[-_a-zA-Z0-9]+$/)) {
+                return null;
+            }
+            return 'Dataset names must only contain letters, numbers, and underscores';
+        }
+    }).then(async (name) => {
+        if (name) {
+            const existingNames = cache.getDatasetNames();
+            if (existingNames.indexOf(name) == -1) {
+                const datasets = await getDatasets();
+                vscode.window.showQuickPick(datasets, {
+                    title: 'Select the Boa dataset to add',
+                    ignoreFocusOut: false
+                }).then(async (dataset) => {
+                    if (dataset) {
+                        cache.addDataset(name, dataset);
+                    }
+                });
+            } else {
+                vscode.window.showErrorMessage(`Dataset "${name}" already exists`);
+            }
+        }
+    });
+}
+
+async function addAnalysis() {
+    const inputs = await getInputs();
+    if (inputs == undefined)
+        return;
+
+    const analyses = cache.getAnalyses();
+    const remainingScripts = (await getFiles(getWorkspaceRoot() + '/' + consts.analysesPath))
+                        .filter(f => !f.startsWith(consts.commonPath + '/'))
+                        .filter(f => f.endsWith('.py'))
+                        .filter(f => analyses.indexOf(f) == -1);
+
+    vscode.window.showQuickPick(['Create a new analysis...', ...remainingScripts], {
+        title: 'Select the analysis script to add',
+        ignoreFocusOut: false
+    }).then(async (script) => {
+        if (script) {
+            if (script == 'Create a new file...') {
+                vscode.window.showInputBox({
+                    prompt: 'Enter the name of the new analysis script',
+                    ignoreFocusOut: false,
+                    validateInput: (value: string) => {
+                        if (value.match(/^[-_a-zA-Z0-9]+\.py$/)) {
+                            return null;
+                        }
+                        return 'Analysis script names must only contain letters, numbers, and underscores and end in ".py".';
+                    }
+                }).then(async (name) => {
+                    if (name) {
+                        cache.addAnalysis(name, inputs);
+
+                        // make a new file and show it
+                        const newScriptPath = getWorkspaceRoot() + '/' + consts.analysesPath + '/' + name;
+                        await vscode.workspace.fs.writeFile(vscode.Uri.file(newScriptPath), new Uint8Array([]));
+                        await vscode.window.showTextDocument(await vscode.workspace.openTextDocument(newScriptPath));
+                    }
+                });
+            } else {
+                cache.addAnalysis(script, inputs);
+            }
+        }
+    });
+}
+
+async function getInputs() {
+    const csvs = cache.getCSVs();
+    // const outputs = cache.getOutputs().map(f => f.replace('.txt', '.csv'));
+    // outputs.forEach(f => csvs.add(f));
+    return await vscode.window.showQuickPick([...csvs], {
+        title: 'Select the files used as input to the analysis',
+        ignoreFocusOut: false,
+        canPickMany: true
+    }).then(async (input) => {
+        return input;
+    });
+}
+
+async function addQuery() {
+    const ds = await vscode.window.showQuickPick(cache.getDatasetNames(), {
+        title: 'Select the dataset to query',
+        ignoreFocusOut: false
+    }).then(async (input) => {
+        return input;
+    });
+
+    if (ds == undefined)
+        return;
+
+    const queries = cache.getQueries();
+    const remainingQueries = (await getFiles(getWorkspaceRoot() + '/' + consts.scriptPath + '/queries'))
+                        .filter(f => f.endsWith('.boa'))
+                        .filter(f => !queries.has('queries/' + f));
+
+    vscode.window.showQuickPick(['Create a new query...', ...remainingQueries], {
+        title: 'Select the query to add',
+        ignoreFocusOut: false
+    }).then(async (query) => {
+        if (query) {
+            if (query == 'Create a new query...') {
+                vscode.window.showInputBox({
+                    prompt: 'Enter the name of the new query',
+                    ignoreFocusOut: false,
+                    validateInput: (value: string) => {
+                        if (value.match(/^[-_a-zA-Z0-9]+\.boa$/)) {
+                            return null;
+                        }
+                        return 'Query names must only contain letters, numbers, and underscores and end in ".boa".';
+                    }
+                }).then(async (name) => {
+                    if (name) {
+                        cache.addQuery(name, ds);
+
+                        // make a new file and show it
+                        const newQueryPath = getWorkspaceRoot() + '/' + consts.scriptPath + '/queries/' + name;
+                        await vscode.workspace.fs.writeFile(vscode.Uri.file(newQueryPath), new Uint8Array([]));
+                        await vscode.window.showTextDocument(await vscode.workspace.openTextDocument(newQueryPath));
+                    }
+                });
+            } else {
+                cache.addQuery(query, ds);
+            }
+        }
+    });
 }

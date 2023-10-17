@@ -183,3 +183,23 @@ export function getType(document: vscode.TextDocument, exprRange: vscode.Range, 
 
     return type;
 }
+
+export async function getFiles(dir, recursing=false) {
+    const items = await vscode.workspace.fs.readDirectory(vscode.Uri.file(dir)).then(
+        async (val) => {
+            const result = [];
+            for (const file of val) {
+                if (file[1] === vscode.FileType.Directory) {
+                    result.push(...await getFiles(`${dir}/${file[0]}`, true));
+                } else {
+                    result.push(`${dir}/${file[0]}`);
+                }
+            }
+            return result;
+        }
+    );
+
+    if (recursing)
+        return items;
+    return items.map(f => f.substring(dir.length + 1));
+}

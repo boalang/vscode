@@ -16,6 +16,7 @@
 //
 import { TextEncoder } from 'util';
 import * as vscode from 'vscode';
+import * as consts from '../consts';
 import { analysesPath, binPath, csvPath, jobsFile, outputPath, scriptPath, snippetPath, studyConfigFile } from '../consts';
 import { getFileContents, getWorkspaceRoot } from '../utils';
 
@@ -181,6 +182,20 @@ class StudyConfigCache {
         if (!this.json.hasOwnProperty('queries'))
             return [];
         return Object.keys(this.json['queries']);
+    }
+
+    getCSVs() {
+        const csvs = new Set<string>();
+        if (!this.json.hasOwnProperty('queries'))
+            return csvs;
+        const keys = Object.keys(this.json['queries']);
+        keys.forEach(k => {
+            const q = this.json['queries'][k];
+            if (q.hasOwnProperty('csv'))
+                if (q['csv'].hasOwnProperty('output'))
+                    csvs.add(q['csv']['output']);
+        });
+        return csvs;
     }
 
     getQueries() {
@@ -443,6 +458,38 @@ class StudyConfigCache {
 
         if (changed)
             await this.writeFile();
+    }
+
+    async addDataset(name: String, ds: String) {
+        if (!this._json.hasOwnProperty('datasets'))
+            this._json['datasets'] = {};
+
+        this._json['datasets'][name] = ds.replace(consts.adminPrefix, '');
+
+        await this.writeFile();
+    }
+
+    async addAnalysis(script: String, input: String[]) {
+        if (!this._json.hasOwnProperty('analyses'))
+            this._json['analyses'] = {};
+
+        this._json['analyses'][script] = {};
+        this._json['analyses'][script]['input'] = input;
+
+        await this.writeFile();
+    }
+
+    async addQuery(query: String, ds: String) {
+        if (!this._json.hasOwnProperty('queries'))
+            this._json['queries'] = {};
+
+        const output = query.replace('.boa', '.txt');
+
+        this._json['queries'][output] = {};
+        this._json['queries'][output]['query'] = 'queries/' + query;
+        this._json['queries'][output]['dataset'] = ds;
+
+        await this.writeFile();
     }
 
     private async rewriteJobs(oldName: string, newName: string) {

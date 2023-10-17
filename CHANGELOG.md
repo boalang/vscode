@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.2] - 2023-10-17
+ - added a new sidebar view that shows an overview of the study template, listing the queries and analyses available, allowing for quickly navigating between them, and running them
+
 ## [0.3.1] - 2023-10-16
  - add new 'wizards' for adding new datasets, queries, and analyses to the study config, that can be triggered as commands or from code lenses
  - fix autocomplete breaking if a snippet file path failed to load

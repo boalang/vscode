@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.3.3] - 2023-11-07
+ - updates to the behavior of the job lists tree
+   - refreshes automatically after a job run finishes
+   - if the last-run job had an error, it expands the item
+   - shows the filename the job was run from (note: this only caches the mapping for your current session)
+
 ## [0.3.2] - 2023-10-17
  - added a new sidebar view that shows an overview of the study template, listing the queries and analyses available, allowing for quickly navigating between them, and running them
 

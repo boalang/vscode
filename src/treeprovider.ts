@@ -38,6 +38,10 @@ class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
         return element;
     }
 
+    getParent(element: vscode.TreeItem): vscode.ProviderResult<vscode.TreeItem> {
+        return null;
+    }
+
     /**
      * Gets the size as a readable string.
      * @param {number} size - the size to convert
@@ -116,7 +120,7 @@ class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
                 }
                 this.jobs.push(new BoaJob(job, source, size));
                 if (this.jobs.length == 1 && (job.compilerStatus == boaapi.CompilerStatus.ERROR || job.executionStatus == boaapi.ExecutionStatus.ERROR))
-                    this.jobs[0].collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
+                    this.view.reveal(this.jobs[0], { focus: true, select: false, expand: true });
             }
         }).then(async() => {
             this.jobs.sort((a, b) => b.job.id - a.job.id)

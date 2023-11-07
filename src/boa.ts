@@ -294,6 +294,7 @@ async function submitQuery(query: string, dataset: any) {
         });
 
         progress.report({ increment: 100 });
+        vscode.commands.executeCommand('boalang.joblist.refresh');
     });
 }
 

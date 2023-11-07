@@ -128,6 +128,34 @@ export default class JobCache {
         vscode.commands.executeCommand('setContext', 'boalang.jobs.stopped', this.jobContexts.stopped);
     }
 
+    private static jobFiles = {};
+
+    static mapToFile(job, uri) {
+        this.jobFiles[job.id] = uri;
+    }
+
+    static getFileFromJob(job) {
+        if (job.id in this.jobFiles)
+            return this.jobFiles[job.id];
+        return undefined;
+    }
+
+    static renameFileMap(oldUri, newUri) {
+        for (const key in this.jobFiles) {
+            if (this.jobFiles[key].path === oldUri.path) {
+                this.jobFiles[key] = newUri;
+            }
+        }
+    }
+
+    static removeFileMap(uri) {
+        for (const key in this.jobFiles) {
+            if (this.jobFiles[key].path === uri.path) {
+                delete this.jobFiles[key];
+            }
+        }
+    }
+
     static async reset() {
         this.source = {};
         this.outputSize = {};
@@ -137,5 +165,6 @@ export default class JobCache {
         this.jobContexts.hasoutput = [];
         this.jobContexts.running = [];
         this.jobContexts.stopped = [];
+        this.jobFiles = {};
     }
 }

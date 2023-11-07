@@ -243,15 +243,15 @@ export async function runQuery(uri: vscode.Uri) {
 
             // if the file has never been saved, or it is an old job
             if (uri.scheme == 'untitled' || uri.scheme == 'boalang') {
-                submitQuery(vscode.window.activeTextEditor.document.getText(), datasetId);
+                submitQuery(vscode.window.activeTextEditor.document.getText(), datasetId, uri);
             } else {
                 const dirty = vscode.workspace.textDocuments.filter((doc) => doc.uri.toString() == uri.toString() && doc.isDirty);
                 if (dirty.length == 1) {
-                    submitQuery(dirty[0].getText(), datasetId);
+                    submitQuery(dirty[0].getText(), datasetId, uri);
                 } else {
                     // otherwise send the file contents
                     getFileContents(uri.fsPath)
-                        .then(query => submitQuery(query, datasetId))
+                        .then(query => submitQuery(query, datasetId, uri))
                         .catch(err => console.error(err));
                 }
             }
@@ -259,7 +259,7 @@ export async function runQuery(uri: vscode.Uri) {
     }
 }
 
-async function submitQuery(query: string, dataset: any) {
+async function submitQuery(query: string, dataset: any, uri: vscode.Uri) {
     if (query.indexOf('{@') != -1) {
         if (!(await promptUser('The query contains template variables and will not run directly.  You should use the study template make system instead.  Continue anyway?'))) {
             return;
@@ -278,6 +278,7 @@ async function submitQuery(query: string, dataset: any) {
 
             const job = await client.query(query, dataset);
             progress.report({ increment: 20 });
+            JobCache.mapToFile(job, uri);
             vscode.commands.executeCommand('boalang.joblist.refresh');
 
             cancel.onCancellationRequested(async (e) => {

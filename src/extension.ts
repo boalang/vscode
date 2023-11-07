@@ -128,6 +128,20 @@ export function activate(context: vscode.ExtensionContext) {
     }
 
     context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider('boalang', boaDocumentProvider));
+
+    // track file changes to update the tree view
+    vscode.workspace.onDidRenameFiles(event => {
+        event.files.forEach(file => {
+            JobCache.renameFileMap(file.oldUri, file.newUri);
+        });
+        vscode.commands.executeCommand('boalang.joblist.refresh');
+    });
+    vscode.workspace.onDidDeleteFiles(event => {
+        event.files.forEach(file => {
+            JobCache.removeFileMap(file);
+        });
+        vscode.commands.executeCommand('boalang.joblist.refresh');
+    });
 }
 
 // this method is called when the extension is deactivated

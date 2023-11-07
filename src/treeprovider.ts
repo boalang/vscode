@@ -18,6 +18,7 @@ import * as vscode from 'vscode';
 import { getJobUri, runBoaCommands } from './boa';
 import * as boaapi from '@boalang/boa-api';
 import JobCache from './jobcache';
+import { getWorkspaceRoot } from './utils';
 
 class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
     private _onDidChangeTreeData: vscode.EventEmitter<any> = new vscode.EventEmitter<any>();
@@ -68,7 +69,11 @@ class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
     async getChildren(element?: vscode.TreeItem): Promise<vscode.TreeItem[]> {
         // jobs have status items
         if (element instanceof BoaJob) {
-            const children = [new vscode.TreeItem(element.job.input.name)];
+            const children = [];
+            if (!element.label.toString().startsWith('Job #')) {
+                children.push(new vscode.TreeItem(`Job #${element.job.id}`));
+            }
+            children.push(new vscode.TreeItem(element.job.input.name));
             if (element.job.executionStatus == boaapi.ExecutionStatus.FINISHED) {
                 const sizeItem = new vscode.TreeItem('output size: ' + this.getSize(element.size));
                 sizeItem.tooltip = element.size.toLocaleString() + ' bytes';
@@ -205,6 +210,15 @@ export const treeProvider = new BoaJobsProvider();
 export class BoaJob extends vscode.TreeItem {
     constructor(public readonly job, public readonly source, public readonly size) {
         super(`Job #${job.id}`, vscode.TreeItemCollapsibleState.Collapsed);
+
+        const jobFile = JobCache.getFileFromJob(job);
+        if (jobFile) {
+            if (jobFile.scheme == 'file') {
+                this.label = jobFile.fsPath.replace(getWorkspaceRoot() + '/', '');
+            } else if (jobFile.scheme == 'untitled') {
+                this.label = jobFile.path;
+            }
+        }
 
         this.tooltip = source;
         this.description = job.submitted.toString();

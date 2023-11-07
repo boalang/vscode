@@ -110,6 +110,8 @@ class BoaJobsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
                     size = await JobCache.getOutputSize(job);
                 }
                 this.jobs.push(new BoaJob(job, source, size));
+                if (this.jobs.length == 1 && (job.compilerStatus == boaapi.CompilerStatus.ERROR || job.executionStatus == boaapi.ExecutionStatus.ERROR))
+                    this.jobs[0].collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
             }
         }).then(async() => {
             this.jobs.sort((a, b) => b.job.id - a.job.id)
